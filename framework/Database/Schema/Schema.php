@@ -76,9 +76,10 @@ class Schema
 
     public function hasTable(string $table): bool
     {
+        $table = addslashes($table);
+
         $result = $this->connection->select(
-            "SHOW TABLES LIKE ?",
-            [$table]
+            "SHOW TABLES LIKE '{$table}'"
         );
 
         return count($result) > 0;
@@ -86,11 +87,14 @@ class Schema
 
     public function hasColumn(string $table, string $column): bool
     {
+        $table = addslashes($table);
+        $column = addslashes($column);
+
         $result = $this->connection->select(
-            "SHOW COLUMNS FROM `{$table}` LIKE ?",
-            [$column]
+            "SHOW COLUMNS FROM `{$table}` LIKE '{$column}'"
         );
 
         return count($result) > 0;
     }
+
 }

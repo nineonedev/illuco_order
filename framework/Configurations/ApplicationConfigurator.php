@@ -134,9 +134,9 @@ class ApplicationConfigurator
     public function create()
     {
         $this->app->make(BootstrapConfigurator::class)->load(); 
-        $this->app->registerAliases();
         $this->app->register();
         $this->app->boot();
+        $this->app->registerAliases();
         $this->app->make(RoutingConfigurator::class)->load();
         
         return $this->app;

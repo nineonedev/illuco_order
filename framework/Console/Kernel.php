@@ -2,67 +2,92 @@
 
 namespace Framework\Console;
 
+use Framework\Console\Input\Input;
+use Framework\Console\Output\Output;
+use Framework\Console\Exceptions\CommandNotFoundException;
+use Framework\Console\Lock\LockManager;
 use Framework\Core\Contracts\KernelInterface;
-use Framework\Support\LockManager;
-use Throwable;
 
 class Kernel implements KernelInterface
 {
-    protected CommandCollection $commands;
+    protected CommandRegistry $registry;
     protected Output $output;
-    protected LockManager $lockManager;
+    protected LockManager $locks;
 
-    public function __construct(CommandCollection $commands, LockManager $lockManager)
+    public function __construct(
+        CommandRegistry $registry, 
+        ?Output $output = null,
+        ?LockManager $locks = null
+    )
     {
-        $this->commands = $commands;
-        $this->output = new Output();
-        $this->lockManager = $lockManager;
-    }
-
-    public function register(Command $command): void
-    {
-        $this->commands->add($command);
+        $this->registry = $registry;
+        $this->output = $output ?: new Output();
+        $this->locks = $locks ?: new LockManager();
     }
 
     /**
-     * @param CommandInput $input
+     * 콘솔 입력을 처리합니다.
+     *
+     * @param Input $input
+     * @return void
      */
-    public function handle($input): void
+    public function handle($input)
     {
+        if (!($input instanceof Input)) {
+            throw new \InvalidArgumentException('Console Kernel only accepts Input instance.');
+        }
+
         $signature = $input->getCommand();
 
-        if (!$this->commands->has($signature)) {
-            $this->output->error("Command '{$signature}' not found.");
-            $this->list();
+        try {
+            /** @var Command $command */
+            $command = $this->registry->get($signature);
+        } catch (CommandNotFoundException $e) {
+            $this->output->error("Command [{$signature}] not found.");
+            $this->listCommands();
             return;
         }
 
-        $command = $this->commands->get($signature);
-        $command->setInput($input);
-        $command->setOutput($this->output);
+        if ($command->shouldLock()) {
+            $lock = $this->locks->get($signature); 
 
-        try {
-            $command->handle();
-        } catch (Throwable $e) {
-            $this->output->error("Error: " . $e->getMessage());
+            if (!$lock->acquire()) {
+                $this->output->warn("Command [{$signature}] is already running."); 
+                return; 
+            }
+        }
+
+        $command->execute($input, $this->output);
+    }
+
+    /**
+     * 종료 후 후처리 로직.
+     *
+     * @param Input $input
+     * @param mixed|null $result
+     * @return void
+     */
+    public function terminate($input, $result = null): void
+    {
+        // 예: 로그 남기기, 록 해제, 종료 메시지 출력 등
+        if ($input instanceof Input) {
+            $signature = $input->getCommand(); 
+            $this->locks->get($signature)->release();
         }
     }
 
     /**
-     * @param CommandInput $input
+     * 등록된 커맨드 전체 출력
      */
-    public function terminate($input, $result = null): void
+    protected function listCommands(): void
     {
-        $this->lockManager->get($input->getCommand())->release();
-    }
-
-    public function list(): void
-    {
+        $this->output->writeln('');
         $this->output->writeln("Available commands:");
-        foreach ($this->commands->all() as $signature => $command) {
-            $desc = $command->getDescription();
-            $this->output->writeln("  {$signature}    {$desc}");
+
+        foreach ($this->registry->all() as $command) {
+            $this->output->writeln(sprintf("  %-20s %s", $command->signature(), $command->description()));
         }
+
+        $this->output->writeln('');
     }
 }
-

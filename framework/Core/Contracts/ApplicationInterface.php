@@ -2,14 +2,14 @@
 
 namespace Framework\Core\Contracts;
 
-use Framework\Console\CommandInput;
+use Framework\Console\Input\Input;
 use Framework\Http\Request;
 
 interface ApplicationInterface
 {
     public function handleRequest(Request $request): void;
 
-    public function handleCommand(CommandInput $input): void;
+    public function handleCommand(Input $input): void;
 
     public function register(): void;
 

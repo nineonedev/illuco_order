@@ -9,7 +9,7 @@ class MysqlGrammar extends Grammar
     public function compileSelect(Builder $builder): array
     {
         $sql = 'select ' . implode(', ', $builder->getColumns()) .
-               ' from `' . $builder->getTable() . '`';
+                ' from `' . $builder->getTable() . '`';
 
         $bindings = [];
 

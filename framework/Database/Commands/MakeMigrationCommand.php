@@ -3,31 +3,54 @@
 namespace Framework\Database\Commands;
 
 use Framework\Console\Command;
-use Framework\Database\Migrations\MigrationCreator;
+use Framework\Support\Stub;
+use InvalidArgumentException;
 
 class MakeMigrationCommand extends Command
 {
-    protected string $signature = 'make:migration {name} {--table=}';
-    protected string $description = 'Create a new migration file';
+    protected string $signature = 'make:migration';
+    protected string $description = '새로운 마이그레이션 파일을 생성합니다.';
+    protected bool $shouldLock = false;
 
-    protected MigrationCreator $creator;
-
-    public function __construct()
+    protected function configure(): void
     {
-        $this->creator = new MigrationCreator();
+        $this->addArgument('name');
+        $this->addOption('table'); // --table 옵션 추가
     }
 
-    public function handle(): void
+    protected function handle(): void
     {
-        $name = $this->getArgument('name');
-        $table = $this->getOption('table');
+        $name = trim((string) $this->argument('name'));
+        $table = trim((string) $this->option('table'));
 
-        if (!$name) {
-            $this->error('Please provide a migration name.');
+        if ($name === '') {
+            throw new InvalidArgumentException(
+                "마이그레이션 이름을 지정해야 합니다.\n예: php console make:migration create_users_table"
+            );
+        }
+
+        if ($table === '') {
+            throw new InvalidArgumentException('--table 옵션은 필수입니다.');
+        }
+
+        $filename   = date('Ymd_His') . '_' . $this->snake($name);
+        $className  = $this->classify($name);
+        $stubFile   = 'migration';
+        $targetPath = base_path("database/migrations/{$filename}.php");
+        $stubPath   = base_path('framework/Database/stubs');
+
+        $stub = new Stub($stubPath);
+
+        try {
+            $stub->generate($stubFile, $targetPath, [
+                'class' => $className,
+                'table' => $table,
+            ]);
+        } catch (\RuntimeException $e) {
+            $this->error("❌ 마이그레이션 생성 실패: " . $e->getMessage());
             return;
         }
 
-        $file = $this->creator->create($name, $table);
-        $this->info("Migration created: {$file}");
+        $this->info("✔ 마이그레이션 생성 완료: {$filename} ({$targetPath})");
     }
 }

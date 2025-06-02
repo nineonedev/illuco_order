@@ -2,74 +2,119 @@
 
 namespace Framework\Console;
 
-abstract class Command
-{
-    protected CommandInput $input;
-    protected Output $output;
+use Framework\Console\Contracts\CommandInterface;
+use Framework\Console\Input\Input;
+use Framework\Console\Output\Output;
+use Framework\Console\Support\CommandDefinition;
 
+abstract class Command implements CommandInterface
+{
     protected string $signature = '';
     protected string $description = '';
-    protected bool $shouldUseLock = true;
+    protected bool $shouldLock = false;
 
-    abstract public function handle(): void;
+    protected CommandDefinition $definition;
+    protected Input $input;
+    protected Output $output;
 
-    public function shouldUseLock(): bool
+    protected array $arguments = [];
+    protected array $argumentOrder = [];
+    protected array $options = [];
+
+    public function __construct()
     {
-        return $this->shouldUseLock;
+        $this->definition = new CommandDefinition();
+        $this->configure();
     }
 
-    public function getArgument(string $key): ?string
+    public function shouldLock(): bool
     {
-        return $this->input->getArgument($key);
+        return $this->shouldLock;
     }
 
-    public function getOption(string $key): ?string
-    {
-        return $this->input->getOption($key);
-    }
-
-    public function setInput(CommandInput $input): void
-    {
-        $this->input = $input;
-    }
-
-    public function setOutput(Output $output): void
-    {
-        $this->output = $output;
-    }
-
-    public function getSignature(): string
+    public function signature(): string
     {
         return $this->signature;
     }
 
-    public function getDescription(): string
+    public function description(): string
     {
         return $this->description;
     }
 
-    public function info(string $message): void
+    abstract protected function handle(): void;
+
+    /**
+     * 자식 클래스에서 인자 및 옵션 정의
+     */
+    protected function configure(): void
+    {
+        // override if needed
+    }
+
+    protected function addArgument(string $name, $default = null): void
+    {
+        $this->definition->addArgument($name, $default);
+    }
+
+    protected function addOption(string $name, $default = null): void
+    {
+        $this->definition->addOption($name, $default);
+    }
+
+    protected function argument($key, $default = null)
+    {
+        return $this->definition->argument($key, $default);
+    }
+
+    protected function option(string $key, $default = null)
+    {
+        return $this->definition->option($key, $default);
+    }
+
+    public function execute(Input $input, Output $output): void
+    {
+        $this->input = $input;
+        $this->output = $output;
+
+        $this->definition->bind($input);
+
+        $this->handle();
+    }
+
+    // 출력 헬퍼
+
+    protected function line(string $message): void
+    {
+        $this->output->writeln($message);
+    }
+
+    protected function info(string $message): void
     {
         $this->output->info($message);
     }
 
-    public function error(string $message): void
+    protected function error(string $message): void
     {
         $this->output->error($message);
     }
 
-    public function success(string $message): void
+    protected function warn(string $message): void
     {
-        $this->output->success($message);
+        $this->output->warn($message);
     }
 
-    public function warning(string $message): void
+    // 문자열 변환 헬퍼
+
+    protected function snake(string $name): string
     {
-        $this->output->warning($message);
+        $name = preg_replace('/([a-z])([A-Z])/', '$1_$2', $name);
+        return strtolower(str_replace([' ', '-'], '_', $name));
     }
 
-    public function line(string $message): void
+    protected function classify(string $name): string
     {
-        $this->output->writeln($message);
+        $name = str_replace(['-', '_'], ' ', $name);
+        return str_replace(' ', '', ucwords($name));
     }
 }

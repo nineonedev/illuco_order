@@ -23,7 +23,7 @@ use Framework\Security\Session\InMemoryStore;
 use Framework\Security\Session\SessionManager;
 use Framework\Security\Session\Store;
 
-class SecurityServiceprovider extends ServiceProvider
+class SecurityServiceProvider extends ServiceProvider
 {
     public function register(): void
     {

@@ -3,7 +3,7 @@
 namespace Framework\Core;
 
 use Framework\Configurations\ApplicationConfigurator;
-use Framework\Console\CommandInput;
+use Framework\Console\Input\Input;
 use Framework\Core\Contracts\ApplicationInterface;
 use Framework\Core\Contracts\DeferredProviderInterface;
 use Framework\Http\Request;
@@ -85,7 +85,7 @@ class Application extends Container implements ApplicationInterface
         return static::$instance; 
     }
 
-    public function handleCommand(CommandInput $input): void
+    public function handleCommand(Input $input): void
     {
         /** @var ConsoleKernel $kernel */
         $kernel = $this->make(ConsoleKernel::class); 

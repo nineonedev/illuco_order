@@ -5,8 +5,10 @@ namespace Framework\Database;
 use Framework\Core\Application;
 use Framework\Core\ServiceProvider;
 use Framework\Database\Contracts\ConnectionInterface;
-use Framework\Database\Migrations\MigrationRepository;
-use Framework\Database\Migrations\MigrationRunner;
+use Framework\Database\Migration\MigrationRepository;
+use Framework\Database\Migration\Migrator;
+use Framework\Database\Schema\Schema;
+use Framework\Support\Test;
 
 class DatabaseServiceProvider extends ServiceProvider
 {
@@ -28,12 +30,13 @@ class DatabaseServiceProvider extends ServiceProvider
         });
 
         // 기본 Connection 바인딩
-        $this->app->bind(ConnectionInterface::class, function ($app) {
+        $this->app->singleton(ConnectionInterface::class, function ($app) {
             return $app->make(DatabaseManager::class)->connection();
         });
-
-        // alias('db', ConnectionInterface::class) 바인딩
-        $this->app->alias(ConnectionInterface::class, 'db');
+        
+        $this->app->singleton(Schema::class, function(Application $app){
+            return new Schema($app->make(ConnectionInterface::class));
+        });
 
         // MigrationRepository 등록
         $this->app->singleton(MigrationRepository::class, function (Application $app) {
@@ -41,8 +44,8 @@ class DatabaseServiceProvider extends ServiceProvider
         });
 
         // MigrationRunner 등록
-        $this->app->singleton(MigrationRunner::class, function (Application $app) {
-            return new MigrationRunner(
+        $this->app->singleton(Migrator::class, function (Application $app) {
+            return new Migrator(
                 $app->make(MigrationRepository::class),
                 $app->make(ConnectionInterface::class),
                 config('database.migrations.path', 'database/migrations')

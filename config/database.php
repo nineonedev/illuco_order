@@ -1,10 +1,10 @@
 <?php 
 
 return [
-    'default' => 'mysql',
     'migrations' => [
         'path' => base_path('database/migrations'),
     ],
+    'default' => 'mysql',
     'connections' => [
         'mysql' => [
             'driver' => 'mysql',

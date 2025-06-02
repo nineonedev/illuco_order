@@ -1,13 +1,17 @@
 <?php
 
-use Framework\Database\Commands\FreshCommand;
 use Framework\Database\Commands\MakeMigrationCommand;
-use Framework\Database\Commands\MigrateCommand;
-use Framework\Database\Commands\RollbackCommand;
+use Framework\Database\Commands\MigrationFreshCommand;
+use Framework\Database\Commands\MigrationMigrateCommand;
+use Framework\Database\Commands\MigrationResetCommand;
+use Framework\Database\Commands\MigrationRollbackCommand;
+use Framework\Database\Commands\MigrationStatusCommand;
 
 return [
-    MigrateCommand::class,
+    MigrationFreshCommand::class,
+    MigrationRollbackCommand::class,
+    MigrationMigrateCommand::class,
     MakeMigrationCommand::class,
-    RollbackCommand::class,
-    FreshCommand::class,
+    MigrationResetCommand::class,
+    MigrationStatusCommand::class,
 ];
