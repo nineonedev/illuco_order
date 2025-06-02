@@ -1,0 +1,82 @@
+@use "../abstracts" as *;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+%element {
+    color: var(--clr-text-primary);
+    font-size: var(--fs-body-md);
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizelegibility;
+    font-size: 62.5%;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    line-height: 1.4375;
+    background-color: var(--clr-background-primary);
+    word-break: keep-all;
+
+    @extend %element;
+}
+
+::selection {
+    background: var(--clr-primary-main);
+    color: var(--clr-primary-contrast);
+}
+
+img {
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    @extend %element;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+button {
+    font-family: "Inter", sans-serif;
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    @extend %element;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+input,
+select,
+textarea {
+    font-family: "Inter", sans-serif;
+    background: none;
+    outline: none;
+    border: none;
+    font-family: inherit;
+    @extend %element;
+}
+
+hr {
+    background-color: var(--clr-table-border);
+    border: 0;
+    height: 0.1rem;
+}

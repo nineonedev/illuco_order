@@ -1,0 +1,25 @@
+{
+    "name": "vite-js-app",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "home": "vite build --config vite.config.home.js",
+        "admin": "vite build --config vite.config.admin.js",
+        "watch:home": "vite build --watch --config vite.config.home.js",
+        "watch:admin": "vite build --watch --config vite.config.admin.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "sass": "^1.88.0",
+        "vite": "^6.3.5"
+    },
+    "dependencies": {
+        "bootstrap": "^5.3.6",
+        "jquery": "^3.7.1",
+        "summernote": "^0.9.1",
+        "tinymce": "^7.9.0"
+    }
+}

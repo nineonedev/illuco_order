@@ -1,0 +1,110 @@
+@use "../abstracts/functions" as *;
+@use "../abstracts/mixins" as *;
+
+:root {
+    // z-inex
+    --zindex-drawer: 1200;
+    --zindex-header: 1100;
+
+    // drawer
+    --drawer-width: 24rem;
+    --drawer-link-radius: 0.4rem;
+
+    // header
+    --header-height: 6.4rem;
+
+    // spacing
+    --spacing: 0.8rem;
+    --spacing-0-5: calc(var(--spacing) * 0.5);
+    --spacing-1: calc(var(--spacing) * 1);
+    --spacing-1-5: calc(var(--spacing) * 1.5);
+    --spacing-2: calc(var(--spacing) * 2);
+    --spacing-3: calc(var(--spacing) * 3);
+    --spacing-4: calc(var(--spacing) * 4);
+    --spacing-5: calc(var(--spacing) * 5);
+    --spacing-6: calc(var(--spacing) * 6);
+    --spacing-6-5: calc(var(--spacing) * 6.5);
+    --spacing-7: calc(var(--spacing) * 7);
+    --spacing-8: calc(var(--spacing) * 8);
+
+    // outer
+    --outer-padding: calc(var(--spacing) * 10);
+    --outer-border-radius: 0.4rem;
+
+    // logo
+    --logo-height: 2.4rem;
+
+    // typography
+    --fs-heading-xl: #{fluid(32, 36)};
+    --fs-heading-lg: #{fluid(24, 28)};
+    --fs-heading-md: #{fluid(22, 24)};
+    --fs-heading-sm: #{fluid(20, 22)};
+    --fs-heading-xs: #{fluid(18, 20)};
+
+    --fs-body-xl: #{fluid(17, 18)};
+    --fs-body-lg: #{fluid(15, 16)};
+    --fs-body-md: #{fluid(13, 14)};
+    --fs-body-sm: #{fluid(11, 12)};
+    --fs-body-xs: #{fluid(9, 10)};
+
+    // opacity
+    --opacity-input-disabled: 0.5;
+    --opacity-action-on-disabled: 0.32;
+    --opacity-action-disabled: 0.12;
+    --opacity-action-hover: 0.08;
+    --opacity-action-surface: 0.04;
+    --opacity-action-border: 0.56;
+    --opacity-action-focus: 0.12;
+    --opacity-action-focus-visible: 0.24;
+    --opacity-action-selected: 0.16;
+    --opacity-action-active: 0.16;
+
+    --clr-input-disabled: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-input-disabled)
+    );
+
+    // action
+    --clr-action-on-disabled: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-on-disabled)
+    );
+    --clr-action-disabled: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-disabled)
+    );
+    --clr-action-border-background: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-border)
+    );
+    --clr-action-hover-background: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-hover)
+    );
+    --clr-action-surface-background: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-surface)
+    );
+    --clr-action-focus-background: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-focus)
+    );
+    --clr-action-focus-visible-background: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-focus-visible)
+    );
+    --clr-action-active-background: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-active)
+    );
+    --clr-action-selected-background: rgba(
+        var(--clr-common-on-background-channel),
+        var(--opacity-action-selected)
+    );
+}
+
+@include mq(md) {
+    :root {
+        --header-height: 5.6rem;
+    }
+}

@@ -1,0 +1,35 @@
+@use "../abstracts" as *;
+
+@each $key, $value in $breakpoints {
+    .no-container-#{$key} {
+        max-width: #{$value}px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-right: 2.4rem;
+        padding-left: 2.4rem;
+    }
+}
+
+.no-card {
+    --padding: 2.4rem;
+    border: 1px solid var(--clr-card-border);
+    border-radius: 0.4rem;
+    padding: var(--padding);
+
+    &.--xl {
+        --padding: 4rem;
+    }
+    &.--lg {
+        --padding: 3.2rem;
+    }
+    &.--md {
+        --padding: 2.4rem;
+    }
+    &.--sm {
+        --padding: 1.6rem;
+    }
+    &.--xs {
+        --padding: 1.2rem;
+    }
+}

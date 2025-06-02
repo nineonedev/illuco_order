@@ -1,0 +1,129 @@
+@use "../abstracts" as *;
+
+.no-cart {
+    $root: &;
+
+    &-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: fluid(40, 80);
+
+        @include mq(lg) {
+            grid-template-columns: 1fr;
+            gap: 6rem;
+        }
+    }
+
+    &-count {
+        display: inline-flex;
+        align-items: center;
+
+        &::before {
+            content: "(";
+        }
+        &::after {
+            content: ")";
+        }
+    }
+
+    &-empty {
+        @include flex-center();
+        flex-direction: column;
+        text-align: center;
+        gap: 1.6rem;
+
+        i {
+            font-size: 6rem;
+        }
+    }
+
+    &-items {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    &-item {
+        &-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.6rem;
+        }
+        &-present {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+
+            &-block {
+                display: flex;
+                align-items: center;
+                gap: fluid(24, 40);
+                width: 100%;
+            }
+
+            &__img {
+                max-width: 12rem;
+                width: 100%;
+
+                figure {
+                    @include img-auto-cover(75%);
+                    border-radius: 0.4rem;
+                }
+            }
+
+            &__price {
+                text-align: right;
+                font-size: fluid(15, 18);
+            }
+
+            &__counter {
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                border-radius: 0.4rem;
+                border: 1px solid var(--clr-text-primary);
+
+                .--input {
+                    display: inline-block;
+                    text-align: center;
+                    width: 2rem;
+                    input {
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+                .--increase {
+                    padding: 0.8rem 1.2rem;
+                }
+                .--decrease {
+                    padding: 0.8rem 1.2rem;
+                }
+            }
+        }
+    }
+
+    &-aggregation {
+        margin: 2rem 0;
+        padding: 2rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+
+        dl {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+
+            dd {
+                b {
+                    font-weight: 600;
+                    font-size: fluid(16, 20);
+                    color: var(--clr-primary-dark);
+                }
+            }
+        }
+    }
+}

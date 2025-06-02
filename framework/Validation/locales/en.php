@@ -1,0 +1,24 @@
+<?php
+
+return [
+    'required' => 'This field is required.',
+    'min' => 'Please enter a value greater than {0}.',
+    'max' => 'Please enter a value smaller than {0}.',
+    'minLength' => 'Please enter at least {0} characters.',
+    'maxLength' => 'Please enter no more than {0} characters.',
+    'pattern' => 'The value format is invalid.',
+    'step' => 'The value must increase by {0}.',
+    'email' => 'Please enter a valid email address.',
+    'date' => 'Please enter a valid date.',
+    'dateISO' => 'Please enter a valid date (ISO).',
+    'number' => 'Please enter a number.',
+    'digit' => 'Please enter digits only.',
+    'phoneUS' => 'Please enter a valid US phone number.',
+    'equal' => 'Please enter the same value again.',
+    'notEqual' => 'Please select a different value.',
+    'unique' => 'Please enter a unique value.',
+    'uploaded' => 'No file was uploaded.',
+    'uploaded_ok' => 'There was an error with the uploaded file.',
+    'file_size' => 'The file must be smaller than {0} bytes.',
+    'file_extension' => 'The file extension is not allowed.',
+];

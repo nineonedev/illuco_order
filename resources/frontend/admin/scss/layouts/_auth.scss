@@ -1,0 +1,89 @@
+@use "../abstracts" as *;
+
+.no-auth {
+    &-layout {
+        display: grid;
+        grid-template-rows: [left-start center-start right-start] 1fr [left-end center-end right-end];
+        grid-template-columns: [left-start center-start] 1fr [left-end right-start] 1fr [center-end right-end];
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        grid-column-gap: 16rem;
+        -moz-column-gap: 16rem;
+        column-gap: 16rem;
+        grid-column-gap: calc(var(--outer-padding) * 2);
+        -moz-column-gap: calc(var(--outer-padding) * 2);
+        column-gap: calc(var(--outer-padding) * 2);
+        width: 100%;
+        padding: 80px;
+        padding: var(--outer-padding);
+        min-height: 100vh;
+        height: -webkit-fit-content;
+        height: -moz-fit-content;
+        height: fit-content;
+        background-color: var(--clr-background-secondary);
+
+        @include mq(md) {
+            width: auto;
+            padding: 0;
+            margin: 0;
+            justify-content: center;
+            background-color: var(--clr-background-primary);
+        }
+    }
+
+    &-container {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        white-space: normal;
+        border-radius: var(--outer-border-radius);
+        border: 1px solid var(--clr-input-border);
+        background-color: var(--clr-background-primary);
+        max-width: 40rem;
+        width: 100%;
+        grid-area: center;
+
+        @include mq(md) {
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            white-space: normal;
+            width: 100vw;
+            min-height: 100%;
+            border-radius: 0;
+            border-radius: initial;
+            box-shadow: none;
+            grid-area: center;
+            border: none;
+        }
+    }
+
+    &-inner {
+        header {
+            padding: var(--spacing-5) var(--spacing-5) var(--spacing-3);
+            text-align: center;
+
+            img {
+                width: auto;
+                margin: 0 auto;
+                height: var(--logo-height);
+                display: block;
+            }
+
+            h1 {
+                margin: var(--spacing-3) 0 var(--spacing-2);
+                font-weight: 600;
+            }
+        }
+
+        form {
+            --input-font-size: 1.6rem;
+            --button-font-size: 1.6rem;
+            --input-label-size: 1.6rem;
+            --input-label-floating-size: 1.4rem;
+
+            padding: 0 var(--spacing-5) var(--spacing-5);
+        }
+    }
+}

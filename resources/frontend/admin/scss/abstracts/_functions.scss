@@ -1,0 +1,117 @@
+@use "sass:color";
+@use "sass:meta";
+@use "sass:math";
+@use "sass:map";
+@use "sass:list";
+@use "sass:string";
+
+@function color-merge($colors: ()) {
+    $output: ();
+
+    @each $color in $colors {
+        $output: list.append($output, linear-gradient($color), comma);
+    }
+
+    @return $output;
+}
+
+@function percent($number: 0) {
+    @return calc($number * 100%);
+}
+
+@function flip-map-values($map) {
+    $keys: map.keys($map);
+    $values: map.values($map);
+    $flipped: ();
+
+    $i: 1;
+    @each $key in $keys {
+        $flipped: map.merge(
+            $flipped,
+            (
+                $key: list.nth($values, list.length($values) - $i + 1),
+            )
+        );
+        $i: $i + 1;
+    }
+
+    @return $flipped;
+}
+
+@function rem($px) {
+    @return 0.1rem * $px;
+}
+
+@function map-reverse($map) {
+    $keys: map.keys($map);
+    $reversed-map: ();
+
+    @for $i from list.length($keys) through 1 {
+        $key: list.nth($keys, $i);
+        $value: map.get($map, $key);
+        $reversed-map: map.set($reversed-map, $key, $value);
+    }
+
+    @return $reversed-map;
+}
+
+@function channel($hex) {
+    $r: color.channel($hex, "red");
+    $g: color.channel($hex, "green");
+    $b: color.channel($hex, "blue");
+
+    @return "#{$r}, #{$g}, #{$b}";
+}
+
+@function flatten-map($map, $prefix: "") {
+    $stack: ();
+
+    @if (meta.type-of($map) == "map" and list.length($map) == 0) {
+        @return ();
+    }
+
+    @each $key, $value in $map {
+        $currentKey: $prefix;
+
+        @if (string.length($prefix) > 0) {
+            $currentKey: "#{$prefix}-#{$key}";
+        } @else {
+            $currentKey: "#{$key}";
+        }
+
+        @if (meta.type-of($value) == "map") {
+            $stack: map.merge($stack, flatten-map($value, $currentKey));
+        } @else {
+            $stack: map.merge(
+                $stack,
+                (
+                    $currentKey: $value,
+                )
+            );
+        }
+    }
+
+    @return $stack;
+}
+
+@function strip-unit($number) {
+    @return math.div($number, ($number * 0 + 1));
+}
+
+@function fluid($y1, $y2, $x1: 375, $x2: 1920) {
+    // `rem`이 포함된 경우 숫자로 변환
+    $y1-num: if(math.unit($y1) == "rem", strip-unit($y1) * 10, strip-unit($y1));
+    $y2-num: if(math.unit($y2) == "rem", strip-unit($y2) * 10, strip-unit($y2));
+
+    // 수식 계산 (CSS 변수 포함 가능)
+    $v: math.div(($y2-num - $y1-num) * 100, $x2 - $x1);
+    $r: math.div(($x1 * $y2-num) - ($x2 * $y1-num), ($x1 - $x2));
+
+    // rem 변환 (0.1배수)
+    $min: $y1-num * 0.1rem;
+    $base: $r * 0.1rem;
+    $max: $y2-num * 0.1rem;
+    $vw: $v * 1vw;
+
+    @return clamp($min, $vw + $base, $max);
+}

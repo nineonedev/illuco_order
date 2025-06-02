@@ -1,0 +1,210 @@
+## 순서
+
+1. [O] 에러, 예외 핸들링
+2. [O] 로거 구현
+3. [] js 번들링 + sass 까지 도입완료
+4. [] 베이스바인딩
+
+## 배포
+
+1. 네이버 단독서버
+
+// =================================================================
+// bootstrap
+// =================================================================
+
+-   aliases
+-   app
+-   bootstrappers
+-   middlewares
+-   providers
+
+// =================================================================
+// config
+// =================================================================
+
+-   app
+-   database
+-   filesystem
+-   path
+-   translation
+
+// =================================================================
+// Framework
+// =================================================================
+
+## Database
+
+-   /ORM
+    -   [] Entity
+    -   [] Repository
+    -   /Casts
+        -   [] Array
+        -   [] Boolean
+        -   [] DateTime
+        -   [] Float
+        -   [] Integer
+    -   Relations
+        -   [] Relation
+        -   [] HasOne
+        -   [] HasMany
+        -   [] BelongsTo
+        -   [] BelongsToMany
+        -   [] HasOneThrough
+        -   [] HasManyThrough
+        -   [] MorphedByMany
+        -   [] MorphMany
+        -   [] MorphToMany
+        -   [] MorphOne
+        -   [] MorphTo
+-   /Factory
+    -   [] Factory
+    -   [] FactoryManager
+-   /Paginator
+    -   [] Paginator
+-   /Schema
+    -   [] Schema
+    -   [] ColumnDefinition
+    -   [] BluePrint
+-   /Query
+    -   [] Builder
+    -   /Grammars
+        -   [] Grammar
+        -   [] MysqlGrammar
+-   /Connections
+    -   [] MysqlConnection
+-   /Migration
+    -   [] Migration
+    -   [] MigrationRunner
+    -   [] Seeder
+    -   [] SeederRunner
+    -   [] SeederTable
+    -   [] TableWriter
+
+## Bus
+
+-   [] Listener
+-   [] Job
+-   [] Event
+
+## Auth
+
+-   [] Gateway
+-   [] Guard
+-   [] AuthMiddleware
+-   [] Policy (can)
+-   [] Gate (define)
+
+## Core
+
+-   [] Container
+-   [] Application
+
+## Console
+
+-   [] Console
+-   [] Command
+
+## Http
+
+-   [] Http
+-   [] Bootstrap
+-   [] Pipeline
+-   [] Middleware
+-   [] Request
+-   [] Response
+-   [] Kernel
+-   [] FormRequest
+
+## Routing
+
+-   [] Router
+-   [] Controller
+-   [] ControllerDispatcher
+-   [] UrlGenerator
+-   [] Route
+-   [] RouteCollection
+
+## Validation
+
+-   /locales
+-   [] Validator
+-   [] RuleParser
+-   [] RuleFactory
+    -   /Rules
+        -   [] Date
+        -   [] DateISO
+        -   [] Digit
+        -   [] Email
+        -   [] Equal
+        -   / Files
+            -   [] FileExtension
+            -   [] FileSize
+            -   [] Uploaded
+            -   [] UploadedOk
+        -   [] Max
+        -   [] MaxLength
+        -   [] Min
+        -   [] MinLength
+        -   [] NotEqual
+        -   [] Number
+        -   [] Pattern
+        -   [] Phone
+        -   [] PhoneUS
+        -   [] Required
+        -   [] Step
+        -   [] Unique
+
+## FileSystem
+
+-   [] Disk
+-   [] DiskManager
+-   [] File
+-   [] UploadedFile
+-   [] Link
+
+## Translation
+
+-   [] Translator
+-   [] LangLoader
+
+## View
+
+-   [] ViewEngine
+
+## Support
+
+-   [] Arr
+-   [] Str
+-   [] Collection
+-   [] Excrypter
+-   [] Logger
+-   [] ExceptionHandler
+
+## Status
+
+-   [] Store
+-   [] Registry
+-   [] Context
+
+## Security
+
+-   /Session
+
+    -   [] SessionStore (Interface)
+    -   [] SessionHandler
+    -   [] SessionManager
+    -   [] SessionIdGenerator
+    -   [] SessionMiddleware
+    -   [] SessionValidator (optional)
+    -   [] SessionData (optional)
+    -   [] SessionTimeoutHandler
+    -   [] CookieManager
+    -   [] Cookie
+
+-   /Cors
+    -   [] Cors
+    -   [] CorsPolicy
+-   /Csrf
+    -   [] Csrf
+    -   [] CsrfTokenManager

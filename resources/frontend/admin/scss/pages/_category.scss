@@ -1,0 +1,115 @@
+@use "../abstracts" as *;
+
+#category-hook {
+    border-radius: 0.4rem;
+    overflow: hidden;
+    border: 1px solid var(--clr-card-border);
+}
+
+.no-category-menu {
+    padding: 1.6rem;
+    border-bottom: 1px solid var(--clr-card-border);
+    font-weight: 600;
+}
+
+.no-category-items {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.4rem;
+    background-color: var(--clr-slate-50);
+
+    [data-node="root"] {
+        > .no-category-item-block {
+            border-left: 0;
+        }
+    }
+
+    .no-category-item {
+        $item: &;
+
+        &:first-child {
+            > .no-category-item-block {
+                border-top: 0;
+            }
+        }
+
+        &-add {
+            &__text {
+                color: var(--clr-primary-main);
+            }
+            &__icon {
+                @include flex-center();
+                padding: 0.6rem;
+                border-radius: 0.2rem;
+                border: 1px dashed var(--clr-primary-main);
+                color: var(--clr-primary-main);
+
+                i {
+                    font-size: 1rem;
+                }
+            }
+        }
+
+        &-block {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+            padding: 1.2rem;
+            border-top: 1px solid var(--clr-card-border);
+            border-left: 1px solid var(--clr-card-border);
+            background: var(--clr-background-primary);
+
+            &.--add {
+                width: 100%;
+                justify-content: flex-start;
+                gap: 1.6rem;
+
+                &:hover {
+                    background: var(--clr-action-surface-background);
+                }
+            }
+
+            [data-action] {
+                &:hover {
+                    background: var(--clr-action-hover-background);
+                }
+            }
+
+            .no-category-item-head {
+                display: flex;
+                align-items: center;
+
+                .no-category-item-head-text {
+                    display: block;
+                    padding-left: 1.2rem;
+                }
+
+                .no-category-item-head-move {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            .no-category-item-action {
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        .no-category-children {
+            padding-left: 2.4rem;
+            position: relative;
+            border-top: 1px solid var(--clr-card-border);
+
+            // &::before {
+            //     content: "";
+            //     position: absolute;
+            //     left: 1.2rem;
+            //     top: 0;
+            //     height: 100%;
+            //     width: 0.1rem;
+            //     background: var(--clr-card-border);
+            // }
+        }
+    }
+}

@@ -1,0 +1,94 @@
+@use "../abstracts" as *;
+
+.no-header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: var(--zindex-header);
+    height: var(--header-height);
+    background: var(--clr-background-header);
+
+    * {
+        color: var(--clr-common-white);
+    }
+
+    .no-header-toggle {
+        display: none;
+        font-size: 2rem;
+
+        @include mq(lg) {
+            @include flex-center();
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background-color: rgba(
+                var(--clr-common-white-channel),
+                var(--opacity-action-surface)
+            );
+
+            &:hover {
+                background: rgba(
+                    var(--clr-common-white-channel),
+                    var(--opacity-action-hover)
+                );
+            }
+            &:focus {
+                background: rgba(
+                    var(--clr-common-white-channel),
+                    var(--opacity-action-focus)
+                );
+            }
+            &:active {
+                background: rgba(
+                    var(--clr-common-white-channel),
+                    var(--opacity-action-active)
+                );
+            }
+        }
+    }
+
+    .no-header-logo {
+        @include flex-center();
+
+        img {
+            height: 1.6rem;
+            width: auto;
+
+            @include mq(md) {
+                height: 1.2rem;
+            }
+        }
+    }
+
+    .no-header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2.4rem;
+        padding-left: 2.4rem;
+        padding-right: 2.4rem;
+        height: 100%;
+        position: relative;
+    }
+
+    .no-header-option {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+
+        &-profile {
+            background-color: var(--clr-primary-light);
+            border-radius: 50%;
+            font-size: 2rem;
+
+            @include mq(lg) {
+                font-size: 1.6rem;
+            }
+
+            &-dropdown {
+                display: none;
+            }
+        }
+    }
+}

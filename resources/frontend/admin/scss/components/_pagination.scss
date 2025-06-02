@@ -1,0 +1,28 @@
+@use "../abstracts" as *;
+
+.no-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 5.2rem;
+    margin: 3.2rem 0;
+    padding: 2.4rem 0;
+    border-top: 1px solid var(--clr-card-border);
+
+    &__input {
+        margin-left: 0.8rem;
+        margin-right: 3.2rem;
+    }
+
+    &__btn {
+        margin-left: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__text {
+        margin: 1.2rem 0;
+        font-size: 1.2rem;
+    }
+}

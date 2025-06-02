@@ -1,0 +1,105 @@
+@use "../abstracts" as *;
+
+.no-error-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2.4rem;
+    text-align: center;
+    grid-area: center;
+
+    @include mq(md) {
+        width: 100vw;
+    }
+
+    h1 {
+        color: var(--clr-error-main);
+        font-size: fluid(64, 120);
+    }
+
+    h2 {
+        font-size: fluid(16, 32);
+    }
+}
+
+.no-error-debug {
+    padding: 4rem;
+    max-width: 102.4rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3.2rem;
+    color: #eee;
+    grid-area: center;
+
+    @include mq(md) {
+        width: 100vw;
+    }
+
+    .no-error-title {
+        color: #ff4e4e;
+        font-size: fluid(48, 72);
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .no-error-block {
+        background-color: #1e1e1e;
+        padding: 1.6rem 2.4rem;
+        border-radius: 0.6rem;
+        font-size: 1.6rem;
+        line-height: 1.6;
+        border-left: 4px solid #ff4e4e;
+
+        strong {
+            display: block;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            color: #ccc;
+            font-family: "Fira Code", monospace;
+            font-size: 1.4rem;
+        }
+
+        .error-line {
+            color: #ff9f1c;
+            font-weight: bold;
+        }
+    }
+
+    .no-error-trace {
+        background: #1e1e1e;
+        overflow-x: auto;
+        border-radius: 0.4rem;
+
+        &__code {
+            font-family: "Fira Code", monospace;
+            font-size: 1.3rem;
+            padding: 1rem;
+            color: #ccc;
+
+            .trace-line {
+                padding: 0.2rem 0.5rem;
+                border-left: 4px solid transparent;
+
+                &.highlight {
+                    background-color: rgba(255, 78, 78, 0.1);
+                    border-left-color: #ff4e4e;
+                }
+
+                .line-number {
+                    display: inline-block;
+                    width: 2.5rem;
+                    color: #888;
+                    text-align: right;
+                    margin-right: 1rem;
+                    user-select: none;
+                }
+            }
+        }
+    }
+}

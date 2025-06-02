@@ -1,0 +1,29 @@
+@use "../abstracts" as *;
+
+$heading-sizes: (
+    xl: var(--fs-heading-xl),
+    lg: var(--fs-heading-lg),
+    md: var(--fs-heading-md),
+    sm: var(--fs-heading-sm),
+    xs: var(--fs-heading-xs),
+);
+
+$body-sizes: (
+    xl: var(--fs-body-xl),
+    lg: var(--fs-body-lg),
+    md: var(--fs-body-md),
+    sm: var(--fs-body-sm),
+    xs: var(--fs-body-xs),
+);
+
+@each $key, $value in $heading-sizes {
+    .no-heading-#{$key} {
+        font-size: #{$value};
+    }
+}
+
+@each $key, $value in $body-sizes {
+    .no-body-#{$key} {
+        font-size: #{$value};
+    }
+}

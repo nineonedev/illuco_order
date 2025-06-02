@@ -1,0 +1,334 @@
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+
+@use "./functions" as *;
+@use "./breakpoints" as *;
+
+@mixin button($type) {
+    $type-color: var(--clr-#{$type}-main);
+    color: var(--clr-common-white);
+    background: $type-color;
+
+    &:hover {
+        color: var(--clr-common-white);
+        background-color: color-mix(
+            in srgb,
+            var(--clr-common-on-background) percent(var(--opacity-action-hover)),
+            $type-color 100%
+        );
+    }
+
+    &:focus {
+        color: var(--clr-common-white);
+        background-color: color-mix(
+            in srgb,
+            var(--clr-common-on-background) percent(var(--opacity-action-focus)),
+            $type-color 100%
+        );
+    }
+    &:focus-visible {
+        color: var(--clr-common-white);
+        background-color: color-mix(
+            in srgb,
+            var(--clr-common-on-background)
+                percent(var(--opacity-action-focus-visible)),
+            $type-color 100%
+        );
+    }
+    &:active {
+        color: var(--clr-common-white);
+        background-color: color-mix(
+            in srgb,
+            var(--clr-common-on-background)
+                percent(var(--opacity-action-active)),
+            $type-color 100%
+        );
+    }
+}
+
+@mixin button-outline($type) {
+    $type-color: var(--clr-#{$type}-main);
+    color: $type-color;
+    border-color: $type-color;
+
+    &:hover {
+        color: $type-color;
+        background-color: var(--clr-#{$type}-action-hover);
+    }
+
+    &:focus-visible {
+        color: $type-color;
+        background-color: var(--clr-#{$type}-action-focus);
+    }
+
+    &:focus-visible {
+        color: $type-color;
+        background-color: var(--clr-#{$type}-action-focus-visible);
+    }
+
+    &:active {
+        color: $type-color;
+        background-color: var(--clr-#{$type}-action-active);
+    }
+}
+
+@mixin primitive(
+    $key: null,
+    $colors: (
+        50: null,
+        100: null,
+        200: null,
+        300: null,
+        400: null,
+        500: null,
+        600: null,
+        700: null,
+        800: null,
+        900: null,
+        950: null,
+    ),
+    $reverse: false
+) {
+    @if ($key != null) {
+        $adjusted: if($reverse == 1, flip-map-values($colors), $colors);
+
+        @each $depth, $color in $adjusted {
+            @if ($color != null) {
+                --clr-#{$key}-#{$depth}: #{$color};
+            }
+        }
+    }
+}
+
+@mixin token(
+    $key: null,
+    $colors: (
+        main: null,
+        light: null,
+        dark: null,
+        contrast: null,
+    ),
+    $primitives: (
+        50: null,
+        100: null,
+        200: null,
+        300: null,
+        400: null,
+        500: null,
+        600: null,
+        700: null,
+        800: null,
+        900: null,
+        950: null,
+    )
+) {
+    @if ($key != null) {
+        $main-depth: map.get($colors, main);
+
+        @if (map.has-key($primitives, $main-depth)) {
+            $main: map.get($primitives, $main-depth);
+            $main-channel: channel($main);
+
+            --clr-#{$key}-channel: #{$main-channel};
+
+            --clr-#{$key}-action-hover: rgba(
+                #{$main-channel},
+                var(--opacity-action-hover)
+            );
+            --clr-#{$key}-action-surface: rgba(
+                #{$main-channel},
+                var(--opacity-action-surface)
+            );
+            --clr-#{$key}-action-active: rgba(
+                #{$main-channel},
+                var(--opacity-action-active)
+            );
+            --clr-#{$key}-action-selected: rgba(
+                #{$main-channel},
+                var(--opacity-action-selected)
+            );
+            --clr-#{$key}-action-focus: rgba(
+                #{$main-channel},
+                var(--opacity-action-focus)
+            );
+            --clr-#{$key}-action-focus-visible: rgba(
+                #{$main-channel},
+                var(--opacity-action-focus-visible)
+            );
+            --clr-#{$key}-action-border: rgba(
+                #{$main-channel},
+                var(--opacity-action-border)
+            );
+            --clr-#{$key}-main: #{$main};
+        }
+
+        @if (map.has-key($colors, light)) {
+            $light-depth: map.get($colors, light);
+
+            @if (map.has-key($primitives, $light-depth)) {
+                $light: map.get($primitives, $light-depth);
+                --clr-#{$key}-light: #{$light};
+            }
+        }
+
+        @if (map.has-key($colors, dark)) {
+            $dark-depth: map.get($colors, dark);
+
+            @if (map.has-key($primitives, $dark-depth)) {
+                $dark: map.get($primitives, $dark-depth);
+                --clr-#{$key}-dark: #{$dark};
+            }
+        }
+
+        @if (map.has-key($colors, contrast)) {
+            $contrast-depth: map.get($colors, contrast);
+
+            @if (map.has-key($primitives, $contrast-depth)) {
+                $contrast: map.get($primitives, $contrast-depth);
+                --clr-#{$key}-contrast: #{$contrast};
+            }
+        }
+    }
+}
+
+@mixin palette(
+    $primitives: (
+        key: null,
+        reverse: false,
+        colors: (
+            50: null,
+            100: null,
+            200: null,
+            300: null,
+            400: null,
+            500: null,
+            600: null,
+            700: null,
+            800: null,
+            900: null,
+            950: null,
+        ),
+    ),
+    $tokens: (
+        key: null,
+        colors: (
+            main: null,
+            light: null,
+            dark: null,
+            contrast: null,
+        ),
+    ),
+    $options: ()
+) {
+    $pk: map.get($primitives, key);
+    $p-colors: map.get($primitives, colors);
+    $p-reverse: map.get($primitives, reverse);
+    $p-sorted: if($p-reverse == true, flip-map-values($p-colors), $p-colors);
+
+    @include primitive($pk, $p-sorted);
+
+    $tk: map.get($tokens, key);
+    $tk-colors: map.get($tokens, colors);
+
+    @include token($tk, $tk-colors, $p-sorted);
+}
+
+@mixin box($size, $center: true) {
+    width: #{$size};
+    height: #{$size};
+
+    @if ($center == true) {
+        @include flex-center();
+    }
+}
+
+@mixin inline-flex-center() {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-center() {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin img-cover() {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: center center;
+}
+
+@mixin img-auto-cover($percent: 56.25%) {
+    position: relative;
+    height: 0;
+    padding-top: #{$percent};
+    overflow: hidden;
+
+    > img {
+        @include pos-center();
+        @include img-cover();
+    }
+}
+
+@mixin pos-full() {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+@mixin pos-center() {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin backdrop($opacity: 0.45) {
+    &::before {
+        content: "";
+        @include overlay($opacity);
+    }
+}
+
+@mixin overlay($opacity: 0.45) {
+    @include pos-full();
+    background-color: rgba(0, 0, 0, $opacity);
+}
+
+@mixin line-clamp($lines: 2) {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
+    white-space: normal;
+}
+
+@mixin mq($breakpoint) {
+    @if (meta.type-of($breakpoint) == "number") {
+        @media (max-width: #{$breakpoint}px) {
+            @content;
+        }
+    } @else if (meta.type-of($breakpoint) == "string") {
+        @if (map.has-key($breakpoints, $breakpoint)) {
+            $point: map.get($breakpoints, $breakpoint);
+            @media (max-width: #{$point}px) {
+                @content;
+            }
+        } @else {
+            @error "wrong breakpoint key: #{$breakpoint}";
+        }
+    } @else {
+        @error "breakpoint type error";
+    }
+
+    @each $key, $value in $breakpoints {
+    }
+}

@@ -1,0 +1,47 @@
+@use "../abstracts" as *;
+
+.--underline {
+    color: var(--clr-primary-main);
+    text-decoration: underline;
+}
+
+.--blind {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.--flex-center {
+    @include flex-center();
+}
+
+.--flex-colmn {
+    display: flex;
+    flex-direction: column;
+}
+
+.no-hr {
+    display: block;
+    background-color: var(--clr-table-border);
+    height: 0.1rem;
+    margin: var(--spacing-0-5) 0;
+    border: 0;
+
+    &.--sm {
+        margin: var(--spacing-0-5) 0;
+    }
+
+    &.--md {
+        margin: var(--spacing-1) 0;
+    }
+
+    &.--lg {
+        margin: var(--spacing-2) 0;
+    }
+
+    &.--xl {
+        margin: var(--spacing-3) 0;
+    }
+}
