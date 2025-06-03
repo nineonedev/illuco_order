@@ -9,8 +9,8 @@ use Framework\Security\Auth\GateManager;
  */
 class Gate extends Facade
 {
-    protected static function accessor(): string
+    protected static function getFacadeAccessor(): string
     {
-        return 'gate'; 
+        return '';
     }
 }

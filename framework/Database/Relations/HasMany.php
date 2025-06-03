@@ -2,26 +2,30 @@
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
+use Framework\Database\Contracts\RepositoryInterface;
+use Framework\Database\Repositories\RepositoryResolver;
 
 class HasMany extends Relation
 {
     protected string $foreignKey;
     protected string $localKey;
+    protected string $relatedEntity;
 
     public function __construct(
         Entity $parent,
-        RepositoryInterface $repository,
+        string $relatedEntity,
         string $foreignKey,
-        string $localKey
+        string $localKey = 'id'
     ) {
+        $this->relatedEntity = $relatedEntity;
         $this->foreignKey = $foreignKey;
         $this->localKey = $localKey;
 
+        $repository = RepositoryResolver::resolveFromEntity($relatedEntity);
         parent::__construct($parent, $repository);
 
-        $this->query->where($this->foreignKey, '=', $this->parent->get($this->localKey));
+        $this->query->where($this->foreignKey, '=', $parent->get($this->localKey));
     }
 
     public function get(): array
@@ -33,7 +37,6 @@ class HasMany extends Relation
             $records
         );
     }
-
 
     public function getEagerResults(array $entities): array
     {
@@ -54,10 +57,9 @@ class HasMany extends Relation
         return $grouped;
     }
 
-
     protected function getRelatedEntity(): string
     {
-        return $this->repository->getEntityClass();
+        return $this->relatedEntity;
     }
 
     public function getForeignKey(): string

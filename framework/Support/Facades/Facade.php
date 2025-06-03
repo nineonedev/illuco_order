@@ -16,7 +16,7 @@ abstract class Facade
      *
      * @return string
      */
-    abstract protected static function accessor(): string;
+    abstract protected static function getFacadeAccessor(): string;
 
     /**
      * Get the root object behind the facade.
@@ -25,7 +25,7 @@ abstract class Facade
      */
     protected static function getFacadeRoot(): object
     {
-        $name = static::accessor();
+        $name = static::getFacadeAccessor();
 
         if (isset(static::$resolvedInstances[$name])) {
             return static::$resolvedInstances[$name];

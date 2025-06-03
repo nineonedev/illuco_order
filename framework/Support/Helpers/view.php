@@ -1,15 +1,16 @@
 <?php
 
 use Framework\Support\Facades\View;
+use Framework\View\ViewRenderer;
 
 if (!function_exists('view')) {
     /**
-     * @return string|\Framework\View\ViewFactory
+     * @return string|ViewRenderer
      */
-    function view(?string $view = null, array $data = [])
+    function view(?string $view = null, array $data = []): mixed
     {
         if (is_null($view)) {
-            return View::getInstance();
+            return View::getFacadeRoot();
         }
 
         return View::render($view, $data);

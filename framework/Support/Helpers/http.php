@@ -16,6 +16,13 @@ if (!function_exists('abort')) {
     }
 }
 
+if (!function_exists('back')) {
+    function back(): Response
+    {
+        return Response::back();
+    }
+}
+
 if (!function_exists('response')) {
     function response(string $content = '', int $statusCode = 200, array $headers = [])
     {

@@ -24,7 +24,7 @@ class SymLink
 
             $this->delete(); 
         }
-
+        
         if (!symlink($this->target, $this->link)) {
             throw new RuntimeException("Failed to create symbolic link: {$this->link} => {$this->target}");
         }

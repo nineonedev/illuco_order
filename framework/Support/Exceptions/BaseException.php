@@ -12,7 +12,7 @@ class BaseException extends Exception
         string $message = "", 
         int $code = 0, 
         array $context = [], 
-        Exception $previous = null
+        ?Exception $previous = null
     )
     {
         parent::__construct($message, $code, $previous); 

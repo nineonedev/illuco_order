@@ -8,7 +8,6 @@ use Framework\Database\Contracts\ConnectionInterface;
 use Framework\Database\Migration\MigrationRepository;
 use Framework\Database\Migration\Migrator;
 use Framework\Database\Schema\Schema;
-use Framework\Support\Test;
 
 class DatabaseServiceProvider extends ServiceProvider
 {

@@ -21,7 +21,7 @@ class DB extends Facade
      *
      * 주로 DB::table(), DB::transaction() 등과 같은 방식으로 사용됩니다.
      */
-    protected static function accessor(): string
+    protected static function getFacadeAccessor(): string
     {
         return Database::class;
     }

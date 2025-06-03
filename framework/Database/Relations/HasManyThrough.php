@@ -2,64 +2,78 @@
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
 
 class HasManyThrough extends Relation
 {
+    protected string $relatedEntity;
     protected string $throughEntity;
-    protected string $throughTable;
 
     protected string $firstKey;         // related → through FK
     protected string $secondKey;        // through → parent FK
     protected string $localKey;         // parent PK
     protected string $secondLocalKey;   // through PK
 
+    protected string $relatedTable;
+    protected string $throughTable;
+
     public function __construct(
         Entity $parent,
-        RepositoryInterface $repository,
+        string $relatedEntity,
         string $throughEntity,
         string $firstKey,
         string $secondKey,
-        string $localKey,
-        string $secondLocalKey
+        string $localKey = 'id',
+        string $secondLocalKey = 'id'
     ) {
+        $this->relatedEntity = $relatedEntity;
         $this->throughEntity = $throughEntity;
         $this->firstKey = $firstKey;
         $this->secondKey = $secondKey;
         $this->localKey = $localKey;
         $this->secondLocalKey = $secondLocalKey;
 
-        parent::__construct($parent, $repository);
+        parent::__construct($parent);
 
-        $relatedTable = $this->repository->getTable();
-        $this->throughTable = (new $throughEntity())->getTable();
+        $this->relatedTable = (new $relatedEntity)->getTable();
+        $this->throughTable = (new $throughEntity)->getTable();
 
         $this->query
-            ->join($this->throughTable, "{$this->throughTable}.{$this->secondKey}", '=', "{$relatedTable}.{$this->firstKey}")
+            ->join(
+                $this->throughTable,
+                "{$this->throughTable}.{$this->secondKey}",
+                '=',
+                "{$this->relatedTable}.{$this->firstKey}"
+            )
             ->where("{$this->throughTable}.{$this->secondLocalKey}", '=', $parent->get($this->localKey));
     }
 
     public function get(): array
     {
         $records = $this->query->get();
-        return array_map(fn($row) => $this->repository->createEntity((array)$row), $records);
+
+        return array_map(
+            fn($record) => $this->repository->createEntity((array)$record),
+            $records
+        );
     }
 
     public function getEagerResults(array $entities): array
     {
-        $localIds = array_map(fn($e) => $e->get($this->localKey), $entities);
-        if (empty($localIds)) return [];
-
-        $relatedTable = $this->repository->getTable();
-        $throughTable = $this->throughTable;
+        $localValues = array_map(fn($e) => $e->get($this->localKey), $entities);
+        if (empty($localValues)) return [];
 
         $records = $this->repository
             ->getBuilder()
             ->getConnection()
-            ->table($relatedTable)
-            ->join($throughTable, "{$throughTable}.{$this->secondKey}", '=', "{$relatedTable}.{$this->firstKey}")
-            ->whereIn("{$throughTable}.{$this->secondLocalKey}", $localIds)
+            ->table($this->relatedTable)
+            ->join(
+                $this->throughTable,
+                "{$this->throughTable}.{$this->secondKey}",
+                '=',
+                "{$this->relatedTable}.{$this->firstKey}"
+            )
+            ->whereIn("{$this->throughTable}.{$this->secondLocalKey}", $localValues)
             ->get();
 
         $grouped = [];
@@ -75,6 +89,6 @@ class HasManyThrough extends Relation
 
     protected function getRelatedEntity(): string
     {
-        return $this->repository->getEntityClass();
+        return $this->relatedEntity;
     }
 }

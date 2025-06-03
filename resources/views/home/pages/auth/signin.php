@@ -1,6 +1,10 @@
 
 <?php extend('layouts.auth') ?>
 
+<?php section('title'); ?>
+로그인
+<?php end_section() ?>
+
 <?php section('content') ?>
 <section class="no-section-xl no-auth-layout">
     <div class="no-auth-container">
@@ -16,7 +20,7 @@
                 </p>
             </header>
             <div>
-                <form method="post" action="" id="auth-form">
+                <form method="post" action="<?=route('auth.login')?>" id="auth-form">
                     <div class="no-form-control">
                         <label for="username" class="no-form-control-inner">
                             <input 
@@ -76,4 +80,25 @@
     </div>
 </section>
 
+<?php end_section() ?>
+
+<?php section('script') ?>
+<script>
+    const frm = document.querySelector('form'); 
+
+    frm.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        
+        const fd = new FormData(e.target); 
+
+        const response = await fetch(e.target.action, {
+            method: e.target.method,
+            body: fd,
+        }); 
+        const resData = await response.json(); 
+
+        console.log(resData);
+        
+    })
+</script>
 <?php end_section() ?>

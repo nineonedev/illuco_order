@@ -8,7 +8,7 @@ class Env
 {
     protected array $values = []; 
 
-    public function __construct(string $path = null)
+    public function __construct(?string $path = null)
     {
         if ($path && file_exists($path)) {
             $this->load($path); 
@@ -44,7 +44,16 @@ class Env
 
     public function get(string $key, ?string $default = null): ?string
     {
-        return $this->values[$key] ?? $default; 
+        $value = $this->values[$key] ?? $default;
+
+        if (is_string($value)) {
+            $lower = strtolower($value);
+            if ($lower === 'true') return true;
+            if ($lower === 'false') return false;
+            if ($lower === 'null') return null;
+        }
+
+        return $value;
     }
 
     public function has(string $key): bool

@@ -21,4 +21,5 @@ interface EntityInterface
     public function __isset($key): bool;
 
     public function __unset($key): void;
+
 }

@@ -16,6 +16,13 @@ class RouteCollection
      */
     protected array $namedRoutes = [];
 
+    public function addNamedRoute(RouteInterface $route): void
+    {
+        if ($route->getName()) {
+            $this->namedRoutes[$route->getName()] = $route;
+        }
+    }
+
     public function add(RouteInterface $route): void
     {
         $method = strtoupper($route->method());
@@ -26,9 +33,7 @@ class RouteCollection
 
         $this->routes[$method][] = $route;
 
-        if ($route->getName()) {
-            $this->namedRoutes[$route->getName()] = $route;
-        }
+        $this->addNamedRoute($route); 
     }
 
     public function match(string $method, string $uri): ?RouteInterface

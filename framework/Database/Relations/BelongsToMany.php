@@ -2,11 +2,11 @@
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
 
 class BelongsToMany extends Relation
 {
+    protected string $relatedEntity;
     protected string $pivotTable;
     protected string $foreignPivotKey;
     protected string $relatedPivotKey;
@@ -15,20 +15,21 @@ class BelongsToMany extends Relation
 
     public function __construct(
         Entity $parent,
-        RepositoryInterface $repository,
+        string $relatedEntity,
         string $pivotTable,
         string $foreignPivotKey,
         string $relatedPivotKey,
         string $parentKey = 'id',
         string $relatedKey = 'id'
     ) {
+        $this->relatedEntity = $relatedEntity;
         $this->pivotTable = $pivotTable;
         $this->foreignPivotKey = $foreignPivotKey;
         $this->relatedPivotKey = $relatedPivotKey;
         $this->parentKey = $parentKey;
         $this->relatedKey = $relatedKey;
 
-        parent::__construct($parent, $repository);
+        parent::__construct($parent);
     }
 
     public function get(): array
@@ -49,8 +50,10 @@ class BelongsToMany extends Relation
 
         $records = $this->query->whereIn($this->relatedKey, $ids)->get();
 
-        $entityClass = $this->repository->getEntityClass();
-        return array_map(fn($r) => new $entityClass((array)$r), $records);
+        return array_map(
+            fn($r) => $this->repository->createEntity((array)$r),
+            $records
+        );
     }
 
     public function getEagerResults(array $entities): array
@@ -71,11 +74,10 @@ class BelongsToMany extends Relation
         $foreignIds = array_map(fn($r) => $r->{$this->foreignPivotKey}, $pivotRows);
 
         $records = $this->query->whereIn($this->relatedKey, $foreignIds)->get();
-        $entityClass = $this->repository->getEntityClass();
 
         $relatedEntities = [];
         foreach ($records as $record) {
-            $relatedEntities[$record->{$this->relatedKey}] = new $entityClass((array)$record);
+            $relatedEntities[$record->{$this->relatedKey}] = $this->repository->createEntity((array)$record);
         }
 
         $results = [];
@@ -149,6 +151,6 @@ class BelongsToMany extends Relation
 
     protected function getRelatedEntity(): string
     {
-        return $this->repository->getEntityClass();
+        return $this->relatedEntity;
     }
 }

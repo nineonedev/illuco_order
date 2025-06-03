@@ -11,17 +11,26 @@ class Route implements RouteInterface
     protected $action;
 
     protected ?string $name = null;
+    protected ?string $namePrefix = null; 
+
     protected array $middleware = [];
     protected array $middlewareGroups = [];
 
     protected array $parameterPatterns = [];
     protected array $parameters = [];
 
+    protected ?RouteCollection $routes = null;
+
     public function __construct(string $method, string $uri, $action)
     {
         $this->method = strtoupper($method);
         $this->uri = $uri;
         $this->action = $action;
+    }
+
+    public function setRouteCollection(RouteCollection $routes): void
+    {
+        $this->routes = $routes;
     }
 
     public function method(): string
@@ -39,11 +48,23 @@ class Route implements RouteInterface
         return $this->action;
     }
 
+    public function setNamePrefix(string $prefix): void
+    {
+        $this->namePrefix = rtrim($prefix, '.') . '.';
+    }
+
     public function name(string $name): RouteInterface
     {
-        if ($this->name !== null) return $this;
+        $fullName = $this->namePrefix ? $this->namePrefix . $name : $name;
         
-        $this->name = $name;
+        if ($this->name !== null) return $this;
+
+        $this->name = $fullName;
+
+        if ($this->routes) {
+            $this->routes->addNamedRoute($this);
+        }
+
         return $this;
     }
 

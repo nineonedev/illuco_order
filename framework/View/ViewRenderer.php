@@ -54,16 +54,21 @@ class ViewRenderer
                 $layout = $this->layout;
                 $this->layout = null;
 
-                return $this->include($layout, $data);
+                $content = $this->include($layout, $data);
             }
 
             return $content;
+        } catch (\Throwable $e) {
+            ob_end_clean(); // 버퍼 제거
+            throw $e; 
+            
         } finally {
             $this->sections->flush();
             $this->components->flush();
             $this->layout = null;
         }
     }
+
 
     public function include(string $view, array $data = []): string
     {
@@ -72,14 +77,7 @@ class ViewRenderer
         extract(array_merge($this->shared, $data), EXTR_SKIP);
 
         ob_start();
-
-        try {
-            include $path;
-        } catch (\Throwable $e) {
-            ob_end_clean();
-            throw $e;
-        }
-
+        include $path;
         return ob_get_clean();
     }
 

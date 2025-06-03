@@ -2,11 +2,11 @@
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
 
 class MorphedByMany extends Relation
 {
+    protected string $relatedEntity;
     protected string $pivotTable;
     protected string $foreignPivotKey;
     protected string $relatedPivotKey;
@@ -15,20 +15,20 @@ class MorphedByMany extends Relation
 
     public function __construct(
         Entity $parent,
-        RepositoryInterface $repository,
+        string $relatedEntity,
         string $pivotTable,
         string $foreignPivotKey,
         string $relatedPivotKey,
         string $morphName
     ) {
+        $this->relatedEntity = $relatedEntity;
         $this->pivotTable = $pivotTable;
         $this->foreignPivotKey = $foreignPivotKey;
         $this->relatedPivotKey = $relatedPivotKey;
-
         $this->morphTypeColumn = "{$morphName}_type";
         $this->morphIdColumn = "{$morphName}_id";
 
-        parent::__construct($parent, $repository);
+        parent::__construct($parent);
     }
 
     public function get(): array
@@ -50,7 +50,10 @@ class MorphedByMany extends Relation
 
         $records = $this->query->whereIn($this->foreignPivotKey, $ids)->get();
 
-        return array_map(fn($r) => $this->repository->createEntity((array)$r), $records);
+        return array_map(
+            fn($r) => $this->repository->createEntity((array)$r),
+            $records
+        );
     }
 
     public function getEagerResults(array $entities): array
@@ -73,13 +76,11 @@ class MorphedByMany extends Relation
         $records = $this->query->whereIn($this->foreignPivotKey, $relatedIds)->get();
 
         $relatedEntities = [];
-
         foreach ($records as $record) {
             $relatedEntities[$record->{$this->foreignPivotKey}] = $this->repository->createEntity((array)$record);
         }
 
         $results = [];
-
         foreach ($pivotRows as $pivot) {
             $morphId = $pivot->{$this->morphIdColumn};
             $relatedId = $pivot->{$this->relatedPivotKey};
@@ -92,6 +93,6 @@ class MorphedByMany extends Relation
 
     protected function getRelatedEntity(): string
     {
-        return $this->repository->getEntityClass();
+        return $this->relatedEntity;
     }
 }

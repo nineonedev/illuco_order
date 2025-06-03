@@ -14,6 +14,10 @@ interface RepositoryInterface
 
     public function all(): array;
 
+    public function getPrimaryKeyName(): string;
+    
+    public function with(array $relations): RepositoryInterface;
+
     public function save(Entity $entity): bool;
 
     public function delete(Entity $entity): bool;
@@ -24,9 +28,10 @@ interface RepositoryInterface
 
     public function getEntityClass(): string;
 
-    public function with(array $relations): self;
 
     public function paginate(int $perPage = 15, int $page = 1): Paginator;
 
     public function createEntity(array $row): Entity;
+
+    public function hasPrimarykey(Entity $entity): bool;
 }

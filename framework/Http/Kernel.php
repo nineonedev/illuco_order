@@ -2,8 +2,7 @@
 
 namespace Framework\Http;
 
-use Exception;
-use Throwable;
+use Framework\Support\Exceptions\Http\NotFoundException;
 use Framework\Core\Application;
 use Framework\Routing\Router;
 use Framework\Routing\Route;
@@ -11,7 +10,6 @@ use Framework\Http\Response;
 use Framework\Http\Pipeline;
 use Framework\Core\Contracts\KernelInterface;
 use Framework\Configurations\MiddlewareConfigurator;
-use Framework\Support\Exceptions\HttpException;
 
 class Kernel implements KernelInterface
 {
@@ -37,7 +35,7 @@ class Kernel implements KernelInterface
         $route = $this->router->match($request);
 
         if (!$route) {
-            return new Response('404 Not Found', 404);
+            throw new NotFoundException("404 Not Found");
         }
 
         $request->setRoute($route);

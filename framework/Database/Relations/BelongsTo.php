@@ -2,33 +2,34 @@
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
 
 class BelongsTo extends Relation
 {
+    protected string $relatedEntity;
     protected string $foreignKey;
     protected string $ownerKey;
 
     public function __construct(
         Entity $parent,
-        RepositoryInterface $repository,
+        string $relatedEntity,
         string $foreignKey,
-        string $ownerKey
+        string $ownerKey = 'id'
     ) {
+        $this->relatedEntity = $relatedEntity;
         $this->foreignKey = $foreignKey;
         $this->ownerKey = $ownerKey;
 
-        parent::__construct($parent, $repository);
+        parent::__construct($parent);
 
-        $this->query->where($this->ownerKey, '=', $this->parent->get($this->foreignKey));
+        $this->query->where($this->ownerKey, '=', $parent->get($this->foreignKey));
     }
 
     public function get(): ?Entity
     {
         $record = $this->query->first();
 
-        return $record 
+        return $record
             ? $this->repository->createEntity((array) $record)
             : null;
     }
@@ -44,7 +45,7 @@ class BelongsTo extends Relation
         $grouped = [];
 
         foreach ($records as $record) {
-            $entity = $this->repository->createEntity((array) $record); 
+            $entity = $this->repository->createEntity((array) $record);
             $key = $record->{$this->ownerKey};
             $grouped[$key] = $entity;
         }
@@ -54,7 +55,7 @@ class BelongsTo extends Relation
 
     protected function getRelatedEntity(): string
     {
-        return $this->repository->getEntityClass();
+        return $this->relatedEntity;
     }
 
     public function getForeignKey(): string

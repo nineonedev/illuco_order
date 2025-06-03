@@ -1,11 +1,11 @@
 RewriteEngine On
 
 # 비공개 서버 내부 폴더 직접 접근 차단 (app 제외)
-RewriteRule ^(config|bootstrap|storage|database|framework|resources|routes|vendor|private|env)(/|$) /error/403 [L,R=302]
+RewriteRule ^(config|bootstrap|storage|database|framework|resources|routes|vendor|env)(/|$) /errors/403 [L,R=302]
 
 # /app (공개 업로드 등) 및 /assets 경로는 통과
 RewriteCond %{REQUEST_URI} ^/uploads/ [OR]
-RewriteCond %{REQUEST_URI} ^/assets/
+RewriteCond %{REQUEST_URI} ^/static/
 RewriteRule ^ - [L]
 
 # 실제 파일 또는 디렉토리 요청은 통과

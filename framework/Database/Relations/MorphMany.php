@@ -2,11 +2,11 @@
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
 
 class MorphMany extends Relation
 {
+    protected string $relatedEntity;
     protected string $morphName;
     protected string $localKey;
 
@@ -15,17 +15,18 @@ class MorphMany extends Relation
 
     public function __construct(
         Entity $parent,
-        RepositoryInterface $repository,
+        string $relatedEntity,
         string $morphName,
         string $localKey = 'id'
     ) {
+        $this->relatedEntity = $relatedEntity;
         $this->morphName = $morphName;
         $this->localKey = $localKey;
 
         $this->morphTypeColumn = "{$morphName}_type";
         $this->morphIdColumn = "{$morphName}_id";
 
-        parent::__construct($parent, $repository);
+        parent::__construct($parent);
 
         $this->query
             ->where($this->morphTypeColumn, '=', get_class($parent))
@@ -35,7 +36,11 @@ class MorphMany extends Relation
     public function get(): array
     {
         $records = $this->query->get();
-        return array_map(fn($row) => $this->repository->createEntity((array)$row), $records);
+
+        return array_map(
+            fn($record) => $this->repository->createEntity((array)$record),
+            $records
+        );
     }
 
     public function getEagerResults(array $entities): array
@@ -61,6 +66,6 @@ class MorphMany extends Relation
 
     protected function getRelatedEntity(): string
     {
-        return $this->repository->getEntityClass();
+        return $this->relatedEntity;
     }
 }

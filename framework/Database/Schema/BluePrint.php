@@ -97,6 +97,11 @@ class Blueprint
         return $this->addColumn('ENUM(' . implode(',', $escaped) . ')', $name);
     }
 
+    public function foreign(string $name, string $type = 'BIGINT'): ColumnDefinition
+    {
+        return $this->addColumn($type, $name)->unsigned()->foreign();
+    }
+
     public function json(string $name): ColumnDefinition
     {
         return $this->addColumn('JSON', $name);
@@ -105,6 +110,22 @@ class Blueprint
     public function binary(string $name): ColumnDefinition
     {
         return $this->addColumn('BLOB', $name);
+    }
+
+    /**
+     * @return array<int, array<string, string|null>>
+     */
+    public function getForeignKeys(): array
+    {
+        $foreigns = [];
+
+        foreach ($this->columns as $column) {
+            if ($fk = $column->getForeign()) {
+                $foreigns[] = $fk;
+            }
+        }
+
+        return $foreigns;
     }
 
     public function mediumText(string $name): ColumnDefinition

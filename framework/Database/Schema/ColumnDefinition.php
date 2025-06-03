@@ -4,19 +4,108 @@ namespace Framework\Database\Schema;
 
 class ColumnDefinition
 {
+
+    protected ?string $foreignTable = null;
+    protected ?string $foreignColumn = null;
+    protected ?string $onDelete = null;
+    protected ?string $onUpdate = null;
+
     protected string $name;
     protected string $type;
     protected bool $nullable = false;
     protected bool $autoIncrement = false;
     protected bool $unsigned = false;
     protected $default = null;
-    protected ?string $onUpdate = null;
     protected array $indexes = [];
 
     public function __construct(string $name, string $type)
     {
         $this->name = $name;
         $this->type = $type;
+    }
+
+    public function foreign(): self
+    {
+        return $this;
+    }
+
+    public function references(string $column): self
+    {
+        $this->foreignColumn = $column;
+        return $this;
+    }
+
+    public function on(string $table): self
+    {
+        $this->foreignTable = $table;
+        return $this;
+    }
+
+    public function onDelete(string $action): self
+    {
+        $this->onDelete = strtoupper($action);
+        return $this;
+    }
+
+    public function onUpdate(string $action): self
+    {
+        $this->onUpdate = strtoupper($action);
+        return $this;
+    }
+
+    public function onDeleteCascade(): self
+    {
+        return $this->onDelete('CASCADE');
+    }
+
+    public function onDeleteSetNull(): self
+    {
+        return $this->onDelete('SET NULL');
+    }
+
+    public function onDeleteRestrict(): self
+    {
+        return $this->onDelete('RESTRICT');
+    }
+
+    public function onDeleteNoAction(): self
+    {
+        return $this->onDelete('NO ACTION');
+    }
+
+    public function onUpdateCascade(): self
+    {
+        return $this->onUpdate('CASCADE');
+    }
+
+    public function onUpdateSetNull(): self
+    {
+        return $this->onUpdate('SET NULL');
+    }
+
+    public function onUpdateRestrict(): self
+    {
+        return $this->onUpdate('RESTRICT');
+    }
+
+    public function onUpdateNoAction(): self
+    {
+        return $this->onUpdate('NO ACTION');
+    }
+
+    public function getForeign(): ?array
+    {
+        if (! $this->foreignTable || ! $this->foreignColumn) {
+            return null;
+        }
+
+        return [
+            'column' => $this->name,
+            'references' => $this->foreignColumn,
+            'on' => $this->foreignTable,
+            'onDelete' => $this->onDelete,
+            'onUpdate' => $this->onUpdate,
+        ];
     }
 
     public function nullable(): self
@@ -28,12 +117,6 @@ class ColumnDefinition
     public function default($value): self
     {
         $this->default = $value;
-        return $this;
-    }
-
-    public function onUpdate(string $value): self
-    {
-        $this->onUpdate = $value;
         return $this;
     }
 

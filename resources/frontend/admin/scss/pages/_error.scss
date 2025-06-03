@@ -37,29 +37,29 @@
         width: 100vw;
     }
 
-    .no-error-title {
+    &__title {
         color: #ff4e4e;
         font-size: fluid(48, 72);
         font-weight: bold;
         text-align: center;
     }
 
-    .no-error-block {
+    &__block {
         background-color: #1e1e1e;
         padding: 1.6rem 2.4rem;
         border-radius: 0.6rem;
+        border-left: 4px solid #ff4e4e;
         font-size: 1.6rem;
         line-height: 1.6;
-        border-left: 4px solid #ff4e4e;
 
-        strong {
+        &-label {
             display: block;
             color: #fff;
             font-weight: 600;
             margin-bottom: 0.8rem;
         }
 
-        p {
+        &-value {
             color: #ccc;
             font-family: "Fira Code", monospace;
             font-size: 1.4rem;
@@ -71,35 +71,137 @@
         }
     }
 
-    .no-error-trace {
+    &__trace {
         background: #1e1e1e;
         overflow-x: auto;
         border-radius: 0.4rem;
+        padding: 1rem;
+        font-family: "Fira Code", monospace;
+        font-size: 1.3rem;
+        color: #ccc;
 
-        &__code {
-            font-family: "Fira Code", monospace;
-            font-size: 1.3rem;
-            padding: 1rem;
-            color: #ccc;
+        .trace-line {
+            padding: 0.2rem 0.5rem;
+            border-left: 4px solid transparent;
 
-            .trace-line {
-                padding: 0.2rem 0.5rem;
-                border-left: 4px solid transparent;
-
-                &.highlight {
-                    background-color: rgba(255, 78, 78, 0.1);
-                    border-left-color: #ff4e4e;
-                }
-
-                .line-number {
-                    display: inline-block;
-                    width: 2.5rem;
-                    color: #888;
-                    text-align: right;
-                    margin-right: 1rem;
-                    user-select: none;
-                }
+            &.highlight {
+                background-color: rgba(255, 78, 78, 0.1);
+                border-left-color: #ff4e4e;
             }
+
+            .line-number {
+                display: inline-block;
+                width: 2.5rem;
+                color: #888;
+                text-align: right;
+                margin-right: 1rem;
+                user-select: none;
+            }
+        }
+    }
+}
+
+.no-debug-wrapper {
+    max-width: 108rem;
+    margin: 0 auto;
+    padding: 4rem;
+    font-family: "Fira Code", monospace;
+    color: #f5f5f5;
+    background: #121212;
+}
+
+.no-debug-header {
+    background: #1e1e1e;
+    padding: 2rem 2.4rem;
+    border-left: 6px solid #ff4e4e;
+    border-radius: 0.6rem;
+    margin-bottom: 2rem;
+
+    .no-debug-title {
+        font-size: 2.4rem;
+        font-weight: bold;
+        color: #ff4e4e;
+        margin-bottom: 1rem;
+    }
+
+    .no-debug-message {
+        font-size: 1.6rem;
+        color: #ccc;
+    }
+}
+
+.no-debug-location {
+    background: #1a1a1a;
+    padding: 1rem 1.6rem;
+    font-size: 1.4rem;
+    border-left: 4px solid #ffa726;
+    border-radius: 0.4rem;
+    margin-bottom: 2rem;
+
+    display: flex;
+    justify-content: space-between;
+
+    .no-debug-line {
+        color: #ff9f1c;
+        font-weight: bold;
+    }
+}
+
+.no-debug-snippet {
+    background: #1e1e1e;
+    border-radius: 0.4rem;
+    margin-bottom: 2rem;
+
+    .no-code-line {
+        padding: 0.4rem 1.2rem;
+        display: flex;
+        gap: 1rem;
+        border-left: 4px solid transparent;
+
+        &.active {
+            background-color: rgba(255, 78, 78, 0.15);
+            border-left-color: #ff4e4e;
+        }
+
+        .no-line-num {
+            width: 3rem;
+            text-align: right;
+            color: #888;
+            user-select: none;
+        }
+
+        .no-code {
+            color: #ddd;
+            white-space: pre-wrap;
+        }
+    }
+}
+
+.no-debug-trace {
+    background: #1e1e1e;
+    border-radius: 0.4rem;
+    padding: 1.2rem;
+    font-size: 1.3rem;
+
+    .no-trace-line {
+        display: flex;
+        gap: 1rem;
+        padding: 0.3rem 0;
+
+        &.highlight {
+            background-color: rgba(255, 78, 78, 0.1);
+        }
+
+        .no-trace-num {
+            color: #888;
+            width: 3rem;
+            text-align: right;
+            user-select: none;
+        }
+
+        .no-trace-text {
+            color: #ccc;
+            white-space: pre-wrap;
         }
     }
 }

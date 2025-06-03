@@ -17,13 +17,13 @@ class Router implements RouterInterface
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ControllerDispatcher $dispatcher = null,
-        UrlGenerator $urlGenerator = null
+        ?ControllerDispatcher $dispatcher = null,
+        ?UrlGenerator $urlGenerator = null
     ) {
         $this->routes = new RouteCollection();
         $this->dispatcher = $dispatcher ?? app()->make(ControllerDispatcher::class);
-        $this->registrar = new RouteRegistrar($this);
-        $this->groupRegistrar = new RouteGroupRegistrar($this);
+        $this->registrar = new RouteRegistrar($this->routes);
+        $this->groupRegistrar = new RouteGroupRegistrar($this->registrar);
         $this->urlGenerator = $urlGenerator ?? new UrlGenerator($this->routes);
     }
 
@@ -41,6 +41,13 @@ class Router implements RouterInterface
     public function registrar(): RouteRegistrar
     {
         return $this->registrar;
+    }
+
+    public function view(string $uri, string $template, array $data = []): Route
+    {
+        return $this->get($uri, function() use($template, $data){
+            return view($template, $data); 
+        }); 
     }
 
     /**

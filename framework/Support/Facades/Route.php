@@ -18,6 +18,7 @@ use Framework\Routing\RouteGroupRegistrar;
  * @method static RouteInstance patch(string $uri, $action)
  * @method static RouteInstance delete(string $uri, $action)
  * @method static RouteInstance any(string $uri, $action)
+ * @method static RouteInstance view(string $uri, string $template, array $data = [])
  * @method static RouteGroupRegistrar middleware(string|array $middleware)
  * @method static RouteGroupRegistrar prefix(string $prefix)
  * @method static RouteGroupRegistrar name(string $name)
@@ -33,7 +34,7 @@ use Framework\Routing\RouteGroupRegistrar;
  */
 class Route extends Facade
 {
-    protected static function accessor(): string
+    protected static function getFacadeAccessor(): string
     {
         return RouterInterface::class; 
     }

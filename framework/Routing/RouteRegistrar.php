@@ -4,12 +4,12 @@ namespace Framework\Routing;
 
 class RouteRegistrar
 {
-    protected Router $router;
+    protected RouteCollection $collection;
     protected array $groupAttributes = [];
 
-    public function __construct(Router $router)
+    public function __construct(RouteCollection $collection)
     {
-        $this->router = $router;
+        $this->collection = $collection;
     }
 
     public function setGroupAttributes(array $attributes): void
@@ -71,22 +71,20 @@ class RouteRegistrar
 
         $action = $this->buildAction($action, $attributes['controller'] ?? null);  
         $route = new Route($method, $fullUri, $action);
+        
+        if ($route instanceof Route) {
+            $route->setRouteCollection($this->collection); 
+        }
 
         if (!empty($attributes['middleware'])) {
             $route->middleware($attributes['middleware']);
         }
 
         if (!empty($attributes['as'])) {
-            $routeName = $route->getName(); 
-
-            if ($routeName) {
-                $route->name($attributes['as'] . $routeName);
-            } else {
-                $route->name($attributes['as']); 
-            }
+            $route->setNamePrefix($attributes['as']); 
         }
 
-        $this->router->getRoutes()->add($route);
+        $this->collection->add($route);
 
         return $route;
     }

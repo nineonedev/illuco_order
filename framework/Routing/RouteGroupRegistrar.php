@@ -9,12 +9,12 @@ class RouteGroupRegistrar
 {
     protected array $groupStack = []; 
     protected array $attributes = []; 
-    protected Router $router;
+    protected RouteRegistrar $registrar;
     
 
-    public function __construct(Router $router)
+    public function __construct(RouteRegistrar $registrar)
     {
-        $this->router = $router; 
+        $this->registrar = $registrar; 
     }
 
     public function prefix(string $prefix): self 
@@ -55,13 +55,13 @@ class RouteGroupRegistrar
 
         $merged = $this->mergeGroupAttributes();
 
-        $previous = $this->router->registrar()->getGroupAttributes(); 
+        $previous = $this->registrar->getGroupAttributes(); 
 
-        $this->router->registrar()->setGroupAttributes($merged); 
+        $this->registrar->setGroupAttributes($merged); 
 
-        $callback($this->router);
+        $callback($this->registrar);
         
-        $this->router->registrar()->setGroupAttributes($previous); 
+        $this->registrar->setGroupAttributes($previous); 
         $this->popGroup();
     }
 

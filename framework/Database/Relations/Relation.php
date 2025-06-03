@@ -1,25 +1,32 @@
-<?php 
+<?php
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
+use Framework\Database\Contracts\RepositoryInterface;
+use Framework\Database\Repositories\RepositoryResolver;
 use Framework\Database\Query\Builder;
 
-abstract class Relation 
+abstract class Relation
 {
-    protected Entity $parent; 
+    protected Entity $parent;
     protected Builder $query;
-    protected RepositoryInterface $repository; 
+    protected RepositoryInterface $repository;
 
-    public function __construct(Entity $parent, RepositoryInterface $repository)
+    public function __construct(Entity $parent, ?RepositoryInterface $repository = null)
     {
-        $this->parent = $parent; 
-        $this->repository = $repository; 
+        $this->parent = $parent;
+
+        if (!$repository) {
+            $entityClass = $this->getRelatedEntity();
+            $repository = RepositoryResolver::resolveFromEntity($entityClass);
+        }
+
+        $this->repository = $repository;
         $this->query = $repository->getBuilder();
     }
 
-    abstract public function get(); 
+    abstract public function get();
 
     /**
      * @param Entity[] $entities

@@ -42,6 +42,12 @@ class Request {
         );
     }
 
+    public function isJsonRequest(): bool
+    {
+        return $this->http()->isAjax()
+        || stripos(request()->http()->accept() ?? '', 'application/json') !== false;
+    }
+
     public function http(): Http
     {
         return $this->http;

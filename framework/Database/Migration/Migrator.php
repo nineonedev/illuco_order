@@ -2,6 +2,7 @@
 
 namespace Framework\Database\Migration;
 
+use Framework\Console\UI\ProgressBar;
 use Framework\Database\Contracts\ConnectionInterface;
 use Framework\Database\Contracts\Migration;
 use RuntimeException;
@@ -28,27 +29,28 @@ class Migrator
 
         $ran = $this->repository->getRan();
         $files = MigrationFile::all($this->migrationPath);
+        $pending = array_filter($files, fn($file) => !in_array($file, $ran, true)); 
 
+        $bar = new ProgressBar(count($pending), 'Migrating', 'done'); 
+        $bar->advance(0);
 
         foreach ($files as $file) {
-            if (in_array($file, $ran, true)) {
-                continue;
-            }
-
-            $migration = require $file;  
+            $migration = require $file;
+            
 
             if (! $migration instanceof Migration) {
                 throw new RuntimeException("Migration must return instance of Migration.");
             }
 
             $this->connection->beginTransaction();
-
-            $migration->up($this->connection->schema());
-
+            $migration->up();
             $this->repository->log($file);
-
             $this->connection->commit();
+
+            $bar->advance(); 
         }
+
+        $bar->finish();
     }
 
     public function rollback(): void
@@ -72,7 +74,7 @@ class Migrator
 
             $this->connection->beginTransaction();
 
-            $instance->down($this->connection->schema());
+            $instance->down();
 
             $this->repository->delete($migration['name']);
 

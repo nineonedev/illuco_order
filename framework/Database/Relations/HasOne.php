@@ -2,26 +2,27 @@
 
 namespace Framework\Database\Relations;
 
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Entities\Entity;
 
 class HasOne extends Relation
 {
+    protected string $relatedEntity;
     protected string $foreignKey;
     protected string $localKey;
 
     public function __construct(
         Entity $parent,
-        RepositoryInterface $repository,
+        string $relatedEntity,
         string $foreignKey,
         string $localKey = 'id'
     ) {
+        $this->relatedEntity = $relatedEntity;
         $this->foreignKey = $foreignKey;
         $this->localKey = $localKey;
 
-        parent::__construct($parent, $repository);
+        parent::__construct($parent);
 
-        $this->query->where($this->foreignKey, '=', $this->parent->get($this->localKey));
+        $this->query->where($this->foreignKey, '=', $parent->get($this->localKey));
     }
 
     public function get(): ?Entity
@@ -54,7 +55,7 @@ class HasOne extends Relation
 
     protected function getRelatedEntity(): string
     {
-        return $this->repository->getEntityClass();
+        return $this->relatedEntity;
     }
 
     public function getForeignKey(): string

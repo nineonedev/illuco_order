@@ -24,6 +24,13 @@ if (!function_exists('database')) {
     }
 }
 
+if (!function_exists('repository')) {
+    function repository(string $repository): RepositoryInterface
+    {
+        return app($repository);
+    }
+}
+
 if (!function_exists('db')) {
     /**
      * @return Builder|Database

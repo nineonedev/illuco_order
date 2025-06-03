@@ -23,7 +23,7 @@ use Framework\View\ViewRenderer;
  */
 class View extends Facade 
 {
-    protected static function accessor(): string
+    protected static function getFacadeAccessor(): string
     {
         return ViewRenderer::class;
     }

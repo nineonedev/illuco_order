@@ -38,6 +38,15 @@ class Response
         return $this;
     }
 
+    public function setHeaders(array $headers): self
+    {
+        foreach ($headers as $key => $value) {
+            $this->setHeader($key, $value);
+        }
+
+        return $this; 
+    }
+
     public function getContent(): string
     {
         return $this->content;

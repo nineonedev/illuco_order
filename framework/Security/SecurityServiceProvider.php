@@ -28,9 +28,9 @@ class SecurityServiceProvider extends ServiceProvider
     public function register(): void
     {
         // 해싱
-        $this->app->singleton(HasherInterface::class, function(){
-            return new BcryptHasher();
-        });
+        $bcrypter = new BcryptHasher();
+        $this->app->instance(BcryptHasher::class, $bcrypter);
+        $this->app->instance(HasherInterface::class, $bcrypter);
         
         // 암호화
         $this->app->singleton(EncrypterInterface::class, function(){
