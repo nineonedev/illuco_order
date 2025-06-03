@@ -2,36 +2,28 @@
 
 namespace Framework\Database\Contracts;
 
-use Framework\Database\Entities\Entity;
+use Framework\Database\Model\Entities\Entity;
 use Framework\Database\Query\Builder;
-use Framework\Database\Paginator\Paginator;
 
 interface RepositoryInterface
 {
-    public function find($id): ?Entity;
+    public function with(): array;
 
-    public function findBy(string $column, $value): ?Entity;
-
-    public function all(): array;
-
-    public function getPrimaryKeyName(): string;
+    public function query(): Builder;
     
-    public function with(array $relations): RepositoryInterface;
+    public function getTable(): string;
 
     public function save(Entity $entity): bool;
 
     public function delete(Entity $entity): bool;
 
-    public function getBuilder(): Builder;
+    public function find($id): ?Entity;
 
-    public function getTable(): string;
+    public function findMany(array $ids): array;
 
-    public function getEntityClass(): string;
+    public function all(): array;
 
+    public function where(string $column, $value): array;
 
-    public function paginate(int $perPage = 15, int $page = 1): Paginator;
-
-    public function createEntity(array $row): Entity;
-
-    public function hasPrimarykey(Entity $entity): bool;
+    public function whereIn(string $column, array $values): array
 }

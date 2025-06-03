@@ -1,20 +1,19 @@
 <?php
 
-namespace Framework\Database\Factories;
+namespace Framework\Database\Model\Entities\Casts;
 
 use Framework\Database\Contracts\CastInterface;
-use Framework\Database\Entities\Casts;
 use InvalidArgumentException;
 
 class CastFactory
 {
     protected static array $casts = [
-        'bool'     => Casts\BoolCast::class,
-        'int'      => Casts\IntegerCast::class,
-        'float'    => Casts\FloatCast::class,
-        'string'   => Casts\StringCast::class,
-        'array'    => Casts\ArrayCast::class,
-        'datetime' => Casts\DateTimeCast::class,
+        'bool'     => BoolCast::class,
+        'int'      => IntegerCast::class,
+        'float'    => FloatCast::class,
+        'string'   => StringCast::class,
+        'array'    => ArrayCast::class,
+        'datetime' => DateTimeCast::class,
     ];
 
     public static function resolve(string $type): CastInterface

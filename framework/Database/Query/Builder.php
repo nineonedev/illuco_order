@@ -148,15 +148,22 @@ class Builder
     }
 
 
-    // 조건절 추가
-    public function where(string $column, string $operator, $value): self
+    public function where(string $column, $operator = null, $value = null): self
     {
+        // where('age', 30) → operator 생략되면 '=' 처리
+        if (func_num_args() === 2) {
+            $value = $operator;
+            $operator = '=';
+        }
+
         $this->wheres[] = [
             'type' => 'basic',
             'column' => $column,
             'operator' => $operator,
             'value' => $value,
+            'boolean' => 'and',
         ];
+
         return $this;
     }
     
@@ -171,8 +178,13 @@ class Builder
         return $this;
     }
 
-    public function orWhere(string $column, string $operator, $value): self
+    public function orWhere(string $column, $operator = null, $value = null): self
     {
+        if (func_num_args() === 2) {
+            $value = $operator;
+            $operator = '=';
+        }
+
         $this->wheres[] = [
             'type' => 'basic',
             'column' => $column,
@@ -180,6 +192,7 @@ class Builder
             'value' => $value,
             'boolean' => 'or',
         ];
+
         return $this;
     }
 

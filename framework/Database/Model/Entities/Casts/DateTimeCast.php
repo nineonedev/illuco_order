@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Database\Entities\Casts;
+namespace Framework\Database\Model\Entities\Casts;
 
 use Framework\Database\Contracts\CastInterface;
 
