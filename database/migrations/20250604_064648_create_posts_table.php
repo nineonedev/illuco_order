@@ -9,16 +9,18 @@ return new class implements Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id(); 
-            $table->foreign('user_id')
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->text('body')->nullable();
+            $table->boolean('published')->default(false);
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreignKey('user_id')
                 ->references('id')
                 ->on('users')
-                ->onDeleteCascade();
-                
-            $table->string('title');
-            $table->text('content')->nullable();
-
-            $table->timestamps();
+                ->onDelete('cascade');
         });
     }
 

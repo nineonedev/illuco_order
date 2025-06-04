@@ -10,7 +10,15 @@ class Entity
     protected array $attributes = [];
     protected array $original = [];
 
+    protected array $metadata = [];
+
     protected array $casts = [];
+
+    protected array $fillable = [];
+
+    protected array $guarded = [];
+
+    protected array $relations = [];
 
     protected string $primaryKey = 'id';
     protected ?string $softDeleteColumn = 'deleted_at';
@@ -23,10 +31,61 @@ class Entity
         $this->syncOriginal();
     }
 
+    public function setRelation(string $name, $value): void
+    {
+        $this->relations[$name] = $value;
+    }
+
+    public function getRelation(string $name)
+    {
+        return $this->relations[$name] ?? null;
+    }
+
+    public function setMetadata(string $key, $value): void
+    {
+        $this->metadata[$key] = $value;
+    }
+
+    public function getMetadata(string $key, $default = null)
+    {
+        return $this->metadata[$key] ?? $default;
+    }
+
+    public function setGuarded(array $fields): void
+    {
+        $this->guarded = $fields;
+    }
+
+    public function getGuarded(): array
+    {
+        return $this->guarded;
+    }
+
+    protected function isFillable(string $key): bool
+    {
+        if (!empty($this->fillable)) {
+            return in_array($key, $this->fillable, true);
+        }
+
+        return !in_array($key, $this->guarded, true);
+    }
+
+    public function setFillable(array $fields): void
+    {
+        $this->fillable = $fields;
+    }
+
+    public function getFillable(): array
+    {
+        return $this->fillable;
+    }
+
     public function fill(array $attributes): void
     {
         foreach ($attributes as $key => $value) {
-            $this->__set($key, $value);
+            if ($this->isFillable($key)) {
+                $this->__set($key, $value);
+            }
         }
     }
 

@@ -26,6 +26,26 @@ class Blueprint
             ->primary();
     }
 
+    public function unsignedBigInteger(string $name): ColumnDefinition
+    {
+        return $this->bigInteger($name)->unsigned();
+    }
+
+    public function unsignedInteger(string $name): ColumnDefinition
+    {
+        return $this->integer($name)->unsigned();
+    }
+
+    public function unsignedSmallInteger(string $name): ColumnDefinition
+    {
+        return $this->addColumn('SMALLINT', $name)->unsigned();
+    }
+
+    public function unsignedTinyInteger(string $name): ColumnDefinition
+    {
+        return $this->addColumn('TINYINT', $name)->unsigned();
+    }
+
     public function string(string $name, int $length = 255): ColumnDefinition
     {
         return $this->addColumn("VARCHAR($length)", $name);
@@ -112,20 +132,15 @@ class Blueprint
         return $this->addColumn('BLOB', $name);
     }
 
-    /**
-     * @return array<int, array<string, string|null>>
-     */
-    public function getForeignKeys(): array
+    public function foreignKey(string $column): ColumnDefinition
     {
-        $foreigns = [];
-
-        foreach ($this->columns as $column) {
-            if ($fk = $column->getForeign()) {
-                $foreigns[] = $fk;
+        foreach ($this->columns as $col) {
+            if ($col->getName() === $column) {
+                return $col->foreign();
             }
         }
 
-        return $foreigns;
+        throw new \InvalidArgumentException("Cannot define foreign key: column [$column] does not exist.");
     }
 
     public function mediumText(string $name): ColumnDefinition

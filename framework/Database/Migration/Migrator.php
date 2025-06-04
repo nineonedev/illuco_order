@@ -25,18 +25,22 @@ class Migrator
 
     public function migrate(): void
     {
-        $this->repository->ensureMigrationTableExists($this->connection);
+        $this->repository->ensureMigrationTableExists();
 
-        $ran = $this->repository->getRan();
-        $files = MigrationFile::all($this->migrationPath);
-        $pending = array_filter($files, fn($file) => !in_array($file, $ran, true)); 
+        $ran = $this->repository->getRan(); // ex: ['20240604_000000_create_users_table']
+        $files = MigrationFile::all($this->migrationPath); // ex: ['/path/to/20240604_000000_create_users_table.php']
 
-        $bar = new ProgressBar(count($pending), 'Migrating', 'done'); 
+        $pending = array_filter($files, function ($file) use ($ran) {
+            $filename = pathinfo($file, PATHINFO_FILENAME);
+            return !in_array($filename, $ran, true);
+        });
+
+        $bar = new ProgressBar(count($pending), 'Migrating', 'done');
         $bar->advance(0);
 
-        foreach ($files as $file) {
+        foreach ($pending as $file) {
+            $filename = pathinfo($file, PATHINFO_FILENAME);
             $migration = require $file;
-            
 
             if (! $migration instanceof Migration) {
                 throw new RuntimeException("Migration must return instance of Migration.");
@@ -44,10 +48,10 @@ class Migrator
 
             $this->connection->beginTransaction();
             $migration->up();
-            $this->repository->log($file);
+            $this->repository->log($filename);
             $this->connection->commit();
 
-            $bar->advance(); 
+            $bar->advance();
         }
 
         $bar->finish();
@@ -63,13 +67,16 @@ class Migrator
         }
 
         foreach ($lastBatch as $migration) {
-            require_once "{$this->migrationPath}/{$migration['name']}.php";
+            $path = "{$this->migrationPath}/{$migration['name']}.php";
 
-            $class = MigrationFile::classFromFile($migration['name']);
-            $instance = new $class();
+            if (!file_exists($path)) {
+                throw new RuntimeException("Migration file not found: {$path}");
+            }
 
-            if (!method_exists($instance, 'down')) {
-                throw new RuntimeException("Migration class [{$class}] must have method [down]");
+            $instance = require $path;
+
+            if (! $instance instanceof Migration) {
+                throw new RuntimeException("Migration must return instance of Migration.");
             }
 
             $this->connection->beginTransaction();

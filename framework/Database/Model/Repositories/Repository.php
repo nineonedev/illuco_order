@@ -9,6 +9,10 @@ use Framework\Database\Query\Builder;
 
 abstract class Repository implements RepositoryInterface
 {
+    /**
+     * @override
+     */
+    protected string $table = 'none';
     protected Model $model;
 
     public function __construct(Model $model)
@@ -18,7 +22,7 @@ abstract class Repository implements RepositoryInterface
 
     public function getTable(): string
     {
-        return $this->model->getTable();
+        return $this->table; 
     }
 
     public function getPrimaryKey(): string
@@ -33,7 +37,7 @@ abstract class Repository implements RepositoryInterface
 
     public function collect(array $rows)
     {
-        return array_map(fn($row) => $this->makeEntity($row), $rows);
+        return array_map(fn($row) => $this->model->makeEntity((array) $row), $rows);
     }
 
     public function find($id): ?Entity
@@ -42,7 +46,7 @@ abstract class Repository implements RepositoryInterface
             ->where($this->getPrimaryKey(), '=', $id)
             ->first();
 
-        return $row ? $this->makeEntity((array) $row) : null;
+        return $row ? $this->model->makeEntity((array) $row) : null;
     }
 
     public function all(): array
@@ -95,8 +99,4 @@ abstract class Repository implements RepositoryInterface
             ->delete();
     }
 
-    protected function makeEntity(array $data): Entity
-    {
-        return $this->model->makeEntity($data);
-    }
 }

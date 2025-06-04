@@ -2,11 +2,9 @@
 
 namespace App\Post\Repositories;
 
-use App\Post\Entities\Post;
-use Framework\Database\Repositories\Repository;
+use Framework\Database\Model\Repositories\Repository;
 
 class PostRepository extends Repository
 {
-    protected $table = "posts";
-    protected $entityClass = Post::class;
+    protected string $table = 'posts';
 }

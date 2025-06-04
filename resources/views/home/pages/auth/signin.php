@@ -1,4 +1,6 @@
-
+<?php 
+    use App\User\Models\User
+?>
 <?php extend('layouts.auth') ?>
 
 <?php section('title'); ?>
@@ -6,6 +8,9 @@
 <?php end_section() ?>
 
 <?php section('content') ?>
+<?php
+    dump(User::withRelations(['posts'])::all());
+?>
 <section class="no-section-xl no-auth-layout">
     <div class="no-auth-container">
         <div class="no-auth-inner">

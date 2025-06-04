@@ -108,9 +108,9 @@ class ColumnDefinition
         ];
     }
 
-    public function nullable(): self
+    public function nullable(bool $nullable = true): self
     {
-        $this->nullable = true;
+        $this->nullable = $nullable;
         return $this;
     }
 
@@ -180,6 +180,10 @@ class ColumnDefinition
 
     protected function formatDefault($value): string
     {
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
         if (is_string($value) && strtoupper($value) === 'CURRENT_TIMESTAMP') {
             return 'CURRENT_TIMESTAMP';
         }

@@ -25,9 +25,12 @@ class CastFactory
 
     public static function resolve($type): CastInterface
     {
+        $args = [];
+
         // 배열 형식: ['enum', UserRole::class]
         if (is_array($type)) {
-            [$key, ...$args] = $type;
+            $key = array_shift($type);
+            $args = $type;
         }
         // 문자열 형식: 'enum:UserRole'
         elseif (is_string($type) && strpos($type, ':') !== false) {
@@ -35,7 +38,6 @@ class CastFactory
             $args = explode(',', $argString);
         } else {
             $key = $type;
-            $args = [];
         }
 
         if (!isset(self::$casts[$key])) {
@@ -46,4 +48,5 @@ class CastFactory
 
         return new $class(...$args);
     }
+
 }

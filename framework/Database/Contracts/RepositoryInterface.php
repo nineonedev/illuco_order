@@ -7,10 +7,6 @@ use Framework\Database\Query\Builder;
 
 interface RepositoryInterface
 {
-    /**
-     * @return static
-     */
-    public function with(array $relations);
 
     public function query(): Builder;
     
@@ -21,8 +17,6 @@ interface RepositoryInterface
     public function delete(Entity $entity): bool;
 
     public function find($id): ?Entity;
-
-    public function findMany(array $ids): array;
 
     public function all(): array;
 
