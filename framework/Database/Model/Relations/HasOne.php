@@ -2,81 +2,59 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Entities\Entity;
-use Framework\Database\Contracts\RepositoryInterface;
+use Framework\Database\Model\Model;
 
 class HasOne extends Relation
 {
     protected string $foreignKey;
     protected string $localKey;
-    protected array $eagerConstraints = [];
 
     public function __construct(
-        Entity $parent,
-        RepositoryInterface $repository,
+        Model $parentModel,
+        string $relatedModelClass,
         string $foreignKey,
         string $localKey = 'id'
     ) {
-        parent::__construct($parent, $repository);
+        parent::__construct($parentModel, $relatedModelClass);
+
         $this->foreignKey = $foreignKey;
         $this->localKey = $localKey;
+        $this->query = $this->getRelatedModel()->getRepository()->query();
     }
 
-    public function getResults(): ?Entity
+    public function getResults(): ?Model
     {
-        $value = $this->parent->get($this->localKey);
-
-        if (!$value) {
-            return null;
-        }
-
-        $results = $this->repository->where($this->foreignKey, $value);
-
-        return $results[0] ?? null;
+        return $this->query
+            ->where($this->foreignKey, '=', $this->parentModel->get($this->localKey))
+            ->first();
     }
 
-    public function initRelation(array $entities, string $relation): array
+    public function addEagerConstraints(array $parents): void
     {
-        foreach ($entities as $entity) {
-            $entity->set($relation, null);
-        }
+        $localKeys = $this->getKeys($parents, $this->localKey);
 
-        return $entities;
+        $this->query->whereIn($this->foreignKey, $localKeys);
     }
 
-    public function addEagerConstraints(array $entities): void
+    public function getEagerResults(array $parents): array
     {
-        $this->eagerConstraints = array_unique(array_filter($this->getKeys($entities)));
+        return $this->query->get();
     }
 
-    public function getEagerResults(array $entities): array
-    {
-        if (empty($this->eagerConstraints)) {
-            return [];
-        }
-
-        return $this->repository->whereIn($this->foreignKey, $this->eagerConstraints);
-    }
-
-    public function match(array $entities, array $results, string $relation): array
+    public function match(array &$parents, array $results, string $relationName): void
     {
         $dictionary = [];
 
         foreach ($results as $result) {
-            $key = $result->get($this->foreignKey);
-            $dictionary[$key] = $result;
+            $key = $result[$this->foreignKey] ?? null;
+            if ($key !== null) {
+                $dictionary[$key] = $result;
+            }
         }
 
-        foreach ($entities as $entity) {
-            $value = $entity->get($this->localKey);
-            $entity->set($relation, $dictionary[$value] ?? null);
+        foreach ($parents as $parent) {
+            $key = $parent->get($this->localKey);
+            $parent->setRelation($relationName, $dictionary[$key] ?? null);
         }
-
-        return $entities;
-    }
-
-    protected function getKeys(array $entities): array
-    {
-        return array_map(fn($entity) => $entity->get($this->localKey), $entities);
     }
 }

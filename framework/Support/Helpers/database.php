@@ -33,14 +33,10 @@ if (!function_exists('repository')) {
 
 if (!function_exists('db')) {
     /**
-     * @return Builder|Database
+     * @return Builder
      */
-    function db(?string $table = null)
+    function db(?string $table = null): Builder
     {
-        if(empty($table)) {
-            return database(); 
-        }
-
         return database()->table($table); 
     }
 }

@@ -2,95 +2,82 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Entities\Entity;
-use Framework\Database\Contracts\RepositoryInterface;
-use Framework\Support\Str;
+use Framework\Database\Model\Model;
+use Framework\Support\Collection;
 
 class MorphTo extends Relation
 {
     protected string $typeColumn;
     protected string $idColumn;
-    protected array $eagerMap = [];
 
     public function __construct(
-        Entity $parent,
-        string $typeColumn = 'morphable_type',
-        string $idColumn = 'morphable_id'
+        Model $parentModel,
+        string $morphName
     ) {
-        // repository는 사용 안 함 → dummy
-        parent::__construct($parent, new class implements RepositoryInterface {});
-        $this->typeColumn = $typeColumn;
-        $this->idColumn = $idColumn;
+        parent::__construct($parentModel, '');
+
+        $this->typeColumn = "{$morphName}_type";
+        $this->idColumn   = "{$morphName}_id";
     }
 
-    public function getResults(): ?Entity
+    public function getResults(): ?Model
     {
-        $type = $this->parent->get($this->typeColumn);
-        $id = $this->parent->get($this->idColumn);
+        $type = $this->parentModel->get($this->typeColumn);
+        $id   = $this->parentModel->get($this->idColumn);
 
-        if (!$type || !$id) {
+        if (! $type || ! $id) {
             return null;
         }
 
-        /** @var RepositoryInterface $repo */
-        $repo = app($type::repositoryClass());
+        /** @var Model $related */
+        $related = new $type();
 
-        return $repo->find($id);
+        return $type::find($id);
     }
 
-    public function initRelation(array $entities, string $relation): array
+    public function addEagerConstraints(array $parents): void
     {
-        foreach ($entities as $entity) {
-            $entity->set($relation, null);
-        }
-
-        return $entities;
+        // MorphTo는 다형성 관계이기 때문에
+        // 타입별로 따로 쿼리를 구성해야 함
     }
 
-    public function addEagerConstraints(array $entities): void
+    public function getEagerResults(array $parents): array
     {
-        foreach ($entities as $entity) {
-            $type = $entity->get($this->typeColumn);
-            $id = $entity->get($this->idColumn);
+        $grouped = [];
+
+        foreach ($parents as $parent) {
+            $type = $parent->get($this->typeColumn);
+            $id   = $parent->get($this->idColumn);
 
             if ($type && $id) {
-                $this->eagerMap[$type][] = $id;
+                $grouped[$type][] = $id;
             }
         }
-    }
 
-    public function getEagerResults(array $entities): array
-    {
         $results = [];
 
-        foreach ($this->eagerMap as $type => $ids) {
-            /** @var RepositoryInterface $repo */
-            $repo = app($type::repositoryClass());
+        foreach ($grouped as $type => $ids) {
+            /** @var Model $related */
+            $related = new $type();
 
-            foreach ($repo->whereIn($repo->getPrimaryKey(), array_unique($ids)) as $item) {
-                $results[$type][$item->get($repo->getPrimaryKey())] = $item;
+            $models = $type::whereIn($related->getPrimaryKey(), array_unique($ids));
+            foreach ($models as $model) {
+                $key = $model->get($related->getPrimaryKey());
+                $results[$type][$key] = $model;
             }
         }
 
         return $results;
     }
 
-    public function match(array $entities, array $results, string $relation): array
+    public function match(array &$parents, array $results, string $relationName): void
     {
-        foreach ($entities as $entity) {
-            $type = $entity->get($this->typeColumn);
-            $id = $entity->get($this->idColumn);
+        foreach ($parents as $parent) {
+            $type = $parent->get($this->typeColumn);
+            $id   = $parent->get($this->idColumn);
 
-            if (isset($results[$type][$id])) {
-                $entity->set($relation, $results[$type][$id]);
-            }
+            $model = $results[$type][$id] ?? null;
+            $parent->setRelation($relationName, $model);
         }
-
-        return $entities;
-    }
-
-    protected function getKeys(array $entities): array
-    {
-        return []; // 불필요 in MorphTo
     }
 }

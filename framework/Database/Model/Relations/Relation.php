@@ -2,39 +2,63 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Entities\Entity;
-use Framework\Database\Contracts\RepositoryInterface;
+use Framework\Database\Model\Model;
+use Framework\Database\Query\Builder;
 
 abstract class Relation
 {
-    protected Entity $parent;
-    protected RepositoryInterface $repository;
+    protected Model $parentModel;
+    protected string $relatedModelClass;
+    protected ?Builder $query = null;
 
-    public function __construct(Entity $parent, RepositoryInterface $repository)
+    public function __construct(Model $parentModel, string $relatedModelClass)
     {
-        $this->parent = $parent;
-        $this->repository = $repository;
+        $this->parentModel = $parentModel;
+        $this->relatedModelClass = $relatedModelClass;
+        $this->query = $this->getRelatedModel()->getRepository()->query();
     }
 
-    abstract public function getResults();
-
-    abstract public function getEagerResults(array $entities): array;
-
-    abstract public function initRelation(array $entities, string $relation): array;
-
-    abstract public function match(array $entities, array $results, string $relation): array;
-
-    abstract public function addEagerConstraints(array $entities): void;
-
-    abstract protected function getKeys(array $entities): array;
-
-    public function getParent(): Entity
+    /**
+     * 관계된 모델 인스턴스 반환
+     */
+    public function getRelatedModel(): Model
     {
-        return $this->parent;
+        return new $this->relatedModelClass();
     }
 
-    public function getRepository(): RepositoryInterface
+    /**
+     * 부모 모델 반환
+     */
+    public function getParentModel(): Model
     {
-        return $this->repository;
+        return $this->parentModel;
     }
+
+    /**
+     * 부모 모델에서 키 추출
+     */
+    protected function getKeys(array $models, string $key): array
+    {
+        return array_values(array_unique(array_map(fn($model) => $model->get($key), $models)));
+    }
+
+    /**
+     * 관계형 쿼리 실행
+     */
+    abstract public function getResults(): mixed;
+
+    /**
+     * Eager Loading 제약조건 추가
+     */
+    abstract public function addEagerConstraints(array $parents): void;
+
+    /**
+     * Eager Loading 결과 조회
+     */
+    abstract public function getEagerResults(array $parents): array;
+
+    /**
+     * Eager Loading 결과 병합
+     */
+    abstract public function match(array &$parents, array $results, string $relationName): void;
 }

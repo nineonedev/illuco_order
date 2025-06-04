@@ -2,101 +2,78 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Entities\Entity;
-use Framework\Database\Contracts\RepositoryInterface;
+use Framework\Database\Model\Model;
 
 class HasOneThrough extends Relation
 {
-    protected string $throughTable;
+    protected string $throughModelClass;
     protected string $throughKey;
     protected string $firstKey;
     protected string $secondKey;
     protected string $localKey;
-    protected array $eagerParentIds = [];
 
     public function __construct(
-        Entity $parent,
-        RepositoryInterface $repository,
-        string $throughTable,
-        string $firstKey,
-        string $secondKey,
+        Model $parentModel,
+        string $relatedModelClass,
+        string $throughModelClass,
+        string $firstKey,   // Country.id → users.country_id
+        string $secondKey,  // users.id → posts.user_id
         string $throughKey = 'id',
         string $localKey = 'id'
     ) {
-        parent::__construct($parent, $repository);
+        parent::__construct($parentModel, $relatedModelClass);
 
-        $this->throughTable = $throughTable;
-        $this->throughKey = $throughKey;
+        $this->throughModelClass = $throughModelClass;
         $this->firstKey = $firstKey;
         $this->secondKey = $secondKey;
+        $this->throughKey = $throughKey;
         $this->localKey = $localKey;
+
+        $this->query = $this->getRelatedModel()->getRepository()->query();
     }
 
-    public function getResults(): ?Entity
+    public function getResults(): ?array
     {
-        $parentId = $this->parent->get($this->localKey);
+        $relatedTable = $this->getRelatedModel()->getTable();
+        $throughTable = (new $this->throughModelClass)->getTable();
 
-        if (!$parentId) {
-            return null;
-        }
-
-        $results = $this->repository
-            ->query()
-            ->join($this->throughTable, $this->throughTable.'.'.$this->firstKey, '=', $this->repository->getTable().'.'.$this->secondKey)
-            ->where($this->throughTable.'.'.$this->throughKey, $parentId)
-            ->get();
-
-        return $results[0] ?? null;
+        return $this->query
+            ->select("{$relatedTable}.*")
+            ->join($throughTable, "{$throughTable}.{$this->throughKey}", '=', "{$relatedTable}.{$this->secondKey}")
+            ->where("{$throughTable}.{$this->firstKey}", $this->parentModel->get($this->localKey))
+            ->first();
     }
 
-    public function initRelation(array $entities, string $relation): array
+    public function addEagerConstraints(array $parents): void
     {
-        foreach ($entities as $entity) {
-            $entity->set($relation, null);
-        }
+        $relatedTable = $this->getRelatedModel()->getTable();
+        $throughTable = (new $this->throughModelClass)->getTable();
 
-        return $entities;
+        $this->query
+            ->select("{$relatedTable}.*", "{$throughTable}.{$this->firstKey} as parent_key")
+            ->join($throughTable, "{$throughTable}.{$this->throughKey}", '=', "{$relatedTable}.{$this->secondKey}")
+            ->whereIn("{$throughTable}.{$this->firstKey}", $this->getKeys($parents, $this->localKey));
     }
 
-    public function addEagerConstraints(array $entities): void
+    public function getEagerResults(array $parents): array
     {
-        $this->eagerParentIds = array_unique(array_filter($this->getKeys($entities)));
+        return $this->query->get();
     }
 
-    public function getEagerResults(array $entities): array
-    {
-        if (empty($this->eagerParentIds)) {
-            return [];
-        }
-
-        return $this->repository
-            ->query()
-            ->join($this->throughTable, $this->throughTable.'.'.$this->firstKey, '=', $this->repository->getTable().'.'.$this->secondKey)
-            ->whereIn($this->throughTable.'.'.$this->throughKey, $this->eagerParentIds)
-            ->get();
-    }
-
-    public function match(array $entities, array $results, string $relation): array
+    public function match(array &$parents, array $results, string $relationName): void
     {
         $dictionary = [];
 
         foreach ($results as $result) {
-            $key = $result->get($this->throughTable.'.'.$this->throughKey);
-            if (!isset($dictionary[$key])) {
-                $dictionary[$key] = $result;
+            $parentKey = $result['parent_key'] ?? null;
+            if ($parentKey !== null) {
+                $dictionary[$parentKey] = $result;
             }
         }
 
-        foreach ($entities as $entity) {
-            $key = $entity->get($this->localKey);
-            $entity->set($relation, $dictionary[$key] ?? null);
+        foreach ($parents as $parent) {
+            $key = $parent->get($this->localKey);
+            $parent->setRelation($relationName, $dictionary[$key] ?? null);
         }
-
-        return $entities;
-    }
-
-    protected function getKeys(array $entities): array
-    {
-        return array_map(fn($entity) => $entity->get($this->localKey), $entities);
     }
 }

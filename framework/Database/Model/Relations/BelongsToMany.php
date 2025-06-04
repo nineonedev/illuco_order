@@ -2,9 +2,7 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Entities\Entity;
-use Framework\Database\Contracts\RepositoryInterface;
-use Framework\Support\Collection;
+use Framework\Database\Model\Model;
 
 class BelongsToMany extends Relation
 {
@@ -13,87 +11,132 @@ class BelongsToMany extends Relation
     protected string $relatedPivotKey;
     protected string $parentKey;
     protected string $relatedKey;
-
-    protected array $eagerParentIds = [];
+    protected array $pivotColumns = [];
 
     public function __construct(
-        Entity $parent,
-        RepositoryInterface $repository,
+        Model $parentModel,
+        string $relatedModelClass,
         string $pivotTable,
-        string $foreignPivotKey,
-        string $relatedPivotKey,
+        string $foreignPivotKey,  // user_id
+        string $relatedPivotKey,  // role_id
         string $parentKey = 'id',
         string $relatedKey = 'id'
     ) {
-        parent::__construct($parent, $repository);
+        parent::__construct($parentModel, $relatedModelClass);
+
         $this->pivotTable = $pivotTable;
         $this->foreignPivotKey = $foreignPivotKey;
         $this->relatedPivotKey = $relatedPivotKey;
         $this->parentKey = $parentKey;
         $this->relatedKey = $relatedKey;
+
+        $this->query = $this->getRelatedModel()->getRepository()->query();
+    }
+
+    public function withPivot(...$columns): self
+    {
+        $this->pivotColumns = array_merge($this->pivotColumns, $columns);
+        return $this;
     }
 
     public function getResults(): array
     {
-        $parentId = $this->parent->get($this->parentKey);
+        $relatedTable = $this->getRelatedModel()->getTable();
+        $columns = ["{$relatedTable}.*"];
 
-        if (!$parentId) {
-            return [];
+        foreach ($this->pivotColumns as $col) {
+            $columns[] = "{$this->pivotTable}.{$col} as pivot_{$col}";
         }
 
-        return $this->repository
-            ->query()
-            ->join($this->pivotTable, $this->relatedKey, '=', $this->pivotTable.'.'.$this->relatedPivotKey)
-            ->where($this->pivotTable.'.'.$this->foreignPivotKey, $parentId)
+        return $this->query
+            ->select($columns)
+            ->join($this->pivotTable, "{$relatedTable}.{$this->relatedKey}", '=', "{$this->pivotTable}.{$this->relatedPivotKey}")
+            ->where("{$this->pivotTable}.{$this->foreignPivotKey}", $this->parentModel->get($this->parentKey))
             ->get();
     }
 
-    public function initRelation(array $entities, string $relation): array
+    public function getEagerResults(array $parents): array
     {
-        foreach ($entities as $entity) {
-            $entity->set($relation, []);
+        $relatedTable = $this->getRelatedModel()->getTable();
+        $columns = ["{$relatedTable}.*"];
+
+        foreach ($this->pivotColumns as $col) {
+            $columns[] = "{$this->pivotTable}.{$col} as pivot_{$col}";
         }
 
-        return $entities;
+        return $this->query->select($columns)->get();
     }
 
-    public function addEagerConstraints(array $entities): void
+
+    public function addEagerConstraints(array $parents): void
     {
-        $this->eagerParentIds = array_unique(array_filter($this->getKeys($entities)));
+        $relatedTable = $this->getRelatedModel()->getTable();
+
+        $this->query
+            ->join($this->pivotTable, "{$relatedTable}.{$this->relatedKey}", '=', "{$this->pivotTable}.{$this->relatedPivotKey}")
+            ->whereIn("{$this->pivotTable}.{$this->foreignPivotKey}", $this->getKeys($parents, $this->parentKey));
     }
-
-    public function getEagerResults(array $entities): array
-    {
-        if (empty($this->eagerParentIds)) {
-            return [];
-        }
-
-        return $this->repository
-            ->query()
-            ->join($this->pivotTable, $this->relatedKey, '=', $this->pivotTable.'.'.$this->relatedPivotKey)
-            ->whereIn($this->pivotTable.'.'.$this->foreignPivotKey, $this->eagerParentIds)
-            ->get();
-    }
-
-    public function match(array $entities, array $results, string $relation): array
+    public function match(array &$parents, array $results, string $relationName): void
     {
         $dictionary = [];
 
         foreach ($results as $result) {
-            $parentId = $result->get($this->pivotTable.'.'.$this->foreignPivotKey);
-            $dictionary[$parentId][] = $result;
+            $key = $result[$this->foreignPivotKey];
+            $dictionary[$key][] = $result;
         }
 
-        foreach ($entities as $entity) {
-            $id = $entity->get($this->parentKey);
-            $entity->set($relation, $dictionary[$id] ?? []);
+        foreach ($parents as $parent) {
+            $key = $parent->get($this->parentKey);
+            $parent->setRelation($relationName, $dictionary[$key] ?? []);
         }
-
-        return $entities;
     }
 
-    protected function getKeys(array $entities): array
+    public function attach($ids, array $pivotData = []): void
     {
-        return array_map(fn($entity) => $entity->get($this->parentKey), $entities);
+        $ids = is_array($ids) ? $ids : [$ids];
+        $rows = [];
+
+        foreach ($ids as $id) {
+            $row = array_merge($pivotData, [
+                $this->foreignPivotKey => $this->parentModel->get($this->parentKey),
+                $this->relatedPivotKey => $id,
+            ]);
+            $rows[] = $row;
+        }
+
+        db($this->pivotTable)->insert($rows);
+    }
+
+    public function detach($ids = null): void
+    {
+        $query = db($this->pivotTable)
+            ->where($this->foreignPivotKey, '=', $this->parentModel->get($this->parentKey));
+
+        if ($ids !== null) {
+            $ids = is_array($ids) ? $ids : [$ids];
+            $query->whereIn($this->relatedPivotKey, $ids);
+        }
+
+        $query->delete();
+    }
+
+    public function sync(array $ids, bool $detaching = true): void
+    {
+        $current = array_values(
+            db($this->pivotTable)
+            ->where($this->foreignPivotKey, '=', $this->parentModel->get($this->parentKey))
+            ->pluck($this->relatedPivotKey)
+        );
+
+        $detach = array_diff($current, $ids);
+        $attach = array_diff($ids, $current);
+
+        if ($detaching && count($detach)) {
+            $this->detach($detach);
+        }
+
+        if (count($attach)) {
+            $this->attach($attach);
+        }
     }
 }

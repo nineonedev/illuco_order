@@ -14,16 +14,36 @@ class CastFactory
         'string'   => StringCast::class,
         'array'    => ArrayCast::class,
         'datetime' => DateTimeCast::class,
+        'enum'      => EnumCast::class,
+        'encrypted' => EncryptedCast::class,
+        'json' => JsonCast::class,
+        'collection' => CollectionCast::class,
+        'money'  => MoneyCast::class,
+        'won'    => WonCast::class,
+        'dollar' => DollarCast::class,
     ];
 
-    public static function resolve(string $type): CastInterface
+    public static function resolve($type): CastInterface
     {
-        if (!isset(self::$casts[$type])) {
-            throw new InvalidArgumentException("Unsupported cast type [$type]");
+        // 배열 형식: ['enum', UserRole::class]
+        if (is_array($type)) {
+            [$key, ...$args] = $type;
+        }
+        // 문자열 형식: 'enum:UserRole'
+        elseif (is_string($type) && strpos($type, ':') !== false) {
+            [$key, $argString] = explode(':', $type, 2);
+            $args = explode(',', $argString);
+        } else {
+            $key = $type;
+            $args = [];
         }
 
-        $class = self::$casts[$type];
+        if (!isset(self::$casts[$key])) {
+            throw new InvalidArgumentException("Unsupported cast type [$key]");
+        }
 
-        return new $class;
+        $class = self::$casts[$key];
+
+        return new $class(...$args);
     }
 }

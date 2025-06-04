@@ -265,6 +265,8 @@ if (!function_exists('dump_classes_in_html')) {
             return;
         }
 
+        echo "<p style='color:black;'>디렉토리: {$fullPath}</p>";
+
         $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fullPath));
         foreach ($rii as $file) {
             if (!$file->isFile() || $file->getExtension() !== 'php') {

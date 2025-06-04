@@ -7,7 +7,10 @@ use Framework\Database\Query\Builder;
 
 interface RepositoryInterface
 {
-    public function with(): array;
+    /**
+     * @return static
+     */
+    public function with(array $relations);
 
     public function query(): Builder;
     
@@ -25,5 +28,5 @@ interface RepositoryInterface
 
     public function where(string $column, $value): array;
 
-    public function whereIn(string $column, array $values): array
+    public function whereIn(string $column, array $values): array;
 }

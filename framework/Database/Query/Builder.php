@@ -35,8 +35,12 @@ class Builder
         return $this->connection;
     }
 
-    public function select(array $columns = ['*']): self
+    public function select(...$columns): self
     {
+        if (count($columns) === 1 && is_array($columns[0])) {
+            $columns = $columns[0];
+        }
+
         $this->columns = $columns;
         return $this;
     }
@@ -122,6 +126,12 @@ class Builder
     {
         [$sql, $bindings] = $this->grammar->compileInsertOrIgnore($this->table, $rows);
         return $this->connection->insert($sql, $bindings);
+    }
+
+    public function insertGetId(array $data): int
+    {
+        $this->insert($data);
+        return (int) $this->connection->pdo()->lastInsertId();
     }
 
     public function insert(array $data): bool
