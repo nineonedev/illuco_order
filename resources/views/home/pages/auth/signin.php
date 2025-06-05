@@ -1,5 +1,5 @@
 <?php 
-    use App\User\Models\User
+    use App\User\Models\User; 
 ?>
 <?php extend('layouts.auth') ?>
 

@@ -2,63 +2,86 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Model;
+use Framework\Database\Contracts\RepositoryInterface;
+use Framework\Database\Model\Entities\Entity;
 use Framework\Database\Query\Builder;
 
 abstract class Relation
 {
-    protected Model $parentModel;
-    protected string $relatedModelClass;
-    protected ?Builder $query = null;
+    protected Entity $parentEntity;
+    protected RepositoryInterface $relatedRepository;
 
-    public function __construct(Model $parentModel, string $relatedModelClass)
+    protected ?string $relationName = null;
+
+    public function __construct(Entity $parentEntity, string $relatedRepositoryClass)
     {
-        $this->parentModel = $parentModel;
-        $this->relatedModelClass = $relatedModelClass;
-        $this->query = $this->getRelatedModel()->getRepository()->query();
+        $this->parentEntity = $parentEntity;
+        $this->relatedRepository = new $relatedRepositoryClass;
     }
 
     /**
-     * 관계된 모델 인스턴스 반환
+     * 현재 관계를 위한 쿼리 빌더 반환
      */
-    public function getRelatedModel(): Model
+    public function getQuery(): Builder
     {
-        return new $this->relatedModelClass();
+        return $this->relatedRepository->query();
     }
 
     /**
-     * 부모 모델 반환
+     * 부모 엔티티 반환
      */
-    public function getParentModel(): Model
+    public function getParentEntity(): Entity
     {
-        return $this->parentModel;
+        return $this->parentEntity;
     }
 
     /**
-     * 부모 모델에서 키 추출
+     * 연관 Repository 반환
      */
-    protected function getKeys(array $models, string $key): array
+    public function getRelatedRepository(): RepositoryInterface
     {
-        return array_values(array_unique(array_map(fn($model) => $model->get($key), $models)));
+        return $this->relatedRepository;
     }
 
     /**
-     * 관계형 쿼리 실행
+     * 관계 이름 설정 (eager loader에서 주입)
      */
-    abstract public function getResults(): mixed;
+    public function setRelationName(string $name): self
+    {
+        $this->relationName = $name;
+        return $this;
+    }
 
     /**
-     * Eager Loading 제약조건 추가
+     * 관계 이름 반환
      */
-    abstract public function addEagerConstraints(array $parents): void;
+    public function getRelationName(): ?string
+    {
+        return $this->relationName;
+    }
 
     /**
-     * Eager Loading 결과 조회
+     * Lazy Load: Entity에 대한 결과 반환
      */
-    abstract public function getEagerResults(array $parents): array;
+    abstract public function getResults(): array;
 
     /**
-     * Eager Loading 결과 병합
+     * Eager Load: 부모들에 대한 조건 설정
      */
-    abstract public function match(array &$parents, array $results, string $relationName): void;
+    abstract public function addEagerConstraints(array $entities): void;
+
+    /**
+     * Eager Load: 조건에 맞는 결과 목록 반환
+     */
+    abstract public function getEagerResults(array $entities): array;
+
+    /**
+     * Eager Load: 결과를 각 Entity에 주입
+     */
+    abstract public function match(array &$entities, array $results, string $relationName): void;
+
+    /**
+     * Eager Load: 초기화용 빈 값 반환 (HasMany는 [], HasOne은 null 등)
+     */
+    abstract public function initRelation();
 }

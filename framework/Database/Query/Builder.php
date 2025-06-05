@@ -35,6 +35,12 @@ class Builder
         return $this->connection;
     }
 
+    public function addSelect(string $column): self
+    {
+        $this->columns[] = $column;
+        return $this; 
+    }
+
     public function select(...$columns): self
     {
         if (count($columns) === 1 && is_array($columns[0])) {
@@ -128,9 +134,14 @@ class Builder
         return $this->connection->insert($sql, $bindings);
     }
 
-    public function insertGetId(array $data): int
+    public function insertGetId(array $data): ?int
     {
-        $this->insert($data);
+        $result = $this->insert($data);
+        return $result ? $this->lastInsertId() : null;
+    }
+
+    public function lastInsertId(): int
+    {
         return (int) $this->connection->pdo()->lastInsertId();
     }
 
@@ -155,6 +166,28 @@ class Builder
     {
         [$sql, $bindings] = $this->grammar->compileDelete($this);
         return $this->connection->delete($sql, $bindings);
+    }
+
+    public function whereNull(string $column): self
+    {
+        $this->wheres[] = [
+            'type' => 'null',
+            'column' => $column,
+            'boolean' => 'and',
+        ];
+
+        return $this;
+    }
+
+    public function whereNotNull(string $column): self
+    {
+        $this->wheres[] = [
+            'type' => 'notNull',
+            'column' => $column,
+            'boolean' => 'and',
+        ];
+
+        return $this;
     }
 
 

@@ -1,18 +1,40 @@
 <?php
 
-namespace Framework\Database\Model\Entities\Casts;
-
-use Framework\Database\Contracts\CastInterface;
+namespace Framework\Database\Model\Casts;
 
 class ArrayCast implements CastInterface
 {
-    public function cast($value)
+    /**
+     * Convert array to JSON string for DB storage
+     *
+     * @param mixed $value
+     * @return string|null
+     */
+    public function set($value)
     {
-        return is_string($value) ? json_decode($value, true) : (array) $value;
+        if (is_null($value)) {
+            return null;
+        }
+
+        return json_encode($value);
     }
 
-    public function recast($value)
+    /**
+     * Convert JSON string from DB to PHP array
+     *
+     * @param mixed $value
+     * @return array|null
+     */
+    public function get($value)
     {
-        return json_encode($value);
+        if (is_null($value)) {
+            return null;
+        }
+
+        if (is_array($value)) {
+            return $value;
+        }
+
+        return json_decode($value, true);
     }
 }

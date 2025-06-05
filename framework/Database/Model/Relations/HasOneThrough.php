@@ -2,78 +2,91 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Model;
+use Framework\Database\Model\Entities\Entity;
 
 class HasOneThrough extends Relation
 {
-    protected string $throughModelClass;
-    protected string $throughKey;
-    protected string $firstKey;
-    protected string $secondKey;
-    protected string $localKey;
+    protected string $throughRepositoryClass;
+    protected string $relatedRepositoryClass;
+
+    protected string $firstKey;     // ex: country.id → users.country_id
+    protected string $secondKey;    // ex: users.id → posts.user_id
+    protected string $localKey;     // ex: country.id
 
     public function __construct(
-        Model $parentModel,
-        string $relatedModelClass,
-        string $throughModelClass,
-        string $firstKey,   // Country.id → users.country_id
-        string $secondKey,  // users.id → posts.user_id
-        string $throughKey = 'id',
+        Entity $parentEntity,
+        string $relatedRepositoryClass,
+        string $throughRepositoryClass,
+        string $firstKey,
+        string $secondKey,
         string $localKey = 'id'
     ) {
-        parent::__construct($parentModel, $relatedModelClass);
+        parent::__construct($parentEntity, $relatedRepositoryClass);
 
-        $this->throughModelClass = $throughModelClass;
+        $this->throughRepositoryClass = $throughRepositoryClass;
+        $this->relatedRepositoryClass = $relatedRepositoryClass;
+
         $this->firstKey = $firstKey;
         $this->secondKey = $secondKey;
-        $this->throughKey = $throughKey;
         $this->localKey = $localKey;
-
-        $this->query = $this->getRelatedModel()->getRepository()->query();
     }
 
-    public function getResults(): ?array
+    public function getResults(): array
     {
-        $relatedTable = $this->getRelatedModel()->getTable();
-        $throughTable = (new $this->throughModelClass)->getTable();
+        $throughRepo = new $this->throughRepositoryClass;
+        $throughTable = $throughRepo->getTable();
+        $relatedTable = $this->relatedRepository->getTable();
 
-        return $this->query
-            ->select("{$relatedTable}.*")
-            ->join($throughTable, "{$throughTable}.{$this->throughKey}", '=', "{$relatedTable}.{$this->secondKey}")
-            ->where("{$throughTable}.{$this->firstKey}", $this->parentModel->get($this->localKey))
-            ->first();
+        $parentKeyValue = $this->parentEntity->get($this->localKey);
+
+        $query = $this->getQuery()
+            ->join($throughTable, "{$throughTable}.{$this->secondKey}", '=', "{$relatedTable}.{$this->firstKey}")
+            ->where("{$throughTable}.{$this->localKey}", $parentKeyValue)
+            ->limit(1);
+
+        $row = $query->first();
+        return $row ? [$this->relatedRepository->toEntities((array)$row)] : [];
     }
 
-    public function addEagerConstraints(array $parents): void
+    public function addEagerConstraints(array $entities): void
     {
-        $relatedTable = $this->getRelatedModel()->getTable();
-        $throughTable = (new $this->throughModelClass)->getTable();
-
-        $this->query
-            ->select("{$relatedTable}.*", "{$throughTable}.{$this->firstKey} as parent_key")
-            ->join($throughTable, "{$throughTable}.{$this->throughKey}", '=', "{$relatedTable}.{$this->secondKey}")
-            ->whereIn("{$throughTable}.{$this->firstKey}", $this->getKeys($parents, $this->localKey));
+        $keys = array_map(fn($e) => $e->get($this->localKey), $entities);
+        $this->getQuery()->whereIn("{$this->throughRepositoryClass}." . $this->localKey, array_unique($keys));
     }
 
-    public function getEagerResults(array $parents): array
+    public function getEagerResults(array $entities): array
     {
-        return $this->query->get();
+        $throughRepo = new $this->throughRepositoryClass;
+        $throughTable = $throughRepo->getTable();
+        $relatedTable = $this->relatedRepository->getTable();
+
+        $parentKeys = array_map(fn($e) => $e->get($this->localKey), $entities);
+
+        $query = $this->getQuery()
+            ->join($throughTable, "{$throughTable}.{$this->secondKey}", '=', "{$relatedTable}.{$this->firstKey}")
+            ->whereIn("{$throughTable}.{$this->localKey}", array_unique($parentKeys));
+
+        $rows = $query->get();
+        return $this->relatedRepository->toEntities($rows);
     }
 
-    public function match(array &$parents, array $results, string $relationName): void
+    public function match(array &$entities, array $results, string $relationName): void
     {
         $dictionary = [];
 
         foreach ($results as $result) {
-            $parentKey = $result['parent_key'] ?? null;
-            if ($parentKey !== null) {
-                $dictionary[$parentKey] = $result;
-            }
+            $throughKey = $result->get($this->localKey);
+            $dictionary[$throughKey] = $result;
         }
 
-        foreach ($parents as $parent) {
-            $key = $parent->get($this->localKey);
-            $parent->setRelation($relationName, $dictionary[$key] ?? null);
+        foreach ($entities as $entity) {
+            $key = $entity->get($this->localKey);
+            $entity->setRelation($relationName, $dictionary[$key] ?? null);
         }
+    }
+
+    public function initRelation(): ?Entity
+    {
+        return null;
     }
 }

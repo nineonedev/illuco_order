@@ -2,27 +2,27 @@
 
 namespace Framework\Database\Model\Casts;
 
-class BoolCast implements CastInterface
+class IntCast implements CastInterface
 {
     /**
-     * Convert value to boolean for DB storage
+     * Convert value to integer for DB storage
      *
      * @param mixed $value
      * @return int
      */
     public function set($value)
     {
-        return $value ? 1 : 0;
+        return (int) $value;
     }
 
     /**
-     * Convert value from DB to PHP boolean
+     * Convert value from DB to PHP integer
      *
      * @param mixed $value
-     * @return bool
+     * @return int
      */
     public function get($value)
     {
-        return (bool) $value;
+        return (int) $value;
     }
 }

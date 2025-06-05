@@ -38,6 +38,10 @@ class MysqlGrammar extends Grammar
                     $bindings = array_merge($bindings, $subBindings);
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";
+                } elseif ($where['type'] === 'null') {
+                    $parts[] = "{$boolean}`{$where['column']}` IS NULL";
+                } elseif ($where['type'] === 'notNull') {
+                    $parts[] = "{$boolean}`{$where['column']}` IS NOT NULL";
                 }
             }
 

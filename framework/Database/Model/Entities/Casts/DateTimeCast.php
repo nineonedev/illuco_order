@@ -1,20 +1,43 @@
 <?php
 
-namespace Framework\Database\Model\Entities\Casts;
+namespace Framework\Database\Model\Casts;
 
-use Framework\Database\Contracts\CastInterface;
+use DateTime;
 
 class DateTimeCast implements CastInterface
 {
-    public function cast($value)
+    /**
+     * Convert to DB string format
+     *
+     * @param mixed $value
+     * @return string|null
+     */
+    public function set($value)
     {
-        return $value ? new \DateTime($value) : null;
+        if (is_null($value)) {
+            return null;
+        }
+
+        if ($value instanceof DateTime) {
+            return $value->format('Y-m-d H:i:s');
+        }
+
+        return (new DateTime($value))->format('Y-m-d H:i:s');
     }
 
-    public function recast($value)
+    /**
+     * Convert from DB to 'Y-m-d H:i:s' string
+     *
+     * @param mixed $value
+     * @return string|null
+     */
+    public function get($value)
     {
-        return $value instanceof \DateTime
-            ? $value->format('Y-m-d H:i:s')
-            : $value;
+        if (is_null($value)) {
+            return null;
+        }
+
+        $datetime = new DateTime($value);
+        return $datetime->format('Y-m-d H:i:s');
     }
 }

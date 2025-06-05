@@ -2,77 +2,73 @@
 
 namespace Framework\Database\Model;
 
+use Framework\Database\Model\Entities\Entity;
 use Framework\Database\Model\Relations\Relation;
+use InvalidArgumentException;
+use ReflectionMethod;
 
 class EagerLoader
 {
     /**
-     * 지정된 모델에 대해 Eager Load 처리
+     * 지정된 관계들을 Eager Load 처리
      *
-     * @param Model       $model
-     * @param object[]    $entities  (Entity[])
+     * @param Entity[] $entities
+     * @param string[]         $relations
      * @return void
      */
-    public function loadFromModel(Model $model, array $entities): void
+    public function load(array $entities, array $relations): void
     {
-        if (empty($entities)) {
+        if (empty($entities) || empty($relations)) {
             return;
         }
 
-        $relationMap = $model->relations();
-        $withRelations = $this->groupNestedRelations($model->getWith());
+        $entityClass = get_class($entities[0]);
+        $entity = new $entityClass();
+        $relationMap = $this->getRelationMap($entity);
 
-        foreach ($withRelations as $relationName => $nested) {
+        foreach ($relations as $relationName) {
             if (!isset($relationMap[$relationName])) {
                 continue;
             }
 
             /** @var Relation $relation */
-            $relation = call_user_func($relationMap[$relationName], $model);
+            $relation = call_user_func($relationMap[$relationName], $entities[0]);
 
             $relation->addEagerConstraints($entities);
             $results = $relation->getEagerResults($entities);
-            $relation->match($entities, $results, $relationName);
 
-            // 중첩된 관계 재귀 처리
-            if (!empty($nested)) {
-                $relatedModels = [];
-
-                foreach ($entities as $parent) {
-                    $related = $parent->getRelation($relationName);
-
-                    if (is_array($related)) {
-                        $relatedModels = array_merge($relatedModels, $related);
-                    } elseif ($related !== null) {
-                        $relatedModels[] = $related;
-                    }
-                }
-
-
-                if (!empty($relatedModels)) {
-                    $relatedModelClass = $relation->getRelatedModel()::class;
-                    $relatedModel = new $relatedModelClass();
-                    $relatedModel->with($nested);
-
-                    $this->loadFromModel($relatedModel, $relatedModels);
-                }
+            // 👇 핵심 수정: 각 엔티티에 직접 setRelation()
+            foreach ($entities as $e) {
+                $related = $results[$e->getPrimaryKey()] ?? null;
+                $e->setRelation($relationName, $related);
             }
         }
     }
 
-    protected function groupNestedRelations(array $with): array
-    {
-        $grouped = [];
 
-        foreach ($with as $relation) {
-            if (strpos($relation, '.') === false) {
-                $grouped[$relation] = [];
-            } else {
-                [$top, $rest] = explode('.', $relation, 2);
-                $grouped[$top][] = $rest;
+    /**
+     * 리플렉션을 사용해 Relation 메서드 자동 매핑
+     *
+     * @param Entity $entity
+     * @return array<string, callable>
+     */
+    protected function getRelationMap(Entity $entity): array
+    {
+        $map = [];
+        $ref = new \ReflectionClass($entity);
+
+        foreach ($ref->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            if ($method->getNumberOfParameters() === 0) {
+                $result = $method->invoke($entity);
+
+                if ($result instanceof Relation) {
+                    $map[$method->getName()] = function (Entity $context) use ($method) {
+                        return $method->invoke($context);
+                    };
+                }
             }
         }
 
-        return $grouped;
+        return $map;
     }
 }

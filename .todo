@@ -208,3 +208,91 @@
 -   /Csrf
     -   [] Csrf
     -   [] CsrfTokenManager
+
+=================================================================
+내가 생각하는 Model 모듈
+==================================================================
+
+# Framework\Database\Model
+
+-   (abstract) Model.php
+
+    -   useEagerLoad = false;
+    -   relations
+    -   relatedTo (관계설정 메소드)
+    -   EagerLoader.php (lazyload + eagerload 담당 아니면 추상화하던가)
+    -   callStatic으로 자신의 메소드 중에 public이고 Relation의 인스턴스인 메소드일 경우 (Reflection 활용) relatedTo를 통해 relations에 넣는다.
+
+    -   static create: bool
+    -   static find: ?object
+    -   static all: array
+    -   static where: Builder
+    -   static whereIn: Builder
+    -   save
+    -   delete
+
+-   (abstract) Entity.php
+
+    -   primaryKey
+    -   fillable
+    -   guard
+    -   casts
+    -   isDirty
+    -   getChanges
+    -   hasChanged
+    -   isClean
+    -   getPrimaryKey
+    -   getPrimaryKeyName
+    -   라라벨은 SoftDeletes라는 Trait를 만들었던데 나는 이 Trait이 좋다고 생각하지않아. 왜냐하면 일단 지식의 깊이를 요구하고 여러곳에서 사용될때 의존성이 깊게 분산되어있어 유지보수와 에러가 발견이 힘들 수 있어.
+    -   따라서 확장하거나 합성하거나 둘중하나인데. 기능이 추가되는 개념이기 때문에 합성쓸거야. 왜냐하면 기능추가될대마다 확장하면 너무 복잡해지니까. 그리고 단순기능이 하나만 추가되는거이기도하고
+        useSoftDelete라는 property로 true면 특정 초기화 메소드에서 $this->softDelete->restore()같은거 하려고해 어때?
+
+-   (abstract) Repository.php
+
+    -   table
+    -   callbacks (CallbackRegistry)
+    -   all
+    -   find
+    -   query: Builder
+    -   delete
+    -   update
+    -   save
+    -   insert
+    -   builder에 entity 설정할 수 있도록하여 get 같은거 할 때, 그 설정된 엔티티안에 데이터 fill하여 반환하는건 어떤가? 근데 조인이나 서브쿼리등도 고려하긴해야함.
+
+# Framework\Database\Model\Casts
+
+    -   Castable.php
+    -   ArrayCast.php
+    -   StringCast.php
+    -   DateTimeCast.php
+    -   FloatCast.php
+
+# Framework\Database\Model\Relations
+
+-   Pivot.php
+-   MorphPivot.php
+-   HasOne.php
+-   HasMany.php
+-   HasOneThrough.php
+-   HasManyThrough.php
+-   BelongsTo.php
+-   MorphTo.php
+-   MorphOne.php
+-   HasOneOrMany.php
+-   HasOneOrManyThrough.php
+-   MorphOneOrMany.php
+
+# (attach, detach, async, pivot)
+
+-   BelongsToMany.php
+-   MorphedByMany.php
+-   MorphMany.php
+-   MorphToMany.php
+
+addEagerConstraints(array $entities) : 쿼리 조건 생성 (쿼리 준비 단게)
+
+getEagerResults(array $entities): 조건을 바탕으로 쿼리생성하여 결과 반환
+
+match : 조회된 결과를 부모 엔티티에 붙여준다. 데이터매핑
+$dictionary: [foreign_key_value => 자식 entity]

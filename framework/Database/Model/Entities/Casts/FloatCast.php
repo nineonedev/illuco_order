@@ -1,17 +1,27 @@
 <?php
 
-namespace Framework\Database\Model\Entities\Casts;
-
-use Framework\Database\Contracts\CastInterface;
+namespace Framework\Database\Model\Casts;
 
 class FloatCast implements CastInterface
 {
-    public function cast($value)
+    /**
+     * Convert value to float for DB storage
+     *
+     * @param mixed $value
+     * @return float
+     */
+    public function set($value)
     {
         return (float) $value;
     }
 
-    public function recast($value)
+    /**
+     * Convert value from DB to PHP float
+     *
+     * @param mixed $value
+     * @return float
+     */
+    public function get($value)
     {
         return (float) $value;
     }

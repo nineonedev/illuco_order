@@ -1,52 +1,61 @@
 <?php
 
-namespace Framework\Database\Model\Entities\Casts;
+namespace Framework\Database\Model\Casts;
 
-use Framework\Database\Contracts\CastInterface;
 use InvalidArgumentException;
 
 class CastFactory
 {
-    protected static array $casts = [
+    /**
+     * @var array<string, class-string<CastInterface>>
+     */
+    protected static $map = [
+        'int'      => IntCast::class,
         'bool'     => BoolCast::class,
-        'int'      => IntegerCast::class,
-        'float'    => FloatCast::class,
         'string'   => StringCast::class,
+        'float'    => FloatCast::class,
         'array'    => ArrayCast::class,
         'datetime' => DateTimeCast::class,
-        'enum'      => EnumCast::class,
-        'encrypted' => EncryptedCast::class,
-        'json' => JsonCast::class,
-        'collection' => CollectionCast::class,
-        'money'  => MoneyCast::class,
-        'won'    => WonCast::class,
-        'dollar' => DollarCast::class,
     ];
 
-    public static function resolve($type): CastInterface
+    /**
+     * Resolve cast class from type
+     *
+     * @param string $type
+     * @return CastInterface
+     */
+    public static function resolve(string $type): CastInterface
     {
-        $args = [];
-
-        // 배열 형식: ['enum', UserRole::class]
-        if (is_array($type)) {
-            $key = array_shift($type);
-            $args = $type;
-        }
-        // 문자열 형식: 'enum:UserRole'
-        elseif (is_string($type) && strpos($type, ':') !== false) {
-            [$key, $argString] = explode(':', $type, 2);
-            $args = explode(',', $argString);
+        if (isset(self::$map[$type])) {
+            $class = self::$map[$type];
+        } elseif (class_exists($type)) {
+            $class = $type;
         } else {
-            $key = $type;
+            throw new InvalidArgumentException("Cast type [$type] not recognized.");
         }
 
-        if (!isset(self::$casts[$key])) {
-            throw new InvalidArgumentException("Unsupported cast type [$key]");
+        $instance = new $class();
+
+        if (!$instance instanceof CastInterface) {
+            throw new InvalidArgumentException("Cast class [$class] must implement CastInterface.");
         }
 
-        $class = self::$casts[$key];
-
-        return new $class(...$args);
+        return $instance;
     }
 
+    /**
+     * 사용자 정의 캐스트 타입 등록 (선택적 기능)
+     *
+     * @param string $alias
+     * @param class-string<CastInterface> $class
+     * @return void
+     */
+    public static function extend(string $alias, string $class): void
+    {
+        if (!class_exists($class)) {
+            throw new InvalidArgumentException("Class [$class] not found.");
+        }
+
+        self::$map[$alias] = $class;
+    }
 }

@@ -15,10 +15,6 @@ class User extends Model
 
     public function posts(): HasMany
     {
-        return $this->hasMany(
-            Post::class, 
-            'user_id', 
-            'id'
-        );
+        return $this->hasMany(Post::class, 'user_id');
     }
 }

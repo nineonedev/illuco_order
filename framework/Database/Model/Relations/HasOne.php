@@ -2,7 +2,7 @@
 
 namespace Framework\Database\Model\Relations;
 
-use Framework\Database\Model\Model;
+use Framework\Database\Model\Entities\Entity;
 
 class HasOne extends Relation
 {
@@ -10,51 +10,57 @@ class HasOne extends Relation
     protected string $localKey;
 
     public function __construct(
-        Model $parentModel,
-        string $relatedModelClass,
+        Entity $parentEntity,
+        string $relatedRepositoryClass,
         string $foreignKey,
-        string $localKey = 'id'
+        string $localKey
     ) {
-        parent::__construct($parentModel, $relatedModelClass);
-
+        parent::__construct($parentEntity, $relatedRepositoryClass);
         $this->foreignKey = $foreignKey;
         $this->localKey = $localKey;
-        $this->query = $this->getRelatedModel()->getRepository()->query();
     }
 
-    public function getResults(): ?Model
+    /**
+     * Lazy load
+     */
+    public function getResults(): array
     {
-        return $this->query
-            ->where($this->foreignKey, '=', $this->parentModel->get($this->localKey))
+        $row = $this->getQuery()
+            ->where($this->foreignKey, $this->parentEntity->get($this->localKey))
             ->first();
+
+        return $row ? [$this->relatedRepository->toEntity((array) $row)] : [];
     }
 
-    public function addEagerConstraints(array $parents): void
+    public function addEagerConstraints(array $entities): void
     {
-        $localKeys = $this->getKeys($parents, $this->localKey);
-
-        $this->query->whereIn($this->foreignKey, $localKeys);
+        $keys = array_map(fn($e) => $e->get($this->localKey), $entities);
+        $this->getQuery()->whereIn($this->foreignKey, array_unique($keys));
     }
 
-    public function getEagerResults(array $parents): array
+    public function getEagerResults(array $entities): array
     {
-        return $this->query->get();
+        $rows = $this->getQuery()->get();
+        return $this->relatedRepository->toEntities($rows);
     }
 
-    public function match(array &$parents, array $results, string $relationName): void
+    public function match(array &$entities, array $results, string $relationName): void
     {
         $dictionary = [];
 
         foreach ($results as $result) {
-            $key = $result[$this->foreignKey] ?? null;
-            if ($key !== null) {
-                $dictionary[$key] = $result;
-            }
+            $key = $result->get($this->foreignKey);
+            $dictionary[$key] = $result;
         }
 
-        foreach ($parents as $parent) {
-            $key = $parent->get($this->localKey);
-            $parent->setRelation($relationName, $dictionary[$key] ?? null);
+        foreach ($entities as $entity) {
+            $value = $dictionary[$entity->get($this->localKey)] ?? null;
+            $entity->setRelation($relationName, $value);
         }
+    }
+
+    public function initRelation(): ?Entity
+    {
+        return null;
     }
 }

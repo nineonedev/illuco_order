@@ -2,33 +2,41 @@
 
 namespace Framework\Database\Model\Entities;
 
-use Framework\Database\Contracts\CastInterface;
-use Framework\Database\Model\Entities\Casts\CastFactory;
+use Framework\Database\Model\Casts\CastFactory;
+use Framework\Database\Model\Casts\CastInterface;
+use RuntimeException;
 
-class Entity
+abstract class Entity
 {
     protected array $attributes = [];
     protected array $original = [];
-
-    protected array $metadata = [];
-
-    protected array $casts = [];
-
     protected array $fillable = [];
-
     protected array $guarded = [];
-
+    protected array $casts = [];
     protected array $relations = [];
-
     protected string $primaryKey = 'id';
-    protected ?string $softDeleteColumn = 'deleted_at';
-    
+
+    protected ?string $softDeleteColumn = null;
+    protected ?SoftDeletes $softDeletes = null;
 
     public function __construct(array $attributes = [])
     {
-        $this->casts = $this->defineCasts();
+        $this->setup();
+
         $this->fill($attributes);
         $this->syncOriginal();
+
+    }
+
+    protected function setup(): void
+    {
+        if ($this->softDeleteColumn) {
+            if (!in_array($this->softDeleteColumn, $this->fillable)) {
+                $this->fillable[] = $this->softDeleteColumn;
+            }
+
+            $this->softDeletes = new SoftDeletes($this, $this->softDeleteColumn);
+        }
     }
 
     public function setRelation(string $name, $value): void
@@ -40,99 +48,66 @@ class Entity
     {
         return $this->relations[$name] ?? null;
     }
-
-    public function setMetadata(string $key, $value): void
+    
+    public function getRelations(): array
     {
-        $this->metadata[$key] = $value;
+        return $this->relations;
     }
 
-    public function getMetadata(string $key, $default = null)
+    public function relationLoaded(string $relation): bool
     {
-        return $this->metadata[$key] ?? $default;
+        return array_key_exists($relation, $this->relations);
     }
 
-    public function setGuarded(array $fields): void
+    public static function create(array $attributes = []): self
     {
-        $this->guarded = $fields;
-    }
-
-    public function getGuarded(): array
-    {
-        return $this->guarded;
-    }
-
-    protected function isFillable(string $key): bool
-    {
-        if (!empty($this->fillable)) {
-            return in_array($key, $this->fillable, true);
-        }
-
-        return !in_array($key, $this->guarded, true);
-    }
-
-    public function setFillable(array $fields): void
-    {
-        $this->fillable = $fields;
-    }
-
-    public function getFillable(): array
-    {
-        return $this->fillable;
+        return new static($attributes);
     }
 
     public function fill(array $attributes): void
     {
         foreach ($attributes as $key => $value) {
-            if ($this->isFillable($key)) {
-                $this->__set($key, $value);
+            if ($this->isGuarded($key)) {
+                continue;
             }
+
+            if (!empty($this->fillable) && !in_array($key, $this->fillable, true)) {
+                continue;
+            }
+
+            $this->set($key, $value);
         }
     }
 
-    public function __get($key)
+    public function set(string $key, $value): void
+    {
+        if ($cast = $this->resolveCast($key)) {
+            $this->attributes[$key] = $cast->set($value);
+        } else {
+            $this->attributes[$key] = $value;
+        }
+    }
+
+    public function get(string $key)
     {
         $value = $this->attributes[$key] ?? null;
 
-        if ($this->hasCast($key)) {
-            return $this->getCast($key)->cast($value);
+        if ($cast = $this->resolveCast($key)) {
+            return $cast->get($value);
         }
 
         return $value;
     }
 
-    public function __set($key, $value): void
+    public function toArray(): array
     {
-        if ($this->hasCast($key)) {
-            $value = $this->getCast($key)->recast($value);
+        $result = [];
+
+        foreach (array_keys($this->attributes) as $key) {
+            $result[$key] = $this->get($key);
         }
 
-        $this->attributes[$key] = $value;
-    }
-
-
-    protected function defineCasts(): array
-    {
-        return [];
-    }
-
-   protected function hasCast(string $key): bool
-    {
-        return isset($this->casts[$key]);
-    }
-
-    protected function getCast(string $key): CastInterface
-    {
-        return CastFactory::resolve($this->casts[$key]);
-    }
-
-    public function get(string $key)
-    {
-        return $this->__get($key);
-    }
-
-    public function set(string $key, $value): void
-    {
-        $this->__set($key, $value);
+        return $result;
     }
 
     public function getAttributes(): array
@@ -140,41 +115,35 @@ class Entity
         return $this->attributes;
     }
 
-    public function getOriginal(): array
-    {
-        return $this->original;
-    }
-
     public function syncOriginal(): void
     {
         $this->original = $this->attributes;
     }
 
-    public function isDirty(?string $key = null): bool
-    {
-        return $key
-            ? ($this->attributes[$key] ?? null) !== ($this->original[$key] ?? null)
-            : count($this->getChanges()) > 0;
-    }
-
     public function getChanges(): array
     {
-        $changes = [];
+        return array_diff_assoc($this->attributes, $this->original);
+    }
 
-        foreach ($this->attributes as $key => $value) {
-            if (!array_key_exists($key, $this->original) || $value !== $this->original[$key]) {
-                $changes[$key] = $value;
-            }
-        }
+    public function isClean(): bool
+    {
+        return $this->getChanges() === [];
+    }
 
-        return $changes;
+    public function isDirty(): bool
+    {
+        return $this->getChanges() !== [];
     }
 
     public function hasPrimaryKey(): bool
     {
         $key = $this->getPrimaryKeyName();
+        return isset($this->attributes[$key]) && !empty($this->attributes[$key]);
+    }
 
-        return !empty($this->get($key));
+    public function getPrimaryKey()
+    {
+        return $this->get($this->getPrimaryKeyName());
     }
 
     public function getPrimaryKeyName(): string
@@ -182,66 +151,77 @@ class Entity
         return $this->primaryKey;
     }
 
-    public function setPrimaryKeyName(string $key): void
+    protected function resolveCast(string $key): ?CastInterface
     {
-        $this->primaryKey = $key;
+        if (!isset($this->casts[$key])) {
+            return null;
+        }
+
+        $cast = $this->casts[$key];
+
+        // 문자열 타입인 경우 CastFactory 사용
+        if (is_string($cast)) {
+            return CastFactory::resolve($cast);
+        }
+
+        if (is_object($cast) && $cast instanceof CastInterface) {
+            return $cast;
+        }
+
+        if (class_exists($cast)) {
+            $instance = new $cast();
+            if (!$instance instanceof CastInterface) {
+                throw new RuntimeException("Cast class [$cast] must implement CastInterface.");
+            }
+            return $instance;
+        }
+
+        throw new RuntimeException("Invalid cast definition for [$key].");
     }
 
-    public function getKey()
+    protected function isGuarded(string $key): bool
     {
-        return $this->get($this->getPrimaryKeyName());
+        return in_array($key, $this->guarded, true);
     }
 
-    /**
-     * 관계 선언
-     */
-    public function relations(): array
-    {
-        return [];
-    }
-
-    /**
-     * SoftDelete 사용 여부 확인
-     */
+    // =======================================
+    // Soft delete methods
+    // =======================================
     public function usesSoftDeletes(): bool
     {
-        return !empty($this->softDeleteColumn);
+        return $this->softDeleteColumn !== null; 
     }
 
-    public function getSoftDeleteColumn(): ?string
+    public function softDeleteColumn(): ?string
     {
-        return $this->softDeleteColumn;
+        return $this->softDeleteColumn; 
     }
 
-    /**
-     * SoftDeleted 상태 여부
-     */
-    public function isSoftDeleted(): bool
+    public function markDeleted(): void
     {
-        if (!$this->usesSoftDeletes()) {
-            return false;
-        }
+        if (!$this->usesSoftDeletes()) return; 
 
-        return !empty($this->get($this->softDeleteColumn));
+        $this->softDeletes->markDeleted();
     }
 
-    /**
-     * 삭제 상태로 표시
-     */
-    public function markAsDeleted(): void
-    {
-        if ($this->usesSoftDeletes()) {
-            $this->set($this->softDeleteColumn, date('Y-m-d H:i:s'));
-        }
-    }
-
-    /**
-     * Soft Delete 복구
-     */
     public function restore(): void
     {
-        if ($this->usesSoftDeletes()) {
-            $this->set($this->softDeleteColumn, null);
-        }
+        if (!$this->usesSoftDeletes()) return; 
+
+        $this->softDeletes->restore();
+    }
+
+    public function isDeleted(): bool
+    {
+        if (!$this->usesSoftDeletes()) return false; 
+
+        return $this->softDeletes->isDeleted();
+    }
+
+    public function deletedAt(): ?string
+    {
+        if (!$this->usesSoftDeletes()) return null;
+        
+        return $this->softDeletes->deletedAt();
     }
 }

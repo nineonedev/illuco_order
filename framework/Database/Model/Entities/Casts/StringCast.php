@@ -1,18 +1,32 @@
 <?php
 
-namespace Framework\Database\Model\Entities\Casts;
-
-use Framework\Database\Contracts\CastInterface;
+namespace Framework\Database\Model\Casts;
 
 class StringCast implements CastInterface
 {
-    public function cast($value)
+    /**
+     * Convert value to string for DB storage
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public function set($value)
     {
         return (string) $value;
     }
 
-    public function recast($value)
+    /**
+     * Convert value from DB to PHP string
+     *
+     * @param mixed $value
+     * @return string|null
+     */
+    public function get($value)
     {
+        if ($value === null) {
+            return null;
+        }
+
         return (string) $value;
     }
 }
