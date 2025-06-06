@@ -6,7 +6,7 @@ use Framework\Http\Request;
 /** @var Application $app */
 $app = require_once __DIR__.'/bootstrap/app.php';
 
-dump_classes_in_html('framework/Database/Model/Relations'); exit; 
+// dump_classes_in_html('framework/Database/ORM'); exit; 
 
 $app->handleRequest(Request::capture());
 

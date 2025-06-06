@@ -3,19 +3,15 @@
 namespace App\User\Observers;
 
 use App\User\Entities\User;
+use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Repositories\Obserable;
 use Framework\Support\Facades\Hash;
-use Framework\Support\Observer;
 
-
-class HashPasswordObserver extends Observer
+class HashPasswordObserver implements Obserable
 {
-    protected $targetClass = User::class;
-    protected $hook = 'beforeUpdate'; 
-
-    protected function observe(object $target): void
+    public function observe(Entity $entity): void
     {
         /** @var User $target */
-        $password = $target->password;
-        $target->set('password', Hash::make($password));
+        $entity->password = Hash::make($entity->password);
     }
 }

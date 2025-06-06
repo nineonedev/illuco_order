@@ -14,8 +14,10 @@ use Throwable;
 
 class ExceptionHandler
 {
-    protected Logger $logger;
+    protected static $metaData = [];
+    
     protected bool $debug = false;
+    protected Logger $logger;
     protected ?ExceptionConfigurator $configurator = null;
 
     public function __construct(bool $debug = false)
@@ -143,8 +145,8 @@ class ExceptionHandler
         }
 
         // 코드 스니펫 추출
-        $linesBefore = 5;
-        $linesAfter = 5;
+        $linesBefore = 10;
+        $linesAfter = 10;
         $codeLines = [];
 
         $file = $e->getFile();

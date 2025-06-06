@@ -1,5 +1,8 @@
-<?php 
-    use App\User\Models\User; 
+<?php
+
+use App\User\Repositories\PostRepository;
+use App\User\Repositories\UserRepository;
+
 ?>
 <?php extend('layouts.auth') ?>
 
@@ -9,7 +12,12 @@
 
 <?php section('content') ?>
 <?php
-    dump(User::withRelations(['posts'])::all());
+// foreach (UserRepository::with(['posts'])->toArray() as $user) {
+// }
+
+foreach (PostRepository::with(['user'])->get() as $post) {
+    dump($post);
+}
 ?>
 <section class="no-section-xl no-auth-layout">
     <div class="no-auth-container">

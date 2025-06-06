@@ -1,21 +1,20 @@
-<?php 
+<?php
 
 namespace App\User\Repositories;
 
-use App\User\Entities\User;
+use App\User\Entities\Post;
+use Framework\Database\ORM\Relations\BelongsTo;
 use Framework\Database\ORM\Repositories\Repository;
 
-class UserRepository extends Repository
+class PostRepository extends Repository
 {
-    protected bool $preventsLazyLoading = true; 
-
     public function table(): string
     {
-        return 'users';
+        return 'posts';
     }
 
     public function entityClass(): string
     {
-        return User::class;
+        return Post::class;
     }
 }

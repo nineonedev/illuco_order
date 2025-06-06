@@ -89,6 +89,7 @@ class Builder
     {
         $this->limit(1);
         $results = $this->get();
+        
         return $results[0] ?? null;
     }
 
@@ -157,11 +158,6 @@ class Builder
         return $this->connection->update($sql, $bindings);
     }
 
-    public function updateOrInsert()
-    {
-        
-    }
-
     public function delete(): int
     {
         [$sql, $bindings] = $this->grammar->compileDelete($this);
@@ -186,6 +182,21 @@ class Builder
             'column' => $column,
             'boolean' => 'and',
         ];
+
+        return $this;
+    }
+
+    public function when($value, Closure $callback, ?Closure $default = null): self
+    {
+        if ($value instanceof Closure) {
+            $value = $value();
+        }
+
+        if ($value) {
+            $callback($this, $value);
+        } elseif ($default) {
+            $default($this, $value);
+        }
 
         return $this;
     }

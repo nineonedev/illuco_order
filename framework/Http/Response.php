@@ -133,4 +133,27 @@ class Response
             ['Content-Type' => 'application/json']
         );
     }
+
+    public static function apiOk($data = null, array $meta = [], int $statusCode = 200): self
+    {
+        if (is_object($data)) {
+            if (method_exists($data, 'toArray')) {
+                $data = $data->toArray();
+            } elseif (method_exists($data, 'apiResource')) {
+                $data = $data->apiResource();
+            }
+        }
+
+        $payload = [
+            'success' => true,
+            'data' => $data,
+        ];
+
+        if (!empty($meta)) {
+            $payload['meta'] = $meta;
+        }
+
+        return self::json($payload, $statusCode);
+    }
+
 }

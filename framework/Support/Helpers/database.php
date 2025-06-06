@@ -1,12 +1,11 @@
 <?php
 
 use Framework\Database\Contracts\ConnectionInterface;
-use Framework\Database\Contracts\RepositoryInterface;
 use Framework\Database\Database;
+use Framework\Database\ORM\Repositories\Repository;
 use Framework\Database\Schema\Schema;
-use Framework\Database\TransactionManager;
-use Framework\Database\Entities\Entity;
 use Framework\Database\Query\Builder;
+use Framework\Database\Query\EntityQueryBuilder;
 
 // 기본 DB Connection (low-level)
 if (!function_exists('connection')) {
@@ -24,10 +23,13 @@ if (!function_exists('database')) {
     }
 }
 
-if (!function_exists('repository')) {
-    function repository(string $repository): RepositoryInterface
+if (!function_exists('query')) {
+    /**
+     * @param Repository|class-string<Repository> $repository
+     */
+    function query($repository): EntityQueryBuilder
     {
-        return app($repository);
+        return database()->query($repository);
     }
 }
 
@@ -54,22 +56,6 @@ if (!function_exists('transaction')) {
     function transaction(callable $callback, ?string $connection = null)
     {
         return database()->transaction($callback, $connection);
-    }
-}
-
-// repository() : 리포지토리 resolve
-if (!function_exists('repository')) {
-    function repository(string $entityClass): RepositoryInterface
-    {
-        return app("repository:{$entityClass}");
-    }
-}
-
-// entity() : 새로운 엔터티 인스턴스 생성
-if (!function_exists('entity')) {
-    function entity(string $class, array $attributes = []): Entity
-    {
-        return new $class($attributes);
     }
 }
 

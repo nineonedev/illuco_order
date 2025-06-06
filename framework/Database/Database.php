@@ -8,6 +8,8 @@ use Framework\Database\Query\Grammars\MysqlGrammar;
 use Framework\Database\Schema\Schema;
 use Framework\Database\TransactionManager;
 use Framework\Database\Contracts\ConnectionInterface;
+use Framework\Database\ORM\Repositories\Repository;
+use Framework\Database\Query\EntityQueryBuilder;
 
 class Database
 {
@@ -29,6 +31,24 @@ class Database
             $this->connection($connection),
             new MysqlGrammar(),
             $table
+        );
+    }
+
+    /**
+     * @param Repository|class-string<Repository> $repository
+     */
+    public function query($repository, ?string $connection = null): EntityQueryBuilder
+    {
+        /** @var Repository $repo */
+        if (is_string($repository) && class_exists($repository)) {
+            $repository = new $repository();
+        }
+
+        return new EntityQueryBuilder(
+            $this->connection($connection),
+            new MysqlGrammar(),
+            $repository->table(),
+            $repository
         );
     }
 

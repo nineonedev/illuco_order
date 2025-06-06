@@ -14,6 +14,24 @@ if (!function_exists('now')) {
     }
 }
 
+if (!function_exists('trait_used')) {
+    /**
+     * 특정 객체 또는 클래스가 해당 Trait을 사용하는지 확인.
+     *
+     * @param string $trait   Trait FQCN (ex: SoftDeletes::class)
+     * @param object|string $classOrObject  객체 또는 클래스명
+     * @return bool
+     */
+    function trait_used($trait, $classOrObject): bool
+    {
+        if (is_object($classOrObject)) {
+            $classOrObject = get_class($classOrObject);
+        }
+        return in_array($trait, class_uses($classOrObject));
+    }
+}
+
+
 function relative_path(...$path): string
 {
     return implode('/', array_map(fn ($p) => trim($p, '/'), $path));
