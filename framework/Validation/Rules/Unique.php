@@ -2,14 +2,13 @@
 
 namespace Framework\Validation\Rules;
 
-use Framework\Support\Facades\DB;
 
 class Unique extends Rule
 {
     protected $table;
     protected $column;
 
-    public function __construct($table, $column)
+    public function __construct($table, $column = null)
     {
         $this->table = $table;
         $this->column = $column;
@@ -23,11 +22,10 @@ class Unique extends Rule
      */
     public function passes($value): bool
     {
-        // Get the database connection and query the table for the unique value
-        $query = DB::table($this->table);
-        $result = $query->where($this->column, '=', $value)->get();
+        $column = $this->column ?: $this->field; 
+        $query = db($this->table);
+        $result = $query->where($column, '=', $value)->get();
 
-        // Return true if the result is empty, meaning the value is unique
         return empty($result);
     }
 

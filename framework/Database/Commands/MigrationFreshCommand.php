@@ -3,7 +3,10 @@
 namespace Framework\Database\Commands;
 
 use Framework\Console\Command;
+use Framework\Console\UI\ProgressBar;
+use Framework\Database\Contracts\ConnectionInterface;
 use Framework\Database\Migration\Migrator;
+use Framework\Database\Schema\Schema;
 
 class MigrationFreshCommand extends Command
 {
@@ -13,15 +16,25 @@ class MigrationFreshCommand extends Command
 
     protected function handle(): void
     {
-        /** @var Migrator $migrator */
-        $migrator = app()->make(Migrator::class);
+        /** @var ConnectionInterface $db */
+        $db = app(ConnectionInterface::class);
 
-        $this->warn("⚠ 모든 마이그레이션이 삭제되고 다시 실행됩니다.");
+        $this->warn("⚠ 모든 테이블을 삭제합니다. (데이터 손실!)");
         $this->line("───────────────────────────────");
 
+        // 모든 테이블 DROP
+        $tables = $db->schema()->getAllTables();
+        $bar = new ProgressBar(count($tables), 'Dropping Tables', 'done'); 
+        
         try {
-            $migrator->fresh();
+            $db->schema()->freshAllTables(function(Schema $_, string $table) use ($bar) {
+                $this->line("Dropped: $table");
+                $bar->advance();
+            });
+            
+            $bar->finish();
             $this->info("✅ 마이그레이션 초기화 완료");
+
         } catch (\Throwable $e) {
             $this->error("❌ 초기화 실패: " . $e->getMessage());
         }

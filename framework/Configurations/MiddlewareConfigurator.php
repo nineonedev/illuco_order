@@ -131,6 +131,9 @@ class MiddlewareConfigurator
 
         // 4. Sort by priority (if applicable)
         if (!empty($this->priority)) {
+            dump($this->priority); 
+
+
             usort($middlewares, function ($a, $b) {
                 $priorityA = array_search($a, $this->priority, true);
                 $priorityB = array_search($b, $this->priority, true);

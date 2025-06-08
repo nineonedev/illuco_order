@@ -3,6 +3,7 @@
 use Framework\Filesystem\DiskManager;
 use Framework\Filesystem\File;
 use Framework\Filesystem\Disk;
+use Framework\Filesystem\UploadedFile;
 
 // 디스크 매니저 반환
 if (!function_exists('disk_manager')) {
@@ -62,8 +63,8 @@ if (!function_exists('file_delete')) {
 
 // 업로드된 $_FILES에서 UploadedFile 인스턴스 생성
 if (!function_exists('uploaded_file')) {
-    function uploaded_file(array $file): \Framework\Filesystem\UploadedFile
+    function uploaded_file(array $file): UploadedFile
     {
-        return \Framework\Filesystem\UploadedFile::createFromGlobal($file);
+        return UploadedFile::createFromGlobal($file);
     }
 }

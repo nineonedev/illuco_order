@@ -71,6 +71,10 @@ class Builder
 
     public function get(): array
     {
+        if (empty($this->orders)) {
+            $this->orderBy('created_at', 'desc');
+        }
+        
         [$sql, $bindings] = $this->grammar->compileSelect($this);
         return $this->connection->select($sql, $bindings);
     }
@@ -91,6 +95,38 @@ class Builder
         $results = $this->get();
         
         return $results[0] ?? null;
+    }
+
+    public function updateOrInsert(array $where, array $values): bool
+    {
+        $query = clone $this;
+        foreach ($where as $column => $value) {
+            $query->where($column, $value);
+        }
+        $exists = $query->first();
+
+        if ($exists) {
+            // UPDATE
+            $this->where(function($q) use ($where) {
+                foreach ($where as $column => $value) {
+                    $q->where($column, $value);
+                }
+            });
+            $this->update($values);
+        } else {
+            // INSERT
+            $this->insert(array_merge($where, $values));
+        }
+        return true;
+    }
+
+    /**
+     * @return static ? $this ? self
+     */
+    public function table(string $table)
+    {
+        $this->table = $table;
+        return $this;
     }
 
     public function getTable(): string
@@ -135,18 +171,7 @@ class Builder
         return $this->connection->insert($sql, $bindings);
     }
 
-    public function insertGetId(array $data): ?int
-    {
-        $result = $this->insert($data);
-        return $result ? $this->lastInsertId() : null;
-    }
-
-    public function lastInsertId(): int
-    {
-        return (int) $this->connection->pdo()->lastInsertId();
-    }
-
-    public function insert(array $data): bool
+    public function insert(array $data): ?int
     {
         [$sql, $bindings] = $this->grammar->compileInsert($this->table, $data);
         return $this->connection->insert($sql, $bindings);
@@ -201,10 +226,24 @@ class Builder
         return $this;
     }
 
-
-    public function where(string $column, $operator = null, $value = null): self
+    /**
+     * @param string|\Closure $column
+     */
+    public function where($column, $operator = null, $value = null): self
     {
-        // where('age', 30) → operator 생략되면 '=' 처리
+        // Closure 지원 (서브쿼리, 복합 where)
+        if ($column instanceof \Closure) {
+            $query = new self($this->connection, $this->grammar, $this->table);
+            $column($query);
+            $this->wheres[] = [
+                'type' => 'nested',
+                'query' => $query,
+                'boolean' => 'and',
+            ];
+            return $this;
+        }
+
+        // 기존: where('age', 30) → operator 생략되면 '=' 처리
         if (func_num_args() === 2) {
             $value = $operator;
             $operator = '=';
@@ -219,6 +258,19 @@ class Builder
         ];
 
         return $this;
+    }
+
+    public function exists(): bool
+    {
+        $clone = clone $this;
+        $clone->columns = [1]; // 또는 ['1']
+        $clone->limit = 1;
+        $clone->orders = []; // order by 무시
+
+        [$sql, $bindings] = $this->grammar->compileSelect($clone);
+        $result = $this->connection->select($sql, $bindings);
+
+        return !empty($result);
     }
     
     public function whereIn(string $column, array $values): self

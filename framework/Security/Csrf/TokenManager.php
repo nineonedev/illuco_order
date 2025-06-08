@@ -7,8 +7,8 @@ use Framework\Security\Contracts\TokenManagerInterface;
 
 class TokenManager implements TokenManagerInterface
 {
-    protected const KEY = '_csrf_token'; 
-    protected SessionInterface $session; 
+    const KEY = '_csrf_token'; 
+    public SessionInterface $session; 
 
     public function __construct(SessionInterface $session)
     {
@@ -32,5 +32,10 @@ class TokenManager implements TokenManagerInterface
     {
         $stored = $this->token(); 
         return is_string($stored) && hash_equals($stored, $token); 
+    }
+
+    public function field(): string
+    {
+        return '<input type="hidden" name="'.static::KEY.'" value="'.$this->generate() . '"/>';
     }
 }

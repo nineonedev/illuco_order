@@ -63,7 +63,7 @@ class HasManyThrough extends Relation
 
         foreach ($entities as $entity) {
             $key = $entity->get($this->localKey);
-            $entity->{$relationName} = $grouped[$key] ?? [];
+            $entity->setRelation($relationName, $grouped[$key] ?? []);
         }
     }
 

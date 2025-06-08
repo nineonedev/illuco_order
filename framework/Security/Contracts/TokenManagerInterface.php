@@ -9,4 +9,6 @@ interface TokenManagerInterface
     public function token(): ?string;
 
     public function verify(string $token): bool;
+
+    public function field(): string;
 }

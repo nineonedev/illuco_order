@@ -2,8 +2,7 @@
 
 namespace Framework\Database\ORM\Loaders;
 
-use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\ORM;
+use Framework\Database\ORM\RelationMap;
 
 class EagerLoader extends AbstractLoader
 {
@@ -21,7 +20,7 @@ class EagerLoader extends AbstractLoader
         $entity = $this->getFirstEntity($entities);
         if (!$entity) return;
 
-        $relation = ORM::getRelation($entity, $relationName);
+        $relation = RelationMap::getRelation($entity, $relationName);
         if (!$relation) return;
 
         $relation->addEagerConstraints($entities);

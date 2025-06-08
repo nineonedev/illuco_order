@@ -2,10 +2,7 @@
 
 namespace Framework\Database\Query;
 
-use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Repositories\Repository;
-use Framework\Database\Paginator\Paginator;
-use Framework\Database\Entities\EntityCollection;
 
 class EntityQueryBuilder extends Builder
 {
@@ -46,6 +43,27 @@ class EntityQueryBuilder extends Builder
             fn($entity) => $entity->get($column),
             $this->get()
         );
+    }
+
+    public function find($id)
+    {
+        $pk = $this->repository->createEntity([])->getPrimaryKeyName();
+
+        // 여러 개
+        if (is_array($id)) {
+            $entities = $this->whereIn($pk, $id)->get();
+            return $entities;
+        }
+
+        // 단일
+        $entity = $this->where($pk, $id)->first();
+        if ($entity) {
+            // with() 사용시 관계도 포함
+            $entities = $this->repository->loadRelations([$entity]);
+            return $entities[0] ?? $entity;
+        }
+
+        return null;
     }
 
     public function toArray(): array

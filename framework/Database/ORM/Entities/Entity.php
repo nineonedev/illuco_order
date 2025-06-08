@@ -5,20 +5,6 @@ namespace Framework\Database\ORM\Entities;
 use App\User\Entities\User;
 use Framework\Database\ORM\Casts\CastFactory;
 use Framework\Database\ORM\Repositories\Repository;
-use Framework\Database\ORM\Relations\{
-    HasOne,
-    HasMany,
-    HasOneThrough,
-    HasManyThrough,
-    BelongsTo,
-    BelongsToMany,
-    MorphOne,
-    MorphTo,
-    MorphMany,
-    MorphToMany,
-    MorphedByMany
-};
-use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard\Duplicates;
 
 abstract class Entity
 {
@@ -41,16 +27,35 @@ abstract class Entity
     
     protected array $relations = [];
 
+    protected array $meta = [];
+
     public function __construct(array $attributes = [])
     {
         $this->fill($attributes);
         $this->syncOriginal();
+        $this->setup();
+    }
+
+    protected function setup(): void
+    {
+
     }
 
     /**
      * @return class-string<Repository>
      */
     abstract public function repositoryClass(): string;
+
+    public function setMeta(string $key, $value): void
+    {
+        $this->meta[$key] = $value;
+    }
+
+    public function getMeta(string $key, $default = null)
+    {
+        return $this->meta[$key] ?? $default;
+    }
+
     public function setRelation($name, $value): void
     {
         $this->relations[$name] = $value;
@@ -116,11 +121,18 @@ abstract class Entity
         if (isset($this->relations[$key])) {
             return $this->relations[$key];
         }
+
+            
         // 2순위: attributes
         if (array_key_exists($key, $this->attributes)) {
             return $this->castAttribute($key, $this->attributes[$key]);
         }
         
+        // 3순위: meta
+        if (isset($this->meta[$key])) {
+            return $this->meta[$key];
+        }
+
         return null;
     }
 
@@ -188,6 +200,11 @@ abstract class Entity
         return empty($this->getChanges());
     }
 
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    } 
+
     public function hasChanged(string $key): bool
     {
         return array_key_exists($key, $this->getChanges());
@@ -213,200 +230,11 @@ abstract class Entity
                 $arr[$relation] = $data;
             }
         }
+
+        if (!empty($this->meta)) {
+            $arr = array_merge($arr, $this->meta);
+        }
         
         return $arr;
-    }
-
-
-    // --- 1:1 관계 ---
-    public function hasOne(
-        string $relatedEntityClass,
-        string $foreignKey,
-        string $localKey = 'id'
-    ): HasOne {
-        return new HasOne(
-            $this, 
-            $relatedEntityClass, 
-            $foreignKey, 
-            $localKey
-        );
-    }
-
-    // --- 1:N 관계 ---
-    public function hasMany(
-        string $relatedEntityClass,
-        string $foreignKey,
-        string $localKey = 'id'
-    ): HasMany {
-        return new HasMany(
-            $this, 
-            $relatedEntityClass, 
-            $foreignKey, 
-            $localKey
-        );
-    }
-
-    // --- N:1 관계 ---
-    public function belongsTo(
-        string $relatedEntityClass,
-        string $foreignKey,
-        string $ownerKey = 'id'
-    ): BelongsTo {
-        return new BelongsTo(
-            $this, 
-            $relatedEntityClass, 
-            $foreignKey, 
-            $ownerKey
-        );
-    }
-
-    // --- N:N(Pivot) 관계 ---
-    public function belongsToMany(
-        string $relatedEntityClass,
-        string $pivotTable,
-        string $foreignKey,
-        string $relatedKey,
-        string $relatedEntityPrimaryKey = 'id'
-    ): BelongsToMany {
-        return new BelongsToMany(
-            $this, 
-            $relatedEntityClass, 
-            $pivotTable, 
-            $foreignKey, 
-            $relatedKey, 
-            $relatedEntityPrimaryKey
-        );
-    }
-
-    // --- MorphTo(다형성 역방향) ---
-    public function morphTo(
-        string $morphType,
-        string $morphId,
-        array $typesMap,
-        array $typeFieldMap = []
-    ): MorphTo {
-        return new MorphTo(
-            $this, 
-            $morphType, 
-            $morphId, 
-            $typesMap, 
-            $typeFieldMap
-        );
-    }
-
-    // --- MorphMany(다형성 1:N 정방향) ---
-    public function morphMany(
-        string $relatedEntityClass,
-        string $morphType,
-        string $morphId,
-        string $localKey = 'id',
-        string $typeValue = null
-    ): MorphMany {
-        return new MorphMany(
-            $this, 
-            $relatedEntityClass, 
-            $morphType, 
-            $morphId, 
-            $localKey, 
-            $typeValue
-        );
-    }
-
-    // --- MorphOne(다형성 1:1 정방향) ---
-    public function morphOne(
-        string $relatedEntityClass,
-        string $morphType,
-        string $morphId,
-        string $localKey = 'id',
-        string $typeValue = null
-    ): MorphOne {
-        return new MorphOne(
-            $this, 
-            $relatedEntityClass, 
-            $morphType, 
-            $morphId, 
-            $localKey, 
-            $typeValue
-        );
-    }
-
-    // --- MorphedByMany(다형성 N:N 역방향) ---
-    public function morphedByMany(
-        string $relatedEntityClass,
-        string $pivotTable,
-        string $morphType,
-        string $morphId,
-        string $pivotRelatedKey,
-        string $relatedEntityPrimaryKey = 'id',
-        string $typeValue = null
-    ): MorphedByMany {
-        return new MorphedByMany(
-            $this, 
-            $relatedEntityClass, 
-            $pivotTable, 
-            $morphType, 
-            $morphId, 
-            $pivotRelatedKey, 
-            $relatedEntityPrimaryKey, 
-            $typeValue
-        );
-    }
-
-    // --- MorphToMany(다형성 N:N 정방향) ---
-    public function morphToMany(
-        string $relatedEntityClass,
-        string $pivotTable,
-        string $morphType,
-        string $morphId,
-        string $pivotRelatedKey,
-        string $relatedEntityPrimaryKey = 'id',
-        string $typeValue = null
-    ): MorphToMany {
-        return new MorphToMany(
-            $this, 
-            $relatedEntityClass, 
-            $pivotTable, 
-            $morphType, 
-            $morphId, 
-            $pivotRelatedKey, 
-            $relatedEntityPrimaryKey, 
-            $typeValue
-        );
-    }
-
-    // --- HasOneThrough ---
-    public function hasOneThrough(
-        string $relatedEntityClass,
-        string $throughEntityClass,
-        string $firstKey,
-        string $secondKey,
-        string $localKey = 'id'
-    ): HasOneThrough {
-        return new HasOneThrough(
-            $this, 
-            $relatedEntityClass, 
-            $throughEntityClass, 
-            $firstKey, 
-            $secondKey, 
-            $localKey
-        );
-    }
-
-    // --- HasManyThrough ---
-    public function hasManyThrough(
-        string $relatedEntityClass,
-        string $throughEntityClass,
-        string $firstKey,
-        string $secondKey,
-        string $localKey = 'id'
-    ): HasManyThrough {
-        return new HasManyThrough(
-            $this, 
-            $relatedEntityClass, 
-            $throughEntityClass, 
-            $firstKey, 
-            $secondKey, 
-            $localKey
-        );
     }
 }

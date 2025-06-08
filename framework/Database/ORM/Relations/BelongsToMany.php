@@ -72,7 +72,7 @@ class BelongsToMany extends Relation implements Pivotable
         }
         foreach ($entities as $entity) {
             $key = $entity->get($entity->getPrimaryKeyName());
-            $entity->{$relationName} = $grouped[$key] ?? [];
+            $entity->setRelation($relationName, $grouped[$key] ?? []);
         }
     }
 

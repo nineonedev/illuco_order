@@ -2,8 +2,10 @@
 
 namespace Framework\Database\ORM\Relations;
 
+use Exception;
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\ORM;
+use Framework\Database\ORM\Entities\Morphable;
+use Framework\Database\ORM\RelationMap;
 
 /**
  * 다형성 1:1 관계 (ex: User, Post → Image)
@@ -15,26 +17,30 @@ class MorphOne extends Relation
     protected $morphType;
     /** @var string morph_id 컬럼명 */
     protected $morphId;
-
-    /** @var string 실제 morph type 값 (ex: User::class) */
+    /** @var string morph_type에 저장될 값 (별칭 또는 클래스명) */
     protected $typeValue;
-
-    /** @var string 부모(엔티티) PK */
+    /** @var string 부모(엔티티) PK 컬럼명 */
     protected $localKey;
 
     public function __construct(
         Entity $parent,
         string $relatedEntityClass,
-        string $morphType,   // morph_type 컬럼
-        string $morphId,     // morph_id 컬럼
-        string $localKey,    // 부모 PK
-        string $typeValue = null // morph type 값(없으면 부모 클래스)
+        string $morphType = 'morph_type',
+        string $morphId = 'morph_id',
+        string $localKey = 'id',
+        $typeValue = null // morph_type에 저장할 값(별칭 또는 클래스명)
     ) {
         parent::__construct($parent, $relatedEntityClass);
         $this->morphType = $morphType;
         $this->morphId = $morphId;
         $this->localKey = $localKey;
-        $this->typeValue = $typeValue ?: get_class($parent);
+
+        // 별칭(예: 'user', 'post')이 있으면 RelationMap에서 가져오고, 없으면 클래스명 사용
+        if ($typeValue === null) {
+            $this->typeValue = RelationMap::morphAlias(get_class($parent)) ?? get_class($parent);
+        } else {
+            $this->typeValue = $typeValue;
+        }
     }
 
     public function addEagerConstraints(array $entities): void
@@ -60,9 +66,10 @@ class MorphOne extends Relation
             $id = $item->get($this->morphId);
             $grouped[$id] = $item;
         }
+
         foreach ($entities as $entity) {
             $key = $entity->get($this->localKey);
-            $entity->{$relationName} = $grouped[$key] ?? null;
+            $entity->setRelation($relationName, $grouped[$key] ?? null);
         }
     }
 

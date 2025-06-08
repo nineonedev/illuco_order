@@ -14,7 +14,7 @@ interface ConnectionInterface
 
     public function select(string $query, array $bindings = []): array;
 
-    public function insert(string $query, array $bindings = []): bool;
+    public function insert(string $query, array $bindings = []): ?int;
 
     public function update(string $query, array $bindings = []): int;
 
@@ -26,7 +26,7 @@ interface ConnectionInterface
 
     public function commit(): void;
 
-    public function rollBack(): void;
+    public function rollback(): void;
 
     public function inTransaction(): bool;
 
@@ -37,4 +37,6 @@ interface ConnectionInterface
     public function insertOrIgnore(string $sql, array $bindings): int;
 
     public function schema(): Schema;
+
+    public function trasaction(callable $callback);
 }

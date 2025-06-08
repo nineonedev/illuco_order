@@ -9,6 +9,10 @@ class HttpServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->singleton(Http::class, function(){
+            return new Http($_SERVER);
+        });
+
         $this->app->bind(Response::class, Response::class); 
 
         $this->app->bind(Redirector::class, fn () => new Redirector()); 

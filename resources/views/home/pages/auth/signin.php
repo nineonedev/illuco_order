@@ -2,6 +2,8 @@
 
 use App\User\Repositories\PostRepository;
 use App\User\Repositories\UserRepository;
+use App\User\Resources\UserResource;
+use Framework\Database\ORM\RelationMap;
 
 ?>
 <?php extend('layouts.auth') ?>
@@ -11,14 +13,7 @@ use App\User\Repositories\UserRepository;
 <?php end_section() ?>
 
 <?php section('content') ?>
-<?php
-// foreach (UserRepository::with(['posts'])->toArray() as $user) {
-// }
 
-foreach (PostRepository::with(['user'])->get() as $post) {
-    dump($post);
-}
-?>
 <section class="no-section-xl no-auth-layout">
     <div class="no-auth-container">
         <div class="no-auth-inner">
@@ -33,7 +28,7 @@ foreach (PostRepository::with(['user'])->get() as $post) {
                 </p>
             </header>
             <div>
-                <form method="post" action="<?=route('auth.login')?>" id="auth-form">
+                <form method="post" action="/admin/dashboard" id="auth-form">
                     <div class="no-form-control">
                         <label for="username" class="no-form-control-inner">
                             <input 

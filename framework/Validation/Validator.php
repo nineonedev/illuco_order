@@ -2,6 +2,7 @@
 
 namespace Framework\Validation;
 
+use Framework\Support\Exceptions\ValidationException;
 use Framework\Validation\Rules\Rule;
 
 class Validator
@@ -11,9 +12,12 @@ class Validator
     protected array $messages = [];
     protected array $errors = [];
 
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], array $rules = [])
     {
         $this->data = $data;
+        $this->rules = $rules; 
+
+        $this->addRules($rules);
     }
 
     /**
@@ -32,6 +36,13 @@ class Validator
         $this->rules[$field] = $rules;
 
         return $this;
+    }
+
+    public function addRules(array $rules): void
+    {
+        foreach ($rules as $field => $ruleSet) {
+            $this->addRule($field, $ruleSet);
+        }
     }
 
     /**
@@ -56,7 +67,9 @@ class Validator
     {
         foreach ($this->rules as $field => $rules) {
             foreach ($rules as $rule) {
-                $ruleInstance = $this->createRuleInstance($rule['name'], $rule['params']);
+                $ruleInstance = RuleFactory::create($rule['name'], $rule['params']);
+                $ruleInstance->setField($field);
+
                 if (!$ruleInstance->passes($this->data[$field] ?? null)) {
                     $this->errors[$field] = $this->messages[$field] ?? $ruleInstance->message();
                 }
@@ -81,6 +94,30 @@ class Validator
         );
     }
 
+    /**
+     * Validate and throw exception on fail.
+     *
+     * @throws ValidationException
+     */
+    public function validateOrFail(): bool
+    {
+        if (!$this->validate()) {
+            throw new ValidationException($this->errors);
+        }
+        
+        return true;
+    }
+
+    /**
+     * Reset the validator's state.
+     */
+    public function flush(): void
+    {
+        $this->errors = [];
+        $this->messages = [];
+        $this->rules = [];
+        // $this->data = []; // data는 유지할지 선택 (보통 유지)
+    }
 
     /**
      * Check if validation fails.
@@ -102,23 +139,6 @@ class Validator
         return $this->errors;
     }
 
-    /**
-     * Create a rule instance.
-     *
-     * @param string $rule
-     * @param array $params
-     * @return Rule
-     */
-    protected function createRuleInstance(string $rule, array $params = []): Rule
-    {
-        $ruleClass = "Framework\\Validation\\Rules\\" . ucfirst($rule);
-
-        if (!class_exists($ruleClass)) {
-            throw new \RuntimeException("Rule {$rule} does not exist.");
-        }
-
-        return new $ruleClass(...$params);
-    }
 
     /**
      * Parse the rule string into individual rules and their parameters.
@@ -151,12 +171,7 @@ class Validator
      */
     public static function make(array $data, array $rules): Validator
     {
-        $validator = new self($data);
-
-        foreach ($rules as $field => $ruleSet) {
-            $validator->addRule($field, $ruleSet);
-        }
-
+        $validator = new self($data, $rules);
         return $validator;
     }
 }

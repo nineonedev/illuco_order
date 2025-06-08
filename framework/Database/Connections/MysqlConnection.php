@@ -53,6 +53,21 @@ class MysqlConnection implements ConnectionInterface {
         return $this->pdo;
     }
 
+    public function trasaction(callable $callback)
+    {
+        try {
+            $this->beginTransaction();
+            $result = $callback();
+            $this->commit();
+            return $result;
+        } catch (\Throwable $e) {
+            if ($this->inTransaction()) {
+                $this->rollback();
+            }
+            throw $e;
+        }
+    }
+
     public function table(string $table): Builder
     {
         return new Builder($this, $this->grammar, $table); 
@@ -65,22 +80,27 @@ class MysqlConnection implements ConnectionInterface {
         return $stmt->fetchAll();
     }
 
-    public function insert(string $query, array $bindings = []): bool
+    public function insert(string $query, array $bindings = []): ?int
     {
         $stmt = $this->pdo->prepare($query);
-        return $stmt->execute($bindings);
+        $ok = $stmt->execute($bindings);
+        if ($ok) {
+            $id = $this->pdo->lastInsertId();
+            return $id ? (int)$id : null;
+        }
+        return null;
     }
 
     public function update(string $query, array $bindings = []): int
     {
-        $stmt = $this->pdo->query($query);
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute($bindings); 
         return $stmt->rowCount();
     }
     
     public function delete(string $query, array $bindings = []): int
     {
-        $stmt = $this->pdo->query($query);
+        $stmt = $this->pdo->prepare($query);
         $stmt->execute($bindings); 
         return $stmt->rowCount();
     }
@@ -101,9 +121,9 @@ class MysqlConnection implements ConnectionInterface {
         $this->pdo->commit();
     }
 
-    public function rollBack(): void
+    public function rollback(): void
     {
-        $this->pdo->rollBack();
+        $this->pdo->rollback();
     }
 
     public function inTransaction(): bool
@@ -129,7 +149,6 @@ class MysqlConnection implements ConnectionInterface {
         $stmt->execute($bindings);
         return $stmt->rowCount();
     }
-
 
     public function schema(): Schema
     {

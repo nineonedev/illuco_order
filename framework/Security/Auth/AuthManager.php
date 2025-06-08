@@ -3,6 +3,7 @@
 namespace Framework\Security\Auth;
 
 use Framework\Security\Contracts\GuardInterface;
+use Framework\Support\Facades\Hash;
 use RuntimeException;
 
 class AuthManager

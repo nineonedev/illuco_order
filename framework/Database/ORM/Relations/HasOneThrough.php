@@ -64,7 +64,7 @@ class HasOneThrough extends Relation
 
         foreach ($entities as $entity) {
             $key = $entity->get($this->localKey);
-            $entity->{$relationName} = $grouped[$key] ?? null;
+            $entity->setRelation($relationName, $grouped[$key] ?? null);
         }
     }
 

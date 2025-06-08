@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'string' => 'Please enter a valid string.',
     'required' => 'This field is required.',
     'min' => 'Please enter a value greater than {0}.',
     'max' => 'Please enter a value smaller than {0}.',
@@ -21,4 +22,10 @@ return [
     'uploaded_ok' => 'There was an error with the uploaded file.',
     'file_size' => 'The file must be smaller than {0} bytes.',
     'file_extension' => 'The file extension is not allowed.',
+    'mime_type'     => 'The file type is not allowed.',
+    'image'         => 'Please upload a valid image file.',
+    'video'         => 'Please upload a valid video file.',
+    'audio'         => 'Please upload a valid audio file.',
+    'document'      => 'Please upload a valid document file.',
+    'archive'       => 'Please upload a valid archive file.',
 ];

@@ -6,6 +6,7 @@ return [
     'default' => 'web',
     'translators' => [
         'web' => base_path('resources/lang'),
-        'rule' => base_path('framework/Validation/locales') 
+        'rule' => base_path('framework/Validation/locales'),
+        'system' => base_path('resources/system'),
     ],
 ];

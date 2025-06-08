@@ -3,39 +3,37 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\ORM;
+use Framework\Database\ORM\RelationMap;
 
-/**
- * 다형성 N:N (ex: Tag ← Taggables → Post/User 등)
- * pivot table: taggables
- *   - taggable_id, taggable_type, tag_id
- */
-class MorphedByMany extends Relation
+class MorphedByMany extends Relation implements Pivotable
 {
     protected $pivotTable;
-    protected $morphType;   // taggable_type
-    protected $morphId;     // taggable_id
-    protected $pivotRelatedKey; // tag_id
-    protected $typeValue;   // 실제 morph_type값 (ex: Post::class)
+    protected $morphType;
+    protected $morphId;
+    protected $pivotRelatedKey;
     protected $relatedEntityPrimaryKey;
+    protected $typeValue;
 
     public function __construct(
         Entity $parent,
         string $relatedEntityClass,
         string $pivotTable,
-        string $morphType,
-        string $morphId,
-        string $pivotRelatedKey, // tag_id 등
+        string $pivotRelatedKey,
+        string $morphType = 'morph_type',
+        string $morphId = 'morph_id',
         string $relatedEntityPrimaryKey = 'id',
-        string $typeValue = null // morph_type 실제값
+        $typeValue = null
     ) {
         parent::__construct($parent, $relatedEntityClass);
         $this->pivotTable = $pivotTable;
+        $this->pivotRelatedKey = $pivotRelatedKey;
         $this->morphType = $morphType;
         $this->morphId = $morphId;
-        $this->pivotRelatedKey = $pivotRelatedKey;
         $this->relatedEntityPrimaryKey = $relatedEntityPrimaryKey;
-        $this->typeValue = $typeValue ?: get_class($parent);
+
+        // typeValue 미지정시 morphMap 별칭 → 클래스명 순
+        $this->typeValue = $typeValue
+            ?: (RelationMap::morphAlias(get_class($parent)) ?? get_class($parent));
     }
 
     public function addEagerConstraints(array $entities): void
@@ -62,13 +60,14 @@ class MorphedByMany extends Relation
         // pivot의 morph_id 기준으로 그룹핑 (각 부모별 여러개)
         $grouped = [];
         foreach ($results as $item) {
+            // 주의: join 시 pivot 데이터를 별도 배열에 할당하는 ORM 설계라면 아래처럼 접근
             $morphId = $item->{$this->pivotTable}[$this->morphId] ?? null;
             if ($morphId !== null) $grouped[$morphId][] = $item;
         }
 
         foreach ($entities as $entity) {
             $key = $entity->get($entity->getPrimaryKeyName());
-            $entity->{$relationName} = $grouped[$key] ?? [];
+            $entity->setRelation($relationName, $grouped[$key] ?? []);
         }
     }
 
@@ -76,7 +75,7 @@ class MorphedByMany extends Relation
     {
         $parentId = $this->parent->get($this->parent->getPrimaryKeyName());
 
-        $this->query
+        return $this->query
             ->join(
                 $this->pivotTable,
                 "{$this->relatedEntityClass::table()}.{$this->relatedEntityPrimaryKey}", '=', "{$this->pivotTable}.{$this->pivotRelatedKey}"

@@ -1,5 +1,6 @@
 <?php
 
+use Framework\Http\ApiResponse;
 use Framework\Http\Redirector;
 use Framework\Http\Request;
 use Framework\Http\Response;
@@ -43,3 +44,28 @@ if (!function_exists('request')) {
         return app(Request::class);
     }
 }
+
+if (!function_exists('api_ok')) {
+    function api_ok(
+        $data = null, 
+        string $message = 'success', 
+        array $meta = [], 
+        int $status = 200
+    ): Response 
+    {
+        return ApiResponse::ok($data, $message, $meta, $status);
+    }
+}
+
+if (!function_exists('api_error')) {
+    function api_error(
+        string $message = 'Error', 
+        int $status = 400, 
+        array $errors = [], 
+        ?array $debug = null
+    ): Response 
+    {
+        return ApiResponse::error($message, $status, $errors, $debug);
+    }
+}
+

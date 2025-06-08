@@ -2,10 +2,14 @@
 
 namespace Framework\Database\Paginator;
 
+use Framework\Database\ORM\Entities\Entity;
+use Framework\Http\Resources\ApiResource;
 use Framework\Support\Collection;
 
 class Paginator
 {
+    const PLACEHOLDER = '__no__';
+
     protected Collection $items;
     protected int $total;
     protected int $perPage;
@@ -24,7 +28,21 @@ class Paginator
         $this->total = $total;
         $this->perPage = $perPage;
         $this->currentPage = $currentPage;
+
+        $this->addNumberingToEntities();
     }
+
+    protected function addNumberingToEntities(): void
+    {
+        $number = $this->total - (($this->currentPage - 1) * $this->perPage);
+
+        foreach ($this->items as $item) {
+            if ($item instanceof Entity) {
+                $item->setMeta(self::PLACEHOLDER, $number--);
+            }
+        }
+    }
+
 
     public function items(): Collection
     {
@@ -76,34 +94,13 @@ class Paginator
         return min($this->from() + $this->items->count() - 1, $this->total);
     }
 
-    public function itemsWithNo(): array
-    {
-        $number = $this->total - (($this->currentPage - 1) * $this->perPage);
-        $results = [];
-
-        foreach ($this->items->all() as $item) {
-            if (is_array($item)) {
-                $item['_no'] = $number--;
-                $results[] = $item;
-            } elseif (is_object($item)) {
-                if (method_exists($item, 'toArray')) {
-                    $data = $item->toArray();
-                    $data['_no'] = $number--;
-                    $results[] = $data;
-                } else {
-                    $item->_no = $number--;
-                    $results[] = $item;
-                }
-            }
-        }
-
-        return $results;
-    }
-
     public function toArray(): array
     {
         return [
-            'data' => $this->itemsWithNo(),
+            'data' => array_map(
+                fn($item) => $item instanceof Entity ? $item->toArray() : $item,
+                $this->items->all()
+            ),
             'total' => $this->total(),
             'per_page' => $this->perPage(),
             'current_page' => $this->currentPage(),
@@ -120,21 +117,20 @@ class Paginator
     {
         return json_encode($this->toArray(), JSON_UNESCAPED_UNICODE);
     }
-
-    public function apiResource(?callable $transformer = null): array
+    
+    /**
+     * @param class-string<ApiResource> $apiResource
+     */
+    public function toResource(string $apiResource): array
     {
+        $data = array_map(function ($item) use ($apiResource) {
+            /** @var ApiResource $resource */
+            $resource = new $apiResource($item);
+            return $resource->toArray();
+        }, $this->items->all());
+
         return [
-            'data' => array_map(function ($item) use ($transformer) {
-                if ($transformer) {
-                    return $transformer($item);
-                }
-
-                if (is_object($item) && method_exists($item, 'toArray')) {
-                    return $item->toArray();
-                }
-
-                return $item;
-            }, $this->items()),
+            'data' => $data,
             'total' => $this->total(),
             'per_page' => $this->perPage(),
             'current_page' => $this->currentPage(),
@@ -142,38 +138,5 @@ class Paginator
             'has_more_pages' => $this->hasMorePages(),
         ];
     }
-
-    public function withNoResource(?callable $transformer = null): array
-    {
-        $number = $this->total - (($this->currentPage - 1) * $this->perPage);
-        $results = [];
-
-        foreach ($this->items->all() as $item) {
-            if ($transformer) {
-                $transformed = $transformer($item);
-            } elseif (is_object($item) && method_exists($item, 'toArray')) {
-                $transformed = $item->toArray();
-            } else {
-                $transformed = $item;
-            }
-
-            $transformed['_no'] = $number--;
-            $results[] = $transformed;
-        }
-
-        return [
-            'data' => $results,
-            'total' => $this->total(),
-            'per_page' => $this->perPage(),
-            'current_page' => $this->currentPage(),
-            'last_page' => $this->lastPage(),
-            'has_more_pages' => $this->hasMorePages(),
-            'next_page_url' => $this->nextPageUrl(),
-            'prev_page_url' => $this->previousPageUrl(),
-            'from' => $this->from(),
-            'to' => $this->to(),
-        ];
-    }
-
 
 }

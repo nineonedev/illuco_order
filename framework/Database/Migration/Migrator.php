@@ -67,7 +67,7 @@ class Migrator
         }
 
         foreach ($lastBatch as $migration) {
-            $path = "{$this->migrationPath}/{$migration['name']}.php";
+            $path = "{$this->migrationPath}/{$migration->name}.php";
 
             if (!file_exists($path)) {
                 throw new RuntimeException("Migration file not found: {$path}");
@@ -80,12 +80,14 @@ class Migrator
             }
 
             $this->connection->beginTransaction();
-
-            $instance->down();
-
-            $this->repository->delete($migration['name']);
-
-            $this->connection->commit();
+            try {
+                $instance->down();
+                $this->repository->delete($migration->name);
+                $this->connection->commit();
+            } catch (\Throwable $e) {
+                $this->connection->rollback();
+                throw $e; 
+            }
         }
     }
 

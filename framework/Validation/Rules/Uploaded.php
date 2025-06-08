@@ -12,8 +12,16 @@ class Uploaded extends Rule
      */
     public function passes($value): bool
     {
-        // Check if the value is an uploaded file
-        return is_uploaded_file($value);
+        // 파일 업로드 배열을 받으면 tmp_name을 사용
+        if (is_array($value) && isset($value['tmp_name'])) {
+            return is_uploaded_file($value['tmp_name']);
+        }
+        // 혹시 문자열 경로가 직접 넘어올 때(예외)
+        if (is_string($value)) {
+            return is_uploaded_file($value);
+        }
+
+        return false; 
     }
 
     /**

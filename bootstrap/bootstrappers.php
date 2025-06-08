@@ -7,6 +7,7 @@ use Framework\Boostrap\Bootstrappers\LoadStates;
 use Framework\Boostrap\Bootstrappers\LoadEnvironment;
 use Framework\Boostrap\Bootstrappers\RegisterCommands;
 use Framework\Boostrap\Bootstrappers\RegisterMiddlewares;
+use Framework\Boostrap\Bootstrappers\RegisterRelations;
 use Framework\Boostrap\Bootstrappers\SetExceptionHandler;
 
 return [
@@ -18,4 +19,5 @@ return [
     SetExceptionHandler::class,
     RegisterMiddlewares::class,
     RegisterCommands::class,
+    RegisterRelations::class,
 ];

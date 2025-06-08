@@ -59,7 +59,10 @@ class ViewRenderer
 
             return $content;
         } catch (\Throwable $e) {
-            ob_end_clean(); // 버퍼 제거
+            if (ob_get_level() > 0) {
+                ob_end_clean(); // 버퍼 제거
+            }
+            
             throw $e; 
             
         } finally {

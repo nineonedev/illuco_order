@@ -10,7 +10,7 @@ class Store implements SessionInterface
 
     public function start(): void
     {
-        if (session_status() !== PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start(); 
         }
 

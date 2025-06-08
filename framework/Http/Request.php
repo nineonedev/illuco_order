@@ -3,6 +3,7 @@
 namespace Framework\Http;
 
 use Framework\Routing\Route;
+use Framework\Validation\Validator;
 
 class Request {
     
@@ -14,6 +15,7 @@ class Request {
     
     protected Http $http;
     protected ?Route $route = null; 
+    protected ?Validator $validator = null;
 
     public function __construct(
         array $get = [], 
@@ -24,8 +26,8 @@ class Request {
     )
     {
         $this->http = new Http($server); 
+        $this->post = $this->parseJsonBody($server) ?? $post;
         $this->get = $get; 
-        $this->post = $post; 
         $this->cookies = $cookies; 
         $this->files = $files; 
         $this->data = [];
@@ -42,10 +44,34 @@ class Request {
         );
     }
 
+    protected function parseJsonBody(array $server): ?array
+    {
+        $contentType = $server['CONTENT_TYPE'] ?? '';
+
+        if (stripos($contentType, 'application/json') !== false) {
+            $raw = file_get_contents('php://input');
+            $json = json_decode($raw, true);
+
+            if (is_array($json)) {
+                return $json;
+            }
+        }
+        
+        return null;
+    }
+
     public function isJsonRequest(): bool
     {
-        return $this->http()->isAjax()
-        || stripos(request()->http()->accept() ?? '', 'application/json') !== false;
+        return (
+            $this->http()->isAjax()
+            || stripos(request()->http()->accept() ?? '', 'application/json') !== false
+        );
+    }
+
+    public function merge(array $data): self
+    {
+        $this->data = array_merge($this->data, $data);
+        return $this;
     }
 
     public function http(): Http
@@ -60,7 +86,7 @@ class Request {
 
     public function __get($name)
     {
-        $this->data[$name] ?? null;
+        return $this->data[$name] ?? null;
     }
 
     public function header(string $key, $default = null)
@@ -71,9 +97,10 @@ class Request {
     public function method(): string
     {
         $method = $this->body('_method');
+        $method = $method ? strtoupper($method) : null;
 
-        if (strtoupper($method) && in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
-            return strtoupper($method);
+        if ($method && in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
+            return $method;
         }
 
         return $this->http->method();
@@ -116,6 +143,21 @@ class Request {
         return array_diff_key($this->all(), array_flip($keys));
     }
 
+    public function file(string $key)
+    {
+        return $this->files[$key] ?? null;
+    }
+
+    public function files(): array
+    {
+        return $this->files;
+    }
+
+    public function hasFile(string $key): bool
+    {
+        return isset($this->files[$key]) && $this->files[$key]['error'] === UPLOAD_ERR_OK;
+    }
+
     public function path(): string
     {
         return $this->http->path();
@@ -136,14 +178,52 @@ class Request {
         return $_SESSION['_errors'] ?? [];
     }
 
-    public function validated()
+    protected function ensureValidator(array $rules)
     {
-
+        if (!$this->validator) {
+            $this->validator = Validator::make($this->all(), $rules); 
+        }
+        
+        $this->validator->addRules($rules);
     }
 
-    public function safe()
+    public function validate(array $rules): bool
     {
+        $this->ensureValidator($rules);
+        return $this->validator->validate();
+    }
+    
+    public function validateOrFail(array $rules): void
+    {
+        $this->ensureValidator($rules); 
+        $this->validator->validateOrFail();
+    }
+    
+    public function replace(array $data): self
+    {
+        $this->data = $data;
+        return $this;
+    }
 
+    public function validated(): array
+    {
+        if (!$this->validator) {
+            throw new \RuntimeException('No validation has been performed on this request.');
+        }
+        return $this->validator->validated();
+    }
+
+    public function safe(array $only = []): array
+    {
+        if (!$this->validator) {
+            throw new \RuntimeException('No validation has been performed on this request.');
+        }
+        $data = $this->validator->validated();
+
+        if (!empty($only)) {
+            return array_intersect_key($data, array_flip($only));
+        }
+        return $data;
     }
 
     public function setRoute(Route $route): void

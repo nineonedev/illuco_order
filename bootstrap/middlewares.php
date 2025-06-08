@@ -4,10 +4,9 @@ use Framework\Security\Csrf\Middleware\CsrfMiddleware;
 
 return [
     'priority' => [
-        CsrfMiddleware::class
     ], 
     'global' => [
-
+        CsrfMiddleware::class
     ],
     'group' => [
 

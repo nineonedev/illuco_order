@@ -7,6 +7,7 @@ use Framework\Http\Contracts\MiddlewareInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Security\Contracts\TokenManagerInterface;
+use Framework\Security\Csrf\TokenManager;
 use RuntimeException;
 
 class CsrfMiddleware implements MiddlewareInterface
@@ -24,10 +25,10 @@ class CsrfMiddleware implements MiddlewareInterface
             return $next($request);
         }
 
-        $token = $request->input('_token') ?? $request->header('X-CSRF-TOKEN'); 
-
+        $token = $request->input(TokenManager::KEY) ?? $request->header('X-CSRF-TOKEN'); 
+        
         if (!$token || !$this->tokens->verify($token)) {
-            throw new RuntimeException("CSRF token mismatch."); 
+            throw new RuntimeException(lang('system.csrf.mismatch')); 
         }
 
         return $next($request); 

@@ -46,8 +46,8 @@ class SecurityServiceProvider extends ServiceProvider
             $manager = new SessionManager();
 
             $manager->setDriver('php', new Store()); 
-            $manager->setDriver('memory', new InMemoryStore());
             $manager->setDriver('db', new DatabaseStore());
+            $manager->setDriver('memory', new InMemoryStore());
             
             $manager->use('php');
 

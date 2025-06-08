@@ -20,10 +20,14 @@ class CookieManager
         int $minutes = 0,
         string $path = '/',
         string $domain = '', 
-        bool $secure = false,
+        ?bool $secure = null,
         bool $httpOnly = true
     ): void
     {
+        if ($secure === null) {
+            $secure = request()->http()->isSecure();
+        }
+        
         $cookie = new CookieJar($name, $value, $minutes, $path, $domain, $secure, $httpOnly);
         $this->queued[$name] = $cookie;
     }

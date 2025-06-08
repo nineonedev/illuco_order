@@ -94,10 +94,11 @@ class MigrationRepository
      */
     public function delete(string $name): void
     {
-        $this->connection
+        $query = $this->connection
             ->table($this->table)
-            ->where('name', '=', $name)
-            ->delete();
+            ->where('name', '=', $name);
+
+        $result = $query->delete();
     }
 
     /**

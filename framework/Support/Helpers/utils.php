@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+use Framework\Support\Str;
+use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard\Duplicates;
 
 if (!function_exists('escape')) {
     function escape(string $string): string
@@ -30,7 +33,6 @@ if (!function_exists('trait_used')) {
         return in_array($trait, class_uses($classOrObject));
     }
 }
-
 
 function relative_path(...$path): string
 {
@@ -64,7 +66,22 @@ if (!function_exists('asset_path')) {
 if (!function_exists('upload_path')) {
     function upload_path(string $path): string
     {
-        return static_path(config('filesystem.disks.local'), $path);
+        $symlinks = config('filesystem.symlinks') ?? [];
+
+        // 1. symlink 타겟 매칭 → 링크로 교체
+        foreach ($symlinks as $target => $link) {
+            // 네이티브로도 처리 가능
+            if (strpos($path, $target) === 0) {
+                // link의 뒤에 슬래시가 없으면 붙임
+
+                $link = rtrim($link, '/');
+                $relative = ltrim(substr($path, strlen($target)), '/');
+                $path = $link . ($relative ? '/' . $relative : '');
+                break;
+            }
+        }
+
+        return static_path($path);
     }
 }
 

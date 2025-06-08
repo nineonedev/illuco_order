@@ -1,0 +1,24 @@
+<?php
+
+use Framework\Database\Contracts\Migration;
+use Framework\Database\Schema\Blueprint;
+use Framework\Support\Facades\Schema;
+
+return new class implements Migration
+{
+    public function up(): void
+    {
+        Schema::table('{{table}}', function (Blueprint $table) {
+            // 예시: $table->string('컬럼명')->nullable();
+            // 예시: $table->dropColumn('컬럼명');
+            // 예시: $table->renameColumn('old', 'new');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('{{table}}', function (Blueprint $table) {
+            // up에서 했던 작업을 되돌리는 코드를 작성
+        });
+    }
+};

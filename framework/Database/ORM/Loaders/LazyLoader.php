@@ -2,8 +2,7 @@
 
 namespace Framework\Database\ORM\Loaders;
 
-use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\ORM;
+use Framework\Database\ORM\RelationMap;
 
 class LazyLoader extends AbstractLoader
 {
@@ -11,7 +10,7 @@ class LazyLoader extends AbstractLoader
     {
         foreach ($entities as $entity) {
             foreach ($relations as $relationName) {
-                $relation = ORM::getRelation($entity, $relationName);
+                $relation = RelationMap::getRelation($entity, $relationName);
 
                 if (!$relation) continue;
 

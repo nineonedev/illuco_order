@@ -6,12 +6,13 @@ use RuntimeException;
 
 class UploadedFile 
 {
-    protected string $path; 
+    protected string $path; // 업로드 임시 파일 경로 (tmp)
     protected string $originalName; 
     protected string $mimeType; 
     protected int $size; 
     protected int $error; 
-    protected ?string $newName = null; 
+    protected ?string $newName = null; // 저장 후 파일명
+    protected ?string $storagePath = null; // 실제 저장 디렉토리
 
     public function __construct(
         string $path,
@@ -19,8 +20,7 @@ class UploadedFile
         string $mimeType,
         int $size,
         int $error
-    )
-    {
+    ) {
         $this->path = $path; 
         $this->originalName = $originalName; 
         $this->mimeType = $mimeType; 
@@ -39,42 +39,58 @@ class UploadedFile
         ); 
     }
 
-    public function storeAs(Disk $disk, string $path, ?string $name = null): string
+    public function storeAs(Disk $disk, ?string $subdir = null, ?string $name = null): string
     {
-        $targetDir = rtrim($disk->path($path), DS);
-        return $this->move($targetDir, $name);
+        if ($subdir) {
+            $disk = $disk->toWork($subdir); // toWork는 clone 반환으로 가정
+        }
+        
+        return $this->move($disk->path(), $name);
     }
 
     public function move(string $destinationPath, ?string $newName = null): string
     {
-        $newName = $newName ?? $this->originalName; 
-        $this->newName = rtrim($destinationPath, DS) . DS . $newName; 
-
-        if (!is_uploaded_file($this->newName)) {
-            throw new RuntimeException("The file is not valid uploaded file."); 
+        if ($newName === null) {
+            $newName = $this->generateSafeFileName();
         }
 
-        if (!move_uploaded_file($this->path, $this->newName)) {
-            throw new RuntimeException("Failed to move uploaded file."); 
+        $fullPath = rtrim($destinationPath, DS) . DS . $newName;
+        $this->newName = $newName; // 실제 파일명만 저장
+        $this->storagePath = $destinationPath; // 디렉토리만 저장
+
+        if (!is_uploaded_file($this->path)) {
+            throw new RuntimeException("The file is not valid uploaded file.");
         }
 
-        return $this->newName; 
+        if (!move_uploaded_file($this->path, $fullPath)) {
+            throw new RuntimeException("Failed to move uploaded file.");
+        }
+
+        return $fullPath;
+    }
+
+    protected function generateSafeFileName(): string
+    {
+        $ext = $this->extension();
+        $ext = $ext ? ('.' . strtolower($ext)) : '';
+        $hash = bin2hex(random_bytes(16)); // 32자리 해시
+        return $hash . $ext;
     }
 
     public function extension(): string
     {
         return pathinfo($this->originalName, PATHINFO_EXTENSION);
     }
-    
+
     public function toArray(): array
     {
         return [
             'original_name' => $this->originalName,
-            'new_name'      => $this->newName,
+            'name'          => $this->newName,
             'mime_type'     => $this->mimeType,
             'size'          => $this->size,
             'error'         => $this->error,
-            'path'          => $this->path,
+            'path'          => $this->storagePath,
             'extension'     => $this->extension(),
         ];
     }
@@ -92,15 +108,15 @@ class UploadedFile
     public function getSize(): int
     {
         return $this->size;
-    } 
+    }
 
     public function getError(): int
     {
-        return $this->error; 
+        return $this->error;
     }
 
     public function isValid(): bool
     {
-        return $this->error === UPLOAD_ERR_OK && is_uploaded_file($this->path); 
+        return $this->error === UPLOAD_ERR_OK && is_uploaded_file($this->path);
     }
 }

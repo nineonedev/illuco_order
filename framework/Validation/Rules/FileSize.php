@@ -4,31 +4,35 @@ namespace Framework\Validation\Rules;
 
 class FileSize extends Rule
 {
-    protected $maxSize;
+    protected $maxBytes;
 
-    public function __construct($maxSize)
+    /**
+     * @param int|float $maxSizeMB 메가바이트 단위
+     */
+    public function __construct($maxSizeMB)
     {
-        $this->maxSize = $maxSize;
+        $this->maxBytes = $maxSizeMB * 1024 * 1024;
     }
 
     /**
-     * Validate that the file size is less than or equal to the max size.
-     *
      * @param mixed $value
      * @return bool
      */
     public function passes($value): bool
     {
-        return filesize($value) <= $this->maxSize;
+        if (is_array($value) && isset($value['tmp_name'])) {
+            return is_file($value['tmp_name']) && filesize($value['tmp_name']) <= $this->maxBytes;
+        }
+        if (is_string($value)) {
+            return is_file($value) && filesize($value) <= $this->maxBytes;
+        }
+        return false;
     }
 
-    /**
-     * Get the error message for the validation rule.
-     *
-     * @return string
-     */
+
     public function message(): string
     {
-        return lang('rule.file_size', [$this->maxSize]);
+        // 예: "10MB"로 보여주기
+        return lang('rule.file_size', [$this->maxBytes / (1024 * 1024) . 'MB']);
     }
 }

@@ -4,6 +4,7 @@ namespace Framework\Validation\Rules;
 
 abstract class Rule
 {
+    protected ?string $field = null;
     /**
      * Check if the rule passes the validation.
      *
@@ -20,5 +21,10 @@ abstract class Rule
     public function message(): string
     {
         return "Validation failed.";
+    }
+
+    public function setField(string $field): void
+    {
+        $this->field = $field; 
     }
 }

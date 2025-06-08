@@ -12,7 +12,11 @@ class UploadedOk extends Rule
      */
     public function passes($value): bool
     {
-        return $value['error'] === UPLOAD_ERR_OK;
+        if (is_array($value) && isset($value['error'])) {
+            return $value['error'] === UPLOAD_ERR_OK;
+        }
+        
+        return false;
     }
 
     /**

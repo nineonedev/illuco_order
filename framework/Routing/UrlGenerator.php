@@ -2,8 +2,6 @@
 
 namespace Framework\Routing;
 
-use Framework\Routing\Contracts\RouteInterface;
-
 class UrlGenerator
 {
     protected RouteCollection $routes;

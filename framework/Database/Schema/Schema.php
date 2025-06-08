@@ -14,49 +14,50 @@ class Schema
         $this->connection = $connection;
     }
 
+    public function table(string $table, Closure $callback): void
+    {
+        $blueprint = new Blueprint($table, true);
+        $callback($blueprint);
+        $sqls = $blueprint->compileAlter();
+
+        foreach ($sqls as $sql) {
+            $this->connection->statement($sql);
+        }
+    }
+
     public function create(string $table, Closure $callback): void
     {
         $blueprint = new Blueprint($table);
         $callback($blueprint);
 
-        $columnsSql = [];
-        $primaryKeys = [];
-        $uniqueIndexes = [];
-        $normalIndexes = [];
-
-        foreach ($blueprint->getColumns() as $column) {
-            $columnsSql[] = $column->toSql();
-
-            foreach ($column->getIndexes() as $index) {
-                $name = $column->getName();
-                if ($index === 'PRIMARY') {
-                    $primaryKeys[] = "`$name`";
-                } elseif ($index === 'UNIQUE') {
-                    $uniqueIndexes[] = "UNIQUE (`$name`)";
-                } elseif ($index === 'INDEX') {
-                    $normalIndexes[] = "INDEX (`$name`)";
-                }
-            }
-        }
-
-        $sql = "CREATE TABLE `{$table}` (\n";
-        $sql .= implode(",\n", $columnsSql);
-
-        if (!empty($primaryKeys)) {
-            $sql .= ",\nPRIMARY KEY (" . implode(', ', $primaryKeys) . ")";
-        }
-
-        if (!empty($uniqueIndexes)) {
-            $sql .= ",\n" . implode(",\n", $uniqueIndexes);
-        }
-
-        if (!empty($normalIndexes)) {
-            $sql .= ",\n" . implode(",\n", $normalIndexes);
-        }
-
-        $sql .= "\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+        // 변경: compileCreate()로 외래키 포함 SQL 생성
+        $sql = $blueprint->compileCreate();
 
         $this->connection->statement($sql);
+    }
+
+    public function getAllTables(): array
+    {
+        $tables = [];
+        $result = $this->connection->select('SHOW TABLES');
+
+        foreach ($result as $row) {
+            // SHOW TABLES 결과는 ["Tables_in_데이터베이스"] 혹은 첫 번째 값만 있음
+            $tables[] = array_values((array) $row)[0];
+        }
+        return $tables;
+    }
+
+    public function truncateAllTables(): void
+    {
+        foreach ($this->getAllTables() as $table) {
+            $this->truncateTable($table);
+        }
+    }
+
+    public function truncateTable(string $table): void
+    {
+        $this->connection->statement("TRUNCATE TABLE `$table`");
     }
 
     public function drop(string $table): void
@@ -97,4 +98,23 @@ class Schema
         return count($result) > 0;
     }
 
+    public function disableForeignKeyChecks(): void
+    {
+        $this->connection->statement('SET FOREIGN_KEY_CHECKS = 0');
+    }
+
+    public function enableForeignKeyChecks(): void
+    {
+        $this->connection->statement('SET FOREIGN_KEY_CHECKS = 1');
+    }
+
+    public function freshAllTables(callable $callback): void
+    {
+        $this->disableForeignKeyChecks();
+        foreach ($this->getAllTables() as $table) {
+            $this->dropIfExists($table);
+            $callback($this, $table);
+        }
+        $this->enableForeignKeyChecks();
+    }
 }

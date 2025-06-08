@@ -1,3 +1,76 @@
+
+## ==========================================================================================
+## 250608 
+## ==========================================================================================
+
+- [O] mimetype 검사하는거 처리 (image, doucment, archive, audio, video)
+            => 사용시 ['ssn_file' => '??:image,document|audio|video']
+            Video.php, Image.php, ... ??.php
+- [] 파일이 수정, 삭제 처리
+
+
+# $profileImage = FileRepository::uploadOne($user, 'profile_image', 'uploaded|uploadedOk|image'); 
+# return $this->apiSuccess([
+#         'user' => $user,
+#         'profile_image_id' => $profileImage ? $profileImage->id : null,
+#     ], '로그인에 성공하였습니다.');
+
+morph의 morphMany가 애매한데? 
+morphOne은 그 이름에 File이 들어갈거니까 문제없는데
+morphMany는 그이름에 File[]이 들어갈텐데. 문제는 morph_type, morph_id가 고유하다는거지.그래서 이 morphMany가 있는 이유와 어떻게 쓰는지에 대한 의문이 생겨
+
+
+morphedByMany랑 morphToMany는 중간 morph테이블 쓰겠다는건데. morphToMany는 file이 morphToMany아니야? 왜냐하면 multi_files에 속하니까. 
+반면 notice는 morphedByMany로 multi_files에 속하지않고 File 데이터들을 multi_fils를 통해서 가져오겠다.
+이거 맞아?
+아 그러면 morphMany는 그냥 직통으로 File에서 해당 morph_type인 것들을 전부 가져오겠다인가? morph_type + morph_id가 아니고 morph_type으로만?
+
+===========================================================================================
+
+아 그러니까 결론 말해줄게 맞는지 알려줘봐.
+notice에 필드가 thumb_image, detail_image 이렇게 있을때, 
+1. morphMany => 위 2개의 필드를 배열로 받겠다는거지? 그럴경우 구분이 어려울 수 있는 문제가있는거지? 
+왜냐하면 thumb_image, detail_image이 고유 이름으로 받는거는 morphOne이니까 
+문제점은 데이터 매핑할대 힘들겠네? 이건 그렇다면 image1, iamge2, image3 이런필드를 넣고 그걸 images라는 이름의 morphMany로 하는경우가 유용한거네? 맞아?
+
+2. morphedByMany => notice는 다형성 중간 테이블로부터 데이터(file)를 가져오는 것이기때문에 이게 맞다.
+
+3. morphToMany => file은 다형성 중간 테이블인 multi_files에 속하므로 morphToMany가 맞다. 
+
+
+## ==========================================================================================
+## 250607 
+## ==========================================================================================
+[] FileUploader 생성 => 파일이 첨부되었을 경우에 벨리데이션처리! 그렇지않으면 그냥 null로 디비에 들어가야함.
+    => 근데 files라는 morph 테이블을 사용하므로 파일 첨부안되었으면 
+    => 그냥 아무것도 안하고 null로 두면되고(어차피 기본값 Null임) 그렇지않으면 파일첨부하여 그 morphId를 thumb_image필드에 넣으면됨! 
+    아니면 그냥 수동처리하던가? if (request()->hasFile('thumb_image')) { disk()-> ...? }
+
+[] 벨리데이션
+[] 파일 테스트
+[] CRUD 테스트 
+[] 인증 + 로그인 
+[] 세션스토어
+[] RolePermission (Policy, Gate)
+
+[] 프론트엔드 Component 제작 후 연결
+
+[] 다대다 테스트
+[] morph 테스트
+[] 완벽한 console 처리! seeder랑 controller, entity, repository 등 생성하는거.
+
+나중에 CORS처리
+우리 사이트아니면 api 막기! 
+
+- 이벤트 모듈, ColumnDefinition 이해, 관계형 이해
+- 객체지향 디자인 패턴 강의
+
+## ==========================================================================================
+## 250606 
+## ==========================================================================================
+
+
+
 ## 순서
 
 1. [O] 에러, 예외 핸들링

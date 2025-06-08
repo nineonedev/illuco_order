@@ -2,8 +2,10 @@
 
 use Framework\Core\Application;
 use Framework\Security\Auth\AuthManager;
+use Framework\Security\Contracts\SessionInterface;
 use Framework\Security\Contracts\TokenManagerInterface;
 use Framework\Security\Cookie\CookieManager;
+use Framework\Security\Session\DatabaseStore;
 use Framework\Security\Session\SessionManager;
 use Framework\Support\Facades\Gate;
 
@@ -24,7 +26,7 @@ if (!function_exists('verify_csrf')) {
 if (!function_exists('csrf_field')) {
     function csrf_field(): string
     {
-        return '<input type="hidden" name="_token" value="'.csrf_token() . '"/>';
+        return app(TokenManagerInterface::class)->field();
     }
 }
 
@@ -32,6 +34,20 @@ if (!function_exists('session')) {
     function session(): SessionManager
     {
         return app(SessionManager::class);
+    }
+}
+
+if (!function_exists('session_store')) {
+    function session_store(): DatabaseStore 
+    {
+        return session()->driver('db');
+    }
+}
+
+if (!function_exists('session_driver')) {
+    function session_driver($name = null): SessionInterface
+    {
+        return session()->driver($name);
     }
 }
 

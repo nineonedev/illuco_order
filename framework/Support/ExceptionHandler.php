@@ -3,6 +3,7 @@
 namespace Framework\Support;
 
 use Framework\Configurations\ExceptionConfigurator;
+use Framework\Http\ApiResponse;
 use Framework\Http\Response;
 use Framework\Support\Exceptions\Http\ForbiddenException;
 use Framework\Support\Exceptions\Http\InternalServerErrorException;
@@ -103,6 +104,9 @@ class ExceptionHandler
 
     protected function handleCli(Throwable $e): void
     {
+        $code = $e instanceof HttpException ? $e->getStatusCode() : 500;
+        $this->logger->error($e->getMessage(), $this->details($e, $code));
+        
         echo "[Exception] " . $e->getMessage() . PHP_EOL;
 
         if ($this->debug) {
@@ -178,21 +182,13 @@ class ExceptionHandler
             ]);
     }
 
+    // 에러 핸들링 (handleJson)
     protected function handleJson(Throwable $e, int $code): void
     {
-        $response = [
-            'error' => true,
-            'message' => $e->getMessage(),
-            'code' => $code,
-        ];
-
-        if ($e instanceof ValidationException) {
-            $response['errors'] = $e->errors();
-        }
-
+        $debug = null;
         if ($this->debug) {
             $details = $this->details($e, $code);
-            $response['debug'] = [
+            $debug = [
                 'exception' => $details['exception'],
                 'file' => $details['file'],
                 'line' => $details['line'],
@@ -200,8 +196,12 @@ class ExceptionHandler
             ];
         }
 
-        response()
-            ->json($response, $code)
-            ->send();
+        if ($e instanceof ValidationException) {
+            ApiResponse::fail($e->getMessage(), $e->errors(), 422, $debug)->send();
+            return;
+        }
+
+        ApiResponse::fail($e->getMessage(), [], $code, $debug)->send();
     }
+
 }

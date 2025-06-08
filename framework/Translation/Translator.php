@@ -33,6 +33,10 @@ class Translator implements TranslatorInterface
 
         if (!is_string($value)) return $value;
 
+        foreach ($replace as $i => $v) {
+            $value = str_replace('{' . $i . '}', $v, $value);   // {0}, {1} 치환
+        }
+
         foreach ($replace as $k => $v) {
             $value = str_replace(':' . $k, $v, $value);
         }

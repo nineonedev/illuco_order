@@ -20,25 +20,37 @@ class Response
         }
     }
 
-    public function setContent(string $content): self
+    /**
+     * @return static
+     */
+    public function setContent(string $content)
     {
         $this->content = $content;
         return $this;
     }
 
-    public function setStatusCode(int $code): self
+    /**
+     * @return static
+     */
+    public function setStatusCode(int $code)
     {
         $this->statusCode = $code;
         return $this;
     }
 
-    public function setHeader(string $key, string $value): self
+    /**
+     * @return static
+     */
+    public function setHeader(string $key, string $value)
     {
         $this->headers[$key] = $value;
         return $this;
     }
 
-    public function setHeaders(array $headers): self
+    /**
+     * @return static
+     */
+    public function setHeaders(array $headers)
     {
         foreach ($headers as $key => $value) {
             $this->setHeader($key, $value);
@@ -62,32 +74,47 @@ class Response
         return $this->headers;
     }
 
-    public function withCookie(string $name, string $value, int $minutes = 60): self
+    /**
+     * @return static
+     */
+    public function withCookie(string $name, string $value, int $minutes = 60)
     {
         $expire = time() + ($minutes * 60); 
         setcookie($name, $value, $expire, '/'); 
         return $this; 
     }
 
-    public function with(string $key, $value): self
+    /**
+     * @return static
+     */
+    public function with(string $key, $value)
     {
         $_SESSION[$key] = $value; 
         return $this;
     }
 
-    public function withErrors(array $errors): self
+    /**
+     * @return static
+     */
+    public function withErrors(array $errors)
     {
         $_SESSION['_errors'] = $errors; 
         return $this;
     }
 
-    public function withInput(array $input = []): self
+    /**
+     * @return static
+     */
+    public function withInput(array $input = [])
     {
         $_SESSION['_old_input'] = $input; 
         return $this;
     }
 
-    public static function back(): self
+    /**
+     * @return static
+     */
+    public static function back()
     {
         $referer = $_SERVER['HTTP_REFERER'] ?? '/';
         return (new self('', 302))->setHeader('Location', $referer);
@@ -109,7 +136,10 @@ class Response
         return $this; 
     }
 
-    public static function create(string $content = '', int $statusCode, array $headers = []): self
+    /**
+     * @return static
+     */
+    public static function create(string $content = '', int $statusCode, array $headers = [])
     {
         return new Response($content, $statusCode, $headers);
     }
@@ -125,7 +155,10 @@ class Response
         return new self($content, $statusCode, ['Content-Type' =>'text/html; charset=utf8']);
     }
 
-    public static function json(array $data, int $statusCode = 200): self
+    /**
+     * @return static
+     */
+    public static function json(array $data, int $statusCode = 200)
     {
         return new self(
             json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
@@ -133,27 +166,4 @@ class Response
             ['Content-Type' => 'application/json']
         );
     }
-
-    public static function apiOk($data = null, array $meta = [], int $statusCode = 200): self
-    {
-        if (is_object($data)) {
-            if (method_exists($data, 'toArray')) {
-                $data = $data->toArray();
-            } elseif (method_exists($data, 'apiResource')) {
-                $data = $data->apiResource();
-            }
-        }
-
-        $payload = [
-            'success' => true,
-            'data' => $data,
-        ];
-
-        if (!empty($meta)) {
-            $payload['meta'] = $meta;
-        }
-
-        return self::json($payload, $statusCode);
-    }
-
 }

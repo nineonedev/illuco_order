@@ -3,12 +3,8 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\ORM;
+use Framework\Database\ORM\RelationMap;
 
-/**
- * 다형성 1:N 관계 (ex: Post, User → images)
- * images 테이블: morph_type, morph_id 컬럼 필수
- */
 class MorphMany extends Relation
 {
     protected $morphType;
@@ -19,16 +15,19 @@ class MorphMany extends Relation
     public function __construct(
         Entity $parent,
         string $relatedEntityClass,
-        string $morphType,
-        string $morphId,
-        string $localKey,
-        string $typeValue = null
+        string $morphType = 'morph_type',
+        string $morphId = 'morph_id',
+        string $localKey = 'id',
+        $typeValue = null
     ) {
         parent::__construct($parent, $relatedEntityClass);
         $this->morphType = $morphType;
         $this->morphId = $morphId;
         $this->localKey = $localKey;
-        $this->typeValue = $typeValue ?: get_class($parent);
+
+        // typeValue 미지정시 morphMap 별칭 → 클래스명 순
+        $this->typeValue = $typeValue
+            ?: (RelationMap::morphAlias(get_class($parent)) ?? get_class($parent));
     }
 
     public function addEagerConstraints(array $entities): void
@@ -55,7 +54,7 @@ class MorphMany extends Relation
         }
         foreach ($entities as $entity) {
             $key = $entity->get($this->localKey);
-            $entity->{$relationName} = $grouped[$key] ?? [];
+            $entity->setRelation($relationName, $grouped[$key] ?? []);
         }
     }
 

@@ -1,12 +1,8 @@
-<?php
-
-use Framework\Support\Facades\Cookie;
-
- extend('layouts.admin') ?>
+<?php extend('layouts.admin') ?>
 
 <?php section('title') ?>
     설정
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('content') ?>
 
@@ -45,7 +41,7 @@ use Framework\Support\Facades\Cookie;
                             <div class="no-form-radio --sm">
                                 <label class="no-form-radio-pointer" for="theme_system">
                                     <input class="no-form-radio-input" type="radio" name="theme" id="theme_system" value="auto"
-                                        <?= Cookie::get('theme') === 'auto' ? 'checked' : '' ?>
+                                        <?= cookie()->get('theme') === 'auto' ? 'checked' : '' ?>
                                     >
                                     <div class="no-form-radio-ripple">
                                         <div class="no-form-radio-box">
@@ -58,7 +54,7 @@ use Framework\Support\Facades\Cookie;
                             <div class="no-form-radio --sm">
                                 <label class="no-form-radio-pointer" for="theme_light">
                                     <input class="no-form-radio-input" type="radio" name="theme" id="theme_light" value="light"
-                                        <?= Cookie::get('theme') === 'light' ? 'checked' : '' ?>
+                                        <?= cookie()->get('theme') === 'light' ? 'checked' : '' ?>
                                     >
                                     <div class="no-form-radio-ripple">
                                         <div class="no-form-radio-box">
@@ -71,7 +67,7 @@ use Framework\Support\Facades\Cookie;
                             <div class="no-form-radio --sm">
                                 <label class="no-form-radio-pointer" for="theme_dark">
                                     <input class="no-form-radio-input" type="radio" name="theme" id="theme_dark" value="dark"
-                                        <?= Cookie::get('theme') === 'dark' ? 'checked' : '' ?>
+                                        <?= cookie()->get('theme') === 'dark' ? 'checked' : '' ?>
                                     >
                                     <div class="no-form-radio-ripple">
                                         <div class="no-form-radio-box">
@@ -100,4 +96,4 @@ use Framework\Support\Facades\Cookie;
     </div>
     <!-- Row -->
 </div>
-<?php endSection() ?>
+<?php end_section() ?>

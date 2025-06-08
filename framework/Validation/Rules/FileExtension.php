@@ -6,9 +6,13 @@ class FileExtension extends Rule
 {
     protected $extensions;
 
-    public function __construct(array $extensions)
+    public function __construct(...$extensions)
     {
-        $this->extensions = $extensions;
+        if (count($extensions) === 1 && is_array($extensions[0])) {
+            $this->extensions = $extensions[0];
+        } else {
+            $this->extensions = $extensions;
+        }
     }
 
     /**
@@ -19,9 +23,22 @@ class FileExtension extends Rule
      */
     public function passes($value): bool
     {
-        $extension = pathinfo($value, PATHINFO_EXTENSION);
-        return in_array(strtolower($extension), $this->extensions);
+        $extension = null;
+
+        // 파일 업로드 배열인 경우
+        if (is_array($value) && isset($value['name'])) {
+            $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
+        } elseif (is_string($value)) {
+            $extension = pathinfo($value, PATHINFO_EXTENSION);
+        }
+
+        if ($extension === null) {
+            return false;
+        }
+
+        return in_array(strtolower($extension), array_map('strtolower', $this->extensions), true);
     }
+
 
     /**
      * Get the error message for the validation rule.

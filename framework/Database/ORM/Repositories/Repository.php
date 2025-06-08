@@ -3,11 +3,10 @@
 namespace Framework\Database\ORM\Repositories;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\Entities\EntityCollection;
 use Framework\Database\ORM\Loaders\EagerLoader;
 use Framework\Database\ORM\Loaders\LazyLoader;
+use Framework\Database\ORM\RelationMap;
 use Framework\Database\ORM\Traits\SoftDeletes;
-use Framework\Database\ORM\ORM;
 use Framework\Database\Query\Builder;
 use Framework\Database\Query\EntityQueryBuilder;
 
@@ -33,11 +32,6 @@ abstract class Repository
 
     protected Observer $observer; 
 
-    /**
-     * @var array<string,array<class-string<Obserable>|Obserable>>
-     */
-    protected array $obserables = [];
-
     /** @var string[] */
     protected array $with = [];
 
@@ -53,53 +47,64 @@ abstract class Repository
 
     abstract public function entityClass(): string; 
     
+    /**
+     * 하위 레포지토리에서 이벤트/옵저버 등록처
+     */
+    protected function registerObservers(): void
+    {
+    }
+
+    /**
+     * @return static
+     */
+    public static function new(array $attributes = [])
+    {
+        return (new static($attributes));
+    }
 
     protected function setup()
     {
-        foreach ($this->obserables as $event => $obs) {
-            $this->observer->registerMany($event, $obs);
-        }
-
+        $this->registerObservers();
         $this->applySoftDeleteFilter();
     }
 
-    public function save(): bool
+    /**
+     * @param class-string<Observeralbe> $observer
+     */
+    public function on(string $event, string $observer): void
+    {
+        $this->observer->register($event, $observer);
+    }
+
+    public function save(): ?Entity
     {
         $entity = $this->entity;
 
         $this->observer->fire(RepositoryEvent::BEFORE_SAVE, $entity);
 
-        $data = $entity->toArray();
         $pkName = $entity->getPrimaryKeyName();
-        $isNew = empty($entity->getPrimaryKey());
-
-        $success = false;
+        $isNew = is_null($entity->getPrimaryKey());
 
         if ($isNew) {
-            
             $this->observer->fire(RepositoryEvent::BEFORE_CREATE, $entity);
+            $id = $this->builder->insert($entity->getAttributes());
 
-            $id = $this->builder->insertGetId($data);
-
-            if ($id) {
-
-                $entity->set($pkName, $id);
-
-                $this->observer->fire(RepositoryEvent::AFTER_CREATE, $entity);
-
-                $success = true;
-            }
-        } else {
-            $this->observer->fire(RepositoryEvent::BEFORE_UPDATE, $entity);
-
-            $success = $this->builder->where($pkName, $entity->getPrimaryKey())->update($data) > 0;
-
-            $this->observer->fire(RepositoryEvent::AFTER_UPDATE, $entity);
+            if (!$id) {
+                return null;
+            } 
+            
+            $entity->set($pkName, $id);
+            $this->observer->fire(RepositoryEvent::AFTER_CREATE, $entity);
+            $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
+            return $entity;
         }
-
+        
+        $this->observer->fire(RepositoryEvent::BEFORE_UPDATE, $entity);
+        $affected = $this->builder->where($pkName, $entity->getPrimaryKey())->update($entity->getAttributes());
+        $this->observer->fire(RepositoryEvent::AFTER_UPDATE, $entity);
         $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
 
-        return $success;
+        return $affected > 0 ? $entity : null;
     }
 
     public function delete(): bool
@@ -171,8 +176,9 @@ abstract class Repository
             : new LazyLoader();
 
         $relations = [];
+
         foreach ($this->with as $relationName) {
-            $relation = ORM::getRelation($entities[0], $relationName);
+            $relation = RelationMap::getRelation($entities[0], $relationName);
             if (!$relation) continue;
             $relations[] = $relationName;
         }

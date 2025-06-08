@@ -8,11 +8,11 @@ class ValidationException extends BaseException
 
     public function __construct(
         array $errors,
-        string $message = "Validation failed",
+        ?string $message = null,
         int $code = 422
     )
     {
-        parent::__construct($message, $code); 
+        parent::__construct($message ?? lang('system.validation.failed'), $code); 
         $this->errors = $errors; 
     }
 
