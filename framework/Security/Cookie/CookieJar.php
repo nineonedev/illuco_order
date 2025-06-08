@@ -24,12 +24,13 @@ class CookieJar
     {
         $this->name = $name; 
         $this->value = $value; 
-        $this->expires = $minutes > 0 ? time() * ($minutes * 60) : 0; 
+        $this->expires = $minutes > 0 ? time() + ($minutes * 60) : 0;
         $this->path = $path; 
         $this->domain = $domain; 
         $this->secure = $secure; 
         $this->httpOnly = $httpOnly; 
     }
+
 
     public function send(): void
     {

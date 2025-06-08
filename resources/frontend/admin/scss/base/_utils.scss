@@ -1,5 +1,15 @@
 @use "../abstracts" as *;
 
+.--tac {
+    text-align: center;
+}
+.--tal {
+    text-align: left;
+}
+.--tar {
+    text-align: right;
+}
+
 .--underline {
     color: var(--clr-primary-main);
     text-decoration: underline;

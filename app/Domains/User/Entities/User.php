@@ -6,8 +6,9 @@ use App\Domains\User\Repositories\UserRepository;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Entities\HasWorkDirectory;
 use Framework\Database\ORM\Entities\Morphable;
+use Framework\Security\Auth\Providers\AuthenticatableInterface;
 
-class User extends Entity implements HasWorkDirectory, Morphable
+class User extends Entity implements HasWorkDirectory, Morphable, AuthenticatableInterface
 {
     protected array $fillable = [
         'name',
@@ -36,5 +37,15 @@ class User extends Entity implements HasWorkDirectory, Morphable
     public function repositoryClass(): string
     {
         return UserRepository::class;
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->id; 
+    }
+
+    public function getAuthPassword(): string
+    {
+        return $this->password;
     }
 }

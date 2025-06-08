@@ -2,7 +2,6 @@
 
 namespace Framework\Security\Encryption;
 
-use Framework\Security\Contracts\EncrypterInterface;
 use RuntimeException;
 
 class Encrypter implements EncrypterInterface

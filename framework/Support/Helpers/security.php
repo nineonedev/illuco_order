@@ -1,11 +1,9 @@
 <?php
 
-use Framework\Core\Application;
 use Framework\Security\Auth\AuthManager;
 use Framework\Security\Contracts\SessionInterface;
-use Framework\Security\Contracts\TokenManagerInterface;
 use Framework\Security\Cookie\CookieManager;
-use Framework\Security\Session\DatabaseStore;
+use Framework\Security\Csrf\TokenManagerInterface;
 use Framework\Security\Session\SessionManager;
 use Framework\Support\Facades\Gate;
 
@@ -34,13 +32,6 @@ if (!function_exists('session')) {
     function session(): SessionManager
     {
         return app(SessionManager::class);
-    }
-}
-
-if (!function_exists('session_store')) {
-    function session_store(): DatabaseStore 
-    {
-        return session()->driver('db');
     }
 }
 

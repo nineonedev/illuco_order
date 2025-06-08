@@ -2,6 +2,7 @@
 
 namespace Framework\Security\Auth;
 
+use Framework\Security\Auth\Providers\AuthenticatableInterface;
 use Framework\Security\Contracts\GuardInterface;
 use Framework\Support\Facades\Hash;
 use RuntimeException;
@@ -38,6 +39,11 @@ class AuthManager
         return $this->guards[$name]; 
     }
 
+    public function attempt(array $credentials): bool
+    {
+        return $this->guard()->attempt($credentials);
+    }
+
     public function check(): bool
     {
         return $this->guard()->check();
@@ -56,5 +62,10 @@ class AuthManager
     public function logout(): void
     {
         $this->guard()->logout();
+    }
+
+    public function login(AuthenticatableInterface $user): void
+    {
+        $this->guard()->login($user);
     }
 }

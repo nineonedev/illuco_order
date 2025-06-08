@@ -35,10 +35,16 @@ if (!function_exists('query')) {
 
 if (!function_exists('db')) {
     /**
-     * @return Builder
+     * @return Database|Builder
      */
-    function db(?string $table = null): Builder
+    function db(?string $table = null)
     {
+        if (is_null($table)) {
+            /** @return Database */
+            return database();
+        }
+
+        /** @return Builder */
         return database()->table($table); 
     }
 }

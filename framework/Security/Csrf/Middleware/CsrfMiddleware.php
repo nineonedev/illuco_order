@@ -3,11 +3,11 @@
 namespace Framework\Security\Csrf\Middleware;
 
 use Closure;
+use Framework\Constants\AuthConstants;
 use Framework\Http\Contracts\MiddlewareInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Framework\Security\Contracts\TokenManagerInterface;
-use Framework\Security\Csrf\TokenManager;
+use Framework\Security\Csrf\TokenManagerInterface;
 use RuntimeException;
 
 class CsrfMiddleware implements MiddlewareInterface
@@ -25,7 +25,7 @@ class CsrfMiddleware implements MiddlewareInterface
             return $next($request);
         }
 
-        $token = $request->input(TokenManager::KEY) ?? $request->header('X-CSRF-TOKEN'); 
+        $token = $request->input(AuthConstants::CSRF_TOKEN_KEY) ?? $request->header('X-CSRF-TOKEN'); 
         
         if (!$token || !$this->tokens->verify($token)) {
             throw new RuntimeException(lang('system.csrf.mismatch')); 

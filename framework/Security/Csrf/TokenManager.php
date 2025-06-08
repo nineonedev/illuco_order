@@ -2,12 +2,11 @@
 
 namespace Framework\Security\Csrf;
 
+use Framework\Constants\AuthConstants;
 use Framework\Security\Contracts\SessionInterface;
-use Framework\Security\Contracts\TokenManagerInterface;
 
 class TokenManager implements TokenManagerInterface
 {
-    const KEY = '_csrf_token'; 
     public SessionInterface $session; 
 
     public function __construct(SessionInterface $session)
@@ -18,14 +17,13 @@ class TokenManager implements TokenManagerInterface
     public function generate(): string
     {
         $token = bin2hex(random_bytes(32)); 
-        $this->session->set(self::KEY, $token); 
-
+        $this->session->set(AuthConstants::CSRF_TOKEN_KEY, $token); 
         return $token; 
     }
 
     public function token(): ?string
     {
-        return $this->session->get(self::KEY); 
+        return $this->session->get(AuthConstants::CSRF_TOKEN_KEY); 
     }
 
     public function verify(string $token): bool
@@ -36,6 +34,6 @@ class TokenManager implements TokenManagerInterface
 
     public function field(): string
     {
-        return '<input type="hidden" name="'.static::KEY.'" value="'.$this->generate() . '"/>';
+        return '<input type="hidden" name="'.AuthConstants::CSRF_TOKEN_KEY.'" value="'.$this->generate() . '"/>';
     }
 }

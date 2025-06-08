@@ -42,6 +42,14 @@ abstract class Entity
     }
 
     /**
+     * @return static
+     */
+    public static function new(array $attributes)
+    {
+        return new static($attributes);
+    }
+
+    /**
      * @return class-string<Repository>
      */
     abstract public function repositoryClass(): string;
@@ -49,6 +57,12 @@ abstract class Entity
     public function setMeta(string $key, $value): void
     {
         $this->meta[$key] = $value;
+    }
+
+    public function createRepository(array $attributes): Repository
+    {
+        $repo = static::repositoryClass();
+        return $repo::new($attributes);
     }
 
     public function getMeta(string $key, $default = null)

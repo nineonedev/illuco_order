@@ -2,15 +2,15 @@
 
 namespace Framework\Security\Auth;
 
-use Framework\Security\Contracts\AuthenticatableInterface;
+use Framework\Constants\AuthConstants;
+use Framework\Security\Auth\Providers\AuthenticatableInterface;
+use Framework\Security\Auth\Providers\UserProviderInterface;
 use Framework\Security\Contracts\GuardInterface;
 use Framework\Security\Contracts\SessionInterface;
-use Framework\Security\Contracts\UserProviderInterface;
+use Framework\Support\Facades\Hash;
 
 class SessionGuard implements GuardInterface
 {
-    protected string $name = 'auth_user_id'; 
-
     protected UserProviderInterface $provider; 
     protected SessionInterface $session; 
 
@@ -40,12 +40,12 @@ class SessionGuard implements GuardInterface
 
     protected function validateCredentials(AuthenticatableInterface $user, array $credentials): bool
     {
-        return password_verify($user->getAuthPassword(), $credentials['password']); 
+        return Hash::check($credentials['password'], $user->getAuthPassword()); 
     }
 
     public function login(AuthenticatableInterface $user): void
     {
-        $this->session->set($this->name, $user->getAuthIdentifier()); 
+        $this->session->set(AuthConstants::SESSION_USER_ID, $user->getAuthIdentifier()); 
         $this->user = $user; 
     }
 
@@ -55,7 +55,7 @@ class SessionGuard implements GuardInterface
             return $this->user; 
         }
 
-        $id = $this->session->get($this->name); 
+        $id = $this->session->get(AuthConstants::SESSION_USER_ID); 
 
         if ($id) {
             return $this->user = $this->provider->retrieveById($id); 
@@ -66,7 +66,7 @@ class SessionGuard implements GuardInterface
 
     public function logout(): void
     {
-        $this->session->forget($this->name); 
+        $this->session->invalidate();
         $this->user = null; 
     }
 

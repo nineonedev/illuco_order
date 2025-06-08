@@ -8,6 +8,8 @@
             Video.php, Image.php, ... ??.php
 - [] 파일이 수정, 삭제 처리
 
+- [] Rule : 다중 검사 password
+- [] Http 
 
 # $profileImage = FileRepository::uploadOne($user, 'profile_image', 'uploaded|uploadedOk|image'); 
 # return $this->apiSuccess([

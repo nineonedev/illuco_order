@@ -1,11 +1,4 @@
-<?php
 
-use App\User\Repositories\PostRepository;
-use App\User\Repositories\UserRepository;
-use App\User\Resources\UserResource;
-use Framework\Database\ORM\RelationMap;
-
-?>
 <?php extend('layouts.auth') ?>
 
 <?php section('title'); ?>
@@ -28,19 +21,20 @@ use Framework\Database\ORM\RelationMap;
                 </p>
             </header>
             <div>
-                <form method="post" action="/admin/dashboard" id="auth-form">
+                <form method="post" action="<?= route('auth.login') ?>" id="auth-form">
+                    <?= csrf_field() ?>
                     <div class="no-form-control">
-                        <label for="username" class="no-form-control-inner">
+                        <label for="email" class="no-form-control-inner">
                             <input 
                                 type="text" 
-                                name="username" 
-                                id="username" 
+                                name="email" 
+                                id="email" 
                                 class="no-form-control-input" 
                                 placeholder="" 
                                 required
                             >
                             <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text">아이디</legend>
+                                <legend class="no-form-control-text">이메일</legend>
                             </fieldset>
                         </label>
                         <span class="no-form-control-space"></span>
@@ -66,8 +60,8 @@ use Framework\Database\ORM\RelationMap;
                     <!-- FormControl -->
 
                     <div class="no-form-checkbox --sm">
-                        <label for="auto_signin" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="auto_signin" id="auto_signin" class="no-form-checkbox-input">
+                        <label for="remember_me" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="remember_me" id="remember_me" class="no-form-checkbox-input">
                             <div class="no-form-checkbox-ripple">
                                 <span class="no-form-checkbox-box">
                                     <div class="no-form-checkbox-icon">
@@ -100,6 +94,9 @@ use Framework\Database\ORM\RelationMap;
         const fd = new FormData(e.target); 
 
         const response = await fetch(e.target.action, {
+            headers: {
+                'Accept': 'application/json'
+            },
             method: e.target.method,
             body: fd,
         }); 

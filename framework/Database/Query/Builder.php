@@ -29,7 +29,7 @@ class Builder
         $this->grammar = $grammar;
         $this->table = $table;
     }
-
+    
     public function getConnection(): ConnectionInterface
     {
         return $this->connection;
@@ -100,25 +100,22 @@ class Builder
     public function updateOrInsert(array $where, array $values): bool
     {
         $query = clone $this;
+
         foreach ($where as $column => $value) {
-            $query->where($column, $value);
+            $query->where($column, '=', $value); 
         }
+
         $exists = $query->first();
 
         if ($exists) {
-            // UPDATE
-            $this->where(function($q) use ($where) {
-                foreach ($where as $column => $value) {
-                    $q->where($column, $value);
-                }
-            });
-            $this->update($values);
+            $this->where($column, '=', $value)->update($values); 
         } else {
-            // INSERT
-            $this->insert(array_merge($where, $values));
+            $this->insert(array_merge($where, $values)); 
         }
+
         return true;
     }
+
 
     /**
      * @return static ? $this ? self

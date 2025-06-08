@@ -5,9 +5,9 @@ namespace Framework\Support\Facades;
 use Framework\Security\Hash\BcryptHasher;
 
 /**
- * @method public string make(string $value, array $options = [])
- * @method public bool check(string $value, string $hashedValue, array $options = [])
- * @method public bool needsRehash(string $hashedValue, array $options = [])
+ * @method static string make(string $value, array $options = [])
+ * @method static bool check(string $value, string $hashedValue, array $options = [])
+ * @method static bool needsRehash(string $hashedValue, array $options = [])
  * @see BcryptHasher
  */
 class Hash extends Facade

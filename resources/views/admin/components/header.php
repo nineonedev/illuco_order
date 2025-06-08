@@ -16,6 +16,12 @@
                     </span>
                 </button>
             </div> -->
+            <div class="no-header-option-item">
+                <form action="<?=route('auth.logout')?>" method="post">
+                    <?= csrf_field() ?>
+                    <button class="no-link-primary">로그아웃</button>
+                </form>
+            </div>
             <div class="no-header-option-item">    
                 <button type="button" data-tooltip="bottom" data-theme="light" class="no-btn-icon">
                     <i class="fa-light fa-sun-bright"></i>

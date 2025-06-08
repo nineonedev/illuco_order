@@ -2,8 +2,6 @@
 
 namespace Framework\Security\Encryption;
 
-use Framework\Security\Contracts\EncrypterInterface;
-
 class StringCipher 
 {
     protected EncrypterInterface $encrypter;

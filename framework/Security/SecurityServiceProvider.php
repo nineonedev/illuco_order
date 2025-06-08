@@ -5,17 +5,17 @@ namespace Framework\Security;
 use Framework\Core\Application;
 use Framework\Core\ServiceProvider;
 use Framework\Security\Auth\AuthManager;
-use Framework\Security\Auth\Providers\InMemoryUserProvider;
+use Framework\Security\Auth\Providers\UserEntityProvider;
+use Framework\Security\Auth\Providers\UserProviderInterface;
 use Framework\Security\Auth\SessionGuard;
-use Framework\Security\Contracts\EncrypterInterface;
 use Framework\Security\Contracts\GuardInterface;
 use Framework\Security\Contracts\HasherInterface;
 use Framework\Security\Contracts\SessionInterface;
-use Framework\Security\Contracts\TokenManagerInterface;
-use Framework\Security\Contracts\UserProviderInterface;
 use Framework\Security\Cookie\CookieManager;
 use Framework\Security\Csrf\TokenManager;
+use Framework\Security\Csrf\TokenManagerInterface;
 use Framework\Security\Encryption\Encrypter;
+use Framework\Security\Encryption\EncrypterInterface;
 use Framework\Security\Encryption\StringCipher;
 use Framework\Security\Hash\BcryptHasher;
 use Framework\Security\Session\DatabaseStore;
@@ -45,18 +45,18 @@ class SecurityServiceProvider extends ServiceProvider
         $this->app->singleton(SessionManager::class, function(){
             $manager = new SessionManager();
 
-            $manager->setDriver('php', new Store()); 
             $manager->setDriver('db', new DatabaseStore());
+            $manager->setDriver('php', new Store()); 
             $manager->setDriver('memory', new InMemoryStore());
             
-            $manager->use('php');
+            $manager->use('db');
 
             return $manager; 
         });
 
 
         $this->app->singleton(UserProviderInterface::class, function(){
-            return new InMemoryUserProvider();
+            return new UserEntityProvider();
         });
 
         $this->app->singleton(SessionInterface::class, function(Application $app) {

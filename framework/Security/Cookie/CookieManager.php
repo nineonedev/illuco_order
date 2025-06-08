@@ -30,6 +30,8 @@ class CookieManager
         
         $cookie = new CookieJar($name, $value, $minutes, $path, $domain, $secure, $httpOnly);
         $this->queued[$name] = $cookie;
+
+        $this->send();
     }
 
     public function forget(string $name): void

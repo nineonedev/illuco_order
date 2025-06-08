@@ -18,6 +18,8 @@ use Framework\Database\Query\EntityQueryBuilder;
 
 abstract class Repository
 {
+    static ?Repository $instance = null;
+    
     protected string $table;
 
     protected bool $withTrashed = false;
@@ -26,8 +28,6 @@ abstract class Repository
 
     protected bool $preventsLazyLoading = false; 
 
-    protected Entity $entity;
-
     protected Builder $builder;
 
     protected Observer $observer; 
@@ -35,12 +35,23 @@ abstract class Repository
     /** @var string[] */
     protected array $with = [];
 
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
         $this->builder = query($this);
         $this->observer = new Observer();
-        $this->entity = $this->createEntity($attributes);
         $this->setup();
+    }
+
+    /**
+     * @return static
+     */
+    public static function new()
+    {
+        if (!static::$instance) {
+            static::$instance = new static();
+        }
+        
+        return static::$instance; 
     }
 
     abstract public function table(): string;
@@ -52,14 +63,6 @@ abstract class Repository
      */
     protected function registerObservers(): void
     {
-    }
-
-    /**
-     * @return static
-     */
-    public static function new(array $attributes = [])
-    {
-        return (new static($attributes));
     }
 
     protected function setup()
@@ -76,10 +79,8 @@ abstract class Repository
         $this->observer->register($event, $observer);
     }
 
-    public function save(): ?Entity
+    public function save(Entity $entity): ?Entity
     {
-        $entity = $this->entity;
-
         $this->observer->fire(RepositoryEvent::BEFORE_SAVE, $entity);
 
         $pkName = $entity->getPrimaryKeyName();
@@ -107,10 +108,8 @@ abstract class Repository
         return $affected > 0 ? $entity : null;
     }
 
-    public function delete(): bool
+    public function delete(Entity $entity): bool
     {
-        $entity = $this->entity;
-        
         if (trait_used(SoftDeletes::class, $entity)) {
             return $this->softDelete($entity); 
         }
