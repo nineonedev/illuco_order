@@ -1,5 +1,7 @@
 <?php extend('layouts.auth') ?>
-<?php section('title') ?>500 서버 오류<?php end_section() ?>
+
+<?php section('title') ?>서버 오류<?php end_section() ?>
+
 <?php section('content') ?>
 <div class="no-debug-wrapper">
     <div class="no-debug-header">
@@ -10,8 +12,10 @@
     <div class="no-debug-location">
         <span><?= escape($file) ?></span>
         <span class="no-debug-line">Line <?= escape((string)$line) ?></span>
+        <button onclick="copyToClipboard('<?= escape($file) ?>')" class="no-copy-btn">복사</button>
     </div>
 
+    <?php if (!empty($snippet)): ?>
     <div class="no-debug-snippet">
         <?php foreach ($snippet as $codeLine): ?>
             <div class="no-code-line<?= $codeLine['highlight'] ? ' active' : '' ?>">
@@ -20,7 +24,9 @@
             </div>
         <?php endforeach; ?>
     </div>
+    <?php endif; ?>
 
+    <?php if (!empty($trace)): ?>
     <div class="no-debug-trace">
         <?php
         $lines = explode("\n", $trace);
@@ -33,5 +39,27 @@
             </div>
         <?php endforeach; ?>
     </div>
+    <?php endif; ?>
+
+    <?php if (!empty($debug['meta'] ?? [])): ?>
+    <div class="no-debug-meta">
+        <h3>추가 정보</h3>
+        <ul>
+            <?php foreach ($debug['meta'] as $key => $value): ?>
+                <li><strong><?= escape($key) ?>:</strong> <?= escape((string)$value) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php endif; ?>
 </div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function () {
+        alert('복사되었습니다: ' + text);
+    }, function (err) {
+        alert('복사 실패: ' + err);
+    });
+}
+</script>
 <?php end_section() ?>

@@ -1,13 +1,11 @@
-<?php 
+<?php
 
 namespace Framework\Support\Exceptions\Http;
 
-use Framework\Support\Exceptions\HttpException;
-
 class ForbiddenException extends HttpException
 {
-    public function __construct(string $message = "Forbidden", array $context = [])
+    public function __construct(string $message = 'Forbidden', array $meta = [])
     {
-        parent::__construct($message, 403, $context);
+        parent::__construct($message, 403, $meta);
     }
 }

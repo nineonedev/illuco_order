@@ -45,7 +45,7 @@ abstract class Repository
     /**
      * @return static
      */
-    public static function new()
+    public static function make()
     {
         if (!static::$instance) {
             static::$instance = new static();

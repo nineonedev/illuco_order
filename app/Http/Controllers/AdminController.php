@@ -11,21 +11,21 @@ class AdminController extends Controller
 {
     public function guide()
     {
-        return $this->view('admin.pages.guide');
+        return $this->render('admin.pages.guide');
     }
 
     public function dashboard()
     {
-        return $this->view('admin.pages.dashboard');
+        return $this->render('admin.pages.dashboard');
     }
 
     public function test()
     {
-        return $this->view('admin.pages.test');
+        return $this->render('admin.pages.test');
     }
 
     public function setting()
     {
-        return $this->view('admin.pages.setting'); 
+        return $this->render('admin.pages.setting'); 
     }
 }

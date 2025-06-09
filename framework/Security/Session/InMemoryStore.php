@@ -64,4 +64,15 @@ class InMemoryStore implements SessionInterface
         $this->flush();
         $this->regenerate();
     }
+
+    public function userId(): ?int
+    {
+        $userId = $this->get('user_id');
+        return $userId ? (int) $userId : null;
+    }
+    
+    public function setUserId(?int $userId = null): void
+    {
+        $this->set('user_id', $userId);
+    }
 }

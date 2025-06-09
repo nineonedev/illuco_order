@@ -45,7 +45,7 @@ class SessionGuard implements GuardInterface
 
     public function login(AuthenticatableInterface $user): void
     {
-        $this->session->set(AuthConstants::SESSION_USER_ID, $user->getAuthIdentifier()); 
+        $this->session->setUserId($user->getAuthIdentifier()); 
         $this->user = $user; 
     }
 
@@ -55,7 +55,7 @@ class SessionGuard implements GuardInterface
             return $this->user; 
         }
 
-        $id = $this->session->get(AuthConstants::SESSION_USER_ID); 
+        $id = $this->session->userId();
 
         if ($id) {
             return $this->user = $this->provider->retrieveById($id); 

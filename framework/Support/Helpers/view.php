@@ -5,12 +5,12 @@ use Framework\View\ViewRenderer;
 
 if (!function_exists('view')) {
     /**
-     * @return string|ViewRenderer
+     * @return ViewRenderer|string
      */
-    function view(?string $view = null, array $data = []): mixed
+    function view(?string $view = null, array $data = [])
     {
         if (is_null($view)) {
-            return View::getFacadeRoot();
+            return app(ViewRenderer::class);
         }
 
         return View::render($view, $data);

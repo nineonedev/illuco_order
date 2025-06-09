@@ -2,7 +2,6 @@
 
 namespace Framework\View;
 
-use Framework\View\Contracts\ViewFinderInterface;
 use Framework\View\Exceptions\ViewNotFoundException;
 
 class ViewFinder implements ViewFinderInterface
@@ -16,8 +15,7 @@ class ViewFinder implements ViewFinderInterface
 
     public function find(string $view): string
     {
-        $relativePath = str_replace('.', DS, $view) . '.php';
-        $fullPath = $this->basePath . DS . $relativePath;
+        $fullPath = $this->buildFullPath($view);
 
         if (!file_exists($fullPath)) {
             throw new ViewNotFoundException("View [{$view}] not found at path: {$fullPath}");
@@ -26,8 +24,22 @@ class ViewFinder implements ViewFinderInterface
         return $fullPath;
     }
 
+    public function exists(string $view): bool
+    {
+        return file_exists($this->buildFullPath($view));
+    }
+
     public function getBasePath(): string
     {
         return $this->basePath;
+    }
+
+    /**
+     * 뷰 이름을 전체 파일 경로로 변환
+     */
+    protected function buildFullPath(string $view): string
+    {
+        $relativePath = str_replace('.', DS, $view) . '.php';
+        return $this->basePath . DS . $relativePath;
     }
 }

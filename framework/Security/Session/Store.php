@@ -62,4 +62,15 @@ class Store implements SessionInterface
         $_SESSION = []; 
         session_destroy();
     }
+
+    public function userId(): ?int
+    {
+        $userId = $this->get('user_id');
+        return $userId ? (int) $userId : null;
+    }
+
+    public function setUserId(?int $userId = null): void
+    {
+        $this->set('user_id', $userId);
+    }
 }

@@ -44,7 +44,7 @@ abstract class Entity
     /**
      * @return static
      */
-    public static function new(array $attributes)
+    public static function make(array $attributes)
     {
         return new static($attributes);
     }

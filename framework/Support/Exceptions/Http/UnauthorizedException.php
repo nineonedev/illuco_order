@@ -1,13 +1,11 @@
-<?php 
+<?php
 
 namespace Framework\Support\Exceptions\Http;
 
-use Framework\Support\Exceptions\HttpException;
-
 class UnauthorizedException extends HttpException
 {
-    public function __construct(string $message = "Unauthorized", array $context = [])
+    public function __construct(string $message = 'Unauthorized', array $meta = [])
     {
-        parent::__construct($message, 401, $context);
+        parent::__construct($message, 401, $meta);
     }
 }

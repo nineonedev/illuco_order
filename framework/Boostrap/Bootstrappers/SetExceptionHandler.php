@@ -5,7 +5,7 @@ namespace Framework\Boostrap\Bootstrappers;
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Configurations\ExceptionConfigurator;
 use Framework\Core\Application;
-use Framework\Support\ExceptionHandler;
+use Framework\Support\Exceptions\ExceptionHandler;
 
 class SetExceptionHandler implements BootstrapperInterface
 {

@@ -23,4 +23,8 @@ interface SessionInterface
     public function regenerate(): void; 
 
     public function invalidate(): void;
+
+    public function userId(): ?int;
+
+    public function setUserId(?int $userId = null): void;
 }

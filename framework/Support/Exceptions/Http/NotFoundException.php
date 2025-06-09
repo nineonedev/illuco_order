@@ -2,12 +2,10 @@
 
 namespace Framework\Support\Exceptions\Http;
 
-use Framework\Support\Exceptions\HttpException;
-
 class NotFoundException extends HttpException
 {
-    public function __construct(string $message = "Not Found", array $context = [])
+    public function __construct(string $message = 'Not Found', array $meta = [])
     {
-        parent::__construct($message, 404, $context);
+        parent::__construct($message, 404, $meta);
     }
 }

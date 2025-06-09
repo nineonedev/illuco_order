@@ -4,7 +4,6 @@ namespace Framework\View;
 
 use Framework\Core\Application;
 use Framework\Core\ServiceProvider;
-use Framework\View\Contracts\ViewFinderInterface;
 
 class ViewServiceProvider extends ServiceProvider 
 {

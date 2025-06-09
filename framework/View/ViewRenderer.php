@@ -2,10 +2,9 @@
 
 namespace Framework\View;
 
-
 class ViewRenderer
 {
-    protected ViewFinder $finder;
+    protected ViewFinderInterface $finder;
     protected SectionManager $sections;
     protected ComponentManager $components;
 
@@ -13,13 +12,18 @@ class ViewRenderer
     protected ?string $layout = null;
 
     public function __construct(
-        ViewFinder $finder,
+        ViewFinderInterface $finder,
         SectionManager $sections,
         ComponentManager $components
     ) {
         $this->finder = $finder;
         $this->sections = $sections;
         $this->components = $components;
+    }
+
+    public function exists(string $view): bool
+    {
+        return $this->finder->exists($view);
     }
 
     public function setLayout(?string $layout): void

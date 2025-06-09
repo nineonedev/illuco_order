@@ -1,19 +1,20 @@
 <?php
 
+use Framework\Security\Auth\Middleware\AuthMiddleware;
 use Framework\Security\Csrf\Middleware\CsrfMiddleware;
 
 return [
     'priority' => [
     ], 
     'global' => [
-        CsrfMiddleware::class
+        
     ],
     'group' => [
         'web' => [
             CsrfMiddleware::class,
         ],
         'auth' => [
-
+            AuthMiddleware::class,
         ]
     ],
 ];

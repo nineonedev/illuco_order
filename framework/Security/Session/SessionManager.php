@@ -84,4 +84,14 @@ class SessionManager
     {
         return $this->driver()->id();
     }
+
+    public function userId(): ?int
+    {
+        return $this->driver()->userId();
+    }
+
+    public function setUserId(?int $userId = null): void
+    {
+        $this->driver()->setUserId($userId);
+    }
 }

@@ -5,7 +5,7 @@ namespace Framework\Configurations;
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Core\Application;
 use Framework\Core\ServiceProvider;
-use Framework\Support\ExceptionHandler;
+use Framework\Support\Exceptions\ExceptionHandler;
 
 class ApplicationConfigurator 
 {

@@ -3,6 +3,7 @@
 namespace Framework\Routing;
 
 use Framework\Routing\Contracts\RouteInterface;
+use Framework\Http\Contracts\MiddlewareInterface;
 
 class Route implements RouteInterface
 {
@@ -75,47 +76,30 @@ class Route implements RouteInterface
 
     public function middleware($middleware): RouteInterface
     {
-        if (is_string($middleware)) {
-            $this->middleware[] = $middleware;
-        } elseif (is_array($middleware)) {
-            $this->middleware = array_merge($this->middleware, $middleware);
+        $middlewares = is_array($middleware) ? $middleware : [$middleware];
+
+        foreach ($middlewares as $item) {
+            if (is_string($item) && class_exists($item) && is_subclass_of($item, MiddlewareInterface::class)) {
+                $this->middleware[] = $item;
+            } elseif (is_string($item)) {
+                $this->middlewareGroups[] = $item;
+            }
         }
 
         $this->middleware = array_unique($this->middleware);
-        return $this;
-    }
-
-    /**
-     * 미들웨어 그룹 설정 (단일)
-     */
-    public function middlewareGroup(string $group): RouteInterface
-    {
-        $this->middlewareGroups[] = $group;
         $this->middlewareGroups = array_unique($this->middlewareGroups);
+        
         return $this;
-    }
-
-    /**
-     * 미들웨어 그룹 설정 (다중)
-     */
-    public function middlewareGroups(array $groups): RouteInterface
-    {
-        $this->middlewareGroups = array_merge($this->middlewareGroups, $groups);
-        $this->middlewareGroups = array_unique($this->middlewareGroups);
-        return $this;
-    }
-
-    /**
-     * 설정된 미들웨어 그룹 반환
-     */
-    public function getMiddlewareGroups(): array
-    {
-        return $this->middlewareGroups;
     }
 
     public function getMiddleware(): array
     {
         return $this->middleware;
+    }
+
+    public function getMiddlewareGroups(): array
+    {
+        return $this->middlewareGroups;
     }
 
     public function matches(string $method, string $uri): bool

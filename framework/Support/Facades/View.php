@@ -15,6 +15,7 @@ use Framework\View\ViewRenderer;
  * @method static \Framework\View\ComponentManager getComponents()
  * @method static void section(string $name)
  * @method static void endSection()
+ * @method static bool exists(string $view)
  * @method static string yield(string $name, string $default = '')
  * @method static void component(string $view, array $data = [])
  * @method static string endComponent()

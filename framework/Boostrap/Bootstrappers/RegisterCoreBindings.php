@@ -14,7 +14,7 @@ use Framework\Console\Lock\LockManager;
 use Framework\Console\Output\Output;
 use Framework\Routing\Contracts\RouterInterface;
 use Framework\Routing\Router;
-use Framework\Support\ExceptionHandler;
+use Framework\Support\Exceptions\ExceptionHandler;
 
 class RegisterCoreBindings implements BootstrapperInterface
 {

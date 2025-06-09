@@ -94,21 +94,31 @@
         
         const fd = new FormData(e.target); 
         
-        const response = await fetch(e.target.action, {
-            headers: {
-                'Accept': 'application/json'
-            },
-            method: e.target.method,
-            body: fd,
-        }); 
-        const resData = await response.json(); 
-        
-        alert(resData.message);
-        e.submitter.disabled = false; 
-        
-        if (resData.success){
-            location.reload(); 
+        try {
+            const response = await fetch(e.target.action, {
+                headers: {
+                    'Accept': 'application/json'
+                },
+                method: e.target.method,
+                body: fd,
+            }); 
+
+            const resData = await response.json(); 
+
+            alert(resData.message);
+
+            if (resData.success){
+                location.reload(); 
+            }
+
+        } catch ($error) {
+            alert($error.message); 
+
+        } finally {
+
+            e.submitter.disabled = false; 
         }
+        
         
     })
 </script>

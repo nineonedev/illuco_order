@@ -32,6 +32,16 @@ class DatabaseStore implements SessionInterface
         }
     }
 
+    public function userId(): ?int
+    {
+        $userId = $this->get('user_id');
+        return $userId ? (int) $userId : null;
+    }
+
+    public function setUserId(?int $userId = null): void
+    {
+        $this->set('user_id', $userId);
+    }
 
     protected function getCookieLifetimeMinutes(): int
     {
@@ -187,7 +197,6 @@ class DatabaseStore implements SessionInterface
      */
     protected function save(): void
     {
-        $userId = $this->data['user_id'] ?? null;
         $ip = $_SERVER['REMOTE_ADDR'] ?? null;
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
         $lastActivity = date('Y-m-d H:i:s');
@@ -195,7 +204,7 @@ class DatabaseStore implements SessionInterface
         db()->table('sessions')->updateOrInsert(
             ['id' => $this->id],
             [
-                'user_id'      => $userId,
+                'user_id'      => $this->userId(),
                 'ip_address'   => $ip,
                 'user_agent'   => $userAgent,
                 'last_activity'=> $lastActivity,

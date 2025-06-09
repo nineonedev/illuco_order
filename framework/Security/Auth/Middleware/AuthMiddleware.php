@@ -4,23 +4,17 @@ namespace Framework\Security\Auth\Middleware;
 
 use App\Domains\User\Repositories\UserRepository;
 use Closure;
-use Framework\Http\ApiResponse;
 use Framework\Http\Contracts\MiddlewareInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
-use Framework\Security\Auth\Exceptions\UnauthenticatedException;
+use Framework\Support\Exceptions\Http\UnauthorizedException;
 
 class AuthMiddleware implements MiddlewareInterface
 {
     public function handle(Request $request, Closure $next, ...$args): Response
     {
-        if (
-            !auth()->check()
-            && !UserRepository::new()->attemptRememberTokenLogin()
-        ) {
-            return $request->isJsonRequest()
-                ? ApiResponse::fail("Unauthorized", [], 401)
-                : redirect_route('home');
+        if (!auth()->check() && !UserRepository::make()->attemptRememberTokenLogin()) {
+            throw new UnauthorizedException('로그인이 필요합니다.');
         }
 
         return $next($request);

@@ -45,27 +45,27 @@ if (!function_exists('request')) {
     }
 }
 
-if (!function_exists('api_ok')) {
-    function api_ok(
+if (!function_exists('api_success')) {
+    function api_success(
         $data = null, 
         string $message = 'success', 
-        array $meta = [], 
-        int $status = 200
+        int $status = 200,
+        array $meta = []
     ): Response 
     {
-        return ApiResponse::ok($data, $message, $meta, $status);
+        return ApiResponse::success($data, $message, $status, $meta);
     }
 }
 
-if (!function_exists('api_error')) {
-    function api_error(
+if (!function_exists('api_fail')) {
+    function api_fail(
         string $message = 'Error', 
-        int $status = 400, 
         array $errors = [], 
+        int $status = 400, 
         ?array $debug = null
     ): Response 
     {
-        return ApiResponse::error($message, $status, $errors, $debug);
+        return ApiResponse::fail($message, $errors, $status, $debug);
     }
 }
 

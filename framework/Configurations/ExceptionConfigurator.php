@@ -3,7 +3,7 @@
 namespace Framework\Configurations;
 
 use Closure;
-use Framework\Support\ExceptionHandler;
+use Framework\Support\Exceptions\ExceptionHandler;
 use Throwable;
 
 class ExceptionConfigurator 
