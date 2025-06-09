@@ -8,15 +8,15 @@ use Framework\Http\Contracts\MiddlewareInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Security\Csrf\TokenManagerInterface;
-use RuntimeException;
+use Framework\Support\Exceptions\Http\ForbiddenException;
 
 class CsrfMiddleware implements MiddlewareInterface
 {
-    protected TokenManagerInterface $tokens; 
+    protected TokenManagerInterface $tokens;
 
     public function __construct(TokenManagerInterface $tokens)
     {
-        $this->tokens = $tokens; 
+        $this->tokens = $tokens;
     }
 
     public function handle(Request $request, Closure $next, ...$args): Response
@@ -25,13 +25,14 @@ class CsrfMiddleware implements MiddlewareInterface
             return $next($request);
         }
 
-        $token = $request->input(AuthConstants::CSRF_TOKEN_KEY) ?? $request->header('X-CSRF-TOKEN'); 
-        
+        $token = $request->input(AuthConstants::CSRF_TOKEN_KEY)
+                ?? $request->header('X-CSRF-TOKEN');
+
         if (!$token || !$this->tokens->verify($token)) {
-            throw new RuntimeException(lang('system.csrf.mismatch')); 
+            throw new ForbiddenException('유효하지 않은 CSRF 토큰입니다.');
         }
 
-        return $next($request); 
+        return $next($request);
     }
 
     protected function isReading(Request $request): bool

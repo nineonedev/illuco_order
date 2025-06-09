@@ -101,7 +101,11 @@ class AuthController extends Controller
 
         auth()->logout();
 
-        return $this->render('auth.success', [], '로그아웃 되었습니다.');
+        if (request()->expectsJson()) {
+            return $this->apiSuccess([], '로그아웃 되었습니다.');
+        }
+
+        return $this->redirectRoute('auth.signin');
     }
 
     // =====================================================
