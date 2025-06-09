@@ -816,6 +816,8 @@
 }
 
 .no-form-file {
+    $root: &; 
+
     @extend %form-control;
     --file-icon-size: 2.4rem;
     --file-button-size: 8rem;
@@ -856,7 +858,7 @@
         @extend %form-input;
         display: flex;
         align-items: center;
-        cursor: pointer;
+        cursor: block;
     }
 
     &-icon {

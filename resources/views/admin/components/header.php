@@ -3,7 +3,7 @@
         <button type="button" class="no-header-toggle" id="drawer-open-btn">
             <i class="fa-light fa-bars"></i>
         </button>
-        <a href="<?=  '#' //route('admin.dashboard') ?>" class="no-header-logo">
+        <a href="<?=  route('admin.dashboard') ?>" class="no-header-logo">
             <img src="<?= asset_path('img/meta/logo-white.svg')?>" alt="">
         </a>
         <div class="no-header-option">
@@ -22,7 +22,7 @@
                     <button class="no-link-primary">로그아웃</button>
                 </form>
             </div>
-            <div class="no-header-option-item">    
+            <!-- <div class="no-header-option-item">    
                 <button type="button" data-tooltip="bottom" data-theme="light" class="no-btn-icon">
                     <i class="fa-light fa-sun-bright"></i>
                     <span data-tooltip-text>
@@ -39,9 +39,9 @@
                         <div data-tooltip-arrow></div>
                     </span>
                 </button>
-            </div>
+            </div> -->
             <div class="no-header-option-item">
-                <a href="<?= '#' //route('admin.setting') ?>" data-tooltip="bottom" class="no-btn-icon">
+                <a href="<?=  route('admin.setting') ?>" data-tooltip="bottom" class="no-btn-icon">
                     <i class="fa-light fa-gear"></i>
                     <span data-tooltip-text>
                         <span>Setting</span>

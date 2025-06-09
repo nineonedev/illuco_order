@@ -60,7 +60,7 @@ class Request {
         return null;
     }
 
-    public function isJsonRequest(): bool
+    public function expectsJson(): bool
     {
         return (
             $this->http()->isAjax()

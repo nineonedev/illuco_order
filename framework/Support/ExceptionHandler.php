@@ -5,6 +5,7 @@ namespace Framework\Support;
 use Framework\Configurations\ExceptionConfigurator;
 use Framework\Http\ApiResponse;
 use Framework\Http\Response;
+use Framework\Security\Auth\Exceptions\UnauthenticatedException;
 use Framework\Support\Exceptions\Http\ForbiddenException;
 use Framework\Support\Exceptions\Http\InternalServerErrorException;
 use Framework\Support\Exceptions\Http\NotFoundException;
@@ -72,22 +73,24 @@ class ExceptionHandler
         }
 
         if (request()->isJsonRequest()) {
-            $this->handleJson($e, $code);
+            $this->handleJson($e, $code)->send(); 
             return;
         }
+        
+        $this->handleHtml($e, $code)->send();
 
-        try {
-            $this->handleHtml($e, $code)->send();
-        } catch (Throwable $fatal) {
-            if (config('app.debug')) {
-                http_response_code(500);
-                echo '<h1>예외 핸들러 실패</h1>';
-                echo '<pre>' . $fatal->getMessage() . '</pre>';
-                echo '<pre>' . $fatal->getTraceAsString() . '</pre>';
-            } else {
-                response()->setStatusCode(500)->view('errors.500')->send();
-            }
-        }
+        // try {
+        //     $this->handleHtml($e, $code)->send();
+        // } catch (Throwable $fatal) {
+        //     if (config('app.debug')) {
+        //         http_response_code(500);
+        //         echo '<h1>예외 핸들러 실패</h1>';
+        //         echo '<pre>' . $fatal->getMessage() . '</pre>';
+        //         echo '<pre>' . $fatal->getTraceAsString() . '</pre>';
+        //     } else {
+        //         response()->setStatusCode(500)->view('errors.500')->send();
+        //     }
+        // }
     }
 
     protected function details(Throwable $e, int $code): array
@@ -142,6 +145,13 @@ class ExceptionHandler
                 ->withInput(request()->all());
         }
 
+        if ($e instanceof UnauthenticatedException) {
+            // return redirect_route('auth.signin'); 
+            return response()
+                ->setStatusCode(401)
+                ->view('errors.401');
+        }
+
         if (!config('app.debug')) {
             return response()
                 ->setStatusCode($code)
@@ -183,7 +193,7 @@ class ExceptionHandler
     }
 
     // 에러 핸들링 (handleJson)
-    protected function handleJson(Throwable $e, int $code): void
+    protected function handleJson(Throwable $e, int $code): Response
     {
         $debug = null;
         if ($this->debug) {
@@ -196,12 +206,22 @@ class ExceptionHandler
             ];
         }
 
-        if ($e instanceof ValidationException) {
-            ApiResponse::fail($e->getMessage(), $e->errors(), 422, $debug)->send();
-            return;
+        if ($e instanceof UnauthenticatedException) {
+            return ApiResponse::fail('로그인이 필요합니다.', [], 401, $debug);
+          
         }
 
-        ApiResponse::fail($e->getMessage(), [], $code, $debug)->send();
+        if ($e instanceof ForbiddenException) {
+            return ApiResponse::fail('접근 권한이 없습니다.', [], 403, $debug);
+          
+        }
+
+        if ($e instanceof ValidationException) {
+            return ApiResponse::fail($e->getMessage(), $e->errors(), 422, $debug);
+          
+        }
+
+        return ApiResponse::fail($e->getMessage(), [], $code, $debug);
     }
 
 }

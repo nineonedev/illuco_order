@@ -9,8 +9,8 @@ return [
         'cache'     => base_path('storage/cache'), 
     ],
     'symlinks' => [
-        base_path('resources/assets') => base_path('static'),  
-        base_path('storage/uploads/public') => base_path('uploads'),
+        base_path('resources/assets') => base_path('static/app'),  
+        base_path('storage/uploads/public') => base_path('/static/uploads'),
     ],
     'mimetypes' => [
         'image' => [

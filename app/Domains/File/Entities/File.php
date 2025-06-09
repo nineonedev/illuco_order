@@ -1,9 +1,10 @@
 <?php 
 
-namespace App\Domains\User\Entities;
+namespace App\Domains\File\Entities;
 
-use App\Domains\User\Repositories\FileRepository;
+use App\Domains\File\Repositories\FileRepository;
 use Framework\Database\ORM\Entities\Entity;
+
 
 class File extends Entity
 {

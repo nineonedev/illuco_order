@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domains\User\Entities\User;
 use App\Domains\User\Repositories\UserRepository;
+use Framework\Constants\AuthConstants;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 
@@ -26,7 +27,7 @@ class AuthController extends Controller
         
         $rememberToken = cookie()->get('remember_token');
         if ($rememberToken) {
-            $user = UserRepository::findByRememberToken($rememberToken);
+            $user = UserRepository::new()->findByRememberToken($rememberToken);
             if ($user) {
                 session()->set('user_id', $user->id);
                 return redirect_route('admin.dashboard');
@@ -98,7 +99,7 @@ class AuthController extends Controller
         UserRepository::new()->setUserToSession($user);
         UserRepository::new()->processRememberMe($request, $user);
 
-        return $this->apiSuccess('로그인에 성공하였습니다.');
+        return $this->apiSuccess([], '로그인에 성공하였습니다.');
     }
 
     /**
@@ -108,7 +109,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $userId = session()->get('user_id');
+        $userId = session()->get(AuthConstants::SESSION_USER_ID);
         $user = $userId ? UserRepository::find($userId) : null;
 
         if ($user) {

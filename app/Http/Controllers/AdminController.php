@@ -23,4 +23,9 @@ class AdminController extends Controller
     {
         return $this->view('admin.pages.test');
     }
+
+    public function setting()
+    {
+        return $this->view('admin.pages.setting'); 
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Framework\Http\Response;
 use Framework\Routing\Contracts\RouterInterface;
 use Framework\Routing\RouteCollection;
 use Framework\Support\Facades\Route;
@@ -96,12 +97,11 @@ if (!function_exists('redirect_route')) {
      * @param string $name
      * @param array $params
      * @param int $status
-     * @return \Framework\Http\Response|\Framework\Http\RedirectResponse
+     * @return Response
      */
     function redirect_route(string $name, array $params = [], int $status = 302)
     {
         $url = route($name, $params);
-        // 아래 Response/RedirectResponse 클래스는 프레임워크에 맞게 수정
         return response()->redirect($url, $status);
     }
 }

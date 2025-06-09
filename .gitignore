@@ -1,5 +1,7 @@
 /static
+/vendor
+/node_modules
+/resources/assets/app
+/resources/assets/uploads
 /uploads
-vendor
-node_modules
 .DS_Store

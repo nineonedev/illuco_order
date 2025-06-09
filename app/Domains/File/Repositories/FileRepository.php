@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Domains\User\Repositories;
+namespace App\Domains\File\Repositories;
 
-use App\Domains\User\Entities\File;
-use App\Domains\User\Entities\Post;
+use App\Domains\File\Entities\File;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Entities\HasWorkDirectory;
 use Framework\Database\ORM\Entities\Morphable;
@@ -54,7 +53,6 @@ class FileRepository extends Repository
             ]
         );
 
-        $repo = new static($file);
-        return $repo->save() ? $repo->entity : null;
+        return static::new()->save($entity);
     }
 }

@@ -1,17 +1,30 @@
-RewriteEngine On
+# Apache 모듈 활성화 및 심볼릭 링크 허용
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine On
 
-# 비공개 서버 내부 폴더 직접 접근 차단 (app 제외)
-RewriteRule ^(config|bootstrap|storage|database|framework|resources|routes|vendor|env)(/|$) /errors/403 [L,R=302]
+    # 보안: 비공개 디렉토리 접근 차단
+    RewriteCond %{REQUEST_URI} ^/config(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/bootstrap(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/storage(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/database(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/framework(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/resources(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/routes(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/vendor(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/env(/|$)
+    RewriteRule ^ / [L,R=302]
 
-# /app (공개 업로드 등) 및 /assets 경로는 통과
-RewriteCond %{REQUEST_URI} ^/uploads/ [OR]
-RewriteCond %{REQUEST_URI} ^/static/
-RewriteRule ^ - [L]
+    # /static/uploads 및 /static/app 접근 허용
+    RewriteCond %{REQUEST_URI} ^/static/uploads(/|$) [OR]
+    RewriteCond %{REQUEST_URI} ^/static/app(/|$)
+    RewriteRule ^ - [L]
 
-# 실제 파일 또는 디렉토리 요청은 통과
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
+    # 실제 존재하는 파일 또는 디렉토리는 그대로 처리
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
 
-# 나머지 요청은 index.php 로 라우팅
-RewriteRule ^ index.php [L]
+    # 나머지는 index.php로 라우팅
+    RewriteRule ^ index.php [L]
+</IfModule>

@@ -2,11 +2,10 @@
 
 namespace Framework\View;
 
-use Framework\View\Contracts\ViewFinderInterface;
 
 class ViewRenderer
 {
-    protected ViewFinderInterface $finder;
+    protected ViewFinder $finder;
     protected SectionManager $sections;
     protected ComponentManager $components;
 
@@ -14,7 +13,7 @@ class ViewRenderer
     protected ?string $layout = null;
 
     public function __construct(
-        ViewFinderInterface $finder,
+        ViewFinder $finder,
         SectionManager $sections,
         ComponentManager $components
     ) {

@@ -15,4 +15,4 @@ node:
 npm: 
 	docker-compose exec -it node bash -c "npm install"
 composer:
-	docker-compose exec web bash -c "composer dump-autoload && composer install"
+	docker-compose exec -it web bash -c "composer dump-autoload && composer install"

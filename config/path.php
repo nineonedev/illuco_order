@@ -2,8 +2,8 @@
 
 return [
     'view' => base_path('resources/views'),
-    'asset' => base_path('static'),
-    'uploads' => base_path('uploads'),
+    'asset' => base_path('static/app'),
+    'uploads' => base_path('static/uploads'),
     'bootstrap' => [
         'aliases' => base_path('bootstrap/aliases.php'),
         'bootstrappers' => base_path('bootstrap/aliases.php'),

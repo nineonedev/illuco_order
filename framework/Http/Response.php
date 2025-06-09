@@ -139,7 +139,7 @@ class Response
     /**
      * @return static
      */
-    public static function create(string $content = '', int $statusCode, array $headers = [])
+    public static function create(string $content = '', int $statusCode = 200, array $headers = [])
     {
         return new Response($content, $statusCode, $headers);
     }

@@ -94,7 +94,8 @@ class RouteGroupRegistrar
             }
 
             if (!empty($group['as'])) {
-                $result['as'] .= $group['as']; 
+                $prevAs = $result['as'] ? trim( $result['as'], '.') . '.' : '';
+                $result['as'] = $prevAs . trim($group['as'], '.');
             }
 
             if (!empty($group['controller'])) {

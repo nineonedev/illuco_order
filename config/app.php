@@ -3,5 +3,5 @@
 return [
     'name' => env('APP_NAME', 'Framework'),
     'environment' => env('APP_ENV', 'production'),
-    'debug' => env('APP_DEBUG', true), 
+    'debug' => env('APP_DEBUG', false), 
 ];

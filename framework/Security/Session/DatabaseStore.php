@@ -32,6 +32,13 @@ class DatabaseStore implements SessionInterface
         }
     }
 
+
+    protected function getCookieLifetimeMinutes(): int
+    {
+        $seconds = config('auth.session.lifetime', 60 * 30); 
+        return ceil($seconds / 60);
+    }
+
     /**
      * 세션 시작: 쿠키의 세션ID로 DB에서 데이터를 로드하거나, 없으면 새로 만듦
      */
@@ -48,11 +55,12 @@ class DatabaseStore implements SessionInterface
             $this->id = $sessionId;
         } else {
             $this->id = bin2hex(random_bytes(20));
+
             // 쿠키 새로 발급 (첫 진입)
             cookie()->set(
                 AuthConstants::SESSION_ID,
                 $this->id,
-                60 * 24,
+                $this->getCookieLifetimeMinutes(),
                 '/',
                 '',
                 null,
@@ -80,9 +88,9 @@ class DatabaseStore implements SessionInterface
      */
     protected function isTimeout($lastActivity): bool
     {
-        $lifetime = config('auth.session.lifetime', 60 * 30); // seconds
+        $lifetimeSeconds = config('auth.session.lifetime', 60 * 30); 
         if (!$lastActivity) return false;
-        return strtotime($lastActivity) < (time() - $lifetime);
+        return strtotime($lastActivity) < (time() - $lifetimeSeconds);
     }
 
     /**
@@ -97,7 +105,7 @@ class DatabaseStore implements SessionInterface
         cookie()->set(
             AuthConstants::SESSION_ID,
             $this->id,
-            60 * 24,
+            $this->getCookieLifetimeMinutes(),
             '/',
             '',
             null,
@@ -116,7 +124,7 @@ class DatabaseStore implements SessionInterface
         cookie()->set(
             AuthConstants::SESSION_ID,
             $this->id,
-            60 * 24,
+            $this->getCookieLifetimeMinutes(),
             '/',
             '',
             null,

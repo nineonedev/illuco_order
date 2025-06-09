@@ -34,10 +34,6 @@ class UserRepository extends Repository
     {
         // 로그인 세션 등록 (user_id 등은 내부적으로 처리)
         auth()->login($user);
-
-        // 부가적으로 username, email 등 추가 저장이 필요하다면 아래처럼
-        session()->set('username', $user->username);
-        session()->set('email', $user->email);
     }
 
     /**

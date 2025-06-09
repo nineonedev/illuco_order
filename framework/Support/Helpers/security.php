@@ -49,6 +49,7 @@ if (!function_exists('cookie')) {
     }
 }
 
+
 if (!function_exists('auth')) {
     function auth(): AuthManager
     {

@@ -17,18 +17,34 @@ class SymLink
 
     public function create(bool $force = false): void
     {
+        $linkDir = dirname($this->link);
+
+        if (!is_dir($linkDir)) {
+            if (!@mkdir($linkDir, 0755, true)) {
+                throw new RuntimeException("Failed to create directory for link: {$linkDir}");
+            }
+        }
+
         if ($this->exists()) {
             if (!$force) {
-                throw new RuntimeException("Symbolic link already exists: {$this->link}"); 
+                throw new RuntimeException("Symbolic link already exists: {$this->link}");
             }
 
-            $this->delete(); 
+            if (!@unlink($this->link)) {
+                throw new RuntimeException("Failed to delete existing symbolic link: {$this->link}");
+            }
         }
-        
-        if (!symlink($this->target, $this->link)) {
-            throw new RuntimeException("Failed to create symbolic link: {$this->link} => {$this->target}");
+
+        if (file_exists($this->link) && !is_link($this->link)) {
+            throw new RuntimeException("Cannot create symlink: {$this->link} already exists and is not a symlink.");
+        }
+
+        if (!@symlink($this->target, $this->link)) {
+            $error = error_get_last();
+            throw new RuntimeException("Failed to create symbolic link: {$this->link} => {$this->target} - {$error['message']}");
         }
     }
+
 
     public function exists(): bool
     {

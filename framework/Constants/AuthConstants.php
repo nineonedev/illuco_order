@@ -13,4 +13,9 @@ final class AuthConstants
     const REMEMBER_ME_INPUT = 'remember_me';
     
     const CSRF_TOKEN_KEY = '_csrf_token';
+    
+    const SAMESITE_LAX = 'Lax'; 
+    const SAMESITE_STRICT = 'Strict'; 
+    const SAMESITE_NONE = 'None';
+
 }

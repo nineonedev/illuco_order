@@ -18,11 +18,15 @@ class FilesystemServiceProvider extends ServiceProvider
 
         foreach ($links as $target => $link) {
             try {
-                (new SymLink($target, $link))->create(true); 
+                $symlink = new SymLink($target, $link);
 
+                if (!$symlink->exists() || $symlink->isBroken()) {
+                    $symlink->create(true);
+                }
             } catch (\Throwable $e) {
-                // logger()->error("Failed to create symlink: {$link} => {$target}");
+                throw new \RuntimeException("[Filesystem] Failed to create symlink '{$link}' => '{$target}': " . $e->getMessage(), 0, $e);
             }
         }
+
     }
 }

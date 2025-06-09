@@ -20,25 +20,25 @@ class App {
     }
 
     run() {
-        $("[data-text-editor]").summernote({
-            height: 300,
-            placeholder: "내용을 입력하세요",
-            lang: "ko-KR",
-            toolbar: [
-                ["style", ["style"]],
-                [
-                    "font",
-                    ["bold", "italic", "underline", "strikethrough", "clear"],
-                ],
-                ["fontname", ["fontname"]],
-                ["fontsize", ["fontsize"]],
-                ["color", ["color"]],
-                ["para", ["ul", "ol", "paragraph"]],
-                ["table", ["table"]],
-                ["insert", ["link", "picture", "video"]],
-                ["view", ["fullscreen", "codeview", "help"]],
-            ],
-        });
+        // $("[data-text-editor]").summernote({
+        //     height: 300,
+        //     placeholder: "내용을 입력하세요",
+        //     lang: "ko-KR",
+        //     toolbar: [
+        //         ["style", ["style"]],
+        //         [
+        //             "font",
+        //             ["bold", "italic", "underline", "strikethrough", "clear"],
+        //         ],
+        //         ["fontname", ["fontname"]],
+        //         ["fontsize", ["fontsize"]],
+        //         ["color", ["color"]],
+        //         ["para", ["ul", "ol", "paragraph"]],
+        //         ["table", ["table"]],
+        //         ["insert", ["link", "picture", "video"]],
+        //         ["view", ["fullscreen", "codeview", "help"]],
+        //     ],
+        // });
     }
 }
 

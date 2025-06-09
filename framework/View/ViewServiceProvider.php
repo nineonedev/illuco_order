@@ -2,15 +2,21 @@
 
 namespace Framework\View;
 
+use Framework\Core\Application;
 use Framework\Core\ServiceProvider;
+use Framework\View\Contracts\ViewFinderInterface;
 
 class ViewServiceProvider extends ServiceProvider 
 {
     public function register(): void
     {
-        $this->app->singleton(ViewRenderer::class, function(){
+        $this->app->singleton(ViewFinderInterface::class, function (Application $app) {
+            return new ViewFinder(config('path.view'));
+        });
+        
+        $this->app->singleton(ViewRenderer::class, function(Application $app){
             return new ViewRenderer(
-                new ViewFinder(config('path.view')),
+                $app->make(ViewFinderInterface::class),
                 new SectionManager(),
                 new ComponentManager(),
             );

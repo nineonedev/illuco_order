@@ -7,7 +7,18 @@ use Framework\Core\Application;
 define('BASE_PATH', dirname(__DIR__));
 define('DS', DIRECTORY_SEPARATOR);
 
-require_once BASE_PATH.'/vendor/autoload.php';
+// spl_autoload_register(function ($class) {
+//     $path = BASE_PATH . '/' . lcfirst($class) . '.php';
+//     $file = str_replace('\\', '/', $path);
+
+//     if (file_exists($file)) {
+//         require $file;
+//     }
+// });
+
+if (file_exists(BASE_PATH.'/vendor/autoload.php')) {
+    require_once BASE_PATH.'/vendor/autoload.php';
+}
 
 return Application::configure(BASE_PATH)
     ->withBootstrappers(require_once BASE_PATH.'/bootstrap/bootstrappers.php')

@@ -1,7 +1,7 @@
 <?php extend('layouts.admin'); ?>
 <?php section('title') ?>
 공지사항 생성
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('content') ?>
 
@@ -13,7 +13,7 @@
         </div>
         <!-- Head -->
         
-        <form method="post" enctype="multipart/form-data" action="<?= route('notices.store') ?>">
+        <form method="post" enctype="multipart/form-data" action="">
             <div class="no-form-group">
                 <div class="no-form-control --md">
                     <label for="title" class="no-form-control-inner">
@@ -72,7 +72,7 @@
                 
                 <?php for ($i = 1; $i <= 5; $i++) : ?>
                 <div class="no-form-control no-form-file">
-                    <label for="file_attachment_<?=$i?>" class="no-form-control-inner">
+                    <label for="file_attachment_<?=$i?>" class="no-form-control-inner no-form-file-inner">
                         <input 
                             type="file" 
                             name="file_attachment_<?=$i?>" 
@@ -83,11 +83,11 @@
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">첨부파일<?=$i?></legend>
                         </fieldset>
-                        <button class="no-form-file-input" type="button" data-input-file>
+                        <button class="no-form-file-input" type="button">
                             <div class="no-form-file-icon">
                                 <i class="fa-light fa-paperclip-vertical"></i>
                             </div>
-                            <span class="no-form-file-text" data-input-file-text>선택된 파일 없음</span>
+                            <span class="no-form-file-text"-text>선택된 파일 없음</span>
                             <span class="no-form-file-button-text">파일선택</span>
                         </button>
                     </label>
@@ -99,7 +99,7 @@
             </div>
             
             <div class="no-form-action">
-                <a href="<?=route('notices.index')?>" class="no-btn-primary-outline --sm">
+                <a href="<?=route('admin.notices.index')?>" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
                 <button type="submit" class="no-btn-primary --sm">
@@ -113,46 +113,46 @@
 </div>
 
 
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('script') ?>
 
 <script>
-    $('#content').summernote({
-            height: 300,
-            lang: "ko-KR",
-            toolbar: [
-                ["style", ["style"]],
-                ["font", ["bold", "italic", "underline", "clear"]],
-                ["fontname", ["fontname"]],
-                ["fontsize", ["fontsize"]],
-                ["color", ["color"]],
-                ["para", ["ul", "ol", "paragraph"]],
-                ["table", ["table"]],
-                ["insert", ["link", "picture"]],
-                ["view", ["codeview"]],
-            ],
-            callbacks: {
-                onImageUpload: function (files) {
-                    const formData = new FormData();
-                    formData.append("file", files[0]);
+    // $('#content').summernote({
+    //         height: 300,
+    //         lang: "ko-KR",
+    //         toolbar: [
+    //             ["style", ["style"]],
+    //             ["font", ["bold", "italic", "underline", "clear"]],
+    //             ["fontname", ["fontname"]],
+    //             ["fontsize", ["fontsize"]],
+    //             ["color", ["color"]],
+    //             ["para", ["ul", "ol", "paragraph"]],
+    //             ["table", ["table"]],
+    //             ["insert", ["link", "picture"]],
+    //             ["view", ["codeview"]],
+    //         ],
+    //         callbacks: {
+    //             onImageUpload: function (files) {
+    //                 const formData = new FormData();
+    //                 formData.append("file", files[0]);
 
-                    fetch("/upload", {
-                        method: "POST",
-                        body: formData,
-                    })
-                        .then((res) => res.json())
-                        .then((data) => {
-                            $("#editor").summernote(
-                                "insertImage",
-                                data.location
-                            );
-                        })
-                        .catch((err) =>
-                            console.error("Upload failed:", err)
-                        );
-                },
-            },
-        });
+    //                 fetch("/upload", {
+    //                     method: "POST",
+    //                     body: formData,
+    //                 })
+    //                     .then((res) => res.json())
+    //                     .then((data) => {
+    //                         $("#editor").summernote(
+    //                             "insertImage",
+    //                             data.location
+    //                         );
+    //                     })
+    //                     .catch((err) =>
+    //                         console.error("Upload failed:", err)
+    //                     );
+    //             },
+    //         },
+    //     });
 </script>
-<?php endSection() ?>
+<?php end_section() ?>

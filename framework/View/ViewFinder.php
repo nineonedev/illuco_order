@@ -9,7 +9,7 @@ class ViewFinder implements ViewFinderInterface
 {
     protected string $basePath;
 
-    public function __construct(string $basePath)
+    public function __construct(string $basePath = '')
     {
         $this->basePath = rtrim($basePath, DS);
     }

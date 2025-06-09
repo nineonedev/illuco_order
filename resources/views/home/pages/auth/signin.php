@@ -90,9 +90,10 @@
 
     frm.addEventListener('submit', async (e) => {
         e.preventDefault(); 
+        e.submitter.disabled = true; 
         
         const fd = new FormData(e.target); 
-
+        
         const response = await fetch(e.target.action, {
             headers: {
                 'Accept': 'application/json'
@@ -101,8 +102,13 @@
             body: fd,
         }); 
         const resData = await response.json(); 
-
-        console.log(resData);
+        
+        alert(resData.message);
+        e.submitter.disabled = false; 
+        
+        if (resData.success){
+            location.reload(); 
+        }
         
     })
 </script>

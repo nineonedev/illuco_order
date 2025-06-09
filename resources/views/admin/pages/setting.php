@@ -1,3 +1,6 @@
+<?php 
+ use Framework\Constants\AppConstants;
+?>
 <?php extend('layouts.admin') ?>
 
 <?php section('title') ?>
@@ -14,7 +17,7 @@
         </div>
         <!-- Head -->
 
-        <form action="<?=route('admin.store')?>" method="post" class="no-form" enctype="multipart/form-data">
+        <form action="#" method="post" class="no-form" enctype="multipart/form-data">
             <div class="no-form-group">
                 <div class="no-form-block">
                     <div class="no-form-switch --sm">
@@ -81,13 +84,40 @@
                     </fieldset>
                     <span class="no-form-control-space"></span>
                 </div>
+                <div class="--flex-column">
+                    <fieldset class="no-form-group">
+                        <legend class="no-form-base-label">언어</legend>
+                        <div class="no-form-listing">
+                            <?php foreach (config('translation.languages') ?? [] as $lang => $label) : 
+                                $checked = $lang === get_locale() ? 'checked' : '';     
+                            ?>
+                            <div class="no-form-radio --sm">
+                                <label class="no-form-radio-pointer" for="language_<?=$lang?>">
+                                    <input 
+                                        class="no-form-radio-input" 
+                                        type="radio" 
+                                        name="<?= AppConstants::LOCALE_KEY ?>"
+                                        id="language_<?=$lang?>" 
+                                        value="<?=$lang?>" 
+                                        <?=$checked?>
+                                    >
+                                    <div class="no-form-radio-ripple">
+                                        <div class="no-form-radio-box">
+                                            <span class="no-form-radio-icon"></span>
+                                        </div>
+                                    </div>
+                                    <span class="no-form-radio-text"><?=$label?></span>
+                                </label>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </fieldset>
+                    <span class="no-form-control-space"></span>
+                </div>
 
             </div>
             
             <div class="no-form-action">
-                <a href="<?= route('employees.index') ?>" class="no-btn-primary-outline --sm">
-                    <span>취소</span>
-                </a>
                 <button type="submit" class="no-btn-primary --sm">
                     <span>저장</span>
                 </button>

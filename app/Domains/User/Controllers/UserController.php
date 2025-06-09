@@ -10,10 +10,10 @@ class UserController extends Controller
 {
     public function index()
     {
-        $data = UserRepository::with(['posts'])
-            ->paginate(3)
-            ->toResource(UserResource::class);
+        // $data = UserRepository::with(['posts'])
+        //     ->paginate(3)
+        //     ->toResource(UserResource::class);
         
-        return $this->json($data);
+        // return $this->json($data);
     }
 }

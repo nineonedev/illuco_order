@@ -1,6 +1,8 @@
 <?php
 
-namespace Framework\Security\Cookie; 
+namespace Framework\Security\Cookie;
+
+use Framework\Constants\AuthConstants; 
 
 class CookieManager
 {
@@ -21,14 +23,24 @@ class CookieManager
         string $path = '/',
         string $domain = '', 
         ?bool $secure = null,
-        bool $httpOnly = true
+        bool $httpOnly = true,
+        string $samesite = AuthConstants::SAMESITE_LAX
     ): void
     {
         if ($secure === null) {
             $secure = request()->http()->isSecure();
         }
-        
-        $cookie = new CookieJar($name, $value, $minutes, $path, $domain, $secure, $httpOnly);
+
+        $cookie = new CookieJar(
+            $name, 
+            $value, 
+            $minutes, 
+            $path, 
+            $domain, 
+            $secure, 
+            $httpOnly,
+            $samesite
+        );
         $this->queued[$name] = $cookie;
 
         $this->send();

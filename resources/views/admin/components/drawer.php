@@ -206,8 +206,8 @@
 
                 <ul class="no-drawer-gnb">
                     <!-- Gnb Item -->
-                    <li class="no-drawer-gnb-item <?//= is_route_prefix_active('admin.notices') ?>">
-                        <a href="<?//=route('notices.index')?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                    <li class="no-drawer-gnb-item ">
+                        <a href="<?= route('admin.notices.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
                                 <i class="fa-light fa-megaphone"></i>
                             </div>
@@ -221,8 +221,8 @@
                         </a>
                     </li>
                     <!-- Gnb Item -->
-                    <li class="no-drawer-gnb-item <?//= is_route_prefix_active('admin.claims') ?>">
-                        <a href="<?//=route('claims.index')?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                    <li class="no-drawer-gnb-item ">
+                        <a href="<?= route('admin.claims.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
                                 <i class="fa-light fa-comment"></i>
                             </div>

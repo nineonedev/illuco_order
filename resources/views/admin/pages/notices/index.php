@@ -2,7 +2,7 @@
 
 <?php section('title') ?>
 공지사항
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('content') ?>
 <div class="no-page-container">
@@ -34,7 +34,7 @@
             </form>
 
             <div class="no-page-index-link">
-                <a href="<?=route('notices.create')?>" class="no-btn-primary --sm">
+                <a href="<?= route('admin.notices.create') ?>" class="no-btn-primary --sm">
                     <span>Create</span>
                 </a>
             </div>
@@ -165,4 +165,4 @@
     <!-- Row -->
 </div>
 
-<?php endSection() ?>
+<?php end_section() ?>

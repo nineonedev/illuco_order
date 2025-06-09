@@ -9,7 +9,7 @@ Light Mode
 html[data-theme="light"],
 html {
     .no-auth-inner header img {
-        content: url("/static/img/meta/logo-primary.svg");
+        content: url("/static/app/img/meta/logo-primary.svg");
     }
 
     .no-text-primary {
@@ -27,6 +27,6 @@ Dark Mode
 */
 html[data-theme="dark"] {
     .no-auth-inner header img {
-        content: url("/static/img/meta/logo-white.svg");
+        content: url("/static/app/img/meta/logo-white.svg");
     }
 }
