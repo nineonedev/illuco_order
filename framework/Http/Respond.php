@@ -2,6 +2,7 @@
 
 namespace Framework\Http;
 
+use Framework\Constants\AuthConstants;
 use Framework\Http\Response;
 use Framework\Http\ApiResponse;
 
@@ -16,6 +17,14 @@ class Respond
     protected ?string $view = null;
     protected ?string $redirect = null;
     protected ?string $redirectRoute = null;
+
+    protected array $session = [];
+    protected array $oldInput = [];
+    protected ?string $downloadPath = null;
+    protected ?string $downloadName = null;
+
+    protected array $headers = []; 
+    protected array $cookies = [];
 
     /**
      * @return static
@@ -83,12 +92,44 @@ class Respond
         return $this;
     }
 
+    public function withSession(string $key, $value)
+    {
+        $this->session[$key] = $value;
+        return $this;
+    }
+
+    public function withInput(array $input)
+    {
+        $this->oldInput = $input;
+        return $this;
+    }
+
+     public function withHeader(string $name, string $value)
+    {
+        $this->headers[$name] = $value;
+        return $this;
+    }
+
+
+    public function withCookie(string $name, string $value, array $options = [])
+    {
+        $this->cookies[$name] = ['value' => $value, 'options' => $options];
+        return $this;
+    }
+
     /**
      * @return static
      */
     public function meta(array $meta)
     {
         $this->meta = $meta;
+        return $this;
+    }
+
+    public function download(string $path, string $name = null)
+    {
+        $this->downloadPath = $path;
+        $this->downloadName = $name;
         return $this;
     }
 
@@ -146,12 +187,39 @@ class Respond
      */
     public function send(): Response
     {
+        // Apply headers
+        foreach ($this->headers as $key => $value) {
+            header("{$key}: {$value}");
+        }
+
+        // Apply cookies
+        foreach ($this->cookies as $name => $cookie) {
+            setcookie($name, $cookie['value'], $cookie['options'] ?? []);
+        }
+
+        // Apply session flash data
+        foreach ($this->session as $key => $value) {
+            session()->flash($key, $value);
+        }
+
+        // Store old input
+        if (!empty($this->oldInput)) {
+            session()->flash(AuthConstants::OLD_INPUT, $this->oldInput);
+        }
+
+        // File download
+        if ($this->downloadPath) {
+            return Response::download($this->downloadPath, $this->downloadName);
+        }
+
+        // JSON 응답
         if (request()->expectsJson()) {
             return $this->success
                 ? ApiResponse::success($this->data, $this->message, $this->status, $this->meta)
                 : ApiResponse::fail($this->message, $this->errors, $this->status);
         }
 
+        // 리다이렉트
         if ($this->redirect) {
             return redirect($this->redirect);
         }
@@ -160,13 +228,17 @@ class Respond
             return redirect_route($this->redirectRoute);
         }
 
+        // HTML 뷰 응답
+        $view = $this->view ?? $this->success ? config('app.fallbacks.success') : 'app.fallbacks.error';
+
         if ($this->success) {
-            return Response::view($this->view ?? '', $this->data ?? [], $this->status);
+            return Response::view($view, $this->data ?? [], $this->status);
         }
 
-        return Response::view($this->view ?? '', [
+        return Response::view($view, [
             'message' => $this->message,
             'errors'  => $this->errors,
         ], $this->status);
     }
+
 }

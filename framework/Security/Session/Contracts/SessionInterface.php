@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Security\Contracts; 
+namespace Framework\Security\Session\Contracts;
 
 interface SessionInterface
 {
@@ -20,11 +20,8 @@ interface SessionInterface
 
     public function id(): string;
 
-    public function regenerate(): void; 
+    public function regenerate(): void;
 
     public function invalidate(): void;
 
-    public function userId(): ?int;
-
-    public function setUserId(?int $userId = null): void;
 }

@@ -22,6 +22,11 @@ class ExceptionHandler
         $this->debug = $debug;
     }
 
+    public function setDebug(bool $debug): void
+    {
+        $this->debug = $debug; 
+    }
+
     public function setConfigurator(ExceptionConfigurator $configurator): void
     {
         $this->configurator = $configurator;
@@ -117,15 +122,18 @@ class ExceptionHandler
     {
         http_response_code($code);
 
-        $viewPath = "errors.{$code}";
-        $fallbackView = 'errors.default';
+        $viewPath = config('view.errors') . '.' . $code;
+        $fallbackView = config('view.fallbacks.error');
+        $template = view()->exists($viewPath) ? $viewPath : $fallbackView; 
+
 
         if (!config('app.debug')) {
             return response()
                 ->setStatusCode($code)
-                ->view(view()->exists($viewPath) ? $viewPath : $fallbackView);
+                ->view($template);
         }
 
+        $template = config('view.debug');
         $linesBefore = 10;
         $linesAfter = 10;
         $codeLines = [];
@@ -149,7 +157,7 @@ class ExceptionHandler
 
         return response()
             ->setStatusCode($code)
-            ->view('errors.debug', [
+            ->view($template, [
                 'message'   => $e->getMessage(),
                 'file'      => $file,
                 'line'      => $line,

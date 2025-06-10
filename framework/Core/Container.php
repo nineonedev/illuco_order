@@ -28,7 +28,7 @@ class Container implements ContainerInterface
 
     public function bind(string $abstract, $concrete = null): void
     {
-        $this->binder->bind($abstract, $concrete, false); 
+        $this->binder->bind($abstract, $concrete); 
     }
 
     public function singleton(string $abstract, $concrete = null): void
@@ -105,6 +105,8 @@ class Container implements ContainerInterface
         }
 
         $instance = $this->reflector->build($abstract, $parameters); 
+
+        
         $this->resolved[$abstract] = true; 
         $this->fireResolvingCallbacksIfExists($abstract, $instance); 
         return $instance; 
@@ -222,7 +224,7 @@ class Container implements ContainerInterface
 
     public function unswap(string $abstract): void
     {
-        unset($this->binder->instances[$abstract]);
+        $this->binder->removeInstance($abstract);
         unset($this->resolved[$abstract]);
     }
 

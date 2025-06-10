@@ -2,6 +2,7 @@
 
 namespace Framework\View;
 
+use Framework\View\Contracts\ViewFinderInterface;
 use Framework\View\Exceptions\ViewNotFoundException;
 
 class ViewFinder implements ViewFinderInterface

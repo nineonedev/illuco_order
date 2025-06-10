@@ -9,4 +9,7 @@ final class AppConstants
     const THEME_KEY = 'ILLUCO_THEME'; 
 
     const LOCALE_KEY = 'ILLUCO_LOCALE'; 
+
+    const CONFIG_PATH = BASE_PATH . '/config';
+    const ENVIRONMENT_PATH = BASE_PATH . '/.env';
 }

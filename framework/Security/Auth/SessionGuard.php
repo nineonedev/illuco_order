@@ -2,11 +2,10 @@
 
 namespace Framework\Security\Auth;
 
-use Framework\Constants\AuthConstants;
+use Framework\Security\Auth\Contracts\GuardInterface;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
 use Framework\Security\Auth\Providers\UserProviderInterface;
-use Framework\Security\Contracts\GuardInterface;
-use Framework\Security\Contracts\SessionInterface;
+use Framework\Security\Session\Contracts\SessionInterface;
 use Framework\Support\Facades\Hash;
 
 class SessionGuard implements GuardInterface
@@ -45,7 +44,7 @@ class SessionGuard implements GuardInterface
 
     public function login(AuthenticatableInterface $user): void
     {
-        $this->session->setUserId($user->getAuthIdentifier()); 
+        $this->session->set('user_id', $user->getAuthIdentifier()); 
         $this->user = $user; 
     }
 
@@ -55,7 +54,7 @@ class SessionGuard implements GuardInterface
             return $this->user; 
         }
 
-        $id = $this->session->userId();
+        $id = $this->session->get('user_id');
 
         if ($id) {
             return $this->user = $this->provider->retrieveById($id); 

@@ -2,19 +2,22 @@
 
 namespace Framework\Security\Session;
 
-use Framework\Security\Contracts\SessionInterface;
+use Framework\Security\Session\Contracts\SupportsUserSessionInterface;
 use RuntimeException;
 
 class SessionManager
 {
     /**
-     * @var SessionInterface[]
+     * @var SessionStore[]
      */
     protected array $drivers = [];
 
     protected ?string $current = null;
 
-    public function setDriver(string $name, SessionInterface $driver): void
+    /** @var array<string, SessionBag> */
+    protected array $bags = [];
+
+    public function setDriver(string $name, SessionStore $driver): void
     {
         $this->drivers[$name] = $driver;
     }
@@ -22,22 +25,22 @@ class SessionManager
     public function use(string $name): void
     {
         if (!isset($this->drivers[$name])) {
-            throw new RuntimeException("Session driver [$name] not registered."); 
+            throw new RuntimeException("Session driver [$name] not registered.");
         }
 
-        $this->current = $name; 
-        $this->drivers[$name]->start(); 
+        $this->current = $name;
+        $this->drivers[$name]->start();
     }
-    
-    public function driver(?string $name = null): SessionInterface
+
+    public function driver(?string $name = null): SessionStore
     {
-        $name = $name ?? $this->current; 
+        $name = $name ?? $this->current;
 
         if (!isset($this->drivers[$name])) {
             throw new RuntimeException("Session driver [$name] not registered.");
         }
 
-        return $this->drivers[$name]; 
+        return $this->drivers[$name];
     }
 
     public function get(string $key, $default = null)
@@ -87,11 +90,37 @@ class SessionManager
 
     public function userId(): ?int
     {
-        return $this->driver()->userId();
+        $driver = $this->driver();
+
+        if ($driver instanceof SupportsUserSessionInterface) {
+            return $driver->userId();
+        }
+
+        return null;
     }
 
     public function setUserId(?int $userId = null): void
     {
-        $this->driver()->setUserId($userId);
+        $driver = $this->driver();
+
+        if ($driver instanceof SupportsUserSessionInterface) {
+            $driver->setUserId($userId);
+        }
+    }
+
+    public function bag(string $key): SessionBag
+    {
+        if (!isset($this->bags[$key])) {
+            $this->bags[$key] = $this->driver()->bag($key);
+        }
+
+        return $this->bags[$key];
+    }
+
+    public function saveAllFlash(): void
+    {
+        foreach ($this->bags as $bag) {
+            $bag->saveFlash();
+        }
     }
 }

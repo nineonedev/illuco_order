@@ -10,15 +10,24 @@ use Framework\Support\Exceptions\ExceptionHandler;
 class ApplicationConfigurator 
 {
     protected Application $app;
+    protected MiddlewareConfigurator $middleware;
+    protected RoutingConfigurator $routing; 
+    protected ExceptionConfigurator $exception;
+    protected BootstrapConfigurator $bootstrap;
+    
 
     public function __construct(Application $app)
     {
         $this->app = $app;
+        $this->exception = new ExceptionConfigurator($this->app);
+        $this->middleware = new MiddlewareConfigurator($this->app);
+        $this->routing = new RoutingConfigurator($this->app); 
+        $this->bootstrap = new BootstrapConfigurator($this->app);
 
-        $app->instance(ExceptionConfigurator::class, new ExceptionConfigurator());
-        $app->instance(MiddlewareConfigurator::class, new MiddlewareConfigurator());
-        $app->instance(RoutingConfigurator::class, new RoutingConfigurator());
-        $app->instance(BootstrapConfigurator::class, new BootstrapConfigurator($this->app));
+        $this->app->instance(BootstrapConfigurator::class, $this->bootstrap);
+        $this->app->instance(MiddlewareConfigurator::class, $this->middleware);
+        $this->app->instance(ExceptionConfigurator::class, $this->exception);
+        $this->app->instance(RoutingConfigurator::class, $this->routing);
     }
 
     /**
@@ -49,13 +58,11 @@ class ApplicationConfigurator
 
     public function withExceptions(callable $callback)
     {
-        /** @var ExceptionConfigurator $configurator */
-        $configurator = $this->app->make(ExceptionConfigurator::class);
-        $callback($configurator);
+        $callback($this->exception);
 
         /** @var ExceptionHandler $handler */
         $handler = $this->app->make(ExceptionHandler::class); 
-        $handler->setConfigurator($configurator); 
+        $handler->setConfigurator($this->exception); 
         
         return $this;
     }
@@ -66,19 +73,16 @@ class ApplicationConfigurator
      */
     public function withRouting(array $routes)
     {
-        /** @var RoutingConfigurator $configurator */
-        $configurator = $this->app->make(RoutingConfigurator::class);
-        
         if (isset($routes['web'])) {
-            $configurator->web($routes['web']);
+            $this->routing->web($routes['web']);
         }
 
         if (isset($routes['console'])) {
-            $configurator->console($routes['console']);
+            $this->routing->console($routes['console']);
         }
 
         if (isset($routes['health'])) {
-            $configurator->health($routes['health']);
+            $this->routing->health($routes['health']);
         }
 
         return $this;
@@ -89,10 +93,7 @@ class ApplicationConfigurator
      */
     public function withMiddleware(callable $callback)
     {
-        $configurator = $this->app->make(MiddlewareConfigurator::class); 
-        $callback($configurator); 
-
-        
+        $callback($this->middleware); 
         return $this; 
     }
 
@@ -102,9 +103,7 @@ class ApplicationConfigurator
      */
     public function withBootstrappers(array $bootstrappers)
     {
-        /** @var BootstrapConfigurator $configurator */
-        $configurator = $this->app->make(BootstrapConfigurator::class);
-        $configurator->addMany($bootstrappers); 
+        $this->bootstrap->addMany($bootstrappers); 
         
         return $this;
     }
@@ -133,11 +132,10 @@ class ApplicationConfigurator
 
     public function create()
     {
-        $this->app->make(BootstrapConfigurator::class)->load(); 
+        $this->bootstrap->load();
         $this->app->register();
         $this->app->boot();
-        $this->app->registerAliases();
-        $this->app->make(RoutingConfigurator::class)->load();
+        $this->exception->setDebug(env('APP_DEBUG', config('app.debug', false)));
         
         return $this->app;
     }

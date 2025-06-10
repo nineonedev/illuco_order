@@ -1,13 +1,17 @@
 <?php 
 
-namespace Framework\Translation;
+namespace Framework\Boostrap\Bootstrappers;
 
-use Framework\Core\ServiceProvider;
+use Framework\Boostrap\Contracts\BootstrapperInterface;
+use Framework\Core\Application;
 use Framework\Translation\Contracts\TranslatorInterface;
+use Framework\Translation\FileLoader;
+use Framework\Translation\Translator;
+use Framework\Translation\TranslatorManager; 
 
-class TranslationServiceProvider extends ServiceProvider
+class RegisterTranslators implements BootstrapperInterface
 {
-    public function register(): void
+    public function bootstrap(Application $app): void
     {
         $locale = config('translation.locale'); 
         $fallback = config('translation.fallback'); 
@@ -16,8 +20,8 @@ class TranslationServiceProvider extends ServiceProvider
 
         $manager = new TranslatorManager($locale, $fallback, $default);
 
-        $this->app->instance(TranslatorManager::class, $manager); 
-        $this->app->instance(TranslatorInterface::class, $manager); 
+        $app->instance(TranslatorManager::class, $manager); 
+        $app->instance(TranslatorInterface::class, $manager); 
 
         foreach ($translators ?? [] as $name => $dir) {
             $manager->addTranslator($name, new Translator($locale, $fallback, new FileLoader($dir)));

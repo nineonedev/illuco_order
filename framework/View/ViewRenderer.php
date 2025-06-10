@@ -2,6 +2,8 @@
 
 namespace Framework\View;
 
+use Framework\View\Contracts\ViewFinderInterface;
+
 class ViewRenderer
 {
     protected ViewFinderInterface $finder;

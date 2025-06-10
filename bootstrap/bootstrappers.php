@@ -1,23 +1,25 @@
 <?php 
 
+use Framework\Boostrap\Bootstrappers\LoadCommands;
 use Framework\Boostrap\Bootstrappers\LoadHelpers;
+use Framework\Boostrap\Bootstrappers\LoadMiddlewares;
+use Framework\Boostrap\Bootstrappers\LoadRelations;
+use Framework\Boostrap\Bootstrappers\LoadRoutes;
+use Framework\Boostrap\Bootstrappers\RegisterConfiguration;
 use Framework\Boostrap\Bootstrappers\RegisterCoreBindings;
-use Framework\Boostrap\Bootstrappers\RegisterAliases;
-use Framework\Boostrap\Bootstrappers\LoadStates;
-use Framework\Boostrap\Bootstrappers\LoadEnvironment;
-use Framework\Boostrap\Bootstrappers\RegisterCommands;
-use Framework\Boostrap\Bootstrappers\RegisterMiddlewares;
-use Framework\Boostrap\Bootstrappers\RegisterRelations;
-use Framework\Boostrap\Bootstrappers\SetExceptionHandler;
+use Framework\Boostrap\Bootstrappers\RegisterEnvironment;
+use Framework\Boostrap\Bootstrappers\RegisterTranslators;
+use Framework\Boostrap\Bootstrappers\HandleExceptions;
 
 return [
+    HandleExceptions::class,
     LoadHelpers::class,
+    RegisterEnvironment::class,
+    RegisterConfiguration::class,
     RegisterCoreBindings::class,
-    RegisterAliases::class,
-    LoadStates::class,
-    LoadEnvironment::class,
-    SetExceptionHandler::class,
-    RegisterMiddlewares::class,
-    RegisterCommands::class,
-    RegisterRelations::class,
+    RegisterTranslators::class,
+    LoadMiddlewares::class,
+    LoadCommands::class,
+    LoadRelations::class,
+    LoadRoutes::class,
 ];

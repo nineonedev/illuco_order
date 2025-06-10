@@ -2,10 +2,13 @@
 
 namespace Framework\Configurations;
 
-use Framework\Http\Middleware\MiddlewareInterface;
+use Framework\Core\Application;
+use Framework\Http\Contracts\MiddlewareInterface;
 
 class MiddlewareConfigurator
 {
+    protected Application $app;
+
     /**
      * @var array<class-string<MiddlewareInterface>>
      */
@@ -20,6 +23,11 @@ class MiddlewareConfigurator
      * @var array<string,array<class-string<MiddlewareInterface>>>
      */
     protected array $groups = [];
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app; 
+    }
 
     /**
      * @param array<class-string<MiddlewareInterface>> $middlewares

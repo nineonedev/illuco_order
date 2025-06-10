@@ -6,14 +6,14 @@ use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Configurations\MiddlewareConfigurator;
 use Framework\Core\Application;
 
-class RegisterMiddlewares implements BootstrapperInterface
+class LoadMiddlewares implements BootstrapperInterface
 {
     public function bootstrap(Application $app): void
     {
         /** @var MiddlewareConfigurator $config */
         $config = $app->make(MiddlewareConfigurator::class);
         
-        $middlewares = require_once base_path('bootstrap/middlewares.php') ?? [];
+        $middlewares = require config('path.bootstrap.providers') ?? [];
         $priority = $middlewares['priority'] ?? [];
         $global = $middlewares['global'] ?? [];
         $group = $middlewares['group'] ?? [];

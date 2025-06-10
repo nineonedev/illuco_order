@@ -155,7 +155,7 @@ class Application extends Container implements ApplicationInterface
     public function register(): void
     {
         if ($this->registered) return; 
-        
+
         foreach ($this->pendingProviders as $provider) {
             $this->registerProvider($provider); 
         }
@@ -171,7 +171,7 @@ class Application extends Container implements ApplicationInterface
     {
         if (is_string($provider)) {
             $provider = new $provider($this);
-        }; 
+        };
 
         $className = get_class($provider);
 

@@ -2,7 +2,8 @@
 
 namespace Framework\Security\Hash;
 
-use Framework\Security\Contracts\HasherInterface;
+use Framework\Security\Hash\Contracts\HasherInterface;
+
 
 class BcryptHasher implements HasherInterface 
 {

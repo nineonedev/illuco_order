@@ -6,11 +6,11 @@ use Framework\Support\Arr;
 
 class Config
 {
-    protected string $configPath; 
+    protected $configPath;
 
     protected array $items = []; 
 
-    public function __construct(string $configPath)
+    public function __construct($configPath)
     {
         $this->configPath = $configPath; 
     }

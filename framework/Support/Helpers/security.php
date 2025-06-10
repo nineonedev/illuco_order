@@ -1,9 +1,9 @@
 <?php
 
 use Framework\Security\Auth\AuthManager;
-use Framework\Security\Contracts\SessionInterface;
 use Framework\Security\Cookie\CookieManager;
 use Framework\Security\Csrf\TokenManagerInterface;
+use Framework\Security\Session\SessionInterface;
 use Framework\Security\Session\SessionManager;
 use Framework\Support\Facades\Gate;
 

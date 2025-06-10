@@ -2,6 +2,12 @@
 
 namespace Framework\View\Exceptions;
 
-use RuntimeException;
+use Framework\Support\Exceptions\Http\InternalServerErrorException;
 
-class ViewNotFoundException extends RuntimeException {}
+class ViewNotFoundException extends InternalServerErrorException
+{
+    public function __construct(string $message = 'Cannot found view', array $meta = [])
+    {
+        parent::__construct($message, $meta);
+    }
+}

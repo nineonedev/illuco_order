@@ -3,6 +3,7 @@
 namespace Framework\Configurations;
 
 use Closure;
+use Framework\Core\Application;
 use Framework\Support\Exceptions\ExceptionHandler;
 use Throwable;
 
@@ -15,6 +16,18 @@ class ExceptionConfigurator
     protected array $reportables = []; 
 
     protected array $renderables = []; 
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
+
+    public function setDebug(bool $debug): void
+    {
+        if (!$this->handler)  return; 
+        
+        $this->handler->setDebug($debug);
+    }
 
     public function use(ExceptionHandler $handler): void
     {

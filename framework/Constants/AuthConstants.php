@@ -16,4 +16,8 @@ final class AuthConstants
     const SAMESITE_STRICT = 'Strict'; 
     const SAMESITE_NONE = 'None';
 
+    const FLASH_OLD_INPUT = '_old_input';
+    
+    const FLASH_ERRORS = '_errors'; 
+    
 }

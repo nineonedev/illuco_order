@@ -14,3 +14,4 @@ if (!function_exists('app')) {
         return $app;
     }
 }
+

@@ -24,7 +24,7 @@ class Reflector
     }
 
     /**
-     * @param callale|array|string $callback
+     * @param callable|array|string $callback
      * @return mixed
      */
     public function call($callback, array $parameters = [])

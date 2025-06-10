@@ -1,14 +1,15 @@
-<?php 
+<?php
 
 namespace Framework\Boostrap\Bootstrappers;
 
 use Framework\Boostrap\Contracts\BootstrapperInterface;
+use Framework\Configurations\RoutingConfigurator;
 use Framework\Core\Application;
 
-class RegisterRelations implements BootstrapperInterface 
+class LoadRoutes implements BootstrapperInterface
 {
     public function bootstrap(Application $app): void
     {
-        require_once base_path('bootstrap/relations.php');
+        $app->make(RoutingConfigurator::class)->load();
     }
 }

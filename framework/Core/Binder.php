@@ -32,6 +32,11 @@ class Binder
         $this->instances[$abstract] = $instance; 
     }
     
+    public function removeInstance(string $abstract): void
+    {
+        unset($this->instances[$abstract]);
+    }
+    
     public function clearInstances(): void
     {
         $this->instances = [];

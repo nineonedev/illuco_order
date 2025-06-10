@@ -3,11 +3,11 @@
 namespace Framework\Security;
 
 use Framework\Security\Auth\AuthManager;
-use Framework\Security\Contracts\TokenManagerInterface;
-use Framework\Security\Contracts\GuardInterface;
-use Framework\Security\Contracts\GateInterface;
-use Framework\Security\Contracts\EncrypterInterface;
+use Framework\Security\Auth\Contracts\GateInterface;
+use Framework\Security\Auth\Contracts\GuardInterface;
 use Framework\Security\Cookie\CookieManager;
+use Framework\Security\Csrf\TokenManagerInterface;
+use Framework\Security\Encryption\EncrypterInterface;
 use Framework\Security\Encryption\StringCipher;
 use Framework\Security\Session\SessionManager;
 

@@ -9,9 +9,9 @@ class LoadHelpers implements BootstrapperInterface
 {
     public function bootstrap(Application $app): void
     {
-        $path = BASE_PATH.'/framework/Support/Helpers';
+        $helperDirectory = BASE_PATH.'/framework/Support/Helpers';
         
-        foreach (glob($path . DS. '*.php') as $file) {
+        foreach (glob($helperDirectory . DS. '*.php') as $file) {
             require_once $file;
         }
     }

@@ -1,12 +1,21 @@
 <?php 
 
-namespace Framework\Configurations; 
+namespace Framework\Configurations;
+
+use Framework\Core\Application; 
 
 class RoutingConfigurator
 {
+    protected Application $app;
+    
     protected ?string $web = null;
     protected ?string $console = null; 
     protected ?string $health = null; 
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app; 
+    }
 
     public function web(string $path): void
     {

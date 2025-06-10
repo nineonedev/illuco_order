@@ -3,7 +3,7 @@
 namespace Framework\Security\Csrf;
 
 use Framework\Constants\AuthConstants;
-use Framework\Security\Contracts\SessionInterface;
+use Framework\Security\Session\Contracts\SessionInterface;
 
 class TokenManager implements TokenManagerInterface
 {

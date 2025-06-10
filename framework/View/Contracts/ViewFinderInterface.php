@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\View;
+namespace Framework\View\Contracts;
 
 interface ViewFinderInterface
 {

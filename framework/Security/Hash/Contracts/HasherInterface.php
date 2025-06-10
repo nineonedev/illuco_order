@@ -1,6 +1,6 @@
 <?php 
 
-namespace Framework\Security\Contracts; 
+namespace Framework\Security\Hash\Contracts; 
 
 interface HasherInterface
 {

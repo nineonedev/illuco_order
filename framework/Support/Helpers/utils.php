@@ -1,7 +1,16 @@
 <?php
 
-use Framework\Support\Str;
-use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard\Duplicates;
+function output_lines(array $lines, bool $highlight = false): void
+{
+    foreach ($lines as $line) {
+        if ($highlight) {
+            echo "\e[1;33m" . $line . "\e[0m" . PHP_EOL; // 노란색
+        } else {
+            echo $line . PHP_EOL;
+        }
+    }
+}
+
 
 if (!function_exists('escape')) {
     function escape(string $string): string

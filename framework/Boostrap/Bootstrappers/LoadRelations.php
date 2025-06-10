@@ -1,16 +1,17 @@
-<?php
+<?php 
 
 namespace Framework\Boostrap\Bootstrappers;
 
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Core\Application;
-use Framework\State\Config;
-use Framework\State\Env;
 
-class LoadStates implements BootstrapperInterface
+class LoadRelations implements BootstrapperInterface 
 {
     public function bootstrap(Application $app): void
     {
-        $app->instance(Config::class, new Config(base_path('config')));
+        $file = config('path.bootstrap.relations');
+        if (file_exists($file)) {
+            require_once $file; 
+        }
     }
 }

@@ -7,14 +7,16 @@ use Framework\Configurations\ExceptionConfigurator;
 use Framework\Core\Application;
 use Framework\Support\Exceptions\ExceptionHandler;
 
-class SetExceptionHandler implements BootstrapperInterface
+class HandleExceptions implements BootstrapperInterface
 {
     public function bootstrap(Application $app): void
     {
-        /** @var ExceptionConfigurator $config */
-        $config = $app->make(ExceptionConfigurator::class); 
+        /** @var ExceptionConfigurator $configurator */
+        $configurator = $app->make(ExceptionConfigurator::class); 
 
-        $handler = $config->getHandler() ?? new ExceptionHandler(env('APP_DEBUG', config('app.debug', false))); 
+        $handler = $configurator->getHandler() ?? new ExceptionHandler(); 
+        $handler->setConfigurator($configurator);
+        $app->instance(ExceptionHandler::class, $handler);
 
         // 예외 핸들러 등록
         set_exception_handler([$handler, 'handle']);
@@ -33,7 +35,6 @@ class SetExceptionHandler implements BootstrapperInterface
                     );
                     $handler->handle($exception);
                 } catch (\Throwable $fatal) {
-                    // 핸들러 내부에서 또 터지면 그냥 최소한의 메시지만 보여주기
                     http_response_code(500);
                     echo '서버 내부 오류가 발생했습니다.';
                 }

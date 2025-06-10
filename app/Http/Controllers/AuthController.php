@@ -100,12 +100,12 @@ class AuthController extends Controller
         }
 
         auth()->logout();
-
-        if (request()->expectsJson()) {
-            return $this->apiSuccess([], '로그아웃 되었습니다.');
-        }
-
-        return $this->redirectRoute('auth.signin');
+        
+        return $this->respondWith()
+            ->success(true)
+            ->message('로그아웃 되었습니다.')
+            ->redirectRoute('auth.signin')
+            ->send();
     }
 
     // =====================================================

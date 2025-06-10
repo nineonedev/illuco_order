@@ -9,7 +9,7 @@ if (!function_exists('view')) {
      */
     function view(?string $view = null, array $data = [])
     {
-        if (is_null($view)) {
+        if ($view === null) {
             return app(ViewRenderer::class);
         }
 

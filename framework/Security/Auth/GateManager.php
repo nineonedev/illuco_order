@@ -2,7 +2,7 @@
 
 namespace Framework\Security\Auth;
 
-use Framework\Security\Contracts\GateInterface;
+use Framework\Security\Auth\Contracts\GateInterface;
 use InvalidArgumentException;
 
 class GateManager implements GateInterface

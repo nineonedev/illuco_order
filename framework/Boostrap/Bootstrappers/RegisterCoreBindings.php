@@ -15,17 +15,17 @@ use Framework\Console\Output\Output;
 use Framework\Routing\Contracts\RouterInterface;
 use Framework\Routing\Router;
 use Framework\Support\Exceptions\ExceptionHandler;
+use Framework\View\ComponentManager;
+use Framework\View\Contracts\ViewFinderInterface;
+use Framework\View\SectionManager;
+use Framework\View\ViewFinder;
+use Framework\View\ViewRenderer;
 
 class RegisterCoreBindings implements BootstrapperInterface
 {
     public function bootstrap(Application $app): void
     {
-        // exception
-        $handler = new ExceptionHandler(true);
-        $handler->setConfigurator($app->make(ExceptionConfigurator::class));
-        $app->instance(ExceptionHandler::class, $handler);
-
-        // routing & kernel
+        // Routing & Kernel
         $router = new Router();
         $app->singleton(Router::class, fn () => $router);
         $app->singleton(RouterInterface::class, fn () => $router);
@@ -45,7 +45,7 @@ class RegisterCoreBindings implements BootstrapperInterface
             );
         });
 
-        // set Kernel
+        // Set Kernel
         $kernelClass = php_sapi_name() === 'cli'
             ? ConsoleKernel::class
             : HttpKernel::class;
