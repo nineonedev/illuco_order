@@ -2,7 +2,7 @@
 
 namespace Framework\Support\Facades;
 
-use Framework\View\ViewRenderer;
+use Framework\View\ViewEngine;
 
 /**
  * @method static void setLayout(?string $layout)
@@ -20,12 +20,12 @@ use Framework\View\ViewRenderer;
  * @method static void component(string $view, array $data = [])
  * @method static string endComponent()
  *
- * @see ViewRenderer
+ * @see ViewEngine
  */
 class View extends Facade 
 {
     protected static function getFacadeAccessor(): string
     {
-        return ViewRenderer::class;
+        return ViewEngine::class;
     }
 }

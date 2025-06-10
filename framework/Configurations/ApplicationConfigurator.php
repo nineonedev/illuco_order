@@ -132,6 +132,7 @@ class ApplicationConfigurator
 
     public function create()
     {
+        $this->app->registerAliases();
         $this->bootstrap->load();
         $this->app->register();
         $this->app->boot();

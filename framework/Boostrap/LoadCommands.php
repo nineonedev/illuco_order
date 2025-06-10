@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Boostrap\Bootstrappers;
+namespace Framework\Boostrap;
 
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Console\CommandRegistry;
@@ -10,10 +10,13 @@ class LoadCommands implements BootstrapperInterface
 {
     public function bootstrap(Application $app): void
     {
+        $path = config('path.bootstrap.commands');
+
+        if(!file_exists($path)) return; 
+
         /** @var CommandRegistry $registry */
         $registry = $app->make(CommandRegistry::class);
-        
-        $commands = require_once config('path.bootstrap.commands') ?? [];
+        $commands = require_once $path ?? [];
         $registry->addMany($commands); 
     }
 }

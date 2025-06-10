@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-namespace Framework\Boostrap\Bootstrappers;
+namespace Framework\Boostrap;
 
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Core\Application;
@@ -9,7 +9,9 @@ class LoadHelpers implements BootstrapperInterface
 {
     public function bootstrap(Application $app): void
     {
-        $helperDirectory = BASE_PATH.'/framework/Support/Helpers';
+        $helperDirectory = $app->basePath() . '/framework/Support/Helpers';
+
+        if (!is_dir($helperDirectory)) return; 
         
         foreach (glob($helperDirectory . DS. '*.php') as $file) {
             require_once $file;

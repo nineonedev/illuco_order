@@ -34,7 +34,7 @@ abstract class RenderableException extends Exception implements RendersException
     protected function htmlView(): string
     {
         $view = config('view.errors') . '.' . $this->getCode();
-        return view()->exists($view) ? $view : config('view.falbacks.error');
+        return view()->exists($view) ? $view : config('view.fallbacks.error');
     }
 
     public function renderHtml(): ?Response

@@ -17,14 +17,12 @@ class FilesystemServiceProvider extends ServiceProvider
         $this->app->instance(DiskManager::class, new DiskManager($disks, $default, $file));
 
         foreach ($links as $target => $link) {
-            try {
-                $symlink = new SymLink($target, $link);
+            $symlink = new SymLink($target, $link);
 
-                if (!$symlink->exists() || $symlink->isBroken()) {
-                    $symlink->create(true);
-                }
-            } catch (\Throwable $e) {
-                throw new \RuntimeException("[Filesystem] Failed to create symlink '{$link}' => '{$target}': " . $e->getMessage(), 0, $e);
+            if (!$symlink->exists()) {
+                $symlink->create();
+            } elseif ($symlink->isBroken() || !$symlink->isPointingTo($target)) {
+                $symlink->create(true);
             }
         }
 

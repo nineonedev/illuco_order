@@ -24,4 +24,12 @@ interface ApplicationInterface
     public function getEnvironment(): string;
 
     public function setEnvironment(string $env): void;
+
+    public function basePath(): string;
+
+    public function storagePath(): string;
+    
+    public function configPath(): string;
+
+    public function viewPath(): string;
 }

@@ -13,7 +13,7 @@ class Logger
 
     public function error(string $message, array $context = []): void
     {
-        $date = now();
+        $date = date('Y-m-d H:i:s');
         $contextStr = !empty($context) ? json_encode($context, JSON_UNESCAPED_UNICODE) : ''; 
         $log = "[$date] ERROR: {$message} {$contextStr}" . PHP_EOL;
         file_put_contents($this->logPath, $log, FILE_APPEND);

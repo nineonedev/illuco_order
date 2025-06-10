@@ -121,7 +121,7 @@ class ExceptionHandler
     protected function handleHtml(Throwable $e, int $code): Response
     {
         http_response_code($code);
-
+        
         $viewPath = config('view.errors') . '.' . $code;
         $fallbackView = config('view.fallbacks.error');
         $template = view()->exists($viewPath) ? $viewPath : $fallbackView; 

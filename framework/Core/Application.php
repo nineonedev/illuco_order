@@ -12,6 +12,7 @@ use Framework\Http\Kernel as HttpKernel;
 
 class Application extends Container implements ApplicationInterface
 {
+    public static ?string $BASE_PATH = null;
     protected static ?Application $instance = null;
 
     protected string $basePath; 
@@ -61,12 +62,11 @@ class Application extends Container implements ApplicationInterface
     {
         parent::__construct(); 
         
-        $this->basePath = $basePath ?? BASE_PATH;
+        $this->basePath = $basePath;
+        static::$BASE_PATH = $basePath;
 
-        $this->instance('app', $this);
         $this->instance(Application::class, $this);
         $this->instance(ApplicationInterface::class, $this);
-        $this->alias(Application::class, 'app');
         static::setInstance($this); 
     }
 
@@ -83,6 +83,26 @@ class Application extends Container implements ApplicationInterface
 
         static::$instance = new Application($basePath); 
         return static::$instance; 
+    }
+    
+    public function basePath(): string
+    {
+        return $this->basePath;
+    }
+
+    public function storagePath(): string
+    {
+        return $this->basePath . '/storage';
+    }
+
+    public function configPath(): string
+    {
+        return $this->basePath . '/config';
+    }
+
+    public function viewPath(): string
+    {
+        return $this->basePath . '/resources/views';
     }
 
     public function handleCommand(Input $input): void

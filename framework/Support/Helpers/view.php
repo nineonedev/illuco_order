@@ -1,16 +1,16 @@
 <?php
 
 use Framework\Support\Facades\View;
-use Framework\View\ViewRenderer;
+use Framework\View\ViewEngine;
 
 if (!function_exists('view')) {
     /**
-     * @return ViewRenderer|string
+     * @return ViewEngine|string
      */
     function view(?string $view = null, array $data = [])
     {
         if ($view === null) {
-            return app(ViewRenderer::class);
+            return View::getInstance();
         }
 
         return View::render($view, $data);

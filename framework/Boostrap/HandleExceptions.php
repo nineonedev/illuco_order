@@ -1,6 +1,6 @@
 <?php 
 
-namespace Framework\Boostrap\Bootstrappers;
+namespace Framework\Boostrap;
 
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Configurations\ExceptionConfigurator;

@@ -1,18 +1,19 @@
 <?php
 
-namespace Framework\State; 
+namespace Framework\State;
 
+use Framework\Core\Application;
 use Framework\Support\Arr;
 
 class Config
 {
-    protected $configPath;
+    protected ?string $configPath = null;
 
     protected array $items = []; 
 
-    public function __construct($configPath)
+    public function __construct(?string $configPath = null)
     {
-        $this->configPath = $configPath; 
+        $this->configPath = $configPath ?? Application::getInstance()->configPath(); 
     }
 
     public function get(string $key, $default = null) 

@@ -16,10 +16,4 @@ class ServiceProvider
 
     public function boot(): void
     {}
-
-    public function before(): void
-    {}
-
-    public function after(): void
-    {}
 }

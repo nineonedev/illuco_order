@@ -36,6 +36,14 @@ abstract class Facade
     }
     
     /**
+     * @return static
+     */
+    public static function getInstance()
+    {
+        return static::getFacadeRoot();
+    }
+
+    /**
      * Swap the resolved instance (useful for testing or mocking).
      *
      * @param object $instance

@@ -11,17 +11,9 @@ class ViewServiceProvider extends ServiceProvider implements DeferredProviderInt
 {
     public function register(): void
     {
-        $this->app->singleton(ViewFinder::class, function (Application $app) {
-            return new ViewFinder(config('path.view'));
-        });
-
-        $this->app->singleton(ViewFinderInterface::class, function (Application $app) {
-            return $app->make(ViewFinder::class); 
-        });
-        
-        $this->app->singleton(ViewRenderer::class, function(Application $app){
-            return new ViewRenderer(
-                $app->make(ViewFinderInterface::class),
+        $this->app->singleton(ViewEngine::class, function(Application $app){
+            return new ViewEngine(
+                new ViewFinder($app->viewPath()),
                 new SectionManager(),
                 new ComponentManager(),
             );
@@ -33,7 +25,7 @@ class ViewServiceProvider extends ServiceProvider implements DeferredProviderInt
         return [
             ViewFinder::class,
             ViewFinderInterface::class,
-            ViewRenderer::class
+            ViewEngine::class
         ];
     }
 }

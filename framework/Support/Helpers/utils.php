@@ -1,5 +1,7 @@
 <?php
 
+use Framework\Core\Application;
+
 function output_lines(array $lines, bool $highlight = false): void
 {
     foreach ($lines as $line) {
@@ -55,13 +57,13 @@ function absolute_path(...$path): string
 
 function static_path(...$path): string
 {
-    return str_replace(BASE_PATH, '', absolute_path(...$path));
+    return str_replace(Application::$BASE_PATH, '', absolute_path(...$path));
 }
 
 if (!function_exists('base_path')) {
     function base_path(string $path): string
     {
-        return absolute_path(BASE_PATH, $path); 
+        return absolute_path(Application::$BASE_PATH, $path); 
     }
 }
 

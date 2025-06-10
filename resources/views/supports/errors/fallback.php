@@ -7,7 +7,7 @@
 <?php section('content') ?>
 <div class="no-section-xl no-auth-layout">
     <div class="no-error-wrap">
-        <h1><?= $code ?? 'Error' ?></h1>
+        <h1><?= $code ?? 'Error 111' ?></h1>
         <h2><?= $message ?? '알 수 없는 오류가 발생했습니다.' ?></h2>
         <p>
             <?= $description ?? '잠시 후 다시 시도해 주시기 바랍니다. 문제가 지속되면 관리자에게 문의해주세요.' ?><br>

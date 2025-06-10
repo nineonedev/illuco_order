@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-namespace Framework\Boostrap\Bootstrappers;
+namespace Framework\Boostrap;
 
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Core\Application;

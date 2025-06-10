@@ -2,16 +2,17 @@
 
 namespace Framework\View;
 
+use Framework\Core\Application;
 use Framework\View\Contracts\ViewFinderInterface;
 use Framework\View\Exceptions\ViewNotFoundException;
 
 class ViewFinder implements ViewFinderInterface
 {
-    protected string $basePath;
+    protected ?string $basePath = null;
 
-    public function __construct(string $basePath = '')
+    public function __construct(?string $basePath = null)
     {
-        $this->basePath = rtrim($basePath, DS);
+        $this->basePath = $basePath ?? Application::getInstance()->viewPath();
     }
 
     public function find(string $view): string
@@ -40,7 +41,7 @@ class ViewFinder implements ViewFinderInterface
      */
     protected function buildFullPath(string $view): string
     {
-        $relativePath = str_replace('.', DS, $view) . '.php';
-        return $this->basePath . DS . $relativePath;
+        $relativePath = str_replace('.', '/', $view) . '.php';
+        return rtrim($this->basePath, '/') . '/' . $relativePath;
     }
 }

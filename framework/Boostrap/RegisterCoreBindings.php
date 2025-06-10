@@ -1,8 +1,7 @@
 <?php
 
-namespace Framework\Boostrap\Bootstrappers;
+namespace Framework\Boostrap;
 
-use Framework\Configurations\ExceptionConfigurator;
 use Framework\Configurations\MiddlewareConfigurator;
 use Framework\Boostrap\Contracts\BootstrapperInterface;
 use Framework\Console\CommandRegistry;
@@ -14,12 +13,6 @@ use Framework\Console\Lock\LockManager;
 use Framework\Console\Output\Output;
 use Framework\Routing\Contracts\RouterInterface;
 use Framework\Routing\Router;
-use Framework\Support\Exceptions\ExceptionHandler;
-use Framework\View\ComponentManager;
-use Framework\View\Contracts\ViewFinderInterface;
-use Framework\View\SectionManager;
-use Framework\View\ViewFinder;
-use Framework\View\ViewRenderer;
 
 class RegisterCoreBindings implements BootstrapperInterface
 {
