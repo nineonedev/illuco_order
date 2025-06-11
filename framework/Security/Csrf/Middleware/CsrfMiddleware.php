@@ -5,8 +5,8 @@ namespace Framework\Security\Csrf\Middleware;
 use Closure;
 use Framework\Constants\AuthConstants;
 use Framework\Http\Contracts\MiddlewareInterface;
+use Framework\Http\Contracts\ResponseInterface;
 use Framework\Http\Request;
-use Framework\Http\Response;
 use Framework\Security\Csrf\TokenManagerInterface;
 use Framework\Support\Exceptions\Http\ForbiddenException;
 
@@ -19,7 +19,7 @@ class CsrfMiddleware implements MiddlewareInterface
         $this->tokens = $tokens;
     }
 
-    public function handle(Request $request, Closure $next, ...$args): Response
+    public function handle(Request $request, Closure $next, ...$args): ResponseInterface
     {
         if ($this->isReading($request)) {
             return $next($request);

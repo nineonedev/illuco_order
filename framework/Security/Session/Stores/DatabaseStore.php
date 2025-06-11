@@ -27,11 +27,10 @@ class DatabaseStore extends SessionStore
             });
         }
     }
-
     public function start(): void
     {
         $this->ensureTableExists();
-
+        
         if ($this->started) return;
 
         $sessionId = cookie()->get(AuthConstants::SESSION_ID);
@@ -45,9 +44,11 @@ class DatabaseStore extends SessionStore
 
         if ($record && !$this->isTimeout($record->last_activity)) {
             $this->data = @unserialize($record->payload) ?: [];
+        } else {
+            $this->data = [];
         }
 
-        $this->started = true;
+        parent::start();
     }
 
     public function regenerate(): void
@@ -67,6 +68,7 @@ class DatabaseStore extends SessionStore
 
         $this->id = bin2hex(random_bytes(20));
         $this->data = [];
+        $this->started = false;
     }
 
     public function invalidateByTimeout(): void
@@ -91,7 +93,7 @@ class DatabaseStore extends SessionStore
         return ceil($seconds / 60);
     }
 
-    protected function save(): void
+    public function save(): void
     {
         $ip = $_SERVER['REMOTE_ADDR'] ?? null;
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
@@ -109,4 +111,5 @@ class DatabaseStore extends SessionStore
             ]
         );
     }
+
 }

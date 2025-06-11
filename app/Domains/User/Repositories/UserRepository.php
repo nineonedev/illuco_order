@@ -76,9 +76,12 @@ class UserRepository extends Repository
         $user = $this->findByRememberToken($rememberToken);
 
         if ($user) {
-            // 인증 세션도 항상 auth()로 관리
             auth()->login($user);
-            $this->createRememberToken($user); // 토큰 갱신
+            session()->regenerate();
+            
+            $this->setUserToSession($user);
+            $this->createRememberToken($user);
+            
             return true;
         }
 

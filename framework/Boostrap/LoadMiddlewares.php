@@ -14,7 +14,7 @@ class LoadMiddlewares implements BootstrapperInterface
         /** @var MiddlewareConfigurator $configurator */
         $configurator = app(MiddlewareConfigurator::class);
 
-        $middlewares = config('path.bootstrap.middlewares') ?? [];
+        $middlewares = require config('path.bootstrap.middlewares') ?? [];
         $globals = $middlewares['global'] ?? [];
         $groups = $middlewares['group'] ?? [];
         $priorities = $middlewares['priority'] ?? [];

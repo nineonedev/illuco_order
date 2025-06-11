@@ -43,6 +43,5 @@ class RegisterCoreBindings implements BootstrapperInterface
             ? ConsoleKernel::class
             : HttpKernel::class;
         $app->singleton(KernelInterface::class, $kernelClass);
-        $app->alias(KernelInterface::class, 'kernel');
     }
 }

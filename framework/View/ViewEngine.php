@@ -2,9 +2,11 @@
 
 namespace Framework\View;
 
+use Framework\View\Contracts\ViewFinderInterface;
+
 class ViewEngine
 {
-    protected ViewFinder $finder;
+    protected ViewFinderInterface $finder;
     protected SectionManager $sections;
     protected ComponentManager $components;
 
@@ -12,7 +14,7 @@ class ViewEngine
     protected ?string $layout = null;
 
     public function __construct(
-        ViewFinder $finder,
+        ViewFinderInterface $finder,
         SectionManager $sections,
         ComponentManager $components
     ) {

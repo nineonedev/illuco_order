@@ -4,7 +4,7 @@ namespace Framework\Routing;
 
 use Closure;
 use Framework\Http\Request;
-use Framework\Http\Response;
+use Framework\Http\Contracts\ResponseInterface;
 use Framework\Routing\Contracts\RouteInterface;
 use Framework\Routing\Contracts\RouterInterface;
 
@@ -67,17 +67,9 @@ class Router implements RouterInterface
     /**
      * 요청 처리 및 컨트롤러 실행
      */
-    public function dispatch(Request $request): Response
+    public function dispatch(Request $request): ResponseInterface
     {
-        $route = $this->match($request);
-
-        if (!$route) {
-            return new Response('404 Not Found', 404);
-        }
-
-        $request->setRoute($route);
-
-        return $this->dispatcher->dispatch($request, $route);
+        return $this->dispatcher->dispatch($request, $request->route());
     }
 
     public function name(string $name): RouteGroupRegistrar

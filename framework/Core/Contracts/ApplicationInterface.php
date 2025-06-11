@@ -32,4 +32,6 @@ interface ApplicationInterface
     public function configPath(): string;
 
     public function viewPath(): string;
+
+    public function loggerPath(): string;
 }

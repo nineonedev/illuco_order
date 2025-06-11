@@ -1,56 +1,57 @@
 <?php
 
 namespace Framework\Http;
+use Framework\Http\Responses\RedirectResponse;
 
 class Redirector
 {
-    public function to(string $url, int $status = 302): Response
+    public static function to(string $url, int $status = 302): RedirectResponse
     {
-        return Response::redirect($url, $status);
+        return new RedirectResponse($url, $status);
     }
 
-    public function back(int $status = 302): Response
+    public static function back(int $status = 302): RedirectResponse
     {
         $referer = $_SERVER['HTTP_REFERER'] ?? '/';
-        return $this->to($referer, $status);
+        return self::to($referer, $status);
     }
 
-    public function home(int $status = 302): Response
+    public static function home(int $status = 302): RedirectResponse
     {
-        return $this->to('/', $status);
+        return self::to('/', $status);
     }
 
-    public function with(string $key, $value): Response
+    public static function with(string $key, $value): RedirectResponse
     {
-        return $this->to($this->previous())->with($key, $value); 
+        // 예: 리다이렉트 + 세션 플래시
+        return self::back()->withSession($key, $value);
     }
 
-    public function withErrors(array $errors): Response
+    public static function withErrors(array $errors): RedirectResponse
     {
-        return $this->to($this->previous())->withErrors($errors);
+        return self::back()->withErrors($errors);
     }
 
-    public function withInput(array $input): Response
+    public static function withInput(array $input): RedirectResponse
     {
-        return $this->to($this->previous())->withInput($input);
+        return self::back()->withInput($input);
     }
 
-    public function previous(): string
+    public static function previous(): string
     {
         return $_SERVER['HTTP_REFERER'] ?? '/';
     }
 
-    public function intended(string $default = '/', int $status = 302): Response
+    public static function intended(string $default = '/', int $status = 302): RedirectResponse
     {
         $intended = $_SESSION['_intended'] ?? $default;
         unset($_SESSION['_intended']);
-        return $this->to($intended, $status);
+        return self::to($intended, $status);
     }
 
-    public function refresh(): Response
+    public static function refresh(): RedirectResponse
     {
         $uri = $_SERVER['REQUEST_URI'] ?? '/';
-        return $this->to($uri);
+        return self::to($uri);
     }
-
 }

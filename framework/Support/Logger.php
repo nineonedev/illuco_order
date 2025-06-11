@@ -6,7 +6,7 @@ class Logger
 {
     protected string $logPath; 
 
-    public function __construct(string $logPath = 'storage/logs/error.log')
+    public function __construct(string $logPath)
     {
         $this->logPath = $logPath; 
     }

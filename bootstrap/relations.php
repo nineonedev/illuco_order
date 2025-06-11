@@ -7,7 +7,7 @@ use Framework\Database\ORM\RelationMap;
 
 RelationMap::setConfig([
     User::class => [
-        
+        // RelationMap::hasMany(Post::class, 'user_id')
     ],
     File::class => [
         RelationMap::morphTo('owner'),

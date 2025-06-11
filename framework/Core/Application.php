@@ -105,6 +105,11 @@ class Application extends Container implements ApplicationInterface
         return $this->basePath . '/resources/views';
     }
 
+    public function loggerPath(): string
+    {
+        return $this->storagePath() . '/logs/error.log';
+    }
+
     public function handleCommand(Input $input): void
     {
         /** @var ConsoleKernel $kernel */

@@ -6,7 +6,7 @@ use Framework\Security\Auth\Contracts\GuardInterface;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
 use RuntimeException;
 
-class AuthManager
+class AuthManager implements GuardInterface
 {
     /** @var GuardInterface[] */
     protected array $guards = [];
@@ -53,7 +53,7 @@ class AuthManager
         return $this->guard()->guest(); 
     }
 
-    public function user()
+    public function user(): ?AuthenticatableInterface
     {
         return $this->guard()->user(); 
     }

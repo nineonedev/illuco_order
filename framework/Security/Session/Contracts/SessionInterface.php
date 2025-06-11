@@ -2,6 +2,8 @@
 
 namespace Framework\Security\Session\Contracts;
 
+use Framework\Security\Session\FlashBag;
+
 interface SessionInterface
 {
     public function start(): void;
@@ -14,6 +16,8 @@ interface SessionInterface
 
     public function forget(string $key): void;
 
+    public function save(): void;
+
     public function flush(): void;
 
     public function all(): array;
@@ -24,4 +28,5 @@ interface SessionInterface
 
     public function invalidate(): void;
 
+    public function flashBag(): FlashBag;
 }

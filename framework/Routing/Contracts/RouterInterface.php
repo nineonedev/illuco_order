@@ -3,8 +3,8 @@
 namespace Framework\Routing\Contracts;
 
 use Closure;
+use Framework\Http\Contracts\ResponseInterface;
 use Framework\Http\Request;
-use Framework\Http\Response;
 use Framework\Routing\Route;
 use Framework\Routing\RouteCollection;
 use Framework\Routing\RouteGroupRegistrar;
@@ -42,7 +42,7 @@ interface RouterInterface
 
     public function currentUrlStartsWith(string $path): bool;
 
-    public function dispatch(Request $request): Response;
+    public function dispatch(Request $request): ResponseInterface;
 
     public function match(Request $request): ?RouteInterface;
 

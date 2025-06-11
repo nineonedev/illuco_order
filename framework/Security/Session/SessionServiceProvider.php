@@ -14,24 +14,20 @@ class SessionServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(SessionManager::class, function(){
+        $this->app->singleton(SessionManager::class, function() {
             $manager = new SessionManager();
-
             $manager->setDriver('db', new DatabaseStore());
             $manager->setDriver('php', new InMemoryStore()); 
-            
             $manager->use('db');
-
-            return $manager; 
+            return $manager;
         });
-
 
         $this->app->singleton(UserProviderInterface::class, function(){
             return new UserEntityProvider();
         });
 
         $this->app->singleton(SessionInterface::class, function(Application $app) {
-            return $app->make(SessionManager::class)->driver(); 
+            return $app->make(SessionManager::class);
         });
     }
 }

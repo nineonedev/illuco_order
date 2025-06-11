@@ -192,9 +192,9 @@ class Container implements ContainerInterface
         return $this->aliasLoader->get($alias);
     }
 
-    public function alias(string $class, string $alias): void
+    public function alias(string $alias, string $class): void
     {
-        $this->aliasLoader->set($class, $alias);
+        $this->aliasLoader->set($alias, $class);
     }
 
     public function aliases(array $aliases): void

@@ -2,10 +2,10 @@
 
 namespace Framework\Security\Session;
 
-use Framework\Security\Session\Contracts\SupportsUserSessionInterface;
+use Framework\Security\Session\Contracts\SessionInterface;
 use RuntimeException;
 
-class SessionManager
+class SessionManager implements SessionInterface
 {
     /**
      * @var SessionStore[]
@@ -41,6 +41,11 @@ class SessionManager
         }
 
         return $this->drivers[$name];
+    }
+
+    public function start(): void
+    {
+        $this->driver()->start();
     }
 
     public function get(string $key, $default = null)
@@ -88,26 +93,6 @@ class SessionManager
         return $this->driver()->id();
     }
 
-    public function userId(): ?int
-    {
-        $driver = $this->driver();
-
-        if ($driver instanceof SupportsUserSessionInterface) {
-            return $driver->userId();
-        }
-
-        return null;
-    }
-
-    public function setUserId(?int $userId = null): void
-    {
-        $driver = $this->driver();
-
-        if ($driver instanceof SupportsUserSessionInterface) {
-            $driver->setUserId($userId);
-        }
-    }
-
     public function bag(string $key): SessionBag
     {
         if (!isset($this->bags[$key])) {
@@ -117,10 +102,24 @@ class SessionManager
         return $this->bags[$key];
     }
 
-    public function saveAllFlash(): void
+    public function flashBag(): FlashBag
     {
-        foreach ($this->bags as $bag) {
-            $bag->saveFlash();
+        return $this->driver()->flashBag();
+    }
+
+    public function hasFlashBag(): bool
+    {
+        return $this->driver()->hasFlashBag();
+    }
+
+    public function save(): void
+    {
+        foreach ($this->drivers as $driver) {
+            if (!$driver->isStarted()) {
+                continue;
+            }
+            
+            $driver->save();
         }
     }
 }

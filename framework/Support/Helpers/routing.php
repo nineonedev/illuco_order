@@ -1,6 +1,7 @@
 <?php
 
 use Framework\Http\Response;
+use Framework\Http\Responses\RedirectResponse;
 use Framework\Routing\Contracts\RouterInterface;
 use Framework\Routing\RouteCollection;
 use Framework\Support\Facades\Route;
@@ -18,6 +19,24 @@ if (!function_exists('route')) {
         return Route::route($name, $params);
     }
 }
+
+if (!function_exists('redirect_route')) {
+    /**
+     * 라우트 이름 기반으로 리다이렉트(302) 응답 반환
+     *
+     * @param string $name
+     * @param array $params
+     * @param int $status
+     * @param array $headers
+     * @return RedirectResponse
+     */
+    function redirect_route(string $name, array $params = [], int $status = 302, array $headers = [])
+    {
+        $url = route($name, $params);
+        return redirect($url, $status, $headers);
+    }
+}
+
 
 if (!function_exists('current_url')) {
     /**
@@ -80,15 +99,6 @@ if (!function_exists('router')) {
     }
 }
 
-if (!function_exists('url')) {
-    /**
-     * 라우트 이름 기반 URL 생성
-     */
-    function url(string $name, array $params = []): string
-    {
-        return Route::urlFor($name, $params);
-    }
-}
 
 if (!function_exists('redirect_route')) {
     /**

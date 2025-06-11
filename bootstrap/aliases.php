@@ -1,9 +1,11 @@
 <?php
 
 use Framework\Core\Application;
-use Framework\View\ViewRenderer;
+use Framework\Core\Contracts\KernelInterface;
+use Framework\View\ViewEngine;
 
 return [
-    Application::class => 'app',
-    ViewRenderer::class => 'view',
+    'app' => Application::class,
+    'view' => ViewEngine::class,
+    'kernel' => KernelInterface::class,
 ];

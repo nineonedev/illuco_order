@@ -4,8 +4,10 @@ namespace Framework\Routing;
 
 use Framework\Core\Application;
 use Framework\Http\Response;
-use Framework\Http\ApiResponse;
-use Framework\Http\Respond;
+use Framework\Http\ResponseBuilder;
+use Framework\Http\Responses\JsonResponse;
+use Framework\Http\Responses\RedirectResponse;
+use Framework\Http\Responses\ViewResponse;
 
 abstract class Controller
 {
@@ -17,104 +19,96 @@ abstract class Controller
     }
 
     /**
+     * ResponseBuilder 사용 (체이닝 방식)
+     */
+    public function responseWith(): ResponseBuilder
+    {
+        return ResponseBuilder::create();
+    }
+
+
+    /**
      * 통합 응답 처리 (성공/실패 분기)
      */
-    public function respond(
+    public function response(
         bool $success,
-        string $view,
+        ?string $view = null,
         string $message = '',
-        array $data = [],
-        array $errors = [],
+        array $payload = [],
         int $status = 200,
-        ?array $debug = null,
         array $meta = []
-    ): Response {
-        return $success
-            ? $this->render($view, $data, $message, $status, $meta)
-            : $this->renderError($view, $message, $errors, $status, $debug);
+    ) {
+        $view = $view ?? ($success ? 'supports.success' : 'supports.error');
+
+        return $this->renderHybrid(
+            $success,
+            $payload,
+            $message,
+            $status,
+            $view,
+            $meta
+        );
     }
 
-    /**
-     * Respond 빌더 사용
-     */
-    public function respondWith(): Respond
-    {
-        return Respond::make();
-    }
-
-    /**
-     * API or HTML 응답 렌더링
-     */
     protected function render(
-        string $view,
+        ?string $view = null,
         array $data = [],
         string $message = 'success',
         int $status = 200,
         array $meta = []
-    ): Response {
-        if (request()->expectsJson()) {
-            return $this->apiSuccess($data, $message, $status, $meta);
-        }
-
-        return $this->view($view, $data, $status);
+    ) {
+        $view = $view ?: 'supports.success';
+        return $this->renderHybrid(true, $data, $message, $status, $view, $meta);
     }
 
-    /**
-     * API or HTML 에러 응답 렌더링
-     */
     protected function renderError(
-        string $view,
+        ?string $view = null,
         string $message = 'Error',
         array $errors = [],
-        int $status = 400,
-        ?array $debug = null
-    ): Response {
+        int $status = 400
+    ) {
+        $view = $view ?: 'supports.error';
+        return $this->renderHybrid(false, $errors, $message, $status, $view);
+    }
+
+
+    /**
+     * 공통 응답 처리 (JSON or HTML)
+     * @return JsonResponse|ViewResponse
+     */
+    protected function renderHybrid(
+        bool $success = true,
+        array $payload = [],
+        string $message = '',
+        int $status = 200,
+        string $view = '',
+        array $meta = [],
+        array $extraViewData = []
+    ) {
         if (request()->expectsJson()) {
-            return $this->apiFail($message, $errors, $status, $debug);
+            return $success
+                ? Response::apiSuccess($payload, $message, $status, $meta)
+                : Response::apiFail($message, $payload, $status);
         }
 
-        return $this->view($view, [
-            'message' => $message,
-            'errors'  => $errors,
-        ], $status);
+        return $this->view($view, array_merge(['message' => $message], $payload, $extraViewData), $status);
     }
+
 
     /**
      * 단순 JSON 응답
+     * @return JsonResponse
      */
-    protected function json(array $data, int $status = 200): Response
+    protected function json($data = [], int $status = 200)
     {
         return Response::json($data, $status);
     }
 
     /**
-     * API 성공 응답
+     * 리다이렉트 to 라우트 이름
+     * @return RedirectResponse
      */
-    protected function apiSuccess(
-        $data = null,
-        string $message = 'success',
-        int $status = 200,
-        array $meta = []
-    ): Response {
-        return ApiResponse::success($data, $message, $status, $meta);
-    }
-
-    /**
-     * API 실패 응답
-     */
-    protected function apiFail(
-        string $message = 'Error',
-        array $errors = [],
-        int $status = 400,
-        ?array $debug = null
-    ): Response {
-        return ApiResponse::fail($message, $errors, $status, $debug);
-    }
-
-    /**
-     * 라우트 리다이렉트
-     */
-    protected function redirectRoute(string $name, array $params = [], int $status = 302): Response
+    protected function redirectRoute(string $name, array $params = [], int $status = 302)
     {
         $url = route($name, $params);
         return $this->redirect($url, $status);
@@ -122,24 +116,27 @@ abstract class Controller
 
     /**
      * 일반 리다이렉트
+     * @return RedirectResponse
      */
-    protected function redirect(string $url, int $status = 302): Response
+    protected function redirect(string $url, int $status = 302)
     {
         return Response::redirect($url, $status);
     }
 
     /**
      * 백 리다이렉트
+     * @return RedirectResponse
      */
-    protected function back(): Response
+    protected function back()
     {
         return Response::back();
     }
 
     /**
      * View 응답
+     * @return ViewResponse
      */
-    protected function view(string $template, array $data = [], int $status = 200): Response
+    protected function view(string $template, array $data = [], int $status = 200)
     {
         return Response::view($template, $data, $status);
     }

@@ -3,14 +3,14 @@
 use Framework\Support\Facades\View;
 use Framework\View\ViewEngine;
 
-if (!function_exists('view')) {
+if (!function_exists('render')) {
     /**
      * @return ViewEngine|string
      */
-    function view(?string $view = null, array $data = [])
+    function render(?string $view = null, array $data = [])
     {
         if ($view === null) {
-            return View::getInstance();
+            return app(ViewEngine::class);
         }
 
         return View::render($view, $data);

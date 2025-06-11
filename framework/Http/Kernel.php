@@ -2,11 +2,12 @@
 
 namespace Framework\Http;
 
+use Framework\Http\Contracts\ResponseInterface;
+use Framework\Http\Responses\AbstractResponse;
 use Framework\Support\Exceptions\Http\NotFoundException;
 use Framework\Core\Application;
 use Framework\Routing\Router;
 use Framework\Routing\Route;
-use Framework\Http\Response;
 use Framework\Http\Pipeline;
 use Framework\Core\Contracts\KernelInterface;
 use Framework\Configurations\MiddlewareConfigurator;
@@ -27,9 +28,8 @@ class Kernel implements KernelInterface
         $this->middleware = $middleware;
     }
 
-    public function handle($request): Response
+    public function handle($request): ResponseInterface
     {
-        // 현재 요청을 컨테이너에 바인딩
         $this->app->swap(Request::class, $request);
 
         $route = $this->router->match($request);
@@ -51,10 +51,14 @@ class Kernel implements KernelInterface
             });
     }
 
+    
+    /**
+     * @param Request $request
+     * @param null|AbstractResponse $response
+     */
     public function terminate($request, $response = null): void
     {
         $route = $request->route();
-
         $middlewares = $this->gatherMiddlewares($route);
 
         foreach ($middlewares as $middleware) {
@@ -67,7 +71,11 @@ class Kernel implements KernelInterface
             }
         }
 
-        // 추후: session 저장, 로그, 큐 flush 등 추가 가능
+        if (session()->hasFlashBag()) {
+            session()->flashBag()->rotate();
+        }
+
+        session()->save();
     }
 
     /**

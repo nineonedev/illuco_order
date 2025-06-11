@@ -4,12 +4,37 @@ namespace Framework\Security\Session;
 
 use Framework\Security\Session\Contracts\SessionInterface;
 
-
 abstract class SessionStore implements SessionInterface
 {
     protected string $id;
     protected array $data = [];
     protected bool $started = false;
+
+    protected ?FlashBag $flashBag = null;
+
+    public function isStarted(): bool
+    {
+        return $this->started;
+    }
+
+    public function start(): void
+    {
+        $this->started = true;
+        $this->flashBag = new FlashBag($this);
+    }
+
+    public function flashBag(): FlashBag
+    {
+        if (!$this->flashBag) {
+            $this->flashBag = new FlashBag($this);
+        }
+        return $this->flashBag;
+    }
+
+    public function hasFlashBag(): bool
+    {
+        return $this->flashBag !== null;
+    }
 
     public function get(string $key, $default = null)
     {
@@ -19,7 +44,6 @@ abstract class SessionStore implements SessionInterface
     public function set(string $key, $value): void
     {
         $this->data[$key] = $value;
-        $this->save();
     }
 
     public function has(string $key): bool
@@ -30,13 +54,13 @@ abstract class SessionStore implements SessionInterface
     public function forget(string $key): void
     {
         unset($this->data[$key]);
-        $this->save();
+        // save() 호출 X
     }
 
     public function flush(): void
     {
         $this->data = [];
-        $this->save();
+        // 바로 save() 가능, 또는 응답 직전에
     }
 
     public function id(): string
@@ -54,7 +78,5 @@ abstract class SessionStore implements SessionInterface
         return new SessionBag($key, $this);
     }
 
-
-    abstract protected function save(): void;
-    
+    abstract public function save(): void;
 }

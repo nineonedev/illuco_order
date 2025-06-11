@@ -36,7 +36,7 @@ abstract class Facade
     }
     
     /**
-     * @return static
+     * @return object
      */
     public static function getInstance()
     {

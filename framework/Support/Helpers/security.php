@@ -3,7 +3,8 @@
 use Framework\Security\Auth\AuthManager;
 use Framework\Security\Cookie\CookieManager;
 use Framework\Security\Csrf\TokenManagerInterface;
-use Framework\Security\Session\SessionInterface;
+use Framework\Security\Session\Contracts\SessionInterface;
+use Framework\Security\Session\FlashBag;
 use Framework\Security\Session\SessionManager;
 use Framework\Support\Facades\Gate;
 
@@ -34,6 +35,41 @@ if (!function_exists('session')) {
         return app(SessionManager::class);
     }
 }
+
+if (!function_exists('flash')) {
+    /**
+     * @return void|FlashBag
+     */
+    function flash($key = null, $value = null)
+    {
+        $flashBag = session()->flashBag();
+
+        if (is_null($key)) {
+            return $flashBag;
+        }
+
+        if (is_array($key)) {
+            $flashBag->setMany($key);
+            return;
+        }
+
+        $flashBag->set($key, $value);
+    }
+}
+
+if (!function_exists('flash_input')) {
+    function flash_input(array $input) {
+        flash()->setInput($input);
+    }
+}
+
+if (!function_exists('flash_errors')) {
+    function flash_errors(array $errors) {
+        flash()->setErrors($errors); 
+    }
+}
+
+
 
 if (!function_exists('session_driver')) {
     function session_driver($name = null): SessionInterface

@@ -4,11 +4,11 @@ namespace Framework\Routing;
 
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Framework\Http\Contracts\ResponseInterface;
 use Framework\Routing\Contracts\RouteInterface;
 use Framework\Core\Application;
 use Framework\Support\Exceptions\Http\InternalServerErrorException;
 use Framework\Support\Exceptions\Http\MethodNotAllowedException;
-use Throwable;
 
 class ControllerDispatcher
 {
@@ -19,14 +19,13 @@ class ControllerDispatcher
         $this->app = $app;
     }
 
-    public function dispatch(Request $request, RouteInterface $route): Response
+    public function dispatch(Request $request, RouteInterface $route): ResponseInterface
     {
         $action = $route->action();
 
-       // [ControllerClass::class, 'method']
+        // [ControllerClass::class, 'method']
         if (is_array($action) && count($action) === 2) {
             [$class, $method] = $action;
-
             $controller = $this->app->make($class);
             return $this->invoke($controller, $method, $request, $route);
         }
@@ -48,7 +47,7 @@ class ControllerDispatcher
         throw new InternalServerErrorException("Invalid route action.");
     }
 
-    protected function invoke(object $controller, string $method, Request $request, RouteInterface $route): Response
+    protected function invoke(object $controller, string $method, Request $request, RouteInterface $route): ResponseInterface
     {
         if (!method_exists($controller, $method)) {
             throw new MethodNotAllowedException("Method {$method} not found in " . get_class($controller));
@@ -61,16 +60,27 @@ class ControllerDispatcher
         return $this->normalizeToResponse($result);
     }
 
-    protected function normalizeToResponse($result): Response
+    /**
+     * 어떠한 반환값도 ResponseInterface로 포장
+     */
+    protected function normalizeToResponse($result): ResponseInterface
     {
-        if ($result instanceof Response) {
+        // 이미 ResponseInterface면 바로 반환
+        if ($result instanceof ResponseInterface) {
             return $result;
         }
 
-        if (is_array($result)) {
+        // 배열/객체면 JSON 응답
+        if (is_array($result) || is_object($result)) {
             return Response::json($result);
         }
 
-        return new Response((string) $result); 
+        // 문자열이면 HTML 응답
+        if (is_string($result)) {
+            return Response::html($result);
+        }
+
+        // null 등 나머지는 204 No Content
+        return Response::html('', 204);
     }
 }
