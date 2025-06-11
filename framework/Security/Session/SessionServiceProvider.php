@@ -30,4 +30,15 @@ class SessionServiceProvider extends ServiceProvider
             return $app->make(SessionManager::class);
         });
     }
+
+    public function boot(): void
+    {
+        $gcChance = (int) config('auth.session.gc_probability', 1);
+        
+        if (mt_rand(1, 100) <= $gcChance) {
+            /** @var SessionManager */
+            $store = $this->app->make(SessionManager::class)->driver();
+            $store->gc();
+        }
+    }
 }

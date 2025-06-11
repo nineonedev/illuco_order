@@ -57,6 +57,16 @@ class Builder
         return $this;
     }
 
+    public function orderByDesc(string $column): self
+    {
+        return $this->orderBy($column, 'desc');
+    }
+
+    public function orderByAsc(string $column): self
+    {
+        return $this->orderBy($column, 'asc');
+    }
+
     public function limit(int $limit): self
     {
         $this->limit = $limit;

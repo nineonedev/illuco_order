@@ -10,18 +10,22 @@ use Framework\Http\Responses\ViewResponse;
 class ResponseBuilder
 {
     protected bool $success = true;
+    
     protected string $message = '';
+
     protected int $status = 200;
+
     protected $data = null;
+
     protected array $meta = [];
+
     protected array $errors = [];
+
     protected ?string $view = null;
 
     protected array $flash = [];
 
     protected ?string $redirectTo = null;
-    
-    protected ?array $redirectRoute = null;
 
     /**
      * @return static
@@ -29,15 +33,6 @@ class ResponseBuilder
     public static function create()
     {
         return new static();
-    }
-
-    /**
-     * @return static
-     */
-    public function jsonOnly()
-    {
-        $this->forceJson = true;
-        return $this;
     }
 
     /**
@@ -72,7 +67,12 @@ class ResponseBuilder
      */
     public function data($data)
     {
-        $this->data = $data;
+        if (is_array($data) && is_array($this->data)) {
+            $this->data = array_merge($this->data, $data);
+        } else {
+            $this->data = $data;
+        }
+
         return $this;
     }
 
@@ -118,6 +118,7 @@ class ResponseBuilder
     public function redirect(string $url)
     {
         $this->redirectTo = $url;
+        $this->data(['redirect' => $url]);
         return $this;
     }
 
@@ -126,8 +127,8 @@ class ResponseBuilder
      */
     public function redirectRoute(string $routeName, array $params = [])
     {
-        $this->redirectRoute = [$routeName, $params];
-        return $this;
+        $url = route($routeName, $params);
+        return $this->redirect($url);
     }
 
     protected function responseJson(): JsonResponse
@@ -139,21 +140,12 @@ class ResponseBuilder
 
     protected function hasRedirect(): bool
     {
-        return $this->redirectRoute !== null || $this->redirectTo !== null;
+        return $this->redirectTo !== null;
     }
 
-    protected function responseRedirect(): ?RedirectResponse
+    protected function responseRedirect(): RedirectResponse
     {
-        if ($this->redirectRoute) {
-            [$name, $params] = $this->redirectRoute;
-            return Response::redirectRoute($name, $params, $this->status);
-        }
-
-        if ($this->redirectTo) {
-            return Response::redirect($this->redirectTo, $this->status);
-        }
-
-        return null;
+        return Response::redirect($this->redirectTo ?? '/', $this->status);
     }
 
     public function responseView(): ViewResponse

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domains\User\Entities\User;
 use App\Domains\User\Repositories\UserRepository;
+use App\Domains\User\Services\RememberToken;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 
@@ -16,15 +17,7 @@ class AuthController extends Controller
 
     public function signin()
     {
-        if (!UserRepository::exists()) {
-            return $this->responseWith()
-                ->success(true)
-                ->message('로그인에 성공하였습니다.')
-                ->redirectRoute('auth.signin')
-                ->send();
-        }
-
-        if (auth()->check() || UserRepository::make()->attemptRememberTokenLogin()) {
+        if (RememberToken::make()->check() || auth()->check()) {
             return $this->responseWith()
                 ->success(true)
                 ->message('로그인에 성공하였습니다.')
@@ -35,9 +28,6 @@ class AuthController extends Controller
         return $this->render('home.pages.auth.signin');
     }
 
-    // =====================================================
-    // 회원가입
-    // =====================================================
     public function register(Request $request)
     {
         $request->validateOrFail([
@@ -50,21 +40,22 @@ class AuthController extends Controller
         $user = UserRepository::make()->save($user);
 
         if (!$user) {
-            return $this->renderError('auth.register', '회원가입에 실패했습니다.');
+            return $this->renderError(null, '회원가입에 실패했습니다.');
         }
 
-        return $this->render('auth.register', [
+        return $this->render(null, [
             'user' => $user
         ], '회원가입에 성공했습니다.');
     }
 
-    // =====================================================
-    // 로그인
-    // =====================================================
     public function login(Request $request)
     {
-        if (UserRepository::make()->attemptRememberTokenLogin()) {
+        if (RememberToken::make()->check()) {
             return $this->render(null, [], '자동로그인에 성공하였습니다.');
+        }
+
+        if (auth()->check()) {
+            return $this->render(null, [], '이미 로그인되어 있습니다.');
         }
 
         $request->validateOrFail([
@@ -77,51 +68,42 @@ class AuthController extends Controller
         if (!auth()->attempt($credentials)) {
             return $this->renderError(null, '이메일 또는 비밀번호가 올바르지 않습니다.');
         }
-
+        
         $user = auth()->user();
-        
-        session()->regenerate();
-        UserRepository::make()->setUserToSession($user);
-        UserRepository::make()->processRememberMe($request, $user);
+        RememberToken::make()->handleRememberMe($request, $user);
 
-        return $this->render(null, ['user' => $user], '로그인에 성공하였습니다.');
-    }
-
-    // =====================================================
-    // 로그아웃
-    // =====================================================
-    public function logout()
-    {
-        $user = UserRepository::find(session()->userId());
-
-        if ($user) {
-            UserRepository::make()->deleteRememberToken($user);
-        }
-
-        auth()->logout();
-        
         return $this->responseWith()
             ->success(true)
-            ->message('로그아웃 되었습니다.')
-            ->redirectRoute('auth.signin')
+            ->redirectRoute('admin.dashboard')
+            ->data(['user' => $user])
+            ->message('로그인에 성공하였습니다.')
             ->send();
     }
 
-    // =====================================================
-    // 프로파일
-    // =====================================================
-    public function me()
+    public function logout()
     {
-        $userId = session()->userId();
+        $user = auth()->user();
 
-        if (!$userId) {
-            return $this->renderError(null, '로그인이 필요합니다.', [], 401);
+        if ($user) {
+            RememberToken::make()->delete($user);
         }
 
-        $user = UserRepository::find($userId);
+        auth()->logout();
+
+        return $this->responseWith()
+            ->success(true)
+            ->message('로그아웃 되었습니다.')
+            ->redirectRoute('home')
+            ->send();
+    }
+
+    public function me()
+    {
+        $id = auth()->id();
+        $user = UserRepository::find($id); 
 
         if (!$user) {
-            return $this->renderError(null, '사용자를 찾을 수 없습니다.', [], 404);
+            return $this->renderError(null, '로그인이 필요합니다.', [], 401);
         }
 
         return $this->render('auth.me', ['user' => $user->toArray()]);

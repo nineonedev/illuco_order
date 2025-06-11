@@ -2,11 +2,12 @@
 
 namespace Framework\Security\Session\Contracts;
 
-use Framework\Security\Session\FlashBag;
 
 interface SessionInterface
 {
     public function start(): void;
+
+    public function started(): bool;
 
     public function has(string $key): bool;
 
@@ -28,5 +29,7 @@ interface SessionInterface
 
     public function invalidate(): void;
 
-    public function flashBag(): FlashBag;
+    public function deleteCurrentDeviceSession(?int $userId = null): void;
+
+    public function gc(): void;
 }

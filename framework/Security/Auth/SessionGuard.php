@@ -37,12 +37,24 @@ class SessionGuard implements GuardInterface
         return true; 
     }
 
+
     protected function validateCredentials(AuthenticatableInterface $user, array $credentials): bool
     {
         return Hash::check($credentials['password'], $user->getAuthPassword()); 
     }
 
     public function login(AuthenticatableInterface $user): void
+    {
+        if (!$this->session->started()) {
+            $this->session->start();
+        }
+
+        $this->session->set('user_id', $user->getAuthIdentifier()); 
+        $this->session->regenerate();
+        $this->user = $user;
+    }
+
+    public function setUser(AuthenticatableInterface $user): void
     {
         $this->session->set('user_id', $user->getAuthIdentifier()); 
         $this->user = $user; 
@@ -77,5 +89,10 @@ class SessionGuard implements GuardInterface
     public function guest(): bool
     {
         return !$this->check();
+    }
+
+    public function id()
+    {
+        return $this->user() ? $this->user()->getAuthIdentifier() : null;
     }
 }

@@ -21,12 +21,6 @@ if (!function_exists('escape')) {
     }
 }
 
-if (!function_exists('now')) {
-    function now(): string
-    {
-        return date('Y-m-d H:i:s');
-    }
-}
 
 if (!function_exists('trait_used')) {
     /**
@@ -70,7 +64,7 @@ if (!function_exists('base_path')) {
 if (!function_exists('asset_path')) {
     function asset_path(string $path): string
     {
-        return static_path(config('path.asset'), $path); 
+        return static_path(config('path.asset'), trim($path, '/')); 
     }
 }
 

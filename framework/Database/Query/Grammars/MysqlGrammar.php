@@ -174,12 +174,31 @@ class MysqlGrammar extends Grammar
             $sql .= ' where ';
             $parts = [];
 
-            foreach ($wheres as $where) {
-                $parts[] = "`{$where['column']}` {$where['operator']} ?";
-                $bindings[] = $where['value'];
+            foreach ($wheres as $i => $where) {
+                $boolean = $i > 0 ? strtoupper($where['boolean'] ?? 'and') . ' ' : '';
+
+                if ($where['type'] === 'basic') {
+                    $parts[] = "{$boolean}`{$where['column']}` {$where['operator']} ?";
+                    $bindings[] = $where['value'];
+                } elseif ($where['type'] === 'in') {
+                    $in = implode(', ', array_fill(0, count($where['values']), '?'));
+                    $parts[] = "{$boolean}`{$where['column']}` IN ({$in})";
+                    $bindings = array_merge($bindings, $where['values']);
+                } elseif ($where['type'] === 'raw') {
+                    $parts[] = "{$boolean}{$where['sql']}";
+                } elseif ($where['type'] === 'null') {
+                    $parts[] = "{$boolean}`{$where['column']}` IS NULL";
+                } elseif ($where['type'] === 'notNull') {
+                    $parts[] = "{$boolean}`{$where['column']}` IS NOT NULL";
+                } elseif ($where['type'] === 'nested') {
+                    [$nestedSql, $nestedBindings] = $this->compileDelete($where['query']);
+                    $nestedSql = preg_replace('/^delete from `[a-zA-Z0-9_]+` where /', '', $nestedSql);
+                    $parts[] = "{$boolean}({$nestedSql})";
+                    $bindings = array_merge($bindings, $nestedBindings);
+                }
             }
 
-            $sql .= implode(' and ', $parts);
+            $sql .= implode(' ', $parts);
         }
 
         return [$sql, $bindings];

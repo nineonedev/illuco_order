@@ -2,6 +2,8 @@
 
 namespace Framework\Security\Session;
 
+use Framework\Security\Session\Bags\FlashBag;
+use Framework\Security\Session\Bags\SessionBag;
 use Framework\Security\Session\Contracts\SessionInterface;
 use RuntimeException;
 
@@ -46,6 +48,11 @@ class SessionManager implements SessionInterface
     public function start(): void
     {
         $this->driver()->start();
+    }
+
+    public function started(): bool
+    {
+        return $this->driver()->started();
     }
 
     public function get(string $key, $default = null)
@@ -107,9 +114,9 @@ class SessionManager implements SessionInterface
         return $this->driver()->flashBag();
     }
 
-    public function hasFlashBag(): bool
+    public function deleteCurrentDeviceSession(?int $userId = null): void
     {
-        return $this->driver()->hasFlashBag();
+        $this->driver()->deleteCurrentDeviceSession($userId);
     }
 
     public function save(): void
@@ -121,5 +128,10 @@ class SessionManager implements SessionInterface
             
             $driver->save();
         }
+    }
+
+    public function gc(): void
+    {
+        $this->driver()->gc();
     }
 }

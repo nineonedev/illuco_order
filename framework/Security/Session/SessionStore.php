@@ -3,10 +3,14 @@
 namespace Framework\Security\Session;
 
 use Framework\Security\Session\Contracts\SessionInterface;
+use Framework\Security\Session\Bags\FlashBag;
+use Framework\Security\Session\Bags\SessionBag;
 
 abstract class SessionStore implements SessionInterface
 {
-    protected string $id;
+    const SESSION_ID = 'SESSION_ID'; 
+
+    protected ?string $id = null;
     protected array $data = [];
     protected bool $started = false;
 
@@ -20,7 +24,15 @@ abstract class SessionStore implements SessionInterface
     public function start(): void
     {
         $this->started = true;
-        $this->flashBag = new FlashBag($this);
+
+        if (!$this->flashBag) {
+            $this->flashBag = new FlashBag($this);
+        }
+    }
+
+    public function started(): bool
+    {
+        return $this->started;
     }
 
     public function flashBag(): FlashBag
@@ -31,9 +43,9 @@ abstract class SessionStore implements SessionInterface
         return $this->flashBag;
     }
 
-    public function hasFlashBag(): bool
+    public function has(string $key): bool
     {
-        return $this->flashBag !== null;
+        return array_key_exists($key, $this->data);
     }
 
     public function get(string $key, $default = null)
@@ -41,26 +53,31 @@ abstract class SessionStore implements SessionInterface
         return $this->data[$key] ?? $default;
     }
 
+    public function setMany(array $values): void
+    {
+        foreach ($values as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
+
+    public function deleteCurrentDeviceSession(?int $userId = null): void
+    {
+        
+    }
+
     public function set(string $key, $value): void
     {
         $this->data[$key] = $value;
     }
 
-    public function has(string $key): bool
-    {
-        return array_key_exists($key, $this->data);
-    }
-
     public function forget(string $key): void
     {
         unset($this->data[$key]);
-        // save() 호출 X
     }
 
     public function flush(): void
     {
         $this->data = [];
-        // 바로 save() 가능, 또는 응답 직전에
     }
 
     public function id(): string
@@ -79,4 +96,9 @@ abstract class SessionStore implements SessionInterface
     }
 
     abstract public function save(): void;
+
+    public function gc(): void
+    {
+        
+    }
 }

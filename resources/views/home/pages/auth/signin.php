@@ -1,5 +1,9 @@
 
-<?php extend('layouts.auth') ?>
+<?php
+
+use App\Domains\User\Services\RememberToken;
+
+ extend('layouts.auth') ?>
 
 <?php section('title'); ?>
 로그인
@@ -60,8 +64,8 @@
                     <!-- FormControl -->
 
                     <div class="no-form-checkbox --sm">
-                        <label for="remember_me" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="remember_me" id="remember_me" class="no-form-checkbox-input">
+                        <label for="<?=RememberToken::INPUT_NAME?>" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="<?=RememberToken::INPUT_NAME?>" id="<?=RememberToken::INPUT_NAME?>" class="no-form-checkbox-input">
                             <div class="no-form-checkbox-ripple">
                                 <span class="no-form-checkbox-box">
                                     <div class="no-form-checkbox-icon">
@@ -104,11 +108,12 @@
             }); 
 
             const resData = await response.json(); 
+            const {message, data, success} = resData;
+            
+            alert(message);
 
-            alert(resData.message);
-
-            if (resData.success){
-                location.reload(); 
+            if (success && data.redirect){
+                location.href = data.redirect;
             }
 
         } catch ($error) {

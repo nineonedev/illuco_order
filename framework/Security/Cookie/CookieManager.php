@@ -37,7 +37,7 @@ class CookieManager
         string $domain = '',
         ?bool $secure = null,
         bool $httpOnly = true,
-        string $sameSite = 'Lax'
+        string $sameSite = CookieJar::SAME_SITE_LAX
     ): void {
         if ($secure === null) {
             $secure = request()->http()->isSecure();
@@ -61,7 +61,7 @@ class CookieManager
         $domain   = $options['domain']   ?? '';
         $secure   = $options['secure']   ?? null;
         $httpOnly = $options['httpOnly'] ?? true;
-        $sameSite = $options['sameSite'] ?? 'Lax';
+        $sameSite = $options['sameSite'] ?? CookieJar::SAME_SITE_LAX;
 
         $this->set($name, $value, $minutes, $path, $domain, $secure, $httpOnly, $sameSite);
     }
@@ -85,7 +85,7 @@ class CookieManager
             $cookie instanceof CookieJar ? $cookie->getDomain() : '',
             $cookie instanceof CookieJar ? $cookie->isSecure() : false,
             $cookie instanceof CookieJar ? $cookie->isHttpOnly() : true,
-            $cookie instanceof CookieJar ? $cookie->getSameSite() : 'Lax'
+            $cookie instanceof CookieJar ? $cookie->getSameSite() : CookieJar::SAME_SITE_LAX
         );
     }
 

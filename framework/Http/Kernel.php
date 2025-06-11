@@ -71,10 +71,6 @@ class Kernel implements KernelInterface
             }
         }
 
-        if (session()->hasFlashBag()) {
-            session()->flashBag()->rotate();
-        }
-
         session()->save();
     }
 

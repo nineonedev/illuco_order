@@ -4,6 +4,10 @@ namespace Framework\Security\Cookie;
 
 class CookieJar
 {
+    const SAME_SITE_LAX = 'Lax';
+    const SAME_SITE_STRICT = 'Strict';
+    const SAME_SITE_NONE = 'None';
+
     protected string $name;
     protected string $value;
     protected int $minutes;
@@ -21,7 +25,7 @@ class CookieJar
         string $domain = '',
         bool $secure = false,
         bool $httpOnly = true,
-        string $sameSite = 'Lax'
+        string $sameSite = self::SAME_SITE_LAX
     ) {
         $this->name = $name;
         $this->value = $value;

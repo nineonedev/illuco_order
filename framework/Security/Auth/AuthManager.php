@@ -67,4 +67,14 @@ class AuthManager implements GuardInterface
     {
         $this->guard()->login($user);
     }
+
+    public function id()
+    {
+        return $this->guard()->id();
+    }
+
+    public function setUser(AuthenticatableInterface $user): void
+    {
+        $this->guard()->setUser($user);
+    }
 }

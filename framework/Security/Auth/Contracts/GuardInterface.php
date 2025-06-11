@@ -17,4 +17,11 @@ interface GuardInterface
     public function check(): bool;
 
     public function guest(): bool;
+
+    /**
+     * @return string|int|null
+     */
+    public function id();
+
+    public function setUser(AuthenticatableInterface $user): void;
 }
