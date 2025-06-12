@@ -114,6 +114,7 @@ class Application extends Container implements ApplicationInterface
     {
         /** @var ConsoleKernel $kernel */
         $kernel = $this->make(ConsoleKernel::class); 
+        $kernel->handle($input);
         $kernel->terminate($input); 
     }
     

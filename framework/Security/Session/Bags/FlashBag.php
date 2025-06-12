@@ -87,13 +87,36 @@ class FlashBag
         }
     }
 
-    public function setInput(array $input): void
+    public function input(array $input): void
     {
         $this->set(self::INPUT_KEY, $input);
     }
 
-    public function setErrors(array $errors): void
+    public function errors(array $errors): void
     {
         $this->set(self::ERROR_KEY, $errors);
+    }
+
+    public function getInput(string $key = null, $default = null)
+    {
+        $input = $this->get(self::INPUT_KEY, []);
+
+        if ($key === null) {
+            return $input;
+        }
+
+        return $input[$key] ?? $default;
+    }
+
+
+    public function getErrors(string $key = null, $default = null)
+    {
+        $errors = $this->get(self::ERROR_KEY, []);
+
+        if ($key === null) {
+            return $errors;
+        }
+
+        return $errors[$key] ?? $default;
     }
 }

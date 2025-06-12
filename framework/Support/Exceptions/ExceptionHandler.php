@@ -97,16 +97,16 @@ class ExceptionHandler
         }
 
         if (function_exists('request') && request()->expectsJson()) {
-            $this->handleJson($e, $code)->send();
+            $this->handleJson($e, $code);
             return;
         }
 
-        $this->handleHtml($e, $code)->send();
+        $this->handleHtml($e, $code);
     }
 
     protected function renderBeforeBooting(Throwable $e, int $code): void
     {
-        $fallback = base_path('supports/debug.php');
+        $fallback = config('path.debug');
         if (is_file($fallback)) {
             $this->renderView($fallback, $e, $code);
         } else {
@@ -114,7 +114,7 @@ class ExceptionHandler
         }
     }
 
-    protected function handleHtml(Throwable $e, int $code): HtmlResponse
+    protected function handleHtml(Throwable $e, int $code): void
     {
         http_response_code($code);
 
@@ -122,26 +122,25 @@ class ExceptionHandler
 
         if ($e instanceof BaseException) {
             $html = $e->renderHtml();
-            return Response::html($html, $code);
+            Response::html($html, $code)->send();
         }
         
-        if (Application::getInstance()->isBooted()) {
-            $view = config('path.error');
-            if ($this->debug && is_file(config('path.debug'))) {
-                $view = config('path.debug');
-            }
-        } else {
-            $view = base_path('supports/error.php');
-            if ($this->debug && is_file(base_path('supports/debug.php'))) {
-                $view = base_path('supports/debug.php');
-            }
+        $view = config('path.error');
+
+        if ($this->debug) {
+            $view = config('path.debug');
+        }
+
+        if (!is_file($view)) {
+            $this->renderBeforeBooting($e, $code);
+            return; 
         }
 
         ob_start();
         $this->renderView($view, $e, $code);
         $content = ob_get_clean();
 
-        return Response::html($content, $code);
+        Response::html($content, $code)->send();
     }
 
     protected function renderView(string $absolutePath, Throwable $e, int $code): void
@@ -167,10 +166,10 @@ class ExceptionHandler
         if ($this->debug) echo $this->details($e, $code)['trace'] . PHP_EOL;
     }
 
-    protected function handleJson(Throwable $e, int $code): JsonResponse
+    protected function handleJson(Throwable $e, int $code): void
     {
         if ($e instanceof BaseException) {
-            return Response::json($e->renderJson(), $code);
+            Response::json($e->renderJson(), $code)->send();
         }
         
         $payload = [
@@ -193,7 +192,7 @@ class ExceptionHandler
             $payload['meta'] = static::$metaData;
         }
 
-        return Response::json($payload, $code);
+        Response::json($payload, $code)->send();
     }
 
     protected function details(Throwable $e, int $code): array

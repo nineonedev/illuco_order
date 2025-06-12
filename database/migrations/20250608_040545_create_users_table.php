@@ -14,15 +14,6 @@ return new class implements Migration
             $table->string('username')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-
-            $table->date('birth')->nullable();
-            $table->enum('gender', ['M', 'F', 'U'])->nullable();
-            $table->string('remember_token')->nullable();
-            
-            $table->timestamp('locked_at')->nullable();
-            $table->timestamp('last_login_at')->nullable();
-            $table->unsignedInteger('login_count')->default(0); 
-            $table->string('login_ip')->nullable();  
             
             $table->timestamps();
         });

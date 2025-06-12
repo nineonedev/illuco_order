@@ -9,6 +9,13 @@ class CookieManager
      */
     protected array $queued = [];
 
+    public function __construct(array $initialCookies = [])
+    {
+        foreach ($initialCookies ?: $_COOKIE as $name => $value) {
+            $this->queued[$name] = new CookieJar($name, $value);
+        }
+    }
+
     public function get(string $name, $default = null)
     {
         if (isset($this->queued[$name])) {

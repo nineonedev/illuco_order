@@ -5,7 +5,7 @@
 - [] Auth 이해 및 처리
 - [O] Respone 고도화 
 - [] Job, Event등 Bus모듈 이해 및 사용법 확인
-- [] supports.success, error 이거 config에서? 
+- [O] supports.success, error 이거 config에서? 
 
 - [O] GC로 해결! Auth - session_id, rememberToken 둘다 없어진상황 ex) 세션만료 + 토큰만료 (1달이후에 접속한 상황) or 쿠키 삭제 => 기존 세션 row가 남아있음.
 - [O] where로 디바이스딜리트 처리! Auth - 로그인 후 rememberToken은 있는데 sesion_id가 만료됨 => 이것도 현재 row추가되는 현상 (기존거 업데이트 안 되고)

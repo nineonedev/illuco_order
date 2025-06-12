@@ -3,19 +3,21 @@
 namespace Framework\Http;
 
 use Framework\Routing\Route;
+use Framework\Security\Cookie\CookieManager;
 use Framework\Validation\Validator;
 
 class Request {
     
     protected array $get; 
     protected array $post; 
-    protected array $cookies; 
     protected array $files; 
     protected array $data; 
     
     protected Http $http;
     protected ?Route $route = null; 
     protected ?Validator $validator = null;
+
+    protected CookieManager $cookies;
 
     public function __construct(
         array $get = [], 
@@ -28,7 +30,7 @@ class Request {
         $this->http = new Http($server); 
         $this->post = $this->parseJsonBody($server) ?? $post;
         $this->get = $get; 
-        $this->cookies = $cookies; 
+        $this->cookies = app(CookieManager::class, $cookies);
         $this->files = $files; 
         $this->data = [];
     }
@@ -42,6 +44,21 @@ class Request {
             $_FILES,
             $_SERVER
         );
+    }
+
+    public function cookie(string $key, $default = null)
+    {
+        return $this->cookieManager->get($key, $default);
+    }
+
+    public function hasCookie(string $key): bool
+    {
+        return $this->cookieManager->has($key); 
+    }
+
+    public function cookies(): CookieManager
+    {
+        return $this->cookies;
     }
 
     protected function parseJsonBody(array $server): ?array
@@ -165,17 +182,17 @@ class Request {
 
     public function old(string $key, $default = null)
     {
-        return $_SESSION['_old_input'][$key] ?? $default; 
+        return session()->flashBag()->getInput($key, $default);
     }
 
     public function flash(): array
     {
-        return $_SESSION['_old_input'] ?? [];
+        return session()->flashBag()->getInput();
     }
 
     public function errors(): array
     {
-        return $_SESSION['_errors'] ?? [];
+        return session()->flashBag()->getErrors();
     }
 
     protected function ensureValidator(array $rules)
