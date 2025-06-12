@@ -15,13 +15,6 @@ class User extends Entity implements HasWorkDirectory, Morphable, Authenticatabl
         'email',
         'password',
         'username',
-        'birth',
-        'gender',
-        'remember_token',
-        'locked_at',
-        'last_login_at',
-        'login_count',
-        'login_ip'
     ];
 
     public static function workDirectory(): string

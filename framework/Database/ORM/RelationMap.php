@@ -3,7 +3,6 @@
 namespace Framework\Database\ORM;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\Entities\HasWorkDirectory;
 use Framework\Database\ORM\Entities\Morphable;
 use Framework\Database\ORM\Relations\{
     Relation,
