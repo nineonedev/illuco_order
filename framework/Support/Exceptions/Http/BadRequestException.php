@@ -2,12 +2,12 @@
 
 namespace Framework\Support\Exceptions\Http;
 
-use Framework\Support\Exceptions\HttpException;
+use Framework\Support\Exceptions\BaseException;
 
-class BadRequestException extends HttpException
+class BadRequestException extends BaseException
 {
-    public function __construct(string $message = "Bad Request", array $context = [])
+    public function __construct(string $message = '잘못된 요청입니다.', array $meta = [])
     {
-        parent::__construct($message, 400, $context);
+        parent::__construct($message, 400, $meta);
     }
 }

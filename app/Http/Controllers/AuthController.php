@@ -66,7 +66,7 @@ class AuthController extends Controller
         $credentials = $request->safe(['email', 'password']);
 
         if (!auth()->attempt($credentials)) {
-            return $this->renderError(null, '이메일 또는 비밀번호가 올바르지 않습니다.');
+            return $this->renderError(null, '이메일 또는 비밀번호가 올바르지 않습니다.')->withInput($request->all())->withErrors(['message' => '에러']);
         }
         
         $user = auth()->user();

@@ -42,15 +42,28 @@ class Env
         }
     }
 
-    public function get(string $key, ?string $default = null): ?string
+    public function get(string $key, $default = null)
     {
         $value = $this->values[$key] ?? $default;
 
         if (is_string($value)) {
             $lower = strtolower($value);
-            if ($lower === 'true') return true;
-            if ($lower === 'false') return false;
-            if ($lower === 'null') return null;
+
+            // boolean
+            if (in_array($lower, ['true', '(true)'], true)) return true;
+            if (in_array($lower, ['false', '(false)'], true)) return false;
+
+            // null
+            if (in_array($lower, ['null', '(null)'], true)) return null;
+
+            // empty
+            if (in_array($lower, ['empty', '(empty)'], true)) return '';
+
+            // numeric
+            if (is_numeric($value)) {
+                // 정수 vs 실수 구분
+                return strpos($value, '.') !== false ? (float) $value : (int) $value;
+            }
         }
 
         return $value;

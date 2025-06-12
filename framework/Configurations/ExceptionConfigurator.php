@@ -11,6 +11,8 @@ class ExceptionConfigurator
 {
     protected ?ExceptionHandler $handler = null; 
 
+    protected Application $app;
+
     protected array $ignoreList = []; 
 
     protected array $reportables = []; 
@@ -25,7 +27,6 @@ class ExceptionConfigurator
     public function setDebug(bool $debug): void
     {
         if (!$this->handler)  return; 
-        
         $this->handler->setDebug($debug);
     }
 

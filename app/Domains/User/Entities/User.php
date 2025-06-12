@@ -6,9 +6,14 @@ use App\Domains\User\Repositories\UserRepository;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Entities\HasWorkDirectory;
 use Framework\Database\ORM\Entities\Morphable;
+use Framework\Database\ORM\Entities\Permissionable;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
 
-class User extends Entity implements HasWorkDirectory, Morphable, AuthenticatableInterface
+class User extends Entity implements 
+    HasWorkDirectory, 
+    Morphable, 
+    AuthenticatableInterface,
+    Permissionable
 {
     protected array $fillable = [
         'name',
@@ -21,6 +26,11 @@ class User extends Entity implements HasWorkDirectory, Morphable, Authenticatabl
     {
         return 'users';
     }
+
+    public static function permissionType(): string
+    {
+        return 'user';
+    } 
 
     public static function morphType(): string
     {

@@ -3,7 +3,7 @@
 
 use App\Domains\User\Services\RememberToken;
 
- extend('layouts.auth') ?>
+extend('layouts.auth') ?>
 
 <?php section('title'); ?>
 로그인
@@ -89,7 +89,7 @@ use App\Domains\User\Services\RememberToken;
 <?php end_section() ?>
 
 <?php section('script') ?>
-<script>
+<!-- <script>
     const frm = document.querySelector('form'); 
 
     frm.addEventListener('submit', async (e) => {
@@ -126,5 +126,5 @@ use App\Domains\User\Services\RememberToken;
         
         
     })
-</script>
+</script> -->
 <?php end_section() ?>

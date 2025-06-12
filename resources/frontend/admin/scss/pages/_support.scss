@@ -23,6 +23,14 @@
     }
 }
 
+.no-success-wrap {
+    @extend .no-error-wrap;
+
+    h1 {
+        color: var(--clr-success-main);
+    }
+}
+
 .no-error-debug {
     padding: 4rem;
     max-width: 102.4rem;

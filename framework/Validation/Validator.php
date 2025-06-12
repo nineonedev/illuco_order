@@ -3,7 +3,6 @@
 namespace Framework\Validation;
 
 use Framework\Support\Exceptions\ValidationException;
-use Framework\Validation\Rules\Rule;
 
 class Validator
 {
@@ -102,7 +101,7 @@ class Validator
     public function validateOrFail(): bool
     {
         if (!$this->validate()) {
-            throw new ValidationException($this->errors);
+            throw new ValidationException(lang('system.validation.failed'), $this->errors);
         }
         
         return true;

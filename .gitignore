@@ -3,5 +3,7 @@
 /node_modules
 /resources/assets/app
 /resources/assets/uploads
+/static/app
+/static/uploads
 /uploads
 .DS_Store

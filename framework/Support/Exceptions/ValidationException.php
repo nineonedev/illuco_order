@@ -1,49 +1,39 @@
-<?php
+<?php 
 
 namespace Framework\Support\Exceptions;
 
-class ValidationException extends RenderableException
+class ValidationException extends BaseException
 {
-    protected array $errors = [];
+    protected array $errors;
 
-    public function __construct(array $errors, ?string $message = null, int $code = 422)
+    public function __construct(string $message = '유효성 검사 실패', array $errors = [], array $meta = [])
     {
-        parent::__construct($message ?? lang('system.validation.failed'), $code);
+        parent::__construct($message, 422, $meta);
         $this->errors = $errors;
     }
 
-    public function errors(): array
+    public function getErrors(): array
     {
         return $this->errors;
     }
 
-    public function renderJson(bool $debug = false): ?\Framework\Http\Response
+    public function renderJson(): array
     {
-        return \Framework\Http\ApiResponse::fail(
-            $this->getMessage(),
-            $this->errors,
-            $this->getCode(),
-            $debug ? $this->debug() : null
-        );
+        return [
+            'success' => false,
+            'message' => $this->getMessage(),
+            'errors'  => $this->getErrors(),
+            'meta'    => $this->getMeta(),
+        ];
     }
 
-    public function renderHtml(): ?\Framework\Http\Response
+    public function renderHtml(): string
     {
-        return back()
-            ->withErrors($this->errors)
-            ->withInput(request()->all());
-    }
-
-    public function renderForCli(): void
-    {
-        echo "[Validation Error] {$this->getMessage()}" . PHP_EOL;
-
-        foreach ($this->errors as $field => $messages) {
-            echo "- {$field}: " . implode(', ', (array) $messages) . PHP_EOL;
-        }
-
-        if (config('app.debug')) {
-            echo $this->getTraceAsString() . PHP_EOL;
-        }
+        return render('supports/error', [
+            'code' => $this->getCode(),
+            'message' => $this->getMessage(),
+            'meta' => $this->getMeta(),
+            'errors' => $this->getErrors(),
+        ]);
     }
 }

@@ -64,10 +64,9 @@ class ViewEngine
 
             return $content;
         } catch (\Throwable $e) {
-            if (ob_get_level() > 0) {
-                ob_end_clean(); // 버퍼 제거
+            while (ob_get_level() > 0) {
+                ob_end_clean();
             }
-            
             throw $e; 
             
         } finally {

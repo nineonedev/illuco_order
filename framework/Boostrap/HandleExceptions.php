@@ -13,8 +13,9 @@ class HandleExceptions implements BootstrapperInterface
     {
         /** @var ExceptionConfigurator $configurator */
         $configurator = $app->make(ExceptionConfigurator::class); 
-
-        $handler = $configurator->getHandler() ?? new ExceptionHandler(); 
+        $handler = new ExceptionHandler(); 
+        
+        $configurator->use($handler);
         $handler->setConfigurator($configurator);
         $app->instance(ExceptionHandler::class, $handler);
 

@@ -4,6 +4,7 @@ namespace Framework\Database\ORM;
 
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Entities\Morphable;
+use Framework\Database\ORM\Entities\Permissionable;
 use Framework\Database\ORM\Relations\{
     Relation,
     HasOne, HasMany, HasOneThrough, HasManyThrough,
@@ -23,16 +24,58 @@ class RelationMap
     // 관계형 config
     protected static $relationConfig = [];
 
+    protected static $permissionableClasses = [];
+
+    protected static $configured = false; 
+
     /** === 관계 메타 데이터 등록/조회 === */
 
-    public static function setConfig(array $relations): void
+    public static function setConfig(array $relations, bool $withPermissions = true): void
     {
-        foreach ($relations as $entityClass => $relation) {
-            if (is_subclass_of($entityClass, Morphable::class)) {
-                static::addMorph($entityClass::morphType(), $entityClass);
+        if (static::$configured) return; 
+
+        foreach ($relations as $class => $relationList) {
+            static::$relationConfig[$class] = $relationList;
+
+            if (is_subclass_of($class, Morphable::class)) {
+                static::addMorph($class::morphType(), $class);
+            }
+
+            if (is_subclass_of($class, Permissionable::class)) {
+                static::$permissionableClasses[] = $class;
             }
         }
-        static::$relationConfig = $relations;
+
+        
+        if ($withPermissions) {
+            static::handlePermissions();
+        }
+        
+        static::$configured = true; 
+    }
+
+    public static function reset(): void
+    {
+        static::$morphMap = [];
+        static::$relationConfig = [];
+        static::$permissionableClasses = [];
+        static::$configured = false;
+    }
+
+    protected static function handlePermissions(): void
+    {
+        // $actions = ['create', 'read', 'update', 'delete'];
+
+        // foreach (static::$permissionableClasses as $class) {
+        //     $type = $class::permissionType();
+
+        //     foreach ($actions as $action) {
+        //         Permission::firstOrCreate([
+        //             'resource' => $type,
+        //             'action' => $action,
+        //         ]);
+        //     }
+        // }
     }
 
     public static function config(): array
@@ -43,7 +86,6 @@ class RelationMap
     public static function getRelation(Entity $entity, string $relationName): ?Relation
     {
         $class = get_class($entity);
-
         $relations = static::relationsFor($class);
 
         if (!$relations) return null;

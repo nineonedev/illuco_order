@@ -69,6 +69,22 @@ if (!function_exists('flash_errors')) {
     }
 }
 
+if (!function_exists('errors')) {
+    function errors(): array
+    {
+        $errors = session()->get('_errors');
+        return $errors ?? [];
+    }
+}
+
+if (!function_exists('old')) {
+    function old(string $key, $default = null)
+    {
+        $inputs = session()->get('_input');
+        return $inputs[$key] ?? $default;
+    }
+}
+
 
 
 if (!function_exists('session_driver')) {

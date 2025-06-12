@@ -5,6 +5,10 @@ return [
     'asset'         => base_path('static/app'),
     'uploads'       => base_path('static/uploads'),
     'helpers'       => base_path('framework/Support/Helpers'),
+    
+    'error'         => base_path('supports/error.php'),
+    'debug'         => base_path('supports/debug.php'),
+    'success'       => base_path('supports/success.php'),
 
     'bootstrap' => [
         'bootstrappers'     => base_path('bootstrap/bootstrappers.php'),
