@@ -2,18 +2,14 @@
 
 namespace Framework\Database\ORM;
 
+use App\Domains\Common\Repositories\PermissionRepository;
 use Framework\Database\ORM\Entities\Entity;
-use App\Domains\Permission\Repositories\PermissionRepository;
-use PhpOffice\PhpSpreadsheet\Calculation\Token\Stack;
 
 class PermissionMap
 {
-    protected static $map = [];
-    protected static $registered = false;
-
-    /**
-     * @param array<class-string<Entity>, string[]> $config
-     */
+    static array $allowedPermissions = ['create', 'read', 'update','delete'];
+    protected static array $map = [];
+    protected static bool $registered = false;
     public static function config(array $config): void
     {
         foreach ($config as $entityClass => $actions) {
@@ -23,8 +19,12 @@ class PermissionMap
         static::handle();
     }
 
-    public static function register(string $class, array $actions = ['create', 'read', 'update', 'delete']): void
+    public static function register(string $class, ?array $actions = null): void
     {
+        if ($actions === null){
+            $actions = static::$allowedPermissions;
+        }
+        
         static::$map[$class] = $actions;
     }
 
@@ -48,10 +48,14 @@ class PermissionMap
             $resource = $class::alias();
 
             foreach ($actions as $action) {
-                // PermissionRepository::firstOrCreate([
-                //     'resource' => $resource,
-                //     'action'   => $action,
-                // ]);
+                if (!in_array($action, static::$allowedPermissions)) {
+                    continue;
+                }
+
+                PermissionRepository::firstOrCreate([
+                    'resource' => $resource,
+                    'action'   => $action,
+                ]);
             }
         }
 

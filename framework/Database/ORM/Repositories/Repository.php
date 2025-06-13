@@ -2,6 +2,7 @@
 
 namespace Framework\Database\ORM\Repositories;
 
+use App\Domains\User\Entities\User;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Loaders\EagerLoader;
 use Framework\Database\ORM\Loaders\LazyLoader;
@@ -18,7 +19,8 @@ use Framework\Database\Query\EntityQueryBuilder;
 
 abstract class Repository
 {
-    static ?Repository $instance = null;
+    /** @var Repository[] */
+    static array $instances = [];
     
     protected bool $withTrashed = false;
     
@@ -35,9 +37,22 @@ abstract class Repository
 
     public function __construct()
     {
+        $this->setup();
         $this->builder = query($this);
         $this->observer = new Observer();
-        $this->setup();
+        $this->boot();
+    }
+
+    protected function setup()
+    {
+        
+    }
+
+
+    protected function boot(): void
+    {
+        $this->registerObservers();
+        $this->applySoftDeleteFilter();
     }
 
     /**
@@ -45,11 +60,18 @@ abstract class Repository
      */
     public static function make()
     {
-        if (!static::$instance) {
-            static::$instance = new static();
+        $calledClass = static::class;
+
+        if (!isset(static::$instances[$calledClass])) {
+            static::$instances[$calledClass] = new static();
         }
-        
-        return static::$instance; 
+
+        return static::$instances[$calledClass];
+    }
+
+    public static function clearInstance(): void
+    {
+        unset(static::$instances[static::class]);
     }
 
     abstract public static function table(): string;
@@ -60,12 +82,6 @@ abstract class Repository
      */
     protected function registerObservers(): void
     {
-    }
-
-    protected function setup()
-    {
-        $this->registerObservers();
-        $this->applySoftDeleteFilter();
     }
 
     /**
@@ -226,7 +242,7 @@ abstract class Repository
 
     public static function __callStatic($method, $arguments)
     {
-        $builder = query(static::class);
+        $builder = query(new static());
 
         if (method_exists($builder, $method)) {
             return $builder->$method(...$arguments);

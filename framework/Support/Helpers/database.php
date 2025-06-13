@@ -24,10 +24,7 @@ if (!function_exists('database')) {
 }
 
 if (!function_exists('query')) {
-    /**
-     * @param Repository|class-string<Repository> $repository
-     */
-    function query($repository): EntityQueryBuilder
+    function query(Repository $repository): EntityQueryBuilder
     {
         return database()->query($repository);
     }
@@ -59,7 +56,7 @@ if (!function_exists('schema')) {
 
 // 트랜잭션 처리기
 if (!function_exists('transaction')) {
-    function transaction(callable $callback, ?string $connection = null)
+    function transaction(Closure $callback, ?string $connection = null)
     {
         return database()->transaction($callback, $connection);
     }

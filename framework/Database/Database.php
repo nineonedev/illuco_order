@@ -2,6 +2,7 @@
 
 namespace Framework\Database;
 
+use App\Domains\User\Repositories\UserRepository;
 use Closure;
 use Framework\Database\Query\Builder;
 use Framework\Database\Query\Grammars\MysqlGrammar;
@@ -34,20 +35,14 @@ class Database
         );
     }
 
-    /**
-     * @param Repository|class-string<Repository> $repository
-     */
-    public function query($repository, ?string $connection = null): EntityQueryBuilder
+    public function query(Repository $repository, ?string $connection = null): EntityQueryBuilder
     {
-        /** @var Repository $repo */
-        if (is_string($repository) && class_exists($repository)) {
-            $repository = new $repository();
-        }
-
+        $class = get_class($repository);
+        
         return new EntityQueryBuilder(
             $this->connection($connection),
             new MysqlGrammar(),
-            $repository->table(),
+            $class::table(),
             $repository
         );
     }

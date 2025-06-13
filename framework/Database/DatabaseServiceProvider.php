@@ -7,6 +7,7 @@ use Framework\Core\ServiceProvider;
 use Framework\Database\Contracts\ConnectionInterface;
 use Framework\Database\Migration\MigrationRepository;
 use Framework\Database\Migration\Migrator;
+use Framework\Database\ORM\PermissionMap;
 use Framework\Database\Schema\Schema;
 
 class DatabaseServiceProvider extends ServiceProvider
@@ -50,5 +51,27 @@ class DatabaseServiceProvider extends ServiceProvider
                 config('database.migrations.path', 'database/migrations')
             );
         });
+    }
+
+    public function boot(): void
+    {
+        $this->registerPermissions();
+    }
+
+    public function registerPermissions(): void
+    {
+        if (!config('database.features.register_permissions', false)) {
+            return; 
+        }
+
+        $file = config('path.bootstrap.permissions');
+        
+        if (!file_exists($file)) {
+            return;
+        }
+
+        $permissions = require_once $file;
+        PermissionMap::config($permissions);
+        PermissionMap::handle();
     }
 }

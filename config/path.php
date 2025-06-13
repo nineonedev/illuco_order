@@ -16,6 +16,7 @@ return [
         'providers'         => base_path('bootstrap/providers.php'),
         'middlewares'       => base_path('bootstrap/middlewares.php'),
         'relations'         => base_path('bootstrap/relations.php'),
+        'permissions'       => base_path('bootstrap/permissions.php'),
         'commands'          => base_path('bootstrap/commands.php'),
     ],
 ];

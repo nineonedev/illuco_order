@@ -15,5 +15,8 @@ return [
             'port'       => env('DB_PORT', 3306),
             'charset'    => env('DB_CHARSET', 'utf8mb4'),
         ]
+    ],
+    'features' => [
+        'register_permissions' => true,
     ]
 ];

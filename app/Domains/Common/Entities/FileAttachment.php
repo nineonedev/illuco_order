@@ -29,7 +29,7 @@ class FileAttachment extends MorphEntity
         return 'file_attachable';
     }
 
-    public function repositoryClass(): string
+    public static function repositoryClass(): string
     {
         return FileAttachmentRepository::class;
     }
