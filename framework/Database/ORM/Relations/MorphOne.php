@@ -4,14 +4,13 @@ namespace Framework\Database\ORM\Relations;
 
 use Exception;
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\Entities\Morphable;
 use Framework\Database\ORM\RelationMap;
 
 /**
  * 다형성 1:1 관계 (ex: User, Post → Image)
  * - 이미지 테이블에 morph_type/morph_id 필드
  */
-class MorphOne extends Relation
+class MorphOne extends MorphRelation
 {
     /** @var string morph_type 컬럼명 */
     protected $morphType;
@@ -37,7 +36,7 @@ class MorphOne extends Relation
 
         // 별칭(예: 'user', 'post')이 있으면 RelationMap에서 가져오고, 없으면 클래스명 사용
         if ($typeValue === null) {
-            $this->typeValue = RelationMap::morphAlias(get_class($parent)) ?? get_class($parent);
+            $this->typeValue = RelationMap::morphAlias(get_class($parent)) ?? get_class($parent)::alias();
         } else {
             $this->typeValue = $typeValue;
         }

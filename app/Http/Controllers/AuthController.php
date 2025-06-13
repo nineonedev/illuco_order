@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\User;
+use App\Domains\User\Repositories\AdminRepository;
 use App\Domains\User\Repositories\UserRepository;
-use App\Domains\User\Services\RememberToken;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 
@@ -17,7 +18,13 @@ class AuthController extends Controller
 
     public function signin()
     {
-        if (RememberToken::make()->check() || auth()->check()) {
+        if (!UserRepository::exists()) {
+            return $this->responseWith()
+                ->redirectRoute('auth.signup')
+                ->send();
+        }
+
+        if (auth()->check()) {
             return $this->responseWith()
                 ->success(true)
                 ->message('로그인에 성공하였습니다.')
@@ -36,23 +43,23 @@ class AuthController extends Controller
             'password' => 'required|string|minLength:8|maxLength:100',
         ]);
 
-        $user = User::make($request->safe());
-        $user = UserRepository::make()->save($user);
+        $admin = Admin::make([]);
+        $admin = AdminRepository::make()->save($admin);
 
-        if (!$user) {
+        if (!$admin) {
             return $this->renderError(null, '회원가입에 실패했습니다.');
         }
 
         return $this->render(null, [
-            'user' => $user
+            'user' => $admin->getRelation('user')
         ], '회원가입에 성공했습니다.');
     }
 
     public function login(Request $request)
     {
-        if (RememberToken::make()->check()) {
-            return $this->render(null, [], '자동로그인에 성공하였습니다.');
-        }
+        // if (RememberToken::make()->check()) {
+        //     return $this->render(null, [], '자동로그인에 성공하였습니다.');
+        // }
 
         if (auth()->check()) {
             return $this->render(null, [], '이미 로그인되어 있습니다.');
@@ -70,7 +77,7 @@ class AuthController extends Controller
         }
         
         $user = auth()->user();
-        RememberToken::make()->handleRememberMe($request, $user);
+        // RememberToken::make()->handleRememberMe($request, $user);
 
         return $this->responseWith()
             ->success(true)
@@ -82,11 +89,11 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $user = auth()->user();
+        // $user = auth()->user();
 
-        if ($user) {
-            RememberToken::make()->delete($user);
-        }
+        // if ($user) {
+        //     RememberToken::make()->delete($user);
+        // }
 
         auth()->logout();
 

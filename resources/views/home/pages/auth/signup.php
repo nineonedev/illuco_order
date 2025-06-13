@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\User\Entities\Admin;
 use App\User\Repositories\PostRepository;
 use App\User\Repositories\UserRepository;
 use App\User\Resources\UserResource;

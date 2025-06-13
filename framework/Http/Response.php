@@ -10,6 +10,12 @@ use Framework\Http\Responses\ViewResponse;
 
 class Response
 {
+
+    public static function configure(): ResponseBuilder
+    {
+        return new ResponseBuilder();
+    }
+
     /**
      * HTML 응답
      */

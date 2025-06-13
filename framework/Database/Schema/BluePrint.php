@@ -194,7 +194,7 @@ class Blueprint
         foreach ($this->columns as $col) {
             $foreign = $col->getForeign();
             if ($foreign) {
-                $fkName = "fk_{$foreign['column']}";
+                $fkName = "fk_{$this->table}_{$foreign['column']}";
                 $this->commands['foreignKeys'][] = [
                     'name'      => $fkName,
                     'column'    => $foreign['column'],

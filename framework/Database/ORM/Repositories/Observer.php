@@ -7,12 +7,12 @@ use Framework\Database\ORM\Entities\Entity;
 class Observer
 {
     /**
-     * @var array<string, Obserable[]>
+     * @var array<string, class-string<Obserable>>
      */
     protected array $observers = [];
 
     /**
-     * @param string[]|Obserable[] $observers
+     * @param array<string, array<class-string<Obserable>>> $observers
      */
     public function __construct($observers = [])
     {
@@ -22,7 +22,7 @@ class Observer
     /**
      * 이벤트명으로 observer 등록
      * @param string $event  ex) beforeCreate, afterDelete 등
-     * @param string|Obserable $observer
+     * @param class-string<Obserable> $observer
      */
     public function register(string $event, $observerClass): void
     {
@@ -55,7 +55,7 @@ class Observer
     /**
      * 배열/클래스명 방식 지원
      * @param string $event
-     * @param array<string,array<class-string<Obserable>|Obserable>> $observers
+     * @param array<string,array<class-string<Obserable>> $observers
      */
     public function registerMany(string $event, array $observers): void
     {
@@ -71,8 +71,9 @@ class Observer
      */
     public function fire(string $event, Entity $entity): void
     {
-        foreach ($this->observers[$event] ?? [] as $observer) {
-            $observer->observe($entity);
+        foreach ($this->observers[$event] ?? [] as $observerClass) {
+            $observer = new $observerClass();
+            $observer->observe($entity, request());
         }
     }
 }

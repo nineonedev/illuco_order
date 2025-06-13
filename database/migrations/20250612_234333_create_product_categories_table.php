@@ -8,22 +8,19 @@ return new class implements Migration
 {
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('product_categories', function (Blueprint $table) {
             $table->id();
-            $table->morphs();
-            $table->string('original_name');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('name');
-            $table->string('mime_type');
-            $table->unsignedBigInteger('size');
-            $table->string('path');
-            $table->string('extension', 20);
+            $table->text('description')->nullable();
+            $table->string('code')->unique();
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
-
         });
     }
 
     public function down(): void
     {
-        Schema::drop('files');
+        Schema::drop('product_categories'); 
     }
 };

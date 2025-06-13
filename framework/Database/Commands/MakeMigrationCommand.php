@@ -15,7 +15,7 @@ class MakeMigrationCommand extends Command
     protected function configure(): void
     {
         $this->addArgument('name');
-        $this->addOption('table'); // --table= 옵션
+        $this->addOption('table');
     }
 
     protected function handle(): void
@@ -29,23 +29,14 @@ class MakeMigrationCommand extends Command
             );
         }
 
-        // create_~, add_~, drop_~, rename_~ 패턴 자동 감지
         $isCreate = preg_match('/^create_.*_table$/', $name);
         $isAlter  = preg_match('/^(add|drop|rename|modify)_.*_to_.*_table$/', $name);
 
-        // table 이름 추출
-        if (!$table) {
-            if (preg_match('/(?:create|add|drop|rename|modify)_(.*?)_table/', $name, $m)) {
-                $table = $m[1];
-            }
+        if (!$table && preg_match('/(?:create|add|drop|rename|modify)_(.*?)_table/', $name, $m)) {
+            $table = $m[1];
         }
 
-        // 스텁 파일명 결정
-        if ($isCreate) {
-            $stubFile = 'migration.create';
-        } else {
-            $stubFile = 'migration.table'; // 혹은 'table'로 네이밍
-        }
+        $stubFile = $isCreate ? 'migration.create' : 'migration.table';
 
         $filename   = date('Ymd_His') . '_' . $this->snake($name);
         $className  = $this->classify($name);
@@ -60,14 +51,14 @@ class MakeMigrationCommand extends Command
                 'table' => $table,
             ]);
         } catch (\RuntimeException $e) {
-            $this->error("❌ 마이그레이션 생성 실패: " . $e->getMessage());
+            $this->error("❌ 마이그레이션 생성 실패: {$e->getMessage()}");
+            $this->error("└ 생성 시도된 파일: {$filename}.php");
             return;
         }
 
         $this->info("✔ 마이그레이션 생성 완료: {$filename} ({$targetPath})");
     }
 
-    // 아래는 문자열 헬퍼 (라라벨 방식 참고)
     protected function snake(string $value): string
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', str_replace(' ', '_', $value)));

@@ -1,16 +1,14 @@
 <?php 
 
-namespace App\Domains\File\Entities;
+namespace App\Domains\Common\Entities;
 
-use App\Domains\File\Repositories\FileRepository;
-use Framework\Database\ORM\Entities\Entity;
+use App\Domains\Common\Repositories\FileAttachmentRepository;
+use Framework\Database\ORM\Entities\MorphEntity;
 
 
-class File extends Entity
+class FileAttachment extends MorphEntity
 {
     protected array $fillable = [
-        'morph_type',
-        'morph_id',
         'original_name', 
         'name',
         'extension',
@@ -21,13 +19,19 @@ class File extends Entity
     ];
 
     protected array $casts = [
-        'morph_id' => 'int',
+        'file_attachable_id' => 'int',
         'size' => 'int',
     ];
 
+
+    public static function morphType(): string
+    {
+        return 'file_attachable';
+    }
+
     public function repositoryClass(): string
     {
-        return FileRepository::class;
+        return FileAttachmentRepository::class;
     }
 
     public function storagePath(): string

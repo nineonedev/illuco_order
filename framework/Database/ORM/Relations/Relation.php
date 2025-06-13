@@ -37,7 +37,8 @@ abstract class Relation
             $entityClass = $this->relatedEntityClass;
         }
         
-        $repository = (new $entityClass)->repositoryClass();
+        $class = $entityClass::repositoryClass();
+        $repository = (new $class);
         
         return (new $repository())->query();
     }

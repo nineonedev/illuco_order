@@ -51,6 +51,7 @@ class Migrator
             $this->repository->log($filename);
             $this->connection->commit();
 
+            // echo "Migrated: {$file}\n";
             $bar->advance();
         }
 
@@ -90,10 +91,47 @@ class Migrator
             }
         }
     }
-
     public function fresh(): void
     {
+        $schema = $this->connection->schema();
+
+        $tables = $schema->getAllTables();
+
+        $schema->disableForeignKeyChecks();
+        $bar = new ProgressBar(count($tables), 'Dropping Tables', 'done');
+        $bar->advance(0);
+
+        foreach ($tables as $table) {
+            $schema->dropIfExists($table);
+            // echo "Dropped: {$table}\n";
+            $bar->advance();
+        }
+
+        $bar->finish();
+        $schema->enableForeignKeyChecks();
+
         $this->repository->drop();
         $this->migrate();
     }
+
+    public function truncate(): void
+    {
+        $schema = $this->connection->schema();
+        $tables = $schema->getAllTables();
+
+        $schema->disableForeignKeyChecks();
+
+        $bar = new ProgressBar(count($tables), 'Truncating Tables', 'done');
+        $bar->advance(0);
+
+        foreach ($tables as $table) {
+            $schema->truncateTable($table);
+            // echo "Truncated: {$table}\n";
+            $bar->advance();
+        }
+
+        $bar->finish();
+        $schema->enableForeignKeyChecks();
+    }
+
 }

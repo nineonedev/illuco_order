@@ -4,7 +4,6 @@ namespace Framework\Database\Commands;
 
 use Framework\Console\Command;
 use Framework\Database\Migration\Migrator;
-use InvalidArgumentException;
 
 class MigrationMigrateCommand extends Command
 {

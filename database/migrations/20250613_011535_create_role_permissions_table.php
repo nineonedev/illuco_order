@@ -1,0 +1,23 @@
+<?php
+
+use Framework\Database\Contracts\Migration;
+use Framework\Database\Schema\Blueprint;
+use Framework\Support\Facades\Schema;
+
+return new class implements Migration
+{
+    public function up(): void
+    {
+        Schema::create('role_permissions', function (Blueprint $table) {
+            $table->id(); 
+            $table->foreignId('role_id')->constrained('roles')->onDeleteCascade();
+            $table->foreignId('permission_id')->constrained('permissions')->onDeleteCascade();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::drop('role_permissions'); 
+    }
+};

@@ -2,7 +2,6 @@
 
 namespace Framework\Database\ORM\Entities;
 
-use App\User\Entities\User;
 use Framework\Database\ORM\Casts\CastFactory;
 use Framework\Database\ORM\Repositories\Repository;
 
@@ -31,12 +30,18 @@ abstract class Entity
 
     public function __construct(array $attributes = [])
     {
+        $this->setup(); 
         $this->fill($attributes);
         $this->syncOriginal();
-        $this->setup();
+        $this->boot();
     }
 
     protected function setup(): void
+    {
+        
+    }
+
+    protected function boot(): void
     {
 
     }
@@ -49,10 +54,15 @@ abstract class Entity
         return new static($attributes);
     }
 
+    public static function alias(): string
+    {
+        return strtolower(class_basename(static::class));
+    }
+
     /**
      * @return class-string<Repository>
      */
-    abstract public function repositoryClass(): string;
+    abstract static public function repositoryClass(): string;
 
     public function setMeta(string $key, $value): void
     {

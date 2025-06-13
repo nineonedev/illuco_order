@@ -10,6 +10,7 @@ return new class implements Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->morphs('userable');
             $table->string('name');
             $table->string('username')->nullable();
             $table->string('email')->unique();

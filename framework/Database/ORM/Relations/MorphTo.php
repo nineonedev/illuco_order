@@ -9,7 +9,7 @@ use Framework\Database\ORM\RelationMap;
  * 다형성 역방향 관계 (ex: Image → Post/User 등 morph 대상)
  * - morph_type, morph_id 컬럼을 가진 엔티티에서 'owner' 엔티티 로드
  */
-class MorphTo extends Relation
+class MorphTo extends MorphRelation
 {
     protected $morphType;        // morph_type 컬럼명
     protected $morphId;          // morph_id 컬럼명

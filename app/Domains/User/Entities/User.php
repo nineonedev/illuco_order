@@ -3,41 +3,29 @@
 namespace App\Domains\User\Entities;
 
 use App\Domains\User\Repositories\UserRepository;
-use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\Entities\HasWorkDirectory;
-use Framework\Database\ORM\Entities\Morphable;
-use Framework\Database\ORM\Entities\Permissionable;
+use Framework\Database\ORM\Entities\MorphEntity;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
 
-class User extends Entity implements 
-    HasWorkDirectory, 
-    Morphable, 
-    AuthenticatableInterface,
-    Permissionable
+class User extends MorphEntity implements  AuthenticatableInterface
 {
     protected array $fillable = [
         'name',
+        'username',
         'email',
         'password',
-        'username',
     ];
 
-    public static function workDirectory(): string
+    public static function morphType(): string
+    {
+        return 'userable';
+    }
+    
+    public static function table(): string
     {
         return 'users';
     }
 
-    public static function permissionType(): string
-    {
-        return 'user';
-    } 
-
-    public static function morphType(): string
-    {
-        return 'user';
-    }
-
-    public function repositoryClass(): string
+    public static function repositoryClass(): string
     {
         return UserRepository::class;
     }

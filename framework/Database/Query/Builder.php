@@ -107,6 +107,29 @@ class Builder
         return $results[0] ?? null;
     }
 
+    public function firstOrCreate(array $attributes, array $values = []): object
+    {
+        $query = clone $this;
+
+        foreach ($attributes as $column => $value) {
+            $query->where($column, '=', $value);
+        }
+
+        $existing = $query->first();
+
+        if ($existing) {
+            return $existing;
+        }
+
+        $data = array_merge($attributes, $values);
+        $id = $this->insert($data);
+
+        // 새로 삽입된 데이터를 다시 조회 (단일 PK 기준)
+        $primaryKey = 'id'; // 필요한 경우 매핑 설정 가능
+        return $this->where($primaryKey, '=', $id)->first();
+    }
+
+
     public function updateOrInsert(array $where, array $values): bool
     {
         $query = clone $this;
@@ -239,7 +262,7 @@ class Builder
     public function where($column, $operator = null, $value = null): self
     {
         // Closure 지원 (서브쿼리, 복합 where)
-        if ($column instanceof \Closure) {
+        if ($column instanceof Closure) {
             $query = new self($this->connection, $this->grammar, $this->table);
             $column($query);
             $this->wheres[] = [

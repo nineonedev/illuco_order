@@ -16,8 +16,11 @@ class AuthMiddleware implements MiddlewareInterface
     {
         // throw new UnauthorizedException('로그인이 필요합니다.');
 
-        if (!auth()->check() && !RememberToken::make()->check()) {
-            return Response::redirectRoute('auth.signin');
+        if (!auth()->check()) {
+            return Response::configure()
+                ->success(false)
+                ->redirectRoute('auth.signin')
+                ->send();
         }
 
         return $next($request);

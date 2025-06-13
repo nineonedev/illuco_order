@@ -1,35 +1,28 @@
 <?php
 
-use App\Domains\File\Entities\File;
-use App\Domains\User\Entities\User;
 use Framework\Database\ORM\RelationMap;
 
+use App\Domains\Common\Entities\FileAttachment;
 
-RelationMap::setConfig([
+use App\Domains\User\Entities\Admin;
+use App\Domains\User\Entities\Employee;
+use App\Domains\User\Entities\User;
+
+
+RelationMap::setRelationMap([
     User::class => [
-        // RelationMap::hasMany(Post::class, 'user_id')
+        RelationMap::morphTo('userable')
+    ], 
+    Admin::class => [
+        RelationMap::morphOne('user', User::class),
     ],
-    File::class => [
-        RelationMap::morphTo('owner'),
-        RelationMap::morphToMany('owners', File::class, 'mutli_files', 'file_id')
+    Employee::class => [
+        RelationMap::morphOne('user', User::class),
     ],
+    Employee::class => [
+        RelationMap::morphOne('user', User::class),
+    ],
+    FileAttachment::class => [
+        RelationMap::morphTo('file_attachable')
+    ]
 ]);
-
-
-// RelationMap::setConfig([
-//     User::class => [
-//         RelationMap::hasMany('posts', Post::class, 'user_id'),
-//         RelationMap::morphOne('profile_image', File::class),
-//     ],
-//     Post::class => [
-//         RelationMap::belongsTo('user', User::class, 'user_id'),
-//         RelationMap::morphOne('thumb_image', File::class),
-//     ],
-//     Notice::class => [
-//         RelationMap::morphedByMany('attachments', File::class, 'multi_files', 'file_id'),
-//     ],
-//     File::class => [
-//         RelationMap::morphTo('owner'),
-//         RelationMap::morphToMany('owners', File::class, 'mutli_files', 'file_id')
-//     ],
-// ]);

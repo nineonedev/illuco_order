@@ -3,14 +3,14 @@
 namespace Framework\Database\ORM;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\Entities\Morphable;
-use Framework\Database\ORM\Entities\Permissionable;
+use Framework\Database\ORM\Entities\MorphEntity;
 use Framework\Database\ORM\Relations\{
     Relation,
     HasOne, HasMany, HasOneThrough, HasManyThrough,
     BelongsTo, BelongsToMany,
     MorphOne, MorphTo, MorphMany, MorphToMany, MorphedByMany
 };
+use Framework\Database\ORM\Relations\MorphRelation;
 use Framework\Support\Collection;
 
 /**
@@ -19,68 +19,58 @@ use Framework\Support\Collection;
 class RelationMap
 {
     // morph type <-> class-string 맵
-    protected static $morphMap = [];
+    protected static $morphs = [];
 
     // 관계형 config
-    protected static $relationConfig = [];
-
-    protected static $permissionableClasses = [];
+    protected static $relations = [];
 
     protected static $configured = false; 
 
     /** === 관계 메타 데이터 등록/조회 === */
 
-    public static function setConfig(array $relations, bool $withPermissions = true): void
+    public static function setRelationMap(array $relations): void
     {
-        if (static::$configured) return; 
+        if (static::$configured) return;
 
         foreach ($relations as $class => $relationList) {
-            static::$relationConfig[$class] = $relationList;
-
-            if (is_subclass_of($class, Morphable::class)) {
-                static::addMorph($class::morphType(), $class);
+            
+            if (!isset(static::$relations[$class])) {
+                static::$relations[$class] = $relationList;
+            } else {
+                static::$relations[$class] = array_merge(
+                    static::$relations[$class],
+                    $relationList
+                );
             }
 
-            if (is_subclass_of($class, Permissionable::class)) {
-                static::$permissionableClasses[] = $class;
+            foreach ($relationList as $rel) {
+                if (
+                    isset($rel['type']) &&
+                    is_subclass_of($rel['type'], MorphRelation::class)
+                ) {
+                    $related = $rel['args'][0] ?? null;
+
+                    if (is_string($related) && is_subclass_of($related, Entity::class)) {
+                        static::addMorph($related::alias(), $related);
+                    }
+                }
             }
         }
 
-        
-        if ($withPermissions) {
-            static::handlePermissions();
-        }
-        
-        static::$configured = true; 
+        static::$configured = true;
     }
+
 
     public static function reset(): void
     {
-        static::$morphMap = [];
-        static::$relationConfig = [];
+        static::$morphs = [];
+        static::$relations = [];
         static::$permissionableClasses = [];
         static::$configured = false;
     }
-
-    protected static function handlePermissions(): void
-    {
-        // $actions = ['create', 'read', 'update', 'delete'];
-
-        // foreach (static::$permissionableClasses as $class) {
-        //     $type = $class::permissionType();
-
-        //     foreach ($actions as $action) {
-        //         Permission::firstOrCreate([
-        //             'resource' => $type,
-        //             'action' => $action,
-        //         ]);
-        //     }
-        // }
-    }
-
     public static function config(): array
     {
-        return static::$relationConfig;
+        return static::$relations;
     }
 
     public static function getRelation(Entity $entity, string $relationName): ?Relation
@@ -96,42 +86,48 @@ class RelationMap
 
         if (!$relation) return null;
 
-        // 올바른 생성: new ... (생성자에 파라미터 전달)
         return new $relation['type']($entity, ...$relation['args']);
     }
 
 
     public static function relationsFor($entityClass): array
     {
-        return static::$relationConfig[$entityClass] ?? [];
-    }
-
-    /** === MorphMap 관련 === */
-
-    public static function setMorphMap(array $map): void
-    {
-        static::$morphMap = $map;
+        return static::$relations[$entityClass] ?? [];
     }
 
     public static function morphMap(): array
     {
-        return static::$morphMap;
+        return static::$morphs;
     }
 
     public static function resolveMorph(string $alias): ?string
     {
-        return static::$morphMap[$alias] ?? null;
+        return static::$morphs[$alias] ?? null;
     }
 
     public static function morphAlias(string $class): ?string
     {
-        return array_search($class, static::$morphMap, true) ?: null;
+        return array_search($class, static::$morphs, true) ?: null;
     }
 
     public static function addMorph(string $alias, string $class): void
     {
-        static::$morphMap[$alias] = $class;
+        if (isset(static::$morphs[$alias])) return; 
+        
+        static::$morphs[$alias] = $class;
     }
+
+    protected static function getMorphTypeFromRelated(string $related): string
+    {
+        if (!is_subclass_of($related, MorphEntity::class)) {
+            throw new \InvalidArgumentException(
+                "Class [{$related}] must extend " . MorphEntity::class . " to be used in a morph relation."
+            );
+        }
+
+        return $related::morphType();
+    }
+
 
     /** === 관계 생성 DSL === */
     public static function hasOne(
@@ -256,41 +252,40 @@ class RelationMap
     public static function morphOne(
         $name, 
         $related, 
-        $morphType = 'morph_type', 
-        $morphId = 'morph_id', 
         $localKey = 'id', 
         $typeValue = null
-    )
-    {
+    ) {
+        $type = static::getMorphTypeFromRelated($related);
+
         return [
             'type' => MorphOne::class, 
             'name' => $name, 
             'args' => [
                 $related, 
-                $morphType, 
-                $morphId, 
+                "{$type}_type", 
+                "{$type}_id", 
                 $localKey, 
                 $typeValue
             ]
         ];
     }
 
+
     public static function morphMany(
         $name, 
         $related, 
-        $morphType = 'morph_type', 
-        $morphId = 'morph_id', 
         $localKey = 'id', 
         $typeValue = null
-    )
-    {
+    ) {
+        $type = static::getMorphTypeFromRelated($related);
+
         return [
             'type' => MorphMany::class, 
             'name' => $name, 
             'args' => [
                 $related, 
-                $morphType, 
-                $morphId, 
+                "{$type}_type", 
+                "{$type}_id", 
                 $localKey, 
                 $typeValue
             ]
@@ -298,73 +293,74 @@ class RelationMap
     }
 
     public static function morphTo(
-        $name, 
-        $morphType = 'morph_type', 
-        $morphId = 'morph_id', 
-        $typesMap = [], 
-        $typeFieldMap = []
-    )
-    {
-        return ['type' => MorphTo::class, 
-            'name' => $name, 
+        string $type,
+        array $typesMap = [],
+        array $typeFieldMap = []
+    ) {
+        
+        return [
+            'type' => MorphTo::class,
+            'name' => $type,
             'args' => [
-                $morphType, 
-                $morphId, 
-                $typesMap, 
+                "{$type}_type",
+                "{$type}_id",
+                $typesMap,
                 $typeFieldMap
             ]
         ];
     }
 
+
     public static function morphToMany(
-        $name, 
-        $related, 
-        $pivotTable, 
-        $pivotRelatedKey, 
-        $morphType = 'morph_type', 
-        $morphId = 'morph_id', 
-        $relatedEntityPrimaryKey = 'id', 
+        string $name,
+        string $related,
+        string $pivotTable,
+        string $pivotRelatedKey,
+        string $relatedEntityPrimaryKey = 'id',
         $typeValue = null
-    )
-    {
-        return ['type' => MorphToMany::class, 
-            'name' => $name, 
+    ) {
+        $type = static::getMorphTypeFromRelated($related);
+
+        return [
+            'type' => MorphToMany::class,
+            'name' => $name,
             'args' => [
-                $related, 
-                $pivotTable, 
-                $pivotRelatedKey, 
-                $morphType, 
-                $morphId, 
-                $relatedEntityPrimaryKey, 
+                $related,
+                $pivotTable,
+                $pivotRelatedKey,
+                "{$type}_type",
+                "{$type}_id",
+                $relatedEntityPrimaryKey,
                 $typeValue
             ]
         ];
     }
 
+
     public static function morphedByMany(
-        $name, 
-        $related, 
-        $pivotTable, 
-        $pivotRelatedKey, 
-        $morphType = 'morph_type', 
-        $morphId = 'morph_id',
-        $relatedEntityPrimaryKey = 'id', 
+        string $name,
+        string $related,
+        string $pivotTable,
+        string $pivotRelatedKey,
+        string $relatedEntityPrimaryKey = 'id',
         $typeValue = null
-    )
-    {
+    ) {
+        $type = static::getMorphTypeFromRelated($related);
+
         return [
-            'type' => MorphedByMany::class, 
-            'name' => $name, 
+            'type' => MorphedByMany::class,
+            'name' => $name,
             'args' => [
-                $related, 
-                $pivotTable, 
-                $pivotRelatedKey, 
-                $morphType, 
-                $morphId, 
-                $relatedEntityPrimaryKey, 
+                $related,
+                $pivotTable,
+                $pivotRelatedKey,
+                "{$type}_type",
+                "{$type}_id",
+                $relatedEntityPrimaryKey,
                 $typeValue
             ]
         ];
     }
+
 
 }

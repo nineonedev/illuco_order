@@ -8,48 +8,26 @@ use Framework\Security\Session\SessionStore;
 
 class DatabaseStore extends SessionStore
 {
-    protected bool $regenerated = false; 
+    protected bool $regenerated = false;
 
     public function start(): void
     {
-        $this->ensureTableExists();
-        
         if ($this->started) return;
 
         $this->initializeSessionId();
         $this->loadSessionData();
 
         parent::start();
-
-    }
-    
-    protected function ensureTableExists(): void
-    {
-        static $ensured = false;
-        if ($ensured) return;
-        $ensured = true;
-
-        if (!Schema::hasTable('sessions')) {
-            Schema::create('sessions', function (Blueprint $table) {
-                $table->string('id', 64)->primary();
-                $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteCascade();
-                $table->string('ip_address')->nullable();
-                $table->text('user_agent')->nullable();
-                $table->timestamp('last_activity')->nullable();
-                $table->longText('payload');
-                $table->timestamps();
-            });
-        }
     }
 
     protected function initializeSessionId(): void
     {
-        if ($this->id) return; 
+        if ($this->id) return;
 
-        $sessionId = cookie()->get(self::SESSION_ID);
+        $id = cookie()->get(self::SESSION_ID);
 
-        if ($sessionId) {
-            $this->id = $sessionId;
+        if ($id) {
+            $this->id = $id;
         } else {
             $this->regenerate();
         }
@@ -57,7 +35,7 @@ class DatabaseStore extends SessionStore
 
     protected function loadSessionData(): void
     {
-        $record = db()->table('sessions')->where('id', $this->id)->first();
+        $record = db()->table('sessions')->where('session_id', $this->id)->first();
 
         if ($record && !$this->isTimeout($record->last_activity)) {
             $this->data = @unserialize($record->payload) ?: [];
@@ -68,15 +46,15 @@ class DatabaseStore extends SessionStore
 
     public function regenerate(): void
     {
-        if ($this->regenerated) return; 
+        if ($this->regenerated) return;
 
         if ($this->id) {
-            db()->table('sessions')->where('id', $this->id)->delete();
+            db()->table('sessions')->where('session_id', $this->id)->delete();
         }
 
         $this->id = bin2hex(random_bytes(20));
         $this->updateCookie();
-        $this->regenerated = true; 
+        $this->regenerated = true;
     }
 
     public function invalidate(): void
@@ -119,7 +97,7 @@ class DatabaseStore extends SessionStore
 
     protected function deleteSessionRecord(): void
     {
-        db()->table('sessions')->where('id', $this->id)->delete();
+        db()->table('sessions')->where('session_id', $this->id)->delete();
     }
 
     protected function resetSessionState(): void
@@ -172,7 +150,7 @@ class DatabaseStore extends SessionStore
     public function save(): void
     {
         db()->table('sessions')->updateOrInsert(
-            ['id' => $this->id],
+            ['session_id' => $this->id],
             $this->buildSessionPayload()
         );
     }

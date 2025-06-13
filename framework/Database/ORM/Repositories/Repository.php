@@ -20,8 +20,6 @@ abstract class Repository
 {
     static ?Repository $instance = null;
     
-    protected string $table;
-
     protected bool $withTrashed = false;
     
     protected bool $onlyTrashed = false;
@@ -54,9 +52,8 @@ abstract class Repository
         return static::$instance; 
     }
 
-    abstract public function table(): string;
-
-    abstract public function entityClass(): string; 
+    abstract public static function table(): string;
+    abstract public static function entityClass(): string;
     
     /**
      * 하위 레포지토리에서 이벤트/옵저버 등록처
@@ -72,7 +69,7 @@ abstract class Repository
     }
 
     /**
-     * @param class-string<Observeralbe> $observer
+     * @param class-string<Obserable> $observer
      */
     public function on(string $event, string $observer): void
     {
@@ -139,7 +136,10 @@ abstract class Repository
     
     protected function softDelete(Entity $entity)
     {
-        /** @var SoftDeletes $entity */
+        /** @var SoftDeletes|Entity $entity */
+
+        if (!trait_used(SoftDeletes::class, $entity)) return;
+
         $entity->markDeleted();
 
         // 바로 DB에 반영
