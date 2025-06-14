@@ -20,7 +20,7 @@ abstract class Rule
      */
     public function message(): string
     {
-        return "Validation failed.";
+        return lang('validation.failed');
     }
 
     public function setField(string $field): void

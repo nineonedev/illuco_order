@@ -50,7 +50,7 @@
                 </a>
             </div>
             <div class="no-header-option-item">
-                <a href="<?= '#' //url('employees.edit', ['id' => 3]) ?>" type="button" class="no-btn-icon --2xl">
+                <a href="<?= route('admin.me.edit') ?>" type="button" class="no-btn-icon --2xl">
                     <div class="no-header-option-profile">나</div>
                 </a>
                 <!-- <button type="button" class="no-btn-icon --2xl">

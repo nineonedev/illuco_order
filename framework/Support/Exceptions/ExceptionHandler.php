@@ -3,11 +3,11 @@
 namespace Framework\Support\Exceptions;
 
 use Framework\Configurations\ExceptionConfigurator;
+use Framework\Console\Output\Output;
+use Framework\Console\UI\Table;
 use Framework\Core\Application;
 use Framework\Http\Contracts\ResponseInterface;
 use Framework\Http\Response;
-use Framework\Http\Responses\HtmlResponse;
-use Framework\Http\Responses\JsonResponse;
 use Framework\Support\Logger;
 use Throwable;
 
@@ -53,6 +53,11 @@ class ExceptionHandler
     {
         $code = $e instanceof BaseException ? $e->getCode() : 500;
 
+        if (php_sapi_name() === 'cli') {
+            $this->handleCli($e);
+            return;
+        }
+
         $this->logger->error($e->getMessage(), array_merge(
             $this->details($e, $code),
             ['meta' => static::$metaData]
@@ -91,10 +96,6 @@ class ExceptionHandler
             return;
         }
 
-        if (php_sapi_name() === 'cli') {
-            $this->handleCli($e);
-            return;
-        }
 
         if (function_exists('request') && request()->expectsJson()) {
             $this->handleJson($e, $code);
@@ -121,8 +122,8 @@ class ExceptionHandler
         while (ob_get_level() > 0) ob_end_clean();
 
         if ($e instanceof BaseException) {
-            $html = $e->renderHtml();
-            Response::html($html, $code)->send();
+            $e->renderHtmlResponse()->send();
+            return; 
         }
         
         $view = config('path.error');
@@ -133,9 +134,8 @@ class ExceptionHandler
 
         if (!is_file($view)) {
             $this->renderBeforeBooting($e, $code);
-            return; 
         }
-
+        
         ob_start();
         $this->renderView($view, $e, $code);
         $content = ob_get_clean();
@@ -159,17 +159,36 @@ class ExceptionHandler
 
     protected function handleCli(Throwable $e): void
     {
-        $code = $e instanceof BaseException ? $e->getCode() : 500;
-        $this->logger->error($e->getMessage(), $this->details($e, $code));
+        $output = new Output();
 
-        echo "[Exception] {$e->getMessage()}" . PHP_EOL;
-        if ($this->debug) echo $this->details($e, $code)['trace'] . PHP_EOL;
+        $code = $e instanceof BaseException ? $e->getCode() : 500;
+        $details = $this->details($e, $code);
+
+        $output->newLine();
+        $output->error("[{$details['exception']}]");
+        $output->writeln("  " . $details['message']);
+        $output->writeln("  at " . $details['file'] . ' : ' . $details['line']);
+        $output->newLine();
+
+        if ($this->debug) {
+            $table = new Table(['#', 'Call']);
+            $lines = explode("\n", $details['trace']);
+            foreach ($lines as $i => $line) {
+                $table->addRow([$i + 1, $line]);
+            }
+
+            $table->render();
+            $output->newLine();
+        }
     }
 
     protected function handleJson(Throwable $e, int $code): void
     {
+        while (ob_get_level() > 0) ob_end_clean();
+
         if ($e instanceof BaseException) {
-            Response::json($e->renderJson(), $code)->send();
+            $e->renderJsonResponse()->send();
+            return;
         }
         
         $payload = [

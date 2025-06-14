@@ -36,7 +36,6 @@ class Unique extends Rule
      */
     public function message(): string
     {
-        // Returning the translated message for the unique rule
-        return lang('rule.unique');
+        return transfer('rule.unique', 'system.'.$this->field);
     }
 }

@@ -52,10 +52,9 @@ class Database
         return $this->manager->connection($connection)->schema();
     }
 
-    public function transaction(Closure $callback, ?string $connection = null)
+    public function transaction(): TransactionManager
     {
-        $tx = new TransactionManager($this->connection($connection));
-        return $tx->run($callback);
+        return app(TransactionManager::class);
     }
 
     public function select(string $sql, array $bindings = [], ?string $connection = null): array

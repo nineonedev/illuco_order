@@ -16,6 +16,24 @@ class CookieManager
         }
     }
 
+    public function all(): array
+    {
+        // 1. 우선 현재 queued 값들부터 배열로 뽑기
+        $result = [];
+        foreach ($this->queued as $name => $cookieJar) {
+            $result[$name] = $cookieJar->getValue();
+        }
+
+        // 2. $_COOKIE에서 queued에 없는 것도 추가
+        foreach ($_COOKIE as $name => $value) {
+            if (!isset($result[$name])) {
+                $result[$name] = $value;
+            }
+        }
+
+        return $result;
+    }
+
     public function get(string $name, $default = null)
     {
         if (isset($this->queued[$name])) {

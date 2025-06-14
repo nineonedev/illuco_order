@@ -28,7 +28,7 @@ class EntityQueryBuilder extends Builder
     public function get(): array
     {
         $rows = parent::get();
-        $entities = array_map(fn($row) => $this->repository->createEntity((array)$row), $rows);
+        $entities = array_map(fn($row) => get_class($this->repository)::resolveEntity((array)$row), $rows);
         return $this->repository->loadRelations($entities);
     }
 
@@ -47,7 +47,7 @@ class EntityQueryBuilder extends Builder
 
     public function find($id)
     {
-        $pk = $this->repository->createEntity([])->getPrimaryKeyName();
+        $pk = get_class($this->repository)::resolveEntity([])->getPrimaryKeyName();
 
         // 여러 개
         if (is_array($id)) {

@@ -1,7 +1,7 @@
 <?php
 
-use Framework\Security\Auth\Middleware\AuthMiddleware;
-use Framework\Security\Csrf\Middleware\CsrfMiddleware;
+use App\Http\Middlewares\AuthMiddleware;
+use App\Http\Middlewares\CsrfMiddleware;
 
 return [
     'priority' => [
@@ -26,13 +26,3 @@ return [
 //     \Illuminate\View\Middleware\ShareErrorsFromSession::class,
 //     \App\Http\Middleware\VerifyCsrfToken::class,
 // ]
-
-
-// function middleware(string|array $names): array
-// {
-//     $groups = config('middleware.group');
-
-//     return collect((array) $names)
-//         ->flatMap(fn($name) => $groups[$name] ?? [$name])
-//         ->all();
-// }

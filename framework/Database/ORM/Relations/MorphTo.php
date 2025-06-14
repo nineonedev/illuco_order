@@ -3,18 +3,18 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\RelationMap;
+use Framework\Database\ORM\Rel;
 
 /**
  * 다형성 역방향 관계 (ex: Image → Post/User 등 morph 대상)
  * - morph_type, morph_id 컬럼을 가진 엔티티에서 'owner' 엔티티 로드
  */
-class MorphTo extends MorphRelation
+class MorphTo extends Relation
 {
     protected $morphType;        // morph_type 컬럼명
     protected $morphId;          // morph_id 컬럼명
-    protected array $typesMap;   // morph_type값 → 엔티티 클래스
-    protected array $typeGroups = [];
+    protected array $typesMap = [];   // [alias => class]
+    protected array $typeGroups = []; // [alias => [id, id], ...]
 
     public function __construct(
         Entity $parent,
@@ -22,12 +22,10 @@ class MorphTo extends MorphRelation
         string $morphId = 'morph_id',
         array $typesMap = []
     ) {
-        parent::__construct($parent, null);
+        parent::__construct($parent, get_class($parent));
         $this->morphType = $morphType;
         $this->morphId = $morphId;
-
-        // 전역 MorphMap 우선, 없으면 인스턴스별 typesMap
-        $this->typesMap = !empty(RelationMap::morphMap()) ? RelationMap::morphMap() : $typesMap;
+        $this->typesMap = $typesMap ?: Rel::morphableMap();
     }
 
     public function addEagerConstraints(array $entities): void
@@ -41,6 +39,8 @@ class MorphTo extends MorphRelation
                 $typeGroups[$typeValue][] = $ownerId;
             }
         }
+
+        // [admin => [1,2,3], employee => [2,3,4]]
         $this->typeGroups = $typeGroups;
     }
 
@@ -51,16 +51,12 @@ class MorphTo extends MorphRelation
         $results = [];
         foreach ($this->typeGroups as $typeValue => $ownerIds) {
             // 1. 엔티티 클래스 찾기 (MorphMap > typesMap)
-            $relatedClass =
-                RelationMap::resolveMorph($typeValue)
-                ?? ($this->typesMap[$typeValue] ?? null);
+            $relatedClass = $this->typesMap[$typeValue] ?? null;
 
             if (!$relatedClass) continue;
 
             // 2. PK 컬럼명 찾기
-            $pk = method_exists($relatedClass, 'primaryKeyName')
-                ? $relatedClass::primaryKeyName()
-                : 'id';
+            $pk = $relatedClass::make()->getPrimaryKeyName() ?? 'id';
 
             $rows = $this->queryForEntity($relatedClass)
                 ->whereIn($pk, $ownerIds)
@@ -89,15 +85,11 @@ class MorphTo extends MorphRelation
         $typeValue = $this->parent->get($this->morphType);
         $ownerId = $this->parent->get($this->morphId);
 
-        $relatedClass =
-            RelationMap::resolveMorph($typeValue)
-            ?? ($this->typesMap[$typeValue] ?? null);
+        $relatedClass = $this->typesMap[$typeValue] ?? null;
 
         if (!$relatedClass || !$ownerId) return null;
 
-        $pk = method_exists($relatedClass, 'primaryKeyName')
-            ? $relatedClass::primaryKeyName()
-            : 'id';
+        $pk = $relatedClass::make()->getPrimaryKeyName() ?? 'id';
 
         return $this->queryForEntity($relatedClass)
             ->where($pk, $ownerId)

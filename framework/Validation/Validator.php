@@ -10,6 +10,7 @@ class Validator
     protected array $rules = [];
     protected array $messages = [];
     protected array $errors = [];
+    protected array $validatedData = [];
 
     public function __construct(array $data = [], array $rules = [])
     {
@@ -57,6 +58,7 @@ class Validator
         return $this;
     }
 
+
     /**
      * Validate the data.
      *
@@ -78,6 +80,11 @@ class Validator
         return empty($this->errors);
     }
 
+    public function setValidated(array $validated): void
+    {
+        $this->validatedData = array_merge($this->validated(), $validated);
+    }
+
     /**
      * Return only the validated (passed) data.
      *
@@ -85,8 +92,7 @@ class Validator
      */
     public function validated(): array
     {
-        // 유효성 실패한 필드 제외하고 반환
-        return array_filter(
+        return $this->validatedData ?: array_filter(
             $this->data,
             fn ($key) => !array_key_exists($key, $this->errors),
             ARRAY_FILTER_USE_KEY

@@ -7,12 +7,10 @@ use Framework\Database\ORM\Repositories\Repository;
 
 abstract class Entity
 {
-    protected string $primaryKey = 'id'; 
+    protected string $primaryKey = 'id';
 
-    /** @var array<string, mixed> 실제 속성 */
     protected array $attributes = [];
 
-    /** @var array<string, mixed> 최초 데이터(변경감지용) */
     protected array $original = [];
 
     /** @var array<string> 허용 속성(없으면 전체 허용) */
@@ -23,35 +21,33 @@ abstract class Entity
 
     /** @var array<string, string> 캐스팅 지정(예: 'is_active' => 'bool') */
     protected array $casts = [];
-    
+
     protected array $relations = [];
 
     protected array $meta = [];
 
     public function __construct(array $attributes = [])
     {
-        $this->setup(); 
+        $this->setup();
         $this->fill($attributes);
         $this->syncOriginal();
         $this->boot();
     }
 
-    protected function setup(): void
-    {
-        
-    }
+    protected function setup(): void {}
+    protected function boot(): void {}
 
-    protected function boot(): void
-    {
-
-    }
-
-    /**
-     * @return static
-     */
-    public static function make(array $attributes)
+    public static function make(array $attributes = [])
     {
         return new static($attributes);
+    }
+    
+    /** @return class-string<Repository> */
+    abstract public static function repositoryClass(): string;
+
+    public static function resolveRepository(): Repository
+    {
+        return static::repositoryClass()::make();
     }
 
     public static function alias(): string
@@ -59,20 +55,10 @@ abstract class Entity
         return strtolower(class_basename(static::class));
     }
 
-    /**
-     * @return class-string<Repository>
-     */
-    abstract static public function repositoryClass(): string;
 
     public function setMeta(string $key, $value): void
     {
         $this->meta[$key] = $value;
-    }
-
-    public function createRepository(array $attributes): Repository
-    {
-        $repo = static::repositoryClass();
-        return $repo::new($attributes);
     }
 
     public function getMeta(string $key, $default = null)
@@ -80,17 +66,25 @@ abstract class Entity
         return $this->meta[$key] ?? $default;
     }
 
-    public function setRelation($name, $value): void
+    public function setRelation(string $name, $value): void
     {
         $this->relations[$name] = $value;
     }
 
-    public function getRelation($name)
+    public function getRelation(string $name)
     {
         return $this->relations[$name] ?? null;
     }
 
-    public function fill(array $attributes): self
+    public function hasRelation(string $name): bool
+    {
+        return array_key_exists($name, $this->relations);
+    }
+
+    /**
+     * @return static
+     */
+    public function fill(array $attributes)
     {
         $pk = $this->getPrimaryKeyName();
 
@@ -105,7 +99,7 @@ abstract class Entity
 
     public function setPrimaryKey($value): void
     {
-        $this->attributes[$this->getPrimaryKey()] = $value;
+        $this->attributes[$this->primaryKey] = $value;
     }
 
     public function getPrimaryKeyName(): string
@@ -118,61 +112,38 @@ abstract class Entity
         return $this->__get($this->primaryKey);
     }
 
-    // ---- 개선: 캐스트 팩토리 활용 ----
     protected function castAttribute(string $key, $value)
     {
-        if (!isset($this->casts[$key])) {
-            return $value;
-        }
-
-        $cast = CastFactory::resolve($this->casts[$key]);
-        return $cast->get($value);
+        if (!isset($this->casts[$key])) return $value;
+        return CastFactory::resolve($this->casts[$key])->get($value);
     }
 
     protected function castSet(string $key, $value)
     {
-        if (!isset($this->casts[$key])) {
-            return $value;
-        }
-        $cast = CastFactory::resolve($this->casts[$key]);
-        return $cast->set($value);
+        if (!isset($this->casts[$key])) return $value;
+        return CastFactory::resolve($this->casts[$key])->set($value);
     }
 
-    // --- 매직 getter/setter ---
-    public function __get($key)
+    public function __get(string $key)
     {
-        // 1순위: relations
-        if (isset($this->relations[$key])) {
-            return $this->relations[$key];
-        }
-
-            
-        // 2순위: attributes
-        if (array_key_exists($key, $this->attributes)) {
-            return $this->castAttribute($key, $this->attributes[$key]);
-        }
-        
-        // 3순위: meta
-        if (isset($this->meta[$key])) {
-            return $this->meta[$key];
-        }
-
-        return null;
+        return $this->relations[$key] ??
+                (array_key_exists($key, $this->attributes) ? $this->castAttribute($key, $this->attributes[$key]) :
+                ($this->meta[$key] ?? null));
     }
 
-    public function __set($key, $value): void
+    public function __set(string $key, $value): void
     {
-        if ($key === $this->getPrimaryKeyName() || $this->isFillable($key)) {
+        if ($key === $this->primaryKey || $this->isFillable($key)) {
             $this->attributes[$key] = $this->castSet($key, $value);
         }
     }
 
-    public function __isset($key): bool
+    public function __isset(string $key): bool
     {
         return isset($this->attributes[$key]);
     }
 
-    public function __unset($key): void
+    public function __unset(string $key): void
     {
         unset($this->attributes[$key]);
     }
@@ -189,13 +160,8 @@ abstract class Entity
 
     protected function isFillable(string $key): bool
     {
-        if (!empty($this->fillable)) {
-            return in_array($key, $this->fillable, true);
-        }
-        if (!empty($this->guarded)) {
-            return !in_array($key, $this->guarded, true);
-        }
-        return true;
+        return !empty($this->fillable) ? in_array($key, $this->fillable, true) :
+                (!empty($this->guarded) ? !in_array($key, $this->guarded, true) : true);
     }
 
     public function syncOriginal(): void
@@ -206,11 +172,13 @@ abstract class Entity
     public function getChanges(): array
     {
         $changes = [];
+
         foreach ($this->attributes as $key => $value) {
             if (!array_key_exists($key, $this->original) || $this->original[$key] !== $value) {
                 $changes[$key] = $value;
             }
         }
+
         return $changes;
     }
 
@@ -224,41 +192,46 @@ abstract class Entity
         return empty($this->getChanges());
     }
 
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    } 
-
     public function hasChanged(string $key): bool
     {
         return array_key_exists($key, $this->getChanges());
     }
 
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
     public function toArray(): array
     {
-        
         $arr = [];
+
         foreach ($this->attributes as $key => $value) {
             $arr[$key] = $this->castAttribute($key, $value);
         }
 
         foreach ($this->relations as $relation => $data) {
-            if (is_array($data) || $data instanceof \Traversable) {
-                $arr[$relation] = array_map(
-                    fn($item) => $item instanceof self ? $item->toArray() : $item,
-                    is_array($data) ? $data : iterator_to_array($data)
-                );
-            } else if ($data instanceof self) {
+            if (is_array($data)) {
+                $arr[$relation] = [];
+
+                foreach ($data as $item) {
+                    $arr[$relation][] = $item instanceof self ? $item->toArray() : $item;
+                }
+
+            } elseif ($data instanceof \Traversable) {
+                $arr[$relation] = [];
+
+                foreach ($data as $item) {
+                    $arr[$relation][] = $item instanceof self ? $item->toArray() : $item;
+                }
+
+            } elseif ($data instanceof self) {
                 $arr[$relation] = $data->toArray();
             } else {
                 $arr[$relation] = $data;
             }
         }
 
-        if (!empty($this->meta)) {
-            $arr = array_merge($arr, $this->meta);
-        }
-        
-        return $arr;
+        return array_merge($arr, $this->meta);
     }
 }

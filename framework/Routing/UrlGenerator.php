@@ -16,7 +16,7 @@ class UrlGenerator
         $route = $this->routes->getByName($name);
 
         if (!$route) {
-            throw new \InvalidArgumentException("Route [{$name}] not defined.");
+            throw new \Exception("Route [{$name}] not defined.");
         }
 
         $uri = $route->uri();

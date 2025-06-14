@@ -76,7 +76,6 @@ class ViewEngine
         }
     }
 
-
     public function include(string $view, array $data = []): string
     {
         $path = $this->finder->find($view);

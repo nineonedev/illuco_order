@@ -1,17 +1,14 @@
 <?php 
 
-namespace App\Domains\User\Observers;
+namespace App\Services\User;
 
-use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\RelationMap;
-use Framework\Database\ORM\Repositories\Obserable;
-use Framework\Http\Request;
+use App\Supports\Services\Service;
 
-class BeforeDeleteUserableObserver implements Obserable
+class DeleteUserService extends Service
 {
-    public function observe(Entity $user, Request $request): void
+    protected function handle(array $payload)
     {
-        $userClass = get_class($user); 
+        userClass = get_class($user); 
 
         $type = $user->{$userClass::getMorphType()};
         $id = $user->{$userClass::getMorphId()}; 

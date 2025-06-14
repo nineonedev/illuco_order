@@ -3,6 +3,9 @@
 namespace Framework\Support\Exceptions;
 
 use Exception;
+use Framework\Http\Response;
+use Framework\Http\Responses\HtmlResponse;
+use Framework\Http\Responses\JsonResponse;
 
 abstract class BaseException extends Exception
 {
@@ -19,21 +22,35 @@ abstract class BaseException extends Exception
         return $this->meta;
     }
 
-    public function renderHtml(): string
+    protected function view(): string
     {
-        return render(config('path.error'), [
-            'code' => $this->getCode(),
-            'message' => $this->getMessage(),
-            'meta' => $this->getMeta(),
-        ]);
+        return config('path.error');
     }
 
-    public function renderJson(): array
+    protected function json(): array
     {
-        return [
+        return [];
+    }
+
+    public function renderHtmlResponse(): HtmlResponse
+    {
+        return Response::html(
+            render($this->view(), [
+                'code'    => $this->getCode(),
+                'message' => $this->getMessage(),
+                'meta'    => $this->getMeta(),
+            ]),
+            $this->getCode()
+        );
+    }
+
+    public function renderJsonResponse(): JsonResponse
+    {
+        $data = array_merge([
             'success' => false,
             'message' => $this->getMessage(),
-            'meta' => $this->getMeta(),
-        ];
+            'meta'    => $this->getMeta(),
+        ], $this->json());
+        return Response::json($data, $this->getCode());
     }
 }

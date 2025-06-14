@@ -36,15 +36,20 @@ class TransactionManager
 
     public function run(callable $callback)
     {
-        $this->begin();
-
+        
         try {
+            $this->begin();
+            
             $result = $callback();
+            
             $this->commit();
 
             return $result;
+
         } catch (Throwable $e) {
+            
             $this->rollBack();
+            
             throw $e;
         }
     }

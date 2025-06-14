@@ -2,91 +2,92 @@
 
 namespace Framework\Database\ORM\Repositories;
 
-use App\Domains\User\Entities\User;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Loaders\EagerLoader;
 use Framework\Database\ORM\Loaders\LazyLoader;
-use Framework\Database\ORM\RelationMap;
+use Framework\Database\ORM\Rel;
 use Framework\Database\ORM\Traits\SoftDeletes;
 use Framework\Database\Query\Builder;
 use Framework\Database\Query\EntityQueryBuilder;
-
-/**
- * @method static EntityQueryBuilder with(array $relations)
- * @method static array toArray()
- * @method static string toJson()
- */
+use RuntimeException;
 
 abstract class Repository
 {
-    /** @var Repository[] */
-    static array $instances = [];
-    
     protected bool $withTrashed = false;
-    
     protected bool $onlyTrashed = false;
-
-    protected bool $preventsLazyLoading = false; 
+    protected bool $preventsLazyLoading = true;
 
     protected Builder $builder;
-
-    protected Observer $observer; 
+    protected Observer $observer;
 
     /** @var string[] */
     protected array $with = [];
 
     public function __construct()
     {
-        $this->setup();
         $this->builder = query($this);
         $this->observer = new Observer();
-        $this->boot();
-    }
 
-    protected function setup()
-    {
-        
-    }
-
-
-    protected function boot(): void
-    {
+        $this->initializeSoftDeleteFilter();
         $this->registerObservers();
-        $this->applySoftDeleteFilter();
     }
+
+    protected function initializeSoftDeleteFilter(): void
+    {
+        if (!trait_used(SoftDeletes::class, static::entityClass())) return;
+
+        $column = (static::resolveEntity())->getSoftDeleteColumn();
+
+        if ($this->onlyTrashed) {
+            $this->builder->whereNotNull($column);
+        } elseif (!$this->withTrashed) {
+            $this->builder->whereNull($column);
+        }
+    }
+
+    /**
+     * @return class-string<Entity>
+     */
+    abstract public static function entityClass(): string;
+
+    abstract public static function table(): string;
 
     /**
      * @return static
      */
     public static function make()
     {
-        $calledClass = static::class;
+        return new static();
+    }
 
-        if (!isset(static::$instances[$calledClass])) {
-            static::$instances[$calledClass] = new static();
+    public static function __callStatic($method, $arguments)
+    {
+        $builder = query(new static());
+
+        if (method_exists($builder, $method)) {
+            return $builder->$method(...$arguments);
         }
 
-        return static::$instances[$calledClass];
-    }
-
-    public static function clearInstance(): void
-    {
-        unset(static::$instances[static::class]);
-    }
-
-    abstract public static function table(): string;
-    abstract public static function entityClass(): string;
-    
-    /**
-     * 하위 레포지토리에서 이벤트/옵저버 등록처
-     */
-    protected function registerObservers(): void
-    {
+        throw new \BadMethodCallException("Method [$method] does not exist.");
     }
 
     /**
-     * @param class-string<Obserable> $observer
+     * @return Entity|SoftDeletes
      */
+    public static function resolveEntity(array $attributes = [])
+    {
+        $class = static::entityClass();
+        return new $class($attributes);
+    }
+
+
+    public function withTransaction(callable $callback)
+    {
+        return transaction()->run(fn () => $callback($this));
+    }
+
+    protected function registerObservers(): void {}
+
     public function on(string $event, string $observer): void
     {
         $this->observer->register($event, $observer);
@@ -96,25 +97,33 @@ abstract class Repository
     {
         $this->observer->fire(RepositoryEvent::BEFORE_SAVE, $entity);
 
-        $pkName = $entity->getPrimaryKeyName();
-        $isNew = is_null($entity->getPrimaryKey());
+        return is_null($entity->getPrimaryKey())
+            ? $this->insertEntity($entity)
+            : $this->updateEntity($entity);
+    }
 
-        if ($isNew) {
-            $this->observer->fire(RepositoryEvent::BEFORE_CREATE, $entity);
-            $id = $this->builder->insert($entity->getAttributes());
+    protected function insertEntity(Entity $entity): ?Entity
+    {
+        $this->observer->fire(RepositoryEvent::BEFORE_CREATE, $entity);
+        $id = $this->builder->insert($entity->getAttributes());
 
-            if (!$id) {
-                return null;
-            } 
-            
-            $entity->set($pkName, $id);
-            $this->observer->fire(RepositoryEvent::AFTER_CREATE, $entity);
-            $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
-            return $entity;
-        }
-        
+        if (!$id) return null;
+
+        $entity->set($entity->getPrimaryKeyName(), $id);
+        $this->observer->fire(RepositoryEvent::AFTER_CREATE, $entity);
+        $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
+
+        return $entity;
+    }
+
+    protected function updateEntity(Entity $entity): ?Entity
+    {
         $this->observer->fire(RepositoryEvent::BEFORE_UPDATE, $entity);
-        $affected = $this->builder->where($pkName, $entity->getPrimaryKey())->update($entity->getAttributes());
+
+        $affected = $this->builder
+            ->where($entity->getPrimaryKeyName(), $entity->getPrimaryKey())
+            ->update($entity->getAttributes());
+
         $this->observer->fire(RepositoryEvent::AFTER_UPDATE, $entity);
         $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
 
@@ -123,102 +132,44 @@ abstract class Repository
 
     public function delete(Entity $entity): bool
     {
-        if (trait_used(SoftDeletes::class, $entity)) {
-            return $this->softDelete($entity); 
-        }
-
-        $this->observer->fire(RepositoryEvent::BEFORE_DELETE, $entity);
-        $success = $this->builder->where('id', $entity->get('id'))->delete() > 0;
-        $this->observer->fire(RepositoryEvent::AFTER_DELETE, $entity);
-        return $success;
+        return $this->isSoftDeletable($entity)
+            ? $this->performSoftDelete($entity)
+            : $this->performHardDelete($entity);
     }
 
-    protected function applySoftDeleteFilter(): void
+    protected function isSoftDeletable(Entity $entity): bool
     {
-        $entityClass = $this->entityClass();
-        if (trait_used(SoftDeletes::class, $entityClass)) {
-            
-            /** @var SoftDeletes $entity */
-            $entity = new $entityClass();
-            $column = $entity->getSoftDeleteColumn();
-
-            if ($this->onlyTrashed) {
-                $this->builder->whereNotNull($column);
-            } elseif (!$this->withTrashed) {
-                $this->builder->whereNull($column);
-            }
-        }
+        return trait_used(SoftDeletes::class, $entity);
     }
-    
-    protected function softDelete(Entity $entity)
-    {
+
+    protected function performSoftDelete(Entity $entity): bool
+    { 
         /** @var SoftDeletes|Entity $entity */
-
-        if (!trait_used(SoftDeletes::class, $entity)) return;
-
         $entity->markDeleted();
-
-        // 바로 DB에 반영
         $this->observer->fire(RepositoryEvent::BEFORE_DELETE, $entity);
-        
-        $pkName = $entity->getPrimaryKeyName();
 
+        $column = $entity->getSoftDeleteColumn();
         $success = $this->builder
-            ->where($pkName, $entity->getPrimaryKey())
-            ->update([$entity->getSoftDeleteColumn() => $entity->deletedAt()]);
+            ->where($entity->getPrimaryKeyName(), $entity->getPrimaryKey())
+            ->update([$column => $entity->deletedAt()]);
 
         $this->observer->fire(RepositoryEvent::AFTER_DELETE, $entity);
         return (bool) $success;
     }
 
-    /*** --- 관계 with/로드 --- ***/
-    public function setWith(array $relations): self
+    protected function performHardDelete(Entity $entity): bool
     {
-        $this->with = $relations;
-        return $this;
+        $this->observer->fire(RepositoryEvent::BEFORE_DELETE, $entity);
+
+        $success = $this->builder
+            ->where('id', $entity->get('id'))
+            ->delete() > 0;
+
+        $this->observer->fire(RepositoryEvent::AFTER_DELETE, $entity);
+        return $success;
     }
 
-    /**
-     * @param Entity[] $entities
-     * @return Entity[]
-     */
-    public function loadRelations(array $entities): array
-    {
-        if (empty($this->with) || empty($entities)) return $entities;
 
-        $loader = $this->preventsLazyLoading
-            ? new EagerLoader()
-            : new LazyLoader();
-
-        $relations = [];
-
-        foreach ($this->with as $relationName) {
-            $relation = RelationMap::getRelation($entities[0], $relationName);
-            if (!$relation) continue;
-            $relations[] = $relationName;
-        }
-
-        if (!empty($relations)) {
-            $loader->load($entities, $relations);
-        }
-
-        return $entities;
-    }
-
-    /*** --- Entity 변환 --- ***/
-    public function createEntity(array $attributes): Entity
-    {
-        $class = $this->entityClass();
-        return new $class($attributes);
-    }
-
-    // 빌더 체이닝용
-    public function query(): EntityQueryBuilder
-    {
-        return $this->builder;
-    }
-
-    /*** --- SoftDeletes --- ***/
     public function withTrashed(): self
     {
         $this->withTrashed = true;
@@ -240,14 +191,31 @@ abstract class Repository
         return $this;
     }
 
-    public static function __callStatic($method, $arguments)
+    public function setWith(array $relations): self
     {
-        $builder = query(new static());
+        $this->with = $relations;
+        return $this;
+    }
 
-        if (method_exists($builder, $method)) {
-            return $builder->$method(...$arguments);
+    public function loadRelations(array $entities): array
+    {
+        if (empty($this->with) || empty($entities)) return $entities;
+
+        $loader = $this->preventsLazyLoading
+            ? new EagerLoader()
+            : new LazyLoader();
+
+        $validRelations = array_filter($this->with, fn ($rel) => Rel::getRelation($entities[0], $rel));
+
+        if (!empty($validRelations)) {
+            $loader->load($entities, $validRelations);
         }
 
-        throw new \BadMethodCallException("Method [$method] does not exist.");
+        return $entities;
+    }
+
+    public function query(): EntityQueryBuilder
+    {
+        return $this->builder;
     }
 }

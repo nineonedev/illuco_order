@@ -3,11 +3,12 @@
 return [
     'locale' => 'ko',
     'fallback' => 'en',
-    'default' => 'web',
+    'default' => 'app',
     'translators' => [
-        'web' => base_path('resources/lang'),
-        'rule' => base_path('framework/Validation/locales'),
-        'system' => base_path('resources/system'),
+        'app' => base_path('resources/lang/app'),
+        'rule' => base_path('resources/lang/rule'),
+        'validation' => base_path('resources/lang/validation'),
+        'system' => base_path('resources/lang/system'),
     ],
     'languages' => [
         'ko' => '한국어',

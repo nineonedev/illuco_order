@@ -22,13 +22,13 @@ abstract class MorphEntity extends Entity implements Morphable
         $this->casts = array_merge($this->casts, [static::getMorphId() => "int"]);
     }
 
-    public static function createMorphData(string $morphTypeValue, int $moprhIdValue): array
+    public static function morphAttributes(string $morphTypeValue, int $moprhIdValue, array $data): array
     {
-        return [
+        return array_merge([
             static::getMorphType() => $morphTypeValue,
-            static::getMorphId() => $moprhIdValue  
-        ];
-    } 
+            static::getMorphId() => $moprhIdValue,
+        ], $data);
+    }
 
     public static function getMorphType(): string
     {

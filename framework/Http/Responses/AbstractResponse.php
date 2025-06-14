@@ -94,13 +94,13 @@ abstract class AbstractResponse implements ResponseInterface
 
     public function withInput(array $input = [])
     {
-        flash()->setInput($input);
+        flash()->input($input);
         return $this;
     }
 
     public function withErrors(array $errors)
     {
-        flash()->setErrors($errors); 
+        flash()->errors($errors); 
         return $this;
     }
 

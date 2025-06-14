@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\User;
-use App\Domains\User\Repositories\AdminRepository;
 use App\Domains\User\Repositories\UserRepository;
-use Framework\Http\Request;
+use App\Http\Requests\User\LoginFormRequest;
+use App\Http\Requests\User\RegisterFormRequest;
+use App\Services\User\RegisterUserService;
 use Framework\Routing\Controller;
+use Framework\Support\Exceptions\Http\UnauthenticatedException;
 
 class AuthController extends Controller
 {
@@ -35,84 +37,66 @@ class AuthController extends Controller
         return $this->render('home.pages.auth.signin');
     }
 
-    public function register(Request $request)
+    public function register(RegisterFormRequest $request)
     {
-        $request->validateOrFail([
-            'name'     => 'required|string|maxLength:50',
-            'email'    => 'required|email|maxLength:100|unique:users',
-            'password' => 'required|string|minLength:8|maxLength:100',
-        ]);
+        $admin = new Admin(); 
 
-        $admin = Admin::make([]);
-        $admin = AdminRepository::make()->save($admin);
+        $service = new RegisterUserService($admin);
+        $result = $service->runInTransaction($request->safe());
 
-        if (!$admin) {
-            return $this->renderError(null, '회원가입에 실패했습니다.');
-        }
-
-        return $this->render(null, [
-            'user' => $admin->getRelation('user')
-        ], '회원가입에 성공했습니다.');
+        return $result->toResponse();
     }
 
-    public function login(Request $request)
+    public function login(LoginFormRequest $request)
     {
-        // if (RememberToken::make()->check()) {
-        //     return $this->render(null, [], '자동로그인에 성공하였습니다.');
-        // }
-
         if (auth()->check()) {
-            return $this->render(null, [], '이미 로그인되어 있습니다.');
+            return $this->render(null, [], lang('validation.already_logged_in'));
         }
 
-        $request->validateOrFail([
-            'email'    => 'required|email|maxLength:100',
-            'password' => 'required|string|minLength:8|maxLength:100',
-        ]);
-
-        $credentials = $request->safe(['email', 'password']);
+        $credentials = $request->safe();
 
         if (!auth()->attempt($credentials)) {
-            return $this->renderError(null, '이메일 또는 비밀번호가 올바르지 않습니다.')->withInput($request->all())->withErrors(['message' => '에러']);
+            return $this->renderError(null, lang('validation.login_failed'))
+                ->withInput($request->all());
         }
         
         $user = auth()->user();
-        // RememberToken::make()->handleRememberMe($request, $user);
 
         return $this->responseWith()
             ->success(true)
             ->redirectRoute('admin.dashboard')
             ->data(['user' => $user])
-            ->message('로그인에 성공하였습니다.')
+            ->message(lang('validation.login_success'))
             ->send();
     }
 
     public function logout()
     {
-        // $user = auth()->user();
-
-        // if ($user) {
-        //     RememberToken::make()->delete($user);
-        // }
-
         auth()->logout();
 
         return $this->responseWith()
             ->success(true)
-            ->message('로그아웃 되었습니다.')
+            ->message(lang('validation.logout_success'))
             ->redirectRoute('home')
             ->send();
     }
 
-    public function me()
+
+    public function edit()
     {
         $id = auth()->id();
-        $user = UserRepository::find($id); 
+        $user = UserRepository::with([User::morphType()])->find($id);
 
         if (!$user) {
-            return $this->renderError(null, '로그인이 필요합니다.', [], 401);
+            throw new UnauthenticatedException();
         }
 
-        return $this->render('auth.me', ['user' => $user->toArray()]);
+        return $this->render('home.pages.auth.me', ['user' => $user]);
+    }
+
+
+    public function update()
+    {
+        
     }
 }

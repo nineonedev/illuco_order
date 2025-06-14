@@ -6,6 +6,7 @@ use Framework\Database\ORM\Repositories\Repository;
 use Framework\Database\Schema\Schema;
 use Framework\Database\Query\Builder;
 use Framework\Database\Query\EntityQueryBuilder;
+use Framework\Database\TransactionManager;
 
 // 기본 DB Connection (low-level)
 if (!function_exists('connection')) {
@@ -56,21 +57,21 @@ if (!function_exists('schema')) {
 
 // 트랜잭션 처리기
 if (!function_exists('transaction')) {
-    function transaction(Closure $callback, ?string $connection = null)
+    function transaction(): TransactionManager
     {
-        return database()->transaction($callback, $connection);
+        return database()->transaction();
     }
 }
 
 if (!function_exists('db_select')) {
-    function db_select(string $sql, array $bindings = [], ?string $connection = null): array
+    function db_select(string $sql, array $bindings = []): array
     {
         return connection()->select($sql, $bindings);
     }
 }
 
 if (!function_exists('db_statement')) {
-    function db_statement(string $sql, array $bindings = [], ?string $connection = null): bool
+    function db_statement(string $sql, array $bindings = []): bool
     {
         return connection()->statement($sql, $bindings);
     }

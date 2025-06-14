@@ -1,9 +1,9 @@
 <?php
 
-use App\Domains\Notices\Controllers\ClaimController;
-use App\Domains\Notice\Controllers\NoticeController;
+use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use Framework\Security\Auth\AuthManager;
 use Framework\Support\Facades\Route;
 
 Route::middleware(['web'])->group(function(){
@@ -30,36 +30,43 @@ Route::middleware(['web'])->group(function(){
     // admin 
     // ============================================================================================================
     Route::prefix('admin')
-    ->name('admin')
-    ->middleware(['auth'])
-    ->group(function(){
-
-        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-        Route::get('guide', [AdminController::class, 'guide'])->name('guide');
-        Route::get('test', [AdminController::class, 'test'])->name('test');
-
-        Route::get('seting', [AdminController::class, 'setting'])->name('setting'); 
-
-
-        Route::prefix('notices')
-        ->name('notices')
+        ->name('admin')
+        ->middleware(['auth'])
         ->group(function(){
-            Route::get('/', [NoticeController::class, 'index'])->name('index');
-            Route::get('create', [NoticeController::class, 'create'])->name('create');
-            Route::get('edit/{id}', [NoticeController::class, 'edit'])->name('edit');
-            Route::get('{id}', [NoticeController::class, 'show'])->name('show');
             
-            Route::post('/', [NoticeController::class, 'store'])->name('store');
-            Route::put('{id}', [NoticeController::class, 'update'])->name('update');
-            Route::delete('{id}', [NoticeController::class, 'destroy'])->name('destroy');
-        });
+            Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('guide', [AdminController::class, 'guide'])->name('guide');
+            Route::get('test', [AdminController::class, 'test'])->name('test');
+            Route::get('seting', [AdminController::class, 'setting'])->name('setting'); 
+            
 
-        Route::prefix('claims')
-        ->name('claims')
-        ->group(function(){
-            Route::get('/', [ClaimController::class, 'index'])->name('index');
-        });
+            Route::prefix('me')
+                ->name('me')
+                ->group(function(){
+                    Route::get('/', [AuthController::class, 'edit'])->name('edit');
+                    Route::patch('/', [AuthController::class, 'update'])->name('update');
+                });
 
-    });
+
+            Route::prefix('notices')
+                ->name('notices')
+                ->group(function(){
+                    Route::get('/', [NoticeController::class, 'index'])->name('index');
+                    Route::get('create', [NoticeController::class, 'create'])->name('create');
+                    Route::get('edit/{id}', [NoticeController::class, 'edit'])->name('edit');
+                    Route::get('{id}', [NoticeController::class, 'show'])->name('show');
+                    
+                    Route::post('/', [NoticeController::class, 'store'])->name('store');
+                    Route::put('{id}', [NoticeController::class, 'update'])->name('update');
+                    Route::delete('{id}', [NoticeController::class, 'destroy'])->name('destroy');
+                });
+
+            // Route::prefix('claims')
+            //     ->name('claims')
+            //     ->group(function(){
+            //         Route::get('/', [ClaimController::class, 'index'])->name('index');
+            //     });
+
+        });
 
 });

@@ -1,6 +1,4 @@
-<?php 
- use Framework\Constants\AppConstants;
-?>
+
 <?php extend('layouts.admin') ?>
 
 <?php section('title') ?>
@@ -96,7 +94,7 @@
                                     <input 
                                         class="no-form-radio-input" 
                                         type="radio" 
-                                        name="<?= AppConstants::LOCALE_KEY ?>"
+                                        name="locale"
                                         id="language_<?=$lang?>" 
                                         value="<?=$lang?>" 
                                         <?=$checked?>

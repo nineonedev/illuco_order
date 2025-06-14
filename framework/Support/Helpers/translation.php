@@ -19,6 +19,22 @@ if (!function_exists('lang')) {
     }
 }
 
+if (!function_exists('transfer')) {
+    /**
+     * @example transfer('rule.between', 'system.age', [10, 20])
+     * '{0}은 {1}~{2} 사이여야 합니다.' → "나이는 10~20 사이여야 합니다."
+     */
+    function transfer(string $key, string $labelKey, array $replace = [], ?string $locale = null): ?string
+    {
+        // 라벨 값 얻기
+        $label = lang($labelKey, [], $locale);
+        // 첫번째 자리에 라벨 끼워 넣음 (순서 치환)
+        array_unshift($replace, $label);
+        return lang($key, $replace, $locale);
+    }
+}
+
+
 if (!function_exists('_')) {
     function _(string $key, array $replace = [], ?string $locale = null): ?string
     {

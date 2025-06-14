@@ -17,7 +17,7 @@ return [
     'phoneUS' => 'Please enter a valid US phone number.',
     'equal' => 'Please enter the same value again.',
     'notEqual' => 'Please select a different value.',
-    'unique' => 'Please enter a unique value.',
+    'unique' => 'The {0} has already been taken.',
     'uploaded' => 'No file was uploaded.',
     'uploaded_ok' => 'There was an error with the uploaded file.',
     'file_size' => 'The file must be smaller than {0} bytes.',

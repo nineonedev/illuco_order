@@ -1,11 +1,11 @@
 <?php
 
-namespace Framework\Security\Csrf\Middleware;
+namespace App\Http\Middlewares;
 
 use Closure;
+use Framework\Http\Request;
 use Framework\Http\Contracts\MiddlewareInterface;
 use Framework\Http\Contracts\ResponseInterface;
-use Framework\Http\Request;
 use Framework\Security\Csrf\TokenManager;
 use Framework\Security\Csrf\TokenManagerInterface;
 use Framework\Support\Exceptions\Http\ForbiddenException;
@@ -29,7 +29,7 @@ class CsrfMiddleware implements MiddlewareInterface
                 ?? $request->header('X-CSRF-TOKEN');
 
         if (!$token || !$this->tokens->verify($token)) {
-            throw new ForbiddenException('유효하지 않은 CSRF 토큰입니다.');
+            throw new ForbiddenException(lang('validation.csrf_mismatch'));
         }
 
         return $next($request);

@@ -302,6 +302,15 @@ class Builder
 
         return !empty($result);
     }
+
+    public function existsBy(array $where): bool
+    {
+        foreach ($where as $column => $value) {
+            $this->where($column, $value);
+        }
+        return $this->exists();
+    }
+
     
     public function whereIn(string $column, array $values): self
     {

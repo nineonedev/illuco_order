@@ -95,12 +95,13 @@
     box-shadow: 0 0 0 0.1rem var(--clr-input-border);
     background: var(--clr-input-background);
     outline: none;
+    caret-color: var(--clr-text-primary);
 
     &:-webkit-autofill,
     &:-webkit-autofill:hover,
     &:-webkit-autofill:focus {
         -webkit-text-fill-color: var(--clr-text-primary);
-        -webkit-box-shadow: 0 0 0px 1000px var(--clr-background-primary) inset;
+        -webkit-background-origin: var(--clr-background-primary);
         transition: background-color 5000s ease-in-out 0s;
     }
 
@@ -816,7 +817,7 @@
 }
 
 .no-form-file {
-    $root: &; 
+    $root: &;
 
     @extend %form-control;
     --file-icon-size: 2.4rem;

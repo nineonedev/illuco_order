@@ -10,7 +10,7 @@ use Framework\Database\ORM\RelationMap;
  * 다형성 1:1 관계 (ex: User, Post → Image)
  * - 이미지 테이블에 morph_type/morph_id 필드
  */
-class MorphOne extends MorphRelation
+class MorphOne extends Relation
 {
     /** @var string morph_type 컬럼명 */
     protected $morphType;
@@ -33,13 +33,7 @@ class MorphOne extends MorphRelation
         $this->morphType = $morphType;
         $this->morphId = $morphId;
         $this->localKey = $localKey;
-
-        // 별칭(예: 'user', 'post')이 있으면 RelationMap에서 가져오고, 없으면 클래스명 사용
-        if ($typeValue === null) {
-            $this->typeValue = RelationMap::morphAlias(get_class($parent)) ?? get_class($parent)::alias();
-        } else {
-            $this->typeValue = $typeValue;
-        }
+        $this->typeValue = $typeValue ?? get_class($parent)::alias();
     }
 
     public function addEagerConstraints(array $entities): void

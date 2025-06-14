@@ -64,8 +64,8 @@ extend('layouts.auth') ?>
                     <!-- FormControl -->
 
                     <div class="no-form-checkbox --sm">
-                        <label for="<?=RememberToken::INPUT_NAME?>" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="<?=RememberToken::INPUT_NAME?>" id="<?=RememberToken::INPUT_NAME?>" class="no-form-checkbox-input">
+                        <label for="remember_me" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="remember_me" id="remember_me" class="no-form-checkbox-input">
                             <div class="no-form-checkbox-ripple">
                                 <span class="no-form-checkbox-box">
                                     <div class="no-form-checkbox-icon">
@@ -89,7 +89,7 @@ extend('layouts.auth') ?>
 <?php end_section() ?>
 
 <?php section('script') ?>
-<!-- <script>
+<script>
     const frm = document.querySelector('form'); 
 
     frm.addEventListener('submit', async (e) => {
@@ -109,6 +109,8 @@ extend('layouts.auth') ?>
 
             const resData = await response.json(); 
             const {message, data, success} = resData;
+
+            console.log(resData);
             
             alert(message);
 
@@ -126,5 +128,5 @@ extend('layouts.auth') ?>
         
         
     })
-</script> -->
+</script>
 <?php end_section() ?>

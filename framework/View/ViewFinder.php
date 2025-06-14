@@ -36,12 +36,23 @@ class ViewFinder implements ViewFinderInterface
         return $this->basePath;
     }
 
-    /**
-     * 뷰 이름을 전체 파일 경로로 변환
-     */
     protected function buildFullPath(string $view): string
     {
+        $basePath = rtrim($this->basePath, '/');
+
+        // 이미 basePath가 view에 포함되어 있으면 잘라냄
+        if (str_starts_with($view, $basePath)) {
+            $view = ltrim(substr($view, strlen($basePath)), '/\\');
+        }
+
+        // .php 확장자가 붙어 있으면 제거
+        if (str_ends_with($view, '.php')) {
+            $view = substr($view, 0, -4);
+        }
+
+        // 점 표기 → 디렉토리 변환
         $relativePath = str_replace('.', '/', $view) . '.php';
-        return rtrim($this->basePath, '/') . '/' . $relativePath;
+
+        return $basePath . '/' . $relativePath;
     }
 }

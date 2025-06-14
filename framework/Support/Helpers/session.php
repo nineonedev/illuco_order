@@ -41,13 +41,13 @@ if (!function_exists('flash')) {
 if (!function_exists('errors')) {
     function errors(): array
     {
-       return flash()->getErrors();
+        return flash()->getErrors();
     }
 }
 
 if (!function_exists('old')) {
     function old(string $key, $default = null)
     {
-       return flash()->getInput($key, $default);
+        return flash()->getInput($key, $default);
     }
 }

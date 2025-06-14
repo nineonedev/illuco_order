@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Security\Auth\Middleware;
+namespace App\Http\Middlewares;
 
 use Closure;
 use Framework\Http\Contracts\MiddlewareInterface;

@@ -1,28 +1,26 @@
 <?php
 
-use Framework\Database\ORM\RelationMap;
-
-use App\Domains\Common\Entities\FileAttachment;
-
 use App\Domains\User\Entities\Admin;
+use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
+use Framework\Database\ORM\Rel;
 
-
-RelationMap::setRelationMap([
-    User::class => [
-        RelationMap::morphTo('userable')
-    ], 
+Rel::setConfig([
     Admin::class => [
-        RelationMap::morphOne('user', User::class),
+        Rel::morphOne(User::class),
     ],
     Employee::class => [
-        RelationMap::morphOne('user', User::class),
+        Rel::morphOne(User::class),
     ],
-    Employee::class => [
-        RelationMap::morphOne('user', User::class),
+    Dealer::class => [
+        Rel::morphOne(User::class),
     ],
-    FileAttachment::class => [
-        RelationMap::morphTo('file_attachable')
-    ]
+    User::class => [
+        Rel::morphTo(User::class, [
+            Admin::class, 
+            Employee::class, 
+            Dealer::class
+        ]),
+    ], 
 ]);

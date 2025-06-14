@@ -3,6 +3,7 @@
 namespace Framework\Core;
 
 use Framework\Core\Contracts\ContainerInterface;
+use Framework\Http\FormRequest;
 
 class Container implements ContainerInterface
 {
@@ -81,9 +82,7 @@ class Container implements ContainerInterface
      */
     protected function resolve(string $abstract, array $parameters = [])
     {
-        if (!isset($this->resolved[$abstract])) {
-            $this->fireBeforeResolvingCallbacks($abstract); 
-        }
+        $this->fireBeforeResolvingCallbacks($abstract);
 
         if ($this->binder->boundInstance($abstract)) {
             return $this->binder->getInstance($abstract); 
@@ -102,11 +101,10 @@ class Container implements ContainerInterface
             
             $this->resolved[$abstract] = true; 
             $this->fireResolvingCallbacksIfExists($abstract, $instance); 
+            return $instance;
         }
 
         $instance = $this->reflector->build($abstract, $parameters); 
-
-        
         $this->resolved[$abstract] = true; 
         $this->fireResolvingCallbacksIfExists($abstract, $instance); 
         return $instance; 
@@ -114,24 +112,30 @@ class Container implements ContainerInterface
 
     protected function fireResolvingCallbacksIfExists(string $abstract, $instance): void
     {
-        if (isset($this->resolvingCallbacks[$abstract])) {
-            $this->fireResolvingCallbacks($abstract, $instance); 
-        }
-
-        if (isset($this->afterResolvingCallbacks[$abstract])) {
-            $this->fireAfterResolvingCallbacks($abstract, $instance); 
-        }
+        $this->fireResolvedCallbacks($abstract, $instance, $this->resolvingCallbacks);
+        $this->fireResolvedCallbacks($abstract, $instance, $this->afterResolvingCallbacks);
     }
 
 
     protected function fireBeforeResolvingCallbacks(string $abstract)
     {
-        if (!isset($this->beforeResolvingCallbacks[$abstract])) {
-            return; 
+        foreach ($this->beforeResolvingCallbacks as $type => $innerCallbacks) {
+            if ($abstract === $type || is_subclass_of($abstract, $type, true)) {
+                foreach ($innerCallbacks as $callback) {
+                    $callback($abstract, $this);
+                }
+            }
         }
+    }
 
-        foreach ($this->beforeResolvingCallbacks[$abstract] as $callback) {
-            $callback($abstract); 
+    protected function fireResolvedCallbacks(string $abstract, object $instance, array $callbacks = []) 
+    {
+        foreach ($callbacks as $type => $innerCallbacks) {
+            if ($abstract === $type || is_subclass_of($abstract, $type, true)) {
+                foreach ($innerCallbacks as $callback) {
+                    $callback($instance, $this);
+                }
+            }
         }
     }
 

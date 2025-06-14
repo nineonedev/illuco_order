@@ -27,12 +27,12 @@ class Request {
         array $server = []
     )
     {
-        $this->http = new Http($server); 
-        $this->post = $this->parseJsonBody($server) ?? $post;
-        $this->get = $get; 
-        $this->cookies = app(CookieManager::class, $cookies);
-        $this->files = $files; 
-        $this->data = [];
+        $this->get          = $get ?: $_GET; 
+        $this->post         = $this->parseJsonBody($server ?: $_SERVER) ?? ($post ?: $_POST);
+        $this->cookies      = app(CookieManager::class, $cookies ?: $_COOKIE);
+        $this->files        = $files ?: $_FILES; 
+        $this->http         = new Http($server ?: $_SERVER); 
+        $this->data         = [];
     }
 
     public static function capture(): self
@@ -242,6 +242,7 @@ class Request {
         }
         return $data;
     }
+
 
     public function setRoute(Route $route): void
     {

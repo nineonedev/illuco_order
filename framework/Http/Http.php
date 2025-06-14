@@ -11,6 +11,11 @@ class Http
         $this->server = $server ?: $_SERVER;
     }
 
+    public function server(): array
+    {
+        return $this->server;
+    }
+
     public function isSecure(): bool
     {
         return (

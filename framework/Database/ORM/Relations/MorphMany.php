@@ -3,9 +3,8 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\RelationMap;
 
-class MorphMany extends MorphRelation
+class MorphMany extends Relation
 {
     protected $morphType;
     protected $morphId;
@@ -24,10 +23,7 @@ class MorphMany extends MorphRelation
         $this->morphType = $morphType;
         $this->morphId = $morphId;
         $this->localKey = $localKey;
-
-        // typeValue 미지정시 morphMap 별칭 → 클래스명 순
-        $this->typeValue = $typeValue
-            ?: (RelationMap::morphAlias(get_class($parent)) ?? get_class($parent)::alias());
+        $this->typeValue = $typeValue ?? get_class($parent)::alias();
     }
 
     public function addEagerConstraints(array $entities): void
