@@ -1,6 +1,7 @@
 <?php
 
 use Framework\State\Config;
+use Framework\State\Context;
 use Framework\State\Env;
 
 
@@ -29,5 +30,14 @@ if (!function_exists('config')) {
         /** @var Config $config */
         $config = app(Config::class);
         return $config->get($key, $default); 
+    }
+}
+
+if (!function_exists('context')) {
+    function context(): Context
+    {
+        /** @var Context $context */
+        $context = app(Context::class); 
+        return $context;  
     }
 }

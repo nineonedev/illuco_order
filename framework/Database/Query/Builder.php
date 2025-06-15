@@ -5,6 +5,7 @@ namespace Framework\Database\Query;
 use Closure;
 use Framework\Database\Contracts\ConnectionInterface;
 use Framework\Database\Paginator\Paginator;
+use Framework\Database\Query\Clauses\JoinClause;
 use Framework\Database\Query\Grammars\Grammar;
 
 class Builder
@@ -28,6 +29,70 @@ class Builder
         $this->connection = $connection;
         $this->grammar = $grammar;
         $this->table = $table;
+    }
+
+    public function getBindings(): array
+    {
+        $bindings = [];
+
+        // where
+        foreach ($this->wheres as $where) {
+            if ($where['type'] === 'basic') {
+                $bindings[] = $where['value'];
+            } elseif ($where['type'] === 'in') {
+                foreach ($where['values'] as $val) {
+                    $bindings[] = $val;
+                }
+            } elseif ($where['type'] === 'nested' || $where['type'] === 'exists') {
+                $bindings = array_merge($bindings, $where['query']->getBindings());
+            }
+            // raw, null, notNull은 바인딩 없음
+        }
+
+        // having
+        foreach ($this->havings as $having) {
+            if ($having['type'] === 'basic') {
+                $bindings[] = $having['value'];
+            }
+            // raw은 생략
+        }
+
+        // union
+        foreach ($this->unions as $union) {
+            $bindings = array_merge($bindings, $union['query']->getBindings());
+        }
+
+        return $bindings;
+    }
+
+    protected function addJoinSub(string $type, SubQuery $subQuery, string $alias, Closure $callback): self
+    {
+        $sql = "({$subQuery->query->getGrammar()->compileSelect($subQuery->query)[0]}) as `{$alias}`";
+        $join = new JoinClause($type, $sql);
+        $callback($join);
+        $this->joins[] = $join->toArray();
+        return $this;
+    }
+
+    public function joinSub(SubQuery $subQuery, string $alias, Closure $callback): self
+    {
+        return $this->addJoinSub('inner', $subQuery, $alias, $callback);
+    }
+
+    public function leftJoinSub(SubQuery $subQuery, string $alias, Closure $callback): self
+    {
+        return $this->addJoinSub('left', $subQuery, $alias, $callback);
+    }
+
+    public function rightJoinSub(SubQuery $subQuery, string $alias, Closure $callback): self
+    {
+        return $this->addJoinSub('right', $subQuery, $alias, $callback);
+    }
+
+
+    public function getGrammar(): Grammar
+    {
+        return $this->grammar;
     }
     
     public function getConnection(): ConnectionInterface
@@ -82,7 +147,7 @@ class Builder
     public function get(): array
     {
         if (empty($this->orders)) {
-            $this->orderBy('created_at', 'desc');
+            $this->orderBy($this->getTable() . '.created_at', 'desc');
         }
         
         [$sql, $bindings] = $this->grammar->compileSelect($this);
@@ -96,8 +161,13 @@ class Builder
         [$sql, $bindings] = $this->grammar->compileSelect($this);
         $results = $this->connection->select($sql, $bindings);
 
-        return array_map(fn($row) => $row->{$column}, $results);
+        if (empty($results)) {
+            return [];
+        }
+
+        return array_map(fn($row) => $row->{$column} ?? null, $results);
     }
+
 
     public function first(): ?object
     {
@@ -135,19 +205,23 @@ class Builder
         $query = clone $this;
 
         foreach ($where as $column => $value) {
-            $query->where($column, '=', $value); 
+            $query->where($column, '=', $value);
         }
 
         $exists = $query->first();
 
         if ($exists) {
-            $this->where($column, '=', $value)->update($values); 
+            foreach ($where as $column => $value) {
+                $this->where($column, '=', $value);
+            }
+            $this->update($values);
         } else {
-            $this->insert(array_merge($where, $values)); 
+            $this->insert(array_merge($where, $values));
         }
 
         return true;
     }
+
 
 
     /**

@@ -3,7 +3,10 @@
 namespace Framework\Database\ORM\Entities;
 
 use Framework\Database\ORM\Casts\CastFactory;
+use Framework\Database\ORM\Rel;
+use Framework\Database\ORM\Relations\Relation;
 use Framework\Database\ORM\Repositories\Repository;
+use Framework\Database\Paginator\Paginator;
 
 abstract class Entity
 {
@@ -55,6 +58,10 @@ abstract class Entity
         return strtolower(class_basename(static::class));
     }
 
+    public function relation(string $name): ?Relation
+    {
+        return $this->getMeta($name . '_relation');
+    }
 
     public function setMeta(string $key, $value): void
     {
@@ -81,6 +88,11 @@ abstract class Entity
         return array_key_exists($name, $this->relations);
     }
 
+    public function rowNumber(): ?int
+    {
+        return $this->getMeta(Paginator::ROW_NUMBER_KEY);
+    }
+
     /**
      * @return static
      */
@@ -95,6 +107,15 @@ abstract class Entity
         }
 
         return $this;
+    }
+
+    public function pivot(string $key = null)
+    {
+        $pivot = $this->getMeta('pivot') ?? [];
+
+        if ($key) return $pivot[$key] ?? null;
+
+        return $pivot;
     }
 
     public function setPrimaryKey($value): void
@@ -126,9 +147,24 @@ abstract class Entity
 
     public function __get(string $key)
     {
-        return $this->relations[$key] ??
-                (array_key_exists($key, $this->attributes) ? $this->castAttribute($key, $this->attributes[$key]) :
-                ($this->meta[$key] ?? null));
+        if (array_key_exists($key, $this->attributes)) {
+            return $this->castAttribute($key, $this->attributes[$key]);
+        }
+
+        if (array_key_exists($key, $this->relations)) {
+            return $this->relations[$key];
+        }
+
+        if (array_key_exists($key, $this->meta)) {
+            return $this->meta[$key];
+        }
+
+        return $this->meta[$key] ?? null;
+    }
+
+    public function forgetRelation(string $name): void
+    {
+        unset($this->relations[$name]);
     }
 
     public function __set(string $key, $value): void
@@ -233,5 +269,16 @@ abstract class Entity
         }
 
         return array_merge($arr, $this->meta);
+    }
+
+    public function __call(string $method, array $args)
+    {
+        $relation = Rel::getRelation($this, $method);
+
+        if ($relation) {
+            return $relation;
+        }
+
+        throw new \BadMethodCallException("Method {$method} does not exist.");
     }
 }

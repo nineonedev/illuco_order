@@ -2,7 +2,7 @@
 
 <?php section('title') ?>
 제품 관리
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('content') ?>
 <div class="no-page-container">
@@ -165,4 +165,4 @@
     <!-- Row -->
 </div>
 
-<?php endSection() ?>
+<?php end_section() ?>

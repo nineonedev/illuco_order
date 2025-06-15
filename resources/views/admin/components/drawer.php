@@ -237,6 +237,20 @@
                     </li>
                     <!-- Gnb Item -->
                 </ul>
+
+                <ul class="no-drawer-gnb">
+                    <!-- Gnb Item -->
+                    <li class="no-drawer-gnb-item ">
+                        <a href="<?= route('admin.roles.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                            <div class="no-drawer-gnb-link__icon">
+                                <i class="fa-light fa-megaphone"></i>
+                            </div>
+                            <div class="no-drawer-gnb-link__text">
+                                <span>권한 생성</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
                 
             </nav>
         </div>

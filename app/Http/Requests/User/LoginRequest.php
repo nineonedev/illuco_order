@@ -4,7 +4,7 @@ namespace App\Http\Requests\User;
 
 use Framework\Http\FormRequest;
 
-class LoginFormRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     protected function rules(): array
     {

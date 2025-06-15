@@ -3,6 +3,7 @@
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use Framework\Security\Auth\AuthManager;
 use Framework\Support\Facades\Route;
 
@@ -45,6 +46,18 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [AuthController::class, 'edit'])->name('edit');
                     Route::patch('/', [AuthController::class, 'update'])->name('update');
+                });
+            
+            Route::prefix('roles')
+                ->name('roles')
+                ->group(function(){
+                    Route::get('/', [RoleController::class, 'index'])->name('index');
+                    Route::get('/create', [RoleController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
+                    
+                    Route::post('/', [RoleController::class, 'store'])->name('store');
+                    Route::put('{id}', [RoleController::class, 'update'])->name('update');
+                    Route::delete('{id}', [RoleController::class, 'destroy'])->name('destroy');
                 });
 
 

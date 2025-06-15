@@ -2,6 +2,8 @@
 
 namespace Framework\Database\Query;
 
+use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Relations\Pivot;
 use Framework\Database\ORM\Repositories\Repository;
 
 class EntityQueryBuilder extends Builder
@@ -28,9 +30,35 @@ class EntityQueryBuilder extends Builder
     public function get(): array
     {
         $rows = parent::get();
-        $entities = array_map(fn($row) => get_class($this->repository)::resolveEntity((array)$row), $rows);
+
+        $entities = array_map(function ($row) {
+            $attributes = (array) $row;
+
+            $pivotAttributes = [];
+            foreach ($attributes as $key => $value) {
+                if (strpos($key, 'pivot_') === 0) {
+                    $pivotKey = substr($key, 6); // pivot_created_at → created_at
+                    $pivotAttributes[$pivotKey] = $value;
+                    unset($attributes[$key]);
+                }
+            }
+
+            /** @var Entity $entity */ 
+            $entity = get_class($this->repository)::resolveEntity($attributes);
+
+            // Pivot 분리하여 relation에 할당
+            if (!empty($pivotAttributes)) {
+                $pivot = new Pivot($pivotAttributes);
+                $pivot->setPivotParent($entity);
+                $entity->setRelation('pivot', $pivot);
+            }
+
+            return $entity;
+        }, $rows);
+
         return $this->repository->loadRelations($entities);
     }
+
 
     public function all(): array
     {

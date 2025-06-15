@@ -10,7 +10,7 @@ return new class implements Migration
     {
         Schema::create('notices', function (Blueprint $table) {
             $table->id();
-            $table->morphs('writer');
+            $table->foreignId('user_id')->constrained('users')->onDeleteCascade();
             $table->string('title');
             $table->text('content');
 

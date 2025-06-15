@@ -29,8 +29,6 @@ class Schema
     {
         $blueprint = new Blueprint($table);
         $callback($blueprint);
-
-        // 변경: compileCreate()로 외래키 포함 SQL 생성
         $sql = $blueprint->compileCreate();
 
         $this->connection->statement($sql);
@@ -42,9 +40,9 @@ class Schema
         $result = $this->connection->select('SHOW TABLES');
 
         foreach ($result as $row) {
-            // SHOW TABLES 결과는 ["Tables_in_데이터베이스"] 혹은 첫 번째 값만 있음
             $tables[] = array_values((array) $row)[0];
         }
+
         return $tables;
     }
 
@@ -116,5 +114,37 @@ class Schema
             $callback($this, $table);
         }
         $this->enableForeignKeyChecks();
+    }
+
+    /**
+     * 지정된 테이블의 모든 컬럼명 배열 반환
+     * 예: ['id', 'role_id', 'permission_id', 'resource', 'action', ...]
+     */
+    public function getColumnListing(string $table): array
+    {
+        $columns = [];
+        $result = $this->connection->select("SHOW COLUMNS FROM `{$table}`");
+
+        foreach ($result as $row) {
+            $columns[] = $row->Field; // MySQL 전용
+        }
+
+        return $columns;
+    }
+
+    /**
+     * 지정된 테이블의 컬럼명 + 데이터 타입 반환
+     * 예: ['id' => 'int(11)', 'name' => 'varchar(255)', ...]
+     */
+    public function getColumnTypes(string $table): array
+    {
+        $types = [];
+        $result = $this->connection->select("SHOW COLUMNS FROM `{$table}`");
+
+        foreach ($result as $row) {
+            $types[$row->Field] = $row->Type;
+        }
+
+        return $types;
     }
 }

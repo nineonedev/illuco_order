@@ -39,6 +39,7 @@ class Str {
         return $value . (self::endsWith($value, 's') ? 'es' : 's'); // 간단한 처리
     }
 
+
     public static function snake(string $value): string
     {
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $value));

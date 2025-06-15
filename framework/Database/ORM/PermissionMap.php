@@ -7,7 +7,7 @@ use Framework\Database\ORM\Entities\Entity;
 
 class PermissionMap
 {
-    static array $allowedPermissions = ['create', 'read', 'update','delete'];
+    static array $allowedActions = ['create', 'read', 'update','delete'];
     protected static array $map = [];
     protected static bool $registered = false;
     public static function config(array $config): void
@@ -22,7 +22,7 @@ class PermissionMap
     public static function register(string $class, ?array $actions = null): void
     {
         if ($actions === null){
-            $actions = static::$allowedPermissions;
+            $actions = static::$allowedActions;
         }
         
         static::$map[$class] = $actions;
@@ -48,7 +48,7 @@ class PermissionMap
             $resource = $class::alias();
 
             foreach ($actions as $action) {
-                if (!in_array($action, static::$allowedPermissions)) {
+                if (!in_array($action, static::$allowedActions)) {
                     continue;
                 }
 

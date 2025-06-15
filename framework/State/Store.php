@@ -11,13 +11,36 @@ class Store
 
     public function put(string $key, $value): void
     {
-        $this->storage[$key] = $value;
+        $segments = explode('.', $key);
+        $ref = &$this->storage;
+
+        foreach ($segments as $segment) {
+            if (!isset($ref[$segment]) || !is_array($ref[$segment])) {
+                $ref[$segment] = [];
+            }
+            $ref = &$ref[$segment];
+        }
+
+        $ref = $value;
     }
+
+
 
     public function get(string $key, $default = null)
     {
-        return $this->storage[$key] ?? $default;
+        $segments = explode('.', $key);
+        $ref = $this->storage;
+
+        foreach ($segments as $segment) {
+            if (!is_array($ref) || !array_key_exists($segment, $ref)) {
+                return $default;
+            }
+            $ref = $ref[$segment];
+        }
+
+        return $ref;
     }
+
 
     public function has(string $key): bool
     {

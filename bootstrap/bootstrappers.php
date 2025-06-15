@@ -11,12 +11,14 @@ use Framework\Boostrap\RegisterTranslators;
 use Framework\Boostrap\HandleExceptions;
 use Framework\Boostrap\LoadAliases;
 use Framework\Boostrap\LoadMiddlewares;
+use Framework\Boostrap\RegisterStores;
 
 return [
     HandleExceptions::class,
     LoadHelpers::class,
     RegisterConfiguration::class,
     RegisterEnvironment::class,
+    RegisterStores::class,
     RegisterCoreBindings::class,
     RegisterTranslators::class,
     LoadAliases::class,

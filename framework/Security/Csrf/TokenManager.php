@@ -17,9 +17,12 @@ class TokenManager implements TokenManagerInterface
 
     public function generate(): string
     {
-        $token = bin2hex(random_bytes(32)); 
-        $this->session->set(self::CSRF_INPUT_NAME, $token); 
-        return $token; 
+        if (!$this->session->has(self::CSRF_INPUT_NAME)) {
+            $token = bin2hex(random_bytes(32));
+            $this->session->set(self::CSRF_INPUT_NAME, $token);
+        }
+        
+        return $this->session->get(self::CSRF_INPUT_NAME);
     }
 
     public function token(): ?string

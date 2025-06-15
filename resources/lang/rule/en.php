@@ -28,4 +28,5 @@ return [
     'audio'         => 'Please upload a valid audio file.',
     'document'      => 'Please upload a valid document file.',
     'archive'       => 'Please upload a valid archive file.',
+    'array'         => 'Please select one or more valid items.',
 ];

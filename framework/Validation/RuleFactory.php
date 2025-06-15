@@ -3,6 +3,7 @@
 namespace Framework\Validation;
 
 use Framework\Validation\Rules\Archive;
+use Framework\Validation\Rules\ArrayRule;
 use Framework\Validation\Rules\Audio;
 use Framework\Validation\Rules\Date;
 use Framework\Validation\Rules\DateISO;
@@ -46,6 +47,8 @@ class RuleFactory
     {
         // Map the rule string to the appropriate rule class
         switch ($rule) {
+            case 'array':
+                return new ArrayRule();
             case 'string': 
                 return new StringRule();
             case 'date':

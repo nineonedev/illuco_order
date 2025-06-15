@@ -192,29 +192,29 @@ if (is_readable($codeFile)) {
     <div class="no-fallback-debug-container">
         <h1 class="no-fallback-debug-title">예외 발생 (DEBUG)</h1>
         <div class="no-fallback-debug-section">
-            <div><span class="no-fallback-debug-label">에러 코드:</span> <?= htmlspecialchars($code ?? 'unknown') ?></div>
+            <div><span class="no-fallback-debug-label">에러 코드:</span> <?= e($code ?? 'unknown') ?></div>
             <div><span class="no-fallback-debug-label">예외 타입:</span>
-                <span class="no-fallback-debug-exception-type"><?= htmlspecialchars($details['exception'] ?? get_class($e)) ?></span>
+                <span class="no-fallback-debug-exception-type"><?= e($details['exception'] ?? get_class($e)) ?></span>
             </div>
             <div><span class="no-fallback-debug-label">메시지:</span>
-                <b class="no-fallback-debug-message"><?= htmlspecialchars($details['message'] ?? ($e->getMessage() ?? '')) ?></b>
+                <b class="no-fallback-debug-message"><?= e($details['message'] ?? ($e->getMessage() ?? '')) ?></b>
             </div>
             <div><span class="no-fallback-debug-label">파일:</span>
-                <span class="no-fallback-debug-code-pos"><?= htmlspecialchars($codeFile) ?></span>
+                <span class="no-fallback-debug-code-pos"><?= e($codeFile) ?></span>
             </div>
             <div><span class="no-fallback-debug-label">라인:</span>
-                <span class="no-fallback-debug-code-pos"><?= htmlspecialchars($codeLine) ?></span>
+                <span class="no-fallback-debug-code-pos"><?= e($codeLine) ?></span>
             </div>
         </div>
         <?php if (!empty($codePreview)): ?>
             <div class="no-fallback-debug-section">
-                <div class="no-fallback-debug-section-title">문제 발생 코드 (<?= htmlspecialchars($codeFile) ?>)</div>
+                <div class="no-fallback-debug-section-title">문제 발생 코드 (<?= e($codeFile) ?>)</div>
                 <div class="no-fallback-debug-codebox">
                     <pre class="no-fallback-debug-code"><?php
                         foreach ($codePreview as $lineNum => $line):
                             $isHighlight = ($lineNum == $codeLine);
                     ?><div class="no-fallback-debug-code-line<?= $isHighlight ? ' no-fallback-debug-code-highlight' : '' ?>">
-                            <span class="no-fallback-debug-code-linenum"><?= $lineNum ?></span><?= htmlspecialchars($line) ?>
+                            <span class="no-fallback-debug-code-linenum"><?= $lineNum ?></span><?= e($line) ?>
                         </div><?php
                         endforeach;
                     ?></pre>
@@ -240,7 +240,7 @@ if (is_readable($codeFile)) {
                         <b>#<?= $idx ?>:</b>
                         <?= $func ?>
                         <?php if ($file): ?>
-                            <span style="color:var(--accent-2);"> in <?= htmlspecialchars($file) ?>:<?= $line ?></span>
+                            <span style="color:var(--accent-2);"> in <?= e($file) ?>:<?= $line ?></span>
                         <?php endif; ?>
                     </div>
                 <?php endforeach;
@@ -255,7 +255,7 @@ if (is_readable($codeFile)) {
             <div class="no-fallback-debug-section">
                 <div class="no-fallback-debug-section-title">메타 데이터</div>
                 <?php foreach ($meta as $k => $v): ?>
-                    <p class="no-fallback-debug-meta-item"><b><?= htmlspecialchars($k) ?>:</b> <?= htmlspecialchars(print_r($v, true)) ?></p>
+                    <p class="no-fallback-debug-meta-item"><b><?= e($k) ?>:</b> <?= e(print_r($v, true)) ?></p>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -264,13 +264,13 @@ if (is_readable($codeFile)) {
             <div class="no-fallback-debug-section">
                 <div class="no-fallback-debug-section-title">서버 정보 ($_SERVER)</div>
                 <?php foreach ($_SERVER as $k => $v): ?>
-                    <p class="no-fallback-debug-server-item"><b><?= htmlspecialchars($k) ?>:</b> <?= htmlspecialchars(print_r($v, true)) ?></p>
+                    <p class="no-fallback-debug-server-item"><b><?= e($k) ?>:</b> <?= e(print_r($v, true)) ?></p>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
 
         <div style="margin-top:32px;font-size:13px;color:#888;">
-            <?= date('Y-m-d H:i:s') ?> · <a href="<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/') ?>">새로고침</a>
+            <?= date('Y-m-d H:i:s') ?> · <a href="<?= e($_SERVER['REQUEST_URI'] ?? '/') ?>">새로고침</a>
         </div>
     </div>
 </body>

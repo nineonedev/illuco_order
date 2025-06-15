@@ -5,7 +5,7 @@ namespace App\Http\Requests\User;
 use Framework\Http\FormRequest;
 use Framework\Support\Facades\Hash;
 
-class RegisterFormRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     protected function rules(): array
     {
@@ -21,10 +21,5 @@ class RegisterFormRequest extends FormRequest
         $this->setValidated([
             'password' => Hash::make($this->input('password')),
         ]);
-    }
-
-    protected function failedValidationMessage(): string
-    {
-        return lang('validation.register_failed');
     }
 }

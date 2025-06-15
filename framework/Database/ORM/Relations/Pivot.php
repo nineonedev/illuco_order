@@ -169,24 +169,32 @@ class Pivot
 
     /**
      * @param Entity $parent
-     * @param array $relatedData [related_id => [extra_attrs], ...]
+     * @param array $relatedData [related_id => [extra_attrs], ...] 또는 [1, 2, 3]
      */
     public function sync(Entity $parent, array $relatedData): void
     {
-        $existingIds = $this->query()
+        $relatedIds = array_keys($relatedData);
+
+        $existingIds = (array) $this->query()
             ->where($this->foreignKey, $parent->get($parent->getPrimaryKeyName()))
             ->pluck($this->relatedKey);
 
-        $detachIds = array_diff($existingIds, array_keys($relatedData));
+        // 먼저 detach (불필요한 항목 제거)
+        $detachIds = array_diff($existingIds, $relatedIds);
+
         if (!empty($detachIds)) {
             $this->detach($parent, $detachIds);
         }
 
-        foreach ($relatedData as $relatedId => $attrs) {
+        // 필요한 항목만 attach or insert
+        foreach ($relatedData as $relatedId => $extra) {
+            $extra = is_array($extra) ? $extra : [];
+
             $this->query()->insertOrIgnore([
-                $this->foreignKey => $parent->get($parent->getPrimaryKeyName()),
-                $this->relatedKey => $relatedId,
-                ...$attrs
+                array_merge([
+                    $this->foreignKey => $parent->get($parent->getPrimaryKeyName()),
+                    $this->relatedKey => $relatedId,
+                ], $extra instanceof Entity ? $extra->toArray() : $extra)
             ]);
         }
     }

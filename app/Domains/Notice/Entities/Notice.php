@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Domains\Notice\Entities;
+namespace App\Domains\Communication\Entities;
 
 use App\Domains\Notice\Repositories\NoticeRepository;
 use Framework\Database\ORM\Entities\Entity;

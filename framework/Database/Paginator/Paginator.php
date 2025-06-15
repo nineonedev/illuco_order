@@ -8,7 +8,7 @@ use Framework\Support\Collection;
 
 class Paginator
 {
-    const PLACEHOLDER = '__no__';
+    const ROW_NUMBER_KEY = '__ROW_NO__';
 
     protected Collection $items;
     protected int $total;
@@ -38,7 +38,7 @@ class Paginator
 
         foreach ($this->items as $item) {
             if ($item instanceof Entity) {
-                $item->setMeta(self::PLACEHOLDER, $number--);
+                $item->setMeta(self::ROW_NUMBER_KEY, $number--);
             }
         }
     }

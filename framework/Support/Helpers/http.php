@@ -158,3 +158,33 @@ if (!function_exists('view')) {
         return Response::view($template, $data, $status, $headers);
     }
 }
+
+
+if (!function_exists('method_field')) {
+    function method_field(string $method): string
+    {
+        $method = strtoupper($method);
+        return '<input type="hidden" name="_method" value="' . e($method) . '" />';
+    }
+}
+
+if (!function_exists('patch_field')) {
+    function patch_field(): string
+    {
+        return method_field('PATCH');
+    }
+}
+
+if (!function_exists('put_field')) {
+    function put_field(): string
+    {
+        return method_field('PUT');
+    }
+}
+
+if (!function_exists('delete_field')) {
+    function delete_field(): string
+    {
+        return method_field('DELETE');
+    }
+}

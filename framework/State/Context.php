@@ -5,25 +5,25 @@ namespace Framework\State;
 class Context
 {
     /**
-     * 현재 컨텍스트 전용 상태 (예: 현재 요청, 현재 세션 등)
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * 등록된 스토어들
-     *
      * @var array<string, Store>
      */
     protected $stores = [];
 
     /**
-     * 전역 데이터 (Registry처럼 쓰이지만 context 내부에서 관리)
-     *
-     * @var array
+     * @var string|null
      */
-    protected $globals = [];
+    protected $defaultStore = null;
+
+
+    public function default(?string $storeName = null): Store
+    {
+        if ($storeName !== null && isset($this->stores[$storeName])) {
+            return $this->stores[$storeName]; 
+        }
+
+        $this->ensureDefaultStore();
+        return $this->stores[$this->defaultStore];
+    }
 
     /**
      * Store를 등록합니다.
@@ -31,71 +31,76 @@ class Context
     public function addStore(string $name, Store $store): void
     {
         $this->stores[$name] = $store;
-    }
-
-    /**
-     * 특정 저장소에서 값을 가져옵니다.
-     */
-    public function getFrom(string $store, string $key, $default = null)
-    {
-        return isset($this->stores[$store])
-            ? $this->stores[$store]->get($key, $default)
-            : $default;
-    }
-
-    /**
-     * 특정 저장소에 값을 저장합니다.
-     */
-    public function setTo(string $store, string $key, $value): void
-    {
-        if (isset($this->stores[$store])) {
-            $this->stores[$store]->put($key, $value);
+        
+        if (!$this->defaultStore) {
+            $this->use($name);       
         }
     }
 
     /**
-     * 특정 저장소에서 값을 제거합니다.
+     * Store를 명시적으로 선택하여 사용합니다.
      */
-    public function forgetFrom(string $store, string $key): void
+    public function use(string $storeName): void
     {
-        if (isset($this->stores[$store])) {
-            $this->stores[$store]->forget($key);
+        if (!isset($this->stores[$storeName])) {
+            throw new \RuntimeException("Store [{$storeName}] has not been registered.");
         }
+
+        $this->defaultStore = $storeName;
     }
 
     /**
-     * 현재 Context 데이터 저장
+     * 기본 store에 값을 저장합니다.
      */
     public function set(string $key, $value): void
     {
-        $this->data[$key] = $value;
+        $this->ensureDefaultStore();
+        $this->stores[$this->defaultStore]->put($key, $value);
     }
 
     public function get(string $key, $default = null)
     {
-        return $this->data[$key] ?? $default;
+        $this->ensureDefaultStore();
+        return $this->stores[$this->defaultStore]->get($key, $default);
     }
 
-    public function all(): array
+    public function forget(string $key): void
     {
-        return $this->data;
+        if ($this->defaultStore !== null) {
+            $this->stores[$this->defaultStore]->forget($key);
+        }
     }
 
-    /**
-     * 전역 데이터 등록
-     */
-    public function setGlobal(string $key, $value): void
+    public function has(string $key): bool
     {
-        $this->globals[$key] = $value;
+        return $this->defaultStore !== null
+            && $this->stores[$this->defaultStore]->has($key);
     }
 
-    public function getGlobal(string $key, $default = null)
+    public function flush(string $storeName = null): void
     {
-        return $this->globals[$key] ?? $default;
+        if ($storeName !== null && isset($this->stores[$storeName])) {
+            $this->stores[$storeName]->flush();
+        } elseif ($this->defaultStore !== null) {
+            $this->stores[$this->defaultStore]->flush();
+        }
     }
 
-    public function allGlobals(): array
+    public function all(string $storeName = null): array
     {
-        return $this->globals;
+        if ($storeName !== null && isset($this->stores[$storeName])) {
+            return $this->stores[$storeName]->all();
+        } elseif ($this->defaultStore !== null) {
+            return $this->stores[$this->defaultStore]->all();
+        }
+
+        return [];
+    }
+
+    protected function ensureDefaultStore(): void
+    {
+        if ($this->defaultStore === null) {
+            throw new \RuntimeException("Default store not set.");
+        }
     }
 }

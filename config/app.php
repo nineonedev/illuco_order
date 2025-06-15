@@ -5,4 +5,9 @@ return [
     'environment' => env('APP_ENV', 'production'),
     'debug' => env('APP_DEBUG', false), 
     'timezone' => 'Asia/Seoul',
+    
+    'default_store' => 'app',
+    'stores' => [
+        'app',
+    ],
 ];

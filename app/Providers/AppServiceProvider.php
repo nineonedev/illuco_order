@@ -37,5 +37,8 @@ class AppServiceProvider extends ServiceProvider
         $permissions = require_once $file;
         PermissionMap::config($permissions);
         PermissionMap::handle();
+
+        context()->set('permissions', $permissions);
+        context()->set('permission_actions', PermissionMap::$allowedActions);
     }
 }

@@ -24,20 +24,45 @@ class Rel
     /** @var array<string,class-string<MorphEntity>> */
     protected static $morphableMap = [];
 
-    protected static $configured = false;
-
-    public static function setConfig(array $relationMap): void
+    public static function setConfig(array $relationMap, bool $dryRun = false, bool $debug = false): void
     {
-        if (static::$configured) return; 
-        static::$relationMap = $relationMap;
-        static::$configured = true; 
+        foreach ($relationMap as $entityClass => $relations) {
+            foreach ($relations as $i => $rel) {
+                $type = $rel['type'] ?? null;
+
+                if ($type === MorphTo::class) {
+                    $morphables = $rel['morphables'] ?? [];
+                    $relationMap[$entityClass][$i] = array_merge($rel, static::createMorphData($entityClass));
+                    static::setMorph([$entityClass => $morphables]);
+                }
+
+                if ($debug || $dryRun) {
+                    echo "[Rel ManualConfig] {$entityClass} → {$rel['name']} ({$rel['type']})\n";
+                }
+            }
+        }
+
+        if (!$dryRun) {
+            static::$relationMap = $relationMap;
+        }
+    }
+
+    protected static function createMorphData(string $related)
+    {
+        return [
+            'name' => $related::morphType(),
+            'args' => [
+                $related::getMorphType(),
+                $related::getMorphId(),
+            ]
+        ];
     }
 
     public static function reset(): void
     {
         static::$morphMap = [];
+        static::$morphableMap = [];
         static::$relationMap = [];
-        static::$configured = false;
     }
 
     public static function getConfig(): array
@@ -52,10 +77,12 @@ class Rel
 
         if (!$relationMap) return null;
 
+        
         $relation = Collection::create($relationMap)
-            ->find(fn($rel) => $rel['name'] === $relationName);
-
+        ->find(fn($rel) => $rel['name'] === $relationName);
+        
         if (!$relation) return null;
+        
         return new $relation['type']($entity, ...$relation['args']);
     }
 
@@ -74,100 +101,68 @@ class Rel
         return static::$morphMap;
     }
 
+    public static function dumpConfig(array $map): void
+    {
+        static::setConfig($map, true, true);
+    }
+
     public static function setMorph(array $morphMap)
     {
-        $map = []; 
-
         foreach ($morphMap as $morphClass => $morphables) {
-
             if (!is_subclass_of($morphClass, MorphEntity::class)) {
-                throw new RuntimeException("MorphClass muset be extend MorphEntity.");
+                throw new RuntimeException("MorphClass must extend MorphEntity.");
             }
 
-            $row = []; 
-            
+            $row = [];
+
             foreach ($morphables as $morphableClass) {
-                $row[][$morphableClass::alias()] = $morphableClass;
-                
+                $row[$morphableClass::alias()] = $morphableClass;
+
                 if (!isset(static::$morphableMap[$morphableClass::alias()])) {
                     static::$morphableMap[$morphableClass::alias()] = $morphableClass;
                 }
             }
 
-            $map[$morphClass] = $row;
+            static::$morphMap[$morphClass] = $row;
         }
-
-        static::$morphMap = $morphMap;
     }
 
     // === 관계 생성 DSL ===
 
-    public static function hasOne(
-        string $name, string $related, string $foreignKey, string $localKey = 'id'
-    ): array {
-        return [
-            'type' => HasOne::class,
-            'name' => $name,
-            'args' => [$related, $foreignKey, $localKey]
-        ];
+    public static function hasOne(string $name, string $related, string $foreignKey, string $localKey = 'id'): array
+    {
+        return ['type' => HasOne::class, 'name' => $name, 'args' => [$related, $foreignKey, $localKey]];
     }
 
-    public static function hasMany(
-        string $name, string $related, string $foreignKey, string $localKey = 'id'
-    ): array {
-        return [
-            'type' => HasMany::class,
-            'name' => $name,
-            'args' => [$related, $foreignKey, $localKey]
-        ];
+    public static function hasMany(string $name, string $related, string $foreignKey, string $localKey = 'id'): array
+    {
+        return ['type' => HasMany::class, 'name' => $name, 'args' => [$related, $foreignKey, $localKey]];
     }
 
-    public static function belongsTo(
-        string $name, string $related, string $foreignKey, string $ownerKey = 'id'
-    ): array {
-        return [
-            'type' => BelongsTo::class,
-            'name' => $name,
-            'args' => [$related, $foreignKey, $ownerKey]
-        ];
+    public static function belongsTo(string $name, string $related, string $foreignKey, string $ownerKey = 'id'): array
+    {
+        return ['type' => BelongsTo::class, 'name' => $name, 'args' => [$related, $foreignKey, $ownerKey]];
     }
 
-    public static function belongsToMany(
-        string $name, string $related, string $pivotTable, string $foreignKey, string $relatedKey, string $relatedEntityPrimaryKey = 'id'
-    ): array {
-        return [
-            'type' => BelongsToMany::class,
-            'name' => $name,
-            'args' => [$related, $pivotTable, $foreignKey, $relatedKey, $relatedEntityPrimaryKey]
-        ];
+    public static function belongsToMany(string $name, string $related, string $pivotTable, string $foreignKey, string $relatedKey, string $relatedEntityPrimaryKey = 'id'): array
+    {
+        return ['type' => BelongsToMany::class, 'name' => $name, 'args' => [$related, $pivotTable, $foreignKey, $relatedKey, $relatedEntityPrimaryKey]];
     }
 
-    public static function hasOneThrough(
-        string $name, string $related, string $through, string $firstKey, string $secondKey, string $localKey = 'id'
-    ): array {
-        return [
-            'type' => HasOneThrough::class,
-            'name' => $name,
-            'args' => [$related, $through, $firstKey, $secondKey, $localKey]
-        ];
+    public static function hasOneThrough(string $name, string $related, string $through, string $firstKey, string $secondKey, string $localKey = 'id'): array
+    {
+        return ['type' => HasOneThrough::class, 'name' => $name, 'args' => [$related, $through, $firstKey, $secondKey, $localKey]];
     }
 
-    public static function hasManyThrough(
-        string $name, string $related, string $through, string $firstKey, string $secondKey, string $localKey = 'id'
-    ): array {
-        return [
-            'type' => HasManyThrough::class,
-            'name' => $name,
-            'args' => [$related, $through, $firstKey, $secondKey, $localKey]
-        ];
+    public static function hasManyThrough(string $name, string $related, string $through, string $firstKey, string $secondKey, string $localKey = 'id'): array
+    {
+        return ['type' => HasManyThrough::class, 'name' => $name, 'args' => [$related, $through, $firstKey, $secondKey, $localKey]];
     }
 
     protected static function checkMorphEntity(string $related): void
     {
         if (!is_subclass_of($related, MorphEntity::class)) {
-            throw new RuntimeException(
-                "Class [{$related}] must extend " . MorphEntity::class . " to be used in a morph relation."
-            );
+            throw new RuntimeException("Class [{$related}] must extend " . MorphEntity::class . " to be used in a morph relation.");
         }
     }
 
@@ -182,100 +177,30 @@ class Rel
         return null;
     }
 
-    // === Morph 계열 자동화 ===
-
-    public static function morphOne(
-        string $related,
-        string $localKey = 'id'
-    ): array {
+    public static function morphOne(string $related, string $localKey = 'id'): array
+    {
         static::checkMorphEntity($related);
-
-        return [
-            'type' => MorphOne::class,
-            'name' => $related::alias(),
-            'args' => [
-                $related,
-                $related::getMorphType(),
-                $related::getMorphId(),
-                $localKey,
-            ]
-        ];
+        return ['type' => MorphOne::class, 'name' => $related::alias(), 'args' => [$related, $related::getMorphType(), $related::getMorphId(), $localKey]];
     }
 
-    public static function morphMany(
-        string $related, 
-        string $localKey = 'id'
-    ): array {
+    public static function morphMany(string $related, string $localKey = 'id'): array
+    {
         static::checkMorphEntity($related);
-
-        return [
-            'type' => MorphMany::class,
-            'name' => $related::alias(),
-            'args' => [
-                $related,
-                $related::getMorphType(),
-                $related::getMorphId(),
-                $localKey,
-            ]
-        ];
+        return ['type' => MorphMany::class, 'name' => $related::alias(), 'args' => [$related, $related::getMorphType(), $related::getMorphId(), $localKey]];
     }
 
-    /**
-     * @param array<class-string<Entity>> $morphables
-     */
-    public static function morphTo(
-        string $related,
-        array $morphables = []
-    ): array {
-        static::setMorph([$related => $morphables]);
-
-        return [
-            'type' => MorphTo::class,
-            'name' => $related::morphType(),
-            'args' => [
-                $related::getMorphType(),
-                $related::getMorphId(),
-            ]
-        ];
+    public static function morphTo(array $morphables): array
+    {
+        return ['type' => MorphTo::class, 'morphables' => $morphables];
     }
 
-    public static function morphToMany(
-        string $related, 
-        string $pivotTable, 
-        string $pivotRelatedKey, 
-        string $relatedEntityPrimaryKey = 'id'
-    ): array {
-        
-        return [
-            'type' => MorphToMany::class,
-            'name' => $related::alias(),
-            'args' => [
-                $related,
-                $pivotTable,
-                $pivotRelatedKey,
-                $related::getMorphType(),
-                $related::getMorphId(),
-                $relatedEntityPrimaryKey
-            ]
-        ];
+    public static function morphToMany(string $related, string $pivotTable, string $pivotRelatedKey, string $relatedEntityPrimaryKey = 'id'): array
+    {
+        return ['type' => MorphToMany::class, 'name' => $related::alias(), 'args' => [$related, $pivotTable, $pivotRelatedKey, $related::getMorphType(), $related::getMorphId(), $relatedEntityPrimaryKey]];
     }
 
-    public static function morphedByMany(
-        string $name, string $related, string $pivotTable, string $pivotRelatedKey, string $relatedEntityPrimaryKey = 'id', $typeValue = null
-    ): array {
-
-        return [
-            'type' => MorphedByMany::class,
-            'name' => $name,
-            'args' => [
-                $related,
-                $pivotTable,
-                $pivotRelatedKey,
-                $related::getMorphType(),
-                $related::getMorphId(),
-                $relatedEntityPrimaryKey,
-                $typeValue ?? $related::alias()
-            ]
-        ];
+    public static function morphedByMany(string $name, string $related, string $pivotTable, string $pivotRelatedKey, string $relatedEntityPrimaryKey = 'id', $typeValue = null): array
+    {
+        return ['type' => MorphedByMany::class, 'name' => $name, 'args' => [$related, $pivotTable, $pivotRelatedKey, $related::getMorphType(), $related::getMorphId(), $relatedEntityPrimaryKey, $typeValue ?? $related::alias()]];
     }
 }

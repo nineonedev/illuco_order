@@ -1,6 +1,5 @@
 <?php
 
-use Framework\Http\Response;
 use Framework\Http\Responses\RedirectResponse;
 use Framework\Routing\Contracts\RouterInterface;
 use Framework\Routing\RouteCollection;
@@ -96,22 +95,5 @@ if (!function_exists('router')) {
     function router(): RouterInterface
     {
         return app(RouterInterface::class);
-    }
-}
-
-
-if (!function_exists('redirect_route')) {
-    /**
-     * 라우트 이름 기반으로 리다이렉트(302) 응답 반환
-     *
-     * @param string $name
-     * @param array $params
-     * @param int $status
-     * @return Response
-     */
-    function redirect_route(string $name, array $params = [], int $status = 302)
-    {
-        $url = route($name, $params);
-        return response()->redirect($url, $status);
     }
 }

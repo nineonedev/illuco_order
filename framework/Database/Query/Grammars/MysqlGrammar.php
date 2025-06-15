@@ -6,6 +6,14 @@ use Framework\Database\Query\Builder;
 
 class MysqlGrammar extends Grammar
 {
+    protected function wrap(string $column): string
+    {
+        if (strpos($column, '.') !== false) {
+            return implode('.', array_map(fn($part) => "`$part`", explode('.', $column)));
+        }
+        return "`$column`";
+    }
+
     public function compileSelect(Builder $builder): array
     {
         $sql = 'select ' . implode(', ', $builder->getColumns()) .
@@ -13,24 +21,37 @@ class MysqlGrammar extends Grammar
 
         $bindings = [];
 
-        // JOIN
         foreach ($builder->getJoins() as $join) {
-            $sql .= " {$join['type']} join `{$join['table']}` on {$join['first']} {$join['operator']} {$join['second']}";
+            if (isset($join['clauses'])) {
+                $onSql = [];
+                foreach ($join['clauses'] as $clause) {
+                    $bool = in_array($clause['type'], ['orOn', 'orWhere']) ? 'or' : 'and';
+                    if (in_array($clause['type'], ['on', 'orOn'])) {
+                        $onSql[] = "{$bool} {$clause['first']} {$clause['operator']} {$clause['second']}";
+                    } elseif (in_array($clause['type'], ['where', 'orWhere'])) {
+                        $onSql[] = "{$bool} {$clause['column']} {$clause['operator']} ?";
+                        $bindings[] = $clause['value'];
+                    }
+                }
+                $sql .= " {$join['type']} join {$join['table']} on " . ltrim(implode(' ', $onSql), 'and ');
+            } else {
+                $sql .= " {$join['type']} join {$join['table']} on {$join['first']} {$join['operator']} {$join['second']}";
+            }
         }
 
-        // WHERE
         if ($wheres = $builder->getWheres()) {
             $sql .= ' where ';
             $parts = [];
 
             foreach ($wheres as $i => $where) {
                 $boolean = $i > 0 ? strtoupper($where['boolean'] ?? 'and') . ' ' : '';
+
                 if ($where['type'] === 'basic') {
-                    $parts[] = "{$boolean}`{$where['column']}` {$where['operator']} ?";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " {$where['operator']} ?";
                     $bindings[] = $where['value'];
                 } elseif ($where['type'] === 'in') {
                     $in = implode(', ', array_fill(0, count($where['values']), '?'));
-                    $parts[] = "{$boolean}`{$where['column']}` IN ({$in})";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$in})";
                     $bindings = array_merge($bindings, $where['values']);
                 } elseif ($where['type'] === 'exists') {
                     [$subSql, $subBindings] = $this->compileSelect($where['query']);
@@ -39,29 +60,28 @@ class MysqlGrammar extends Grammar
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";
                 } elseif ($where['type'] === 'null') {
-                    $parts[] = "{$boolean}`{$where['column']}` IS NULL";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NULL";
                 } elseif ($where['type'] === 'notNull') {
-                    $parts[] = "{$boolean}`{$where['column']}` IS NOT NULL";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NOT NULL";
                 }
             }
 
             $sql .= implode(' ', $parts);
         }
 
-        // GROUP BY
         if ($groups = $builder->getGroups()) {
-            $sql .= ' group by ' . implode(', ', array_map(fn($g) => "`$g`", $groups));
+            $sql .= ' group by ' . implode(', ', array_map(fn($g) => $this->wrap($g), $groups));
         }
 
-        // HAVING
         if ($havings = $builder->getHavings()) {
             $sql .= ' having ';
             $parts = [];
 
             foreach ($havings as $i => $having) {
                 $boolean = $i > 0 ? strtoupper($having['boolean'] ?? 'and') . ' ' : '';
+
                 if ($having['type'] === 'basic') {
-                    $parts[] = "{$boolean}`{$having['column']}` {$having['operator']} ?";
+                    $parts[] = "{$boolean}" . $this->wrap($having['column']) . " {$having['operator']} ?";
                     $bindings[] = $having['value'];
                 } elseif ($having['type'] === 'raw') {
                     $parts[] = "{$boolean}{$having['sql']}";
@@ -70,16 +90,15 @@ class MysqlGrammar extends Grammar
 
             $sql .= implode(' ', $parts);
         }
-
+        
         // ORDER
         if ($orders = $builder->getOrders()) {
             $sql .= ' order by ' . implode(', ', array_map(
-                fn($o) => "`{$o['column']}` " . strtoupper($o['direction']),
+                fn($o) => $this->wrap($o['column']) . ' ' . strtoupper($o['direction']),
                 $orders
             ));
         }
 
-        // LIMIT/OFFSET
         if ($builder->getLimit()) {
             $sql .= ' limit ' . $builder->getLimit();
         }
@@ -87,7 +106,6 @@ class MysqlGrammar extends Grammar
             $sql .= ' offset ' . $builder->getOffset();
         }
 
-        // UNION
         foreach ($builder->getUnions() as $union) {
             [$unionSql, $unionBindings] = $this->compileSelect($union['query']);
             $sql .= ' ' . ($union['all'] ? 'union all' : 'union') . " ({$unionSql})";
@@ -145,7 +163,7 @@ class MysqlGrammar extends Grammar
     public function compileUpdate(Builder $builder, array $data): array
     {
         $sql = "update `{$builder->getTable()}` set ";
-        $set = implode(', ', array_map(fn($k) => "`$k` = ?", array_keys($data)));
+        $set = implode(', ', array_map(fn($k) => $this->wrap($k) . ' = ?', array_keys($data)));
         $sql .= $set;
 
         $bindings = array_values($data);
@@ -155,7 +173,7 @@ class MysqlGrammar extends Grammar
             $parts = [];
 
             foreach ($wheres as $where) {
-                $parts[] = "`{$where['column']}` {$where['operator']} ?";
+                $parts[] = $this->wrap($where['column']) . " {$where['operator']} ?";
                 $bindings[] = $where['value'];
             }
 
@@ -178,18 +196,18 @@ class MysqlGrammar extends Grammar
                 $boolean = $i > 0 ? strtoupper($where['boolean'] ?? 'and') . ' ' : '';
 
                 if ($where['type'] === 'basic') {
-                    $parts[] = "{$boolean}`{$where['column']}` {$where['operator']} ?";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " {$where['operator']} ?";
                     $bindings[] = $where['value'];
                 } elseif ($where['type'] === 'in') {
                     $in = implode(', ', array_fill(0, count($where['values']), '?'));
-                    $parts[] = "{$boolean}`{$where['column']}` IN ({$in})";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$in})";
                     $bindings = array_merge($bindings, $where['values']);
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";
                 } elseif ($where['type'] === 'null') {
-                    $parts[] = "{$boolean}`{$where['column']}` IS NULL";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NULL";
                 } elseif ($where['type'] === 'notNull') {
-                    $parts[] = "{$boolean}`{$where['column']}` IS NOT NULL";
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NOT NULL";
                 } elseif ($where['type'] === 'nested') {
                     [$nestedSql, $nestedBindings] = $this->compileDelete($where['query']);
                     $nestedSql = preg_replace('/^delete from `[a-zA-Z0-9_]+` where /', '', $nestedSql);

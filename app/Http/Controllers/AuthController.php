@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Repositories\UserRepository;
-use App\Http\Requests\User\LoginFormRequest;
-use App\Http\Requests\User\RegisterFormRequest;
+use App\Http\Requests\User\LoginRequest;
+use App\Http\Requests\User\RegisterRequest;
 use App\Services\User\RegisterUserService;
 use Framework\Routing\Controller;
 use Framework\Support\Exceptions\Http\UnauthenticatedException;
@@ -37,7 +37,7 @@ class AuthController extends Controller
         return $this->render('home.pages.auth.signin');
     }
 
-    public function register(RegisterFormRequest $request)
+    public function register(RegisterRequest $request)
     {
         $admin = new Admin(); 
 
@@ -47,7 +47,7 @@ class AuthController extends Controller
         return $result->toResponse();
     }
 
-    public function login(LoginFormRequest $request)
+    public function login(LoginRequest $request)
     {
         if (auth()->check()) {
             return $this->render(null, [], lang('validation.already_logged_in'));
@@ -86,6 +86,7 @@ class AuthController extends Controller
     {
         $id = auth()->id();
         $user = UserRepository::with([User::morphType()])->find($id);
+        
 
         if (!$user) {
             throw new UnauthenticatedException();

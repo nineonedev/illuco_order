@@ -14,8 +14,8 @@ function output_lines(array $lines, bool $highlight = false): void
 }
 
 
-if (!function_exists('escape')) {
-    function escape(string $string): string
+if (!function_exists('e')) {
+    function e(string $string): string
     {
         return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
     }
