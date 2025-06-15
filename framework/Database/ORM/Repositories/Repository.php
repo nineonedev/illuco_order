@@ -97,9 +97,9 @@ abstract class Repository
     {
         $this->observer->fire(RepositoryEvent::BEFORE_SAVE, $entity);
 
-        return is_null($entity->getPrimaryKey())
-            ? $this->insertEntity($entity)
-            : $this->updateEntity($entity);
+        return $entity->getPrimaryKey()
+            ? $this->updateEntity($entity)
+            : $this->insertEntity($entity);
     }
 
     protected function insertEntity(Entity $entity): ?Entity
@@ -127,7 +127,8 @@ abstract class Repository
         $this->observer->fire(RepositoryEvent::AFTER_UPDATE, $entity);
         $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
 
-        return $affected > 0 ? $entity : null;
+        // return $affected > 0 ? $entity : null;
+        return $entity;
     }
 
     public function delete(Entity $entity): bool

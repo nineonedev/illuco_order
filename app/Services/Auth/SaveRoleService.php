@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Common;
+namespace App\Services\Auth;
 
-use App\Domains\Common\Entities\Role;
-use App\Domains\Common\Repositories\PermissionRepository;
-use App\Domains\Common\Repositories\RoleRepository;
+use App\Domains\Auth\Entities\Role;
+use App\Domains\Auth\Repositories\PermissionRepository;
+use App\Domains\Auth\Repositories\RoleRepository;
 use App\Supports\Services\Service;
-use Framework\Support\Collection;
+use Framework\Database\ORM\Entities\Entity;
 use RuntimeException;
 
 class SaveRoleService extends Service
@@ -16,19 +16,15 @@ class SaveRoleService extends Service
         $role = $payload['role'] ?? [];
         $permissionInputs = $payload['permissions'] ?? []; 
 
-        $role = new Role($role);
-        $saved = RoleRepository::make()->save($role);
+        $role = $role instanceof Entity ? $role : new Role($role);
+        $role = RoleRepository::make()->save($role);
 
-        if (!$saved && !$role->getPrimaryKey()) {
+        if (!$role) {
             throw new RuntimeException('역할 저장 실패');
         }
 
-        $role = $saved ?: $role;
-        
         $permissions = $this->parsePermissionInputs($permissionInputs);
         $permissionIds = $this->resolvePermissionIds($permissions);
-        
-        $role = RoleRepository::with(['permissions'])->find($role->getPrimaryKey());
         $role->permissions()->sync($permissionIds);
 
         return ['role' => $role->toArray()];

@@ -1,7 +1,7 @@
 <?php
 
-use App\Domains\Common\Entities\Permission;
-use App\Domains\Common\Entities\Role;
+use App\Domains\Auth\Entities\Permission;
+use App\Domains\Auth\Entities\Role;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
 use App\Domains\User\Entities\Admin;

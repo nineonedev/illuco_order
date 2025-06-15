@@ -1,8 +1,8 @@
 <?php 
 
-namespace App\Domains\Common\Entities;
+namespace App\Domains\Auth\Entities;
 
-use App\Domains\Common\Repositories\PermissionRepository;
+use App\Domains\Auth\Repositories\PermissionRepository;
 use Framework\Database\ORM\Entities\Entity;
 
 class Permission extends Entity

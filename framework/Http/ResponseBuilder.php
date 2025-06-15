@@ -47,6 +47,15 @@ class ResponseBuilder
     /**
      * @return static
      */
+    public function back()
+    {
+        $url = session()->get('_previous_url', '/');
+        return $this->redirect($url);
+    }
+
+    /**
+     * @return static
+     */
     public function with(array $flash)
     {
         $this->flash = $flash;

@@ -9,6 +9,7 @@ use Framework\Core\Contracts\DeferredProviderInterface;
 use Framework\Http\Request;
 use Framework\Console\Kernel as ConsoleKernel;
 use Framework\Http\Kernel as HttpKernel;
+use Framework\Translation\TranslatorManager;
 
 class Application extends Container implements ApplicationInterface
 {
@@ -26,6 +27,8 @@ class Application extends Container implements ApplicationInterface
     protected array $bootedCallbacks = [];
 
     protected bool $registered = false; 
+
+    protected string $locale = 'ko';
     
     /**
      * @var array<class-string<ServiceProvider>>,bool>
@@ -67,7 +70,7 @@ class Application extends Container implements ApplicationInterface
 
         $this->instance(Application::class, $this);
         $this->instance(ApplicationInterface::class, $this);
-        static::setInstance($this); 
+        static::setInstance($this);
     }
 
     public static function setInstance(Application $app)
@@ -144,6 +147,17 @@ class Application extends Container implements ApplicationInterface
     public function getEnvironment(): string
     {
         return $this->environment;
+    }
+
+    public function setLocale(string $locale): void
+    {
+        $this->locale = $locale;
+        app(TranslatorManager::class)->setLocale($locale);
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 
     /**

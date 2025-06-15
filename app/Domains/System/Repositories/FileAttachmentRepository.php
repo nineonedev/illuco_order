@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Domains\Common\Repositories;
+namespace App\Domains\System\Repositories;
 
-use App\Domains\Common\Entities\FileAttachment;
+use App\Domains\System\Entities\FileAttachment;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Repositories\Repository;
 use Framework\Filesystem\UploadedFile;
 
 class FileAttachmentRepository extends Repository
 {
-    public function table(): string
+    public static function table(): string
     {
         return 'file_attachments';
     }
 
-    public function entityClass(): string
+    public static function entityClass(): string
     {
         return FileAttachment::class;
     }

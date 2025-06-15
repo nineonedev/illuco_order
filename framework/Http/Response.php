@@ -46,8 +46,8 @@ class Response
      */
     public static function back(): RedirectResponse
     {
-        $referer = $_SERVER['HTTP_REFERER'] ?? '/';
-        return new RedirectResponse($referer);
+        $url = session()->get('_previous_url', '/');
+        return new RedirectResponse($url);
     }
 
     /**

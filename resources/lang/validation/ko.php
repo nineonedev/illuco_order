@@ -6,6 +6,7 @@ return [
     'unauthenticated' => '로그인이 필요합니다.',
     'unauthorized' => '이 작업을 수행할 권한이 없습니다.',
     'forbidden' => '접근이 거부되었습니다.',
+    'authorization' => '해당 작업을 수행할 수 없습니다.',
 
     // HTTP/REST
     'bad_request' => '잘못된 요청입니다.',

@@ -6,6 +6,7 @@ return [
     'unauthenticated' => 'Authentication is required.',
     'unauthorized' => 'You do not have permission to perform this action.',
     'forbidden' => 'Access denied.',
+    'authorization' => 'This action is unauthorized.',
 
     // HTTP/REST
     'bad_request' => 'Bad request.',

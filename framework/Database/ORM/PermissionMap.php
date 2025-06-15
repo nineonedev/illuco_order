@@ -2,7 +2,7 @@
 
 namespace Framework\Database\ORM;
 
-use App\Domains\Common\Repositories\PermissionRepository;
+use App\Domains\Auth\Repositories\PermissionRepository;
 use Framework\Database\ORM\Entities\Entity;
 
 class PermissionMap

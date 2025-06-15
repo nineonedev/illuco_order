@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Domains\Common\Repositories\PermissionRepository;
+use App\Domains\Auth\Repositories\PermissionRepository;
 use Framework\Core\ServiceProvider;
 use Framework\Database\ORM\PermissionMap;
 

@@ -60,6 +60,7 @@ class RouteRegistrar
 
         return $this->addRoute('GET', $uri, $action);
     }
+    
 
     protected function addRoute(string $method, string $uri, $action): Route
     {

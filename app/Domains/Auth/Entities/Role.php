@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domains\Common\Entities;
+namespace App\Domains\Auth\Entities;
 
-use App\Domains\Common\Repositories\RoleRepository;
+use App\Domains\Auth\Repositories\RoleRepository;
 use Framework\Database\ORM\Entities\Entity;
 
 class Role extends Entity

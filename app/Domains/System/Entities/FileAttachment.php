@@ -1,8 +1,8 @@
 <?php 
 
-namespace App\Domains\Common\Entities;
+namespace App\Domains\System\Entities;
 
-use App\Domains\Common\Repositories\FileAttachmentRepository;
+use App\Domains\System\Repositories\FileAttachmentRepository;
 use Framework\Database\ORM\Entities\MorphEntity;
 
 

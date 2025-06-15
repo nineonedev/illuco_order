@@ -12,6 +12,7 @@ return [
 
     'bootstrap' => [
         'bootstrappers'     => base_path('bootstrap/bootstrappers.php'),
+        'policies'          => base_path('bootstrap/policies.php'),
         'aliases'           => base_path('bootstrap/aliases.php'),
         'providers'         => base_path('bootstrap/providers.php'),
         'middlewares'       => base_path('bootstrap/middlewares.php'),

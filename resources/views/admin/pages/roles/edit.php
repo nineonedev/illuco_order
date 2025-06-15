@@ -99,6 +99,9 @@
                 <a href="<?= route('admin.roles.index') ?>" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
+                <button type="submit" class="no-btn-error-outline --sm" data-action="delete">
+                    <span>삭제</span>
+                </button>
                 <button type="submit" class="no-btn-primary --sm">
                     <span>수정</span>
                 </button>
@@ -117,11 +120,18 @@
         e.submitter.disabled = true;
 
         const fd = new FormData(e.target);
-
         try {
+            if (e.submitter.dataset.action === 'delete') {
+                fd.set('_method', 'delete');
+                
+                if(!confirm('정말로 삭제하시겠습니까?')) {
+                    return;
+                }
+            } 
+
             const response = await fetch(e.target.action, {
                 headers: { 'Accept': 'application/json' },
-                method: e.target.method, // _method=PUT 포함됨
+                method: e.target.method, 
                 body: fd,
             });
 

@@ -97,3 +97,11 @@ if (!function_exists('router')) {
         return app(RouterInterface::class);
     }
 }
+
+function locale_route(string $name, array $params = [])
+{
+    $url = route($name, $params);
+    $locale = get_locale(); // ko, en 등
+
+    return '/' . $locale . ltrim($url, '/');
+}
