@@ -10,8 +10,8 @@ return new class implements Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->morphs('orderer');
-
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteSetNull();
+            $table->foreignId('customer_id')->nullable()->constrained('customers')->onDeleteSetNull();
             $table->string('orderer_name');
             $table->string('orderer_email')->nullable();
             $table->string('orderer_phone')->nullable();

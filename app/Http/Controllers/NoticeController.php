@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domains\Communication\Entities\Notice;
 use App\Domains\Communication\Repositories\NoticeRepository;
+use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
 use Exception;
 use Framework\Http\Request;
@@ -35,27 +36,24 @@ class NoticeController extends Controller
 
     public function store(Request $request)
     {
+        return $this->runInTransaction(function () use ($request) {
+            $data = $request->all();
 
-        $request->validateOrFail([
-            'title' => 'required',
-        ]); 
+            $notice = new Notice($data);
+            $notice->user_id = guard()->id();
 
-        $data = $request->all();
-        $notice = new Notice($data);
-        $notice->user_id = guard()->id();
+            $notice = NoticeRepository::make()->save($notice);
+            if (!$notice) {
+                throw new \Exception("공지 생성에 실패했습니다.");
+            }
 
-        $notice = NoticeRepository::make()->save($notice);
+            $attachments = FileAttachmentRepository::make()->uploadMany($notice);
+            $notice->setRelation(FileAttachment::morphType(), $attachments);
 
-        if (!$notice) {
-            throw new Exception("공지 생성에 실패했습니다.");
-        }
-
-        // $fileRepo = new FileAttachmentRepository();
-        // $fileRepo->uploadMany($notice); 
-        
-
-        return $this->render(null, ['notice' => $notice]);
+            return ['notice' => $notice];
+        }, null);
     }
+
 
 
     public function update()

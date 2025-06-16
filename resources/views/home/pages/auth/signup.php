@@ -85,7 +85,7 @@ use Framework\Database\ORM\RelationMap;
                     </div>
                     <!-- FormControl -->
 
-                    <button type="submit" class="no-btn-primary no-btn-submit">로그인</button>
+                    <button type="submit" class="no-btn-primary no-btn-submit">회원가입</button>
                     <span class="no-form-control-space"></span>
                     <p class="--tac">
                         이미 회원이신가요? <a href="<?=route('auth.signin')?>" class="--underline">로그인</a>

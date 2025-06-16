@@ -9,6 +9,7 @@ return new class implements Migration
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('country');
             $table->string('name');

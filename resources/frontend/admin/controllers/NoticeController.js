@@ -1,30 +1,28 @@
-import Form from '../../modules/components/Form';
-import Controller from '../../modules/core/Controller';
-import File from '../components/File';
-import Summernote from '../components/Summernote';
+// import Form from '../../modules/components/Form';
+import Controller from "../../modules/core/Controller";
+import File from "../components/File";
+import Form from "../components/Form";
+import LongText from "../components/LongText";
 
 export default class NoticeController extends Controller {
-    index(){
-        this._logger.info('index');
+    index() {
+        this._logger.info("index");
     }
 
-    create(){
-        this._logger.info('create');
-        Summernote.make('#content');
+    create() {
+        this._logger.info("create");
 
-        const form = Form.make('form-hook', {}, true);
-        new File('file-hook');
+        Form.make("frm");
 
-
-        this._listen('store', this._store.bind(this));
+        this._listen("store", this._store.bind(this));
     }
 
-    edit(){
-        this._logger.info('edit');
+    edit() {
+        this._logger.info("edit");
     }
 
-    async _store({data, action}, evt){
+    async _store({ data, action }, evt) {
         const resData = await this._ajax.post(action, data);
-        console.log(resData);
+        this._logger.info(resData);
     }
 }

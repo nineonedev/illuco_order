@@ -26,6 +26,20 @@ abstract class Controller
         return ResponseBuilder::create();
     }
 
+    protected function runInTransaction(
+        \Closure $callback,
+        ?string $view = null,
+        string $successMessage = '성공적으로 처리되었습니다.',
+        string $errorMessage = '처리 중 오류가 발생했습니다.'
+    ) {
+        try {
+            $result = transaction()->run($callback);
+            return $this->response(true, $view, $successMessage, is_array($result) ? $result : []);
+        } catch (\Throwable $e) {
+            return $this->response(false, null, $errorMessage . ' (' . $e->getMessage() . ')');
+        }
+    }
+
 
     /**
      * 통합 응답 처리 (성공/실패 분기)

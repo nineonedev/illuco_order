@@ -14,8 +14,8 @@
         </div>
         <!-- Head -->
         
-        <div id="form-hook">
-            <form method="post" enctype="multipart/form-data" action="<?= route('admin.notices.store') ?>">
+        <form method="post" id="frm" enctype="multipart/form-data" action="<?= route('admin.notices.store') ?>">
+            <div class="no-form-inner">
                 <div class="no-form-group">
                     <div class="no-form-control --md">
                         <label for="title" class="no-form-control-inner">
@@ -28,10 +28,7 @@
                     </div>
                     <!-- FormControl -->
                     
-                    <!-- <div id="editorjs" class="no-form-control-input" style="min-height: 300px;"></div> -->
-
-                    
-                    <div class="no-form-base --md">
+                    <div class="no-form-base --md" id="content" data-component-props='{"name": "content", "value": 123}'>
                         <label for="content" class="no-form-base-label">
                             <span>내용</span>
                         </label>
@@ -71,8 +68,9 @@
                         <span class="no-form-control-space"></span>
                         <span class="no-form-control-space"></span>
                     </div>
-                    
+
                     <div id="file-hook"></div>
+
                     <?php for ($i = 1; $i <= 5; $i++) : ?>
                     <div class="no-form-control no-form-file">
                         <label for="file_attachable[]" class="no-form-control-inner no-form-file-inner">
@@ -109,8 +107,8 @@
                         <span>저장</span>
                     </button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
 
     </div>
     <!-- Row -->
