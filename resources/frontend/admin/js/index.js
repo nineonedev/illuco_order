@@ -1,46 +1,83 @@
-import $ from "jquery";
-
-window.$ = $;
-window.jQuery = $;
-
-import "../scss/index.scss";
-
-import Product from "./Product";
-
+import Controllers from "../bootstrap/Controllers";
+import '../scss/index.scss';
 class App {
-    async init() {
-        await import("bootstrap");
-        await import("summernote/dist/summernote-bs5");
-        await import("summernote/dist/lang/summernote-ko-KR");
-
-        const product = new Product("asddas", 232);
-        product.showInfo();
-
-        document.addEventListener("DOMContentLoaded", this.run);
+    static init() {
+        document.addEventListener('DOMContentLoaded', this.run.bind(this));
     }
 
-    run() {
-        // $("[data-text-editor]").summernote({
-        //     height: 300,
-        //     placeholder: "내용을 입력하세요",
-        //     lang: "ko-KR",
-        //     toolbar: [
-        //         ["style", ["style"]],
-        //         [
-        //             "font",
-        //             ["bold", "italic", "underline", "strikethrough", "clear"],
-        //         ],
-        //         ["fontname", ["fontname"]],
-        //         ["fontsize", ["fontsize"]],
-        //         ["color", ["color"]],
-        //         ["para", ["ul", "ol", "paragraph"]],
-        //         ["table", ["table"]],
-        //         ["insert", ["link", "picture", "video"]],
-        //         ["view", ["fullscreen", "codeview", "help"]],
-        //     ],
-        // });
+    static run() {
+        const controllerName = document.body.dataset.controller;
+        const actionName = document.body.dataset.action;
+
+        if (!controllerName || !actionName) {
+            console.warn('[App] data-controller 또는 data-action이 비어 있습니다.');
+            return;
+        }
+
+        const ControllerClass = Controllers[controllerName];
+
+        if (!ControllerClass) {
+            console.warn(`[App] 컨트롤러 '${controllerName}'를 찾을 수 없습니다.`);
+            return;
+        }
+
+        const controller = new ControllerClass();
+
+        if (typeof controller[actionName] !== 'function') {
+            console.error(`[App] ${controller.constructor.name}.${actionName}() 메서드가 존재하지 않습니다.`);
+            return; 
+        }
+
+        try {
+            controller[actionName]();
+        } catch (e) {
+            console.error(`[App] ${controller.constructor.name}.${actionName}() 실행 중 오류 발생:`, e);
+        }
     }
 }
 
-const app = new App();
-app.init();
+App.init();
+
+
+
+// new Summernote('#content').render();
+// Sortable.create(document.querySelector('.no-form-group'));
+
+// const form = document.querySelector('#frm');
+    
+//     form.addEventListener('submit', async (e) => {
+//         e.preventDefault(); 
+//         e.submitter.disabled = true; 
+        
+//         const fd = new FormData(e.target); 
+        
+//         try {
+//             const response = await fetch(e.target.action, {
+//                 headers: {
+//                     'Accept': 'application/json'
+//                 },
+//                 method: e.target.method,
+//                 body: fd,
+//             }); 
+
+//             const resData = await response.json(); 
+//             const {message, data, success} = resData;
+
+//             console.log(resData);
+            
+//             alert(message);
+
+//             // if (success && data.redirect){
+//             //     location.href = data.redirect;
+//             // }
+
+//         } catch ($error) {
+//             alert($error.message); 
+
+//         } finally {
+
+//             e.submitter.disabled = false; 
+//         }
+        
+        
+//     })

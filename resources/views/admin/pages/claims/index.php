@@ -2,7 +2,7 @@
 
 <?php section('title') ?>
 클레임
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('content') ?>
 <div class="no-page-container">
@@ -34,7 +34,7 @@
             </form>
 
             <div class="no-page-index-link">
-                <a href="<?=route('claims.create')?>" class="no-btn-primary --sm">
+                <a href="<?=route('admin.claims.create')?>" class="no-btn-primary --sm">
                     <span>Create</span>
                 </a>
             </div>
@@ -165,4 +165,4 @@
     <!-- Row -->
 </div>
 
-<?php endSection() ?>
+<?php end_section() ?>

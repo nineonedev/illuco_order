@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'unexpected' => 'An unexpected error occurred. Please try again later.',
+    
     // CSRF & Auth
     'csrf_mismatch' => 'CSRF token mismatch.',
     'unauthenticated' => 'Authentication is required.',

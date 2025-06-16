@@ -9,6 +9,7 @@ use Framework\Core\Contracts\DeferredProviderInterface;
 use Framework\Http\Request;
 use Framework\Console\Kernel as ConsoleKernel;
 use Framework\Http\Kernel as HttpKernel;
+use Framework\State\Env;
 use Framework\Translation\TranslatorManager;
 
 class Application extends Container implements ApplicationInterface

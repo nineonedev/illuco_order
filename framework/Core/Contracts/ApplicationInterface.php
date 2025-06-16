@@ -24,6 +24,10 @@ interface ApplicationInterface
     public function getEnvironment(): string;
 
     public function setEnvironment(string $env): void;
+    
+    public function getLocale(): string;
+
+    public function setLocale(string $locale): void;
 
     public function basePath(): string;
 

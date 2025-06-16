@@ -190,10 +190,12 @@ class ExceptionHandler
             $e->renderJsonResponse()->send();
             return;
         }
+
+        $isProd = Application::getInstance()->isProduction();
         
         $payload = [
             'success' => false,
-            'message' => $e->getMessage(),
+            'message' => $isProd ? lang('validation.unexpected') : $e->getMessage(),
             'errors' => [],
         ];
 
@@ -216,9 +218,12 @@ class ExceptionHandler
 
     protected function details(Throwable $e, int $code): array
     {
+        $isProd = Application::getInstance()->isProduction();
+        $message = $isProd ? lang('validation.unexpected') : $e->getMessage();
+        
         return [
             'code' => $code,
-            'message' => $e->getMessage(),
+            'message' => $message,
             'exception' => get_class($e),
             'file' => $e->getFile(),
             'line' => $e->getLine(),

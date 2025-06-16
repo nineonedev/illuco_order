@@ -15,12 +15,14 @@ class FileAttachment extends MorphEntity
         'mime_type',
         'size', 
         'extension',
-        'path'
+        'path',
+        'sort_order',
+        'file_key',
     ];
 
     protected array $casts = [
-        'file_attachable_id' => 'int',
         'size' => 'int',
+        'sort_order' => 'int',
     ];
 
 

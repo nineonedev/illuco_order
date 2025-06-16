@@ -1,306 +1,229 @@
-export default class Component {
-    static ON_UPDATING = "updating";
-    static ON_UPDATED = "updated";
-    static ON_DESTROYING = "destroying";
-    static ON_DESTROYED = "destroyed";
-    static ON_MOUNTING = "mounting";
-    static ON_MOUNTED = "mounted";
+import Logger from "../supports/Logger";
 
-    constructor(hookId, props = {}) {
-        this._hostEl = null;
-        this._rootEl = null;
+export default class Component {
+    constructor(hookId, props = {}, hydrated = false) {
         this._hookId = hookId;
-        this._props = props;
-        this._state = {};
+        this._hydrated = hydrated;
+        this._hasHydratedOnce = false;
+
+        this._debug = true;
+        this._logger = null;
+        this._el = null;
+        this._hostEl = null;
         this._children = [];
 
-        this._parent = null;
-        this._watchers = {};
-        this._computed = {};
-        this._lifecycle = {};
-        this._cache = new Map();
+        this._initialProps = props;
+        this._props = { ...this._initialProps, ...this._defineProps() };
 
-        this.setHost(hookId);
+        this._initialState = this._defineState();
+        this._state = { ...this._initialState };
+
         this._setup();
-        this._mount();
+        this._render();
     }
 
-    get root() {
-        return this._rootEl;
+    static make(hookId, props = {}, hydrated = false) {
+        return new this(hookId, props, hydrated);
+    }
+
+    /** =============================
+     * Setup & Boot
+     ============================== */
+    _setup() {
+        const el = document.getElementById(this._hookId);
+        if (!el) throw new Error(`Element #${this._hookId} not found`);
+
+        this._hostEl = el;
+        this._el = this._hydrated ? el : null;
+
+        this._boot();
+        this._register();
+    }
+
+    _boot() {
+        this._logger = new Logger(this.constructor.name, this._debug);
+        this._logger.info(`Component booted`);
+    }
+
+    _register() {}
+
+    /** =============================
+     * Rendering
+     ============================== */
+    _render() {
+        if (this._hydrated) {
+            if (!this._hasHydratedOnce) {
+                this._logger.info(`Hydrated existing DOM`);
+                this._fireBindingCallbacks();
+                this._hasHydratedOnce = true;
+            } else {
+                this._logger.info(`Skipped redundant hydration re-bind`);
+            }
+            
+            return;
+        }
+
+        const html = this._template();
+        const template = document.createElement('template');
+        template.innerHTML = html.trim();
+        const content = template.content.firstElementChild;
+
+        if (!this._el) {
+            this._hostEl.innerHTML = '';
+            this._hostEl.appendChild(content);
+            this._el = content;
+        } else {
+            this._el.replaceWith(content);
+            this._el = content;
+        }
+
+        this._logger.info(`Rendered`);
+        this._fireBindingCallbacks();
+    }
+
+    render() {
+        this._render();
+    }
+
+    _fireBindingCallbacks() {
+        this._bind();
+        this._bindEvents();
+        this._bound();
+    }
+
+    /** =============================
+     * Lifecycle Hooks (override)
+     ============================== */
+    _defineState() {
+        return {};
+    }
+
+    _defineProps() {
+        return {};
+    }
+
+    _defineComputed() {
+        return {};
+    }
+
+    _template() {
+        return '<div></div>';
+    }
+
+    _bind() {}
+    _bindEvents() {}
+    _bound() {}
+
+    /** =============================
+     * State Management
+     ============================== */
+    get state() {
+        return this._state;
     }
 
     get props() {
         return this._props;
     }
 
-    get host() {
-        return this._hostEl;
+    setState(newState = {}, shouldRender = true) {
+        const prevState = { ...this._state };
+        Object.assign(this._state, newState);
+
+        this._logger.info(`State updated`, {
+            from: prevState,
+            to: this._state,
+        });
+
+        if (shouldRender) {
+            this._render();
+        }
     }
 
-    get state() {
-        return Object.freeze(this._state);
-    }
-
-    _fireUpdateCallback(
-        oldObj,
-        newObj,
-        options = { shouldRender: true, prefix: "" }
-    ) {
-        const changedKeys = Object.keys(newObj).filter(
-            (key) => oldObj[key] !== newObj[key]
-        );
-        if (changedKeys.length === 0) return;
-
-        const { shouldRender, prefix } = options;
-
-        for (const key of changedKeys) {
-            const oldValue = oldObj[key];
-            const newValue = newObj[key];
-            oldObj[key] = newValue;
-
-            const watcherKey = prefix ? `${prefix}.${key}` : key;
-            const watchers = this._watchers[watcherKey];
-            if (watchers) {
-                watchers.forEach((cb) => cb(newValue, oldValue));
+    getChanges() {
+        const changes = {};
+        for (const key in this._state) {
+            if (this._state[key] !== this._initialState[key]) {
+                changes[key] = {
+                    from: this._initialState[key],
+                    to: this._state[key],
+                };
             }
         }
-
-        if (shouldRender) this._update();
+        return changes;
     }
 
-    setProps(newProps, shouldRender = true) {
-        this._fireUpdateCallback(this._props, newProps, {
-            shouldRender,
-            prefix: "props",
-        });
+    isDirty() {
+        return Object.keys(this.getChanges()).length > 0;
     }
 
-    setState(newState, shouldRender = true) {
-        this._fireUpdateCallback(this._state, newState, { shouldRender });
+    isClean() {
+        return !this.isDirty();
     }
 
-    addChild(child) {
-        if (!(child instanceof Component)) return;
-        child._parent = this;
-        this._children.push(child);
-    }
-
-    removeChild(child) {
-        if (!(child instanceof Component)) return;
-        this._children = this._children.filter((c) => c !== child);
-        child.flush();
-    }
-
-    defineComputed(key, computeFn) {
-        let cachedValue;
-        Object.defineProperty(this._computed, key, {
-            get: () => {
-                const newValue = computeFn.call(this);
-                if (newValue !== cachedValue) cachedValue = newValue;
-                return cachedValue;
-            },
-            enumerable: true,
-        });
-    }
-
-    get computed() {
-        return this._computed;
-    }
-
-    emit(eventName, payload) {
+    /** =============================
+     * Event System
+     ============================== */
+    _emit(eventName, data) {
         const handler = this._props?.on?.[eventName];
-        if (typeof handler === "function") handler(payload);
-    }
-
-    watch(key, callback) {
-        if (!this._watchers[key]) this._watchers[key] = [];
-        this._watchers[key].push(callback);
-    }
-
-    on(hookName, callback) {
-        this._lifecycle[hookName] = callback;
-    }
-
-    _render() {}
-
-    _renderElement(string) {
-        const html = string || "";
-
-        const template = document.createElement("template");
-        template.innerHTML = html.trim();
-
-        return template.content.firstChild;
-    }
-
-    flush() {
-        for (const child of this._children) {
-            if (typeof child.flush === "function") {
-                child.flush();
-            }
+        if (typeof handler === 'function') {
+            this._logger.info(`Emitting '${eventName}'`, data);
+            handler(data);
+        } else {
+            this._logger.warn(`No handler for emitted event '${eventName}'`);
         }
-
-        this._unmount();
-        this._children = [];
-        this._state = {};
-        this._props = {};
-        this._hookId = null;
-        this._watchers = {};
-        this._computed = {};
-        this._lifecycle = {};
     }
 
-    _unmount() {
-        this._runLifecycle(Component.ON_DESTROYING);
-        if (this._rootEl) {
-            this._rootEl.remove();
-            this._rootEl = null;
-        }
-        this._runLifecycle(Component.ON_DESTROYED);
+    _dispatch(name, detail = {}) {
+        const event = new CustomEvent(`@${name}`, {
+            detail,
+            bubbles: true,
+            cancelable: true,
+        });
+
+        this._logger.info(`Dispatched custom event '@${name}'`, detail);
+        document.body.dispatchEvent(event);
     }
 
-    _update() {
-        this._runLifecycle(Component.ON_UPDATING);
-        const newRootEl = this._renderElement(this._render());
-
-        if (this._rootEl && newRootEl instanceof HTMLElement) {
-            this._rootEl.replaceWith(newRootEl);
-        } else if (this._hostEl) {
-            this._hostEl.innerHTML = "";
-            this._hostEl.appendChild(newRootEl);
-        }
-
-        this._rootEl = newRootEl;
-        this._setEvents();
-        this._runLifecycle(Component.ON_UPDATED);
+    /** =============================
+     * DOM Utilities
+     ============================== */
+    _qs(selector) {
+        return this._el?.querySelector(selector);
     }
 
-    // async _finalizeMount(el) {
-    //     if (this._rootEl && el !== this._rootEl) {
-    //         this._rootEl.replaceWith(el);
-    //     } else {
-    //         this._hostEl.innerHTML = "";
-    //         this._hostEl.appendChild(el);
-    //     }
+    _qsAll(selector) {
+        return [...(this._el?.querySelectorAll(selector) || [])];
+    }
 
-    //     this._rootEl = el;
-    //     await this._mountChildren();
-    //     this._setEvents();
-    //     this._runLifecycle(Component.ON_MOUNTED);
-    // }
+    _on(selector, eventName, callback, strict = false) {
+        const el = selector instanceof HTMLElement ? selector : this._qs(selector);
 
-    async _mount() {
-        this._runLifecycle(Component.ON_MOUNTING);
-
-        if (this._render === Component.prototype._render) {
-            throw new Error(`render must implement`);
-        }
-
-        if (typeof this._render === "async") {
-        } else if (typeof this._render === "function") {
-        }
-
-        if (
-            typeof this._render === "function" &&
-            this._render !== Component.prototype._render
-        ) {
-            try {
-                const asyncEl = this._render();
-            } catch (e) {
-                this._finalizeMount(asyncEl);
-                const fallbackEl = this._createFallbackElement();
-            }
-
+        if (!el) {
+            const msg = `Event binding failed: '${eventName}' on`;
+            this._logger.warn(msg, selector);
+            if (strict) throw new Error(msg);
             return;
         }
 
-        const rootEl = this._render();
-        this._finalizeMount(rootEl);
+        el.addEventListener(eventName, callback);
+        this._logger.info(`Bound '${eventName}' to`, selector);
     }
 
-    async _mountChildren() {
-        for (const child of this._children) {
-            await child._mount();
-        }
-    }
-
-    _createRootElement(tag = "div", classList = [], attrs = {}) {
-        const el = document.createElement(tag);
-
-        if (Array.isArray(classList)) {
-            el.className = classList.join(" ");
+    _off(selector, eventName, callback) {
+        const el = this._qs(selector);
+        if (!el) {
+            this._logger.warn(`Failed to unbind '${eventName}' on`, selector);
+            return;
         }
 
-        for (const key in attrs) {
-            el.setAttribute(key, attrs[key]);
-        }
-
-        return el;
+        el.removeEventListener(eventName, callback);
+        this._logger.info(`Unbound '${eventName}' from`, selector);
     }
 
-    _createFragment(...children) {
-        const fragment = document.createDocumentFragment();
-
-        children.forEach((child) => {
-            if (typeof child === "string") {
-                fragment.appendChild(document.createTextNode(child));
-            } else if (child instanceof Node) {
-                fragment.appendChild(child);
-            }
-        });
-
-        return fragment;
+    /** =============================
+     * Debug Helper
+     ============================== */
+    get logger() {
+        return this._logger;
     }
-
-    _createFallbackElement() {
-        return this._renderElement("<p>Loading...</p>");
-    }
-
-    _createErrorElement() {
-        return this._renderElement(
-            `<p class="error">Something went wrong.</p>`
-        );
-    }
-
-    _renderSlot(name = "default", scope = {}) {
-        const slots = this._props?.slots || {};
-        const slot = slots[name];
-        return typeof slot === "function" ? slot(scope) : slot || "";
-    }
-
-    _runLifecycle(hookName) {
-        const cb = this._lifecycle[hookName];
-        if (typeof cb === "function") cb.call(this);
-    }
-
-    setHost(hookId) {
-        const el = document.getElementById(hookId);
-        if (!el) throw new Error(`Element with id ${hookId} not found`);
-        this._hostEl = el;
-        if (this._rootEl) {
-            this._hostEl.innerHTML = "";
-            this._hostEl.appendChild(this._rootEl);
-        }
-    }
-
-    /**
-     * @override
-     */
-    _setup() {}
-
-    /**
-     * @override
-     */
-    _render() {
-        throw new Error("Component must implement its own _render() method.");
-    }
-
-    /**
-     * @override
-     */
-    _setEvents() {}
-
-    /**
-     * @override (optional)
-     */
-    async _renderAsync() {}
 }

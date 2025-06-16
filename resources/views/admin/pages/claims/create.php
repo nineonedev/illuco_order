@@ -2,7 +2,7 @@
 
 <?php section('title') ?>
 클레임 생성
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('content') ?>
 <div class="no-form-container">
@@ -11,7 +11,7 @@
             <h1 class="no-heading-sm">클레임 생성</h1>
         </div>
         
-        <form method="post" enctype="multipart/form-data" action="<?= route('claims.store') ?>">
+        <form method="post" enctype="multipart/form-data" action="<?= route('admin.claims.store') ?>">
             <div class="no-form-group">
                 <h2 class="no-form-group-title no-body-lg">
                     제품 정보
@@ -138,7 +138,7 @@
 
             <!-- 액션 버튼 -->
             <div class="no-form-action">
-                <a href="<?= route('claims.index') ?>" class="no-btn-primary-outline --sm">
+                <a href="<?= route('admin.claims.index') ?>" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
                 <button type="submit" class="no-btn-primary --sm">
@@ -148,40 +148,7 @@
         </form>
     </div>
 </div>
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('script') ?>
-<script>
-    $('#content').summernote({
-        height: 300,
-        lang: "ko-KR",
-        toolbar: [
-            ["style", ["style"]],
-            ["font", ["bold", "italic", "underline", "clear"]],
-            ["fontname", ["fontname"]],
-            ["fontsize", ["fontsize"]],
-            ["color", ["color"]],
-            ["para", ["ul", "ol", "paragraph"]],
-            ["table", ["table"]],
-            ["insert", ["link", "picture"]],
-            ["view", ["codeview"]],
-        ],
-        callbacks: {
-            onImageUpload: function (files) {
-                const formData = new FormData();
-                formData.append("file", files[0]);
-
-                fetch("/upload", {
-                    method: "POST",
-                    body: formData,
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        $('#content').summernote("insertImage", data.location);
-                    })
-                    .catch((err) => console.error("Upload failed:", err));
-            },
-        },
-    });
-</script>
-<?php endSection() ?>
+<?php end_section() ?>

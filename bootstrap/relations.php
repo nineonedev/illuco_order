@@ -4,6 +4,7 @@ use App\Domains\Auth\Entities\Permission;
 use App\Domains\Auth\Entities\Role;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
+use App\Domains\System\Entities\FileAttachment;
 use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\Employee;
@@ -49,8 +50,15 @@ Rel::setConfig([
     // ===================================================================
     Notice::class => [
         Rel::belongsTo('user',  User::class, 'user_id'),
+        Rel::morphMany(FileAttachment::class),
     ],
     Claim::class => [
         Rel::belongsTo('user',  User::class, 'user_id'),
+        Rel::morphMany(FileAttachment::class),
+    ],
+    FileAttachment::class => [
+        Rel::morphTo([
+            Notice::class, Claim::class,
+        ]),
     ],
 ]);

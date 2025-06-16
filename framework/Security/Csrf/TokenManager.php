@@ -40,4 +40,9 @@ class TokenManager implements TokenManagerInterface
     {
         return '<input type="hidden" name="'.self::CSRF_INPUT_NAME.'" value="'.$this->generate() . '"/>';
     }
+
+    public function meta(): string
+    {
+        return '<meta name="'.self::CSRF_INPUT_NAME.'" content="'.$this->generate().'">';
+    }
 }

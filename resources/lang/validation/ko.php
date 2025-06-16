@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'unexpected' => '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+
     // CSRF & Auth
     'csrf_mismatch' => 'CSRF 토큰이 일치하지 않습니다.',
     'unauthenticated' => '로그인이 필요합니다.',

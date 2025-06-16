@@ -65,6 +65,7 @@
                                                     value="<?= $action ?>"
                                                     id="<?= md5($entityClass . $action) ?>"
                                                     class="no-form-checkbox-input"
+                                                    checked
                                                 >
                                                 <div class="no-form-checkbox-ripple">
                                                     <span class="no-form-checkbox-box">

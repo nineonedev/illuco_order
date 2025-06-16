@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
-use Framework\Security\Auth\AuthManager;
 use Framework\Support\Facades\Route;
 
 Route::middleware(['web'])->group(function(){
@@ -74,11 +74,16 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [NoticeController::class, 'destroy'])->name('destroy');
                 });
 
-            // Route::prefix('claims')
-            //     ->name('claims')
-            //     ->group(function(){
-            //         Route::get('/', [ClaimController::class, 'index'])->name('index');
-            //     });
+            Route::prefix('claims')
+                ->name('claims')
+                ->group(function(){
+                    Route::get('/', [ClaimController::class, 'index'])->name('index');
+                    Route::get('/create', [ClaimController::class, 'create'])->name('create');
+                    
+                    Route::post('/', [ClaimController::class, 'store'])->name('store');
+                    Route::put('{id}', [ClaimController::class, 'update'])->name('update');
+                    Route::delete('{id}', [ClaimController::class, 'destroy'])->name('destroy');
+                });
 
         });
 

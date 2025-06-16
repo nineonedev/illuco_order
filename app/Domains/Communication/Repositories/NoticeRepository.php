@@ -8,6 +8,7 @@ use Framework\Database\ORM\Repositories\Repository;
 
 class NoticeRepository extends Repository
 {
+
     public static function table(): string
     {
         return 'notices';

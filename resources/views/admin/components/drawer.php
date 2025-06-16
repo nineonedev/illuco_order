@@ -222,7 +222,7 @@
                     </li>
                     <!-- Gnb Item -->
                     <li class="no-drawer-gnb-item ">
-                        <a href="" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                        <a href="<?= route('admin.claims.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
                                 <i class="fa-light fa-comment"></i>
                             </div>

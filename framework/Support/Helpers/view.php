@@ -45,11 +45,16 @@ if (!function_exists('shared')) {
     }
 }
 
-if (!function_exists('section')) {
-    function section(string $name): void
-    {
+function section(string $name, string $value = null): void
+{
+    if (!is_null($value)) {
         View::section($name);
+        echo $value;
+        View::endSection();
+        return;
     }
+    
+    View::section($name);
 }
 
 if (!function_exists('end_section')) {

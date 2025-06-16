@@ -121,6 +121,13 @@ if (!function_exists('csrf_field')) {
     }
 }
 
+if (!function_exists('csrf_meta')) {
+    function csrf_meta(): string
+    {
+        return app(TokenManagerInterface::class)->meta();
+    }
+}
+
 
 if (!function_exists('session')) {
     function session(): SessionManager
