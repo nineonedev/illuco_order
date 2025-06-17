@@ -25,6 +25,8 @@ class Notice extends Entity
     protected array $casts = [
         'user_id' => 'int',
         'is_pinned' => 'bool',
+        'visible_from' => 'datetime',
+        'visible_to' => 'datetime',
     ];
 
     public static function repositoryClass(): string

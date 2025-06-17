@@ -1,6 +1,8 @@
 import Logger from "../supports/Logger";
+import Ajax from "./Ajax";
 
 export default class Component {
+    static HOOK_COUNT = 0;
     static NODE_COUNT = 0;
     static NODE_BINDING_COUNT = 0;
     static NODE_PROP_SEL = "data-component-props";
@@ -9,6 +11,7 @@ export default class Component {
 
     constructor(hookId, props = {}) {
         this._id = this._generateComponentId();
+        this._fallbackHookId = this._generateComponentHookId();
         this._hookId = hookId;
         this._hostEl = null;
         this._el = null;
@@ -16,15 +19,17 @@ export default class Component {
         this._DOM = {};
         this._refs = {};
         this._watchers = {};
+        this._children = {};
         this._lifecycle = {
             mounted: [],
             destroyed: [],
         };
-        this._snapshot = null;
-
+        
         this._children = [];
         this._isSetup = false;
         this._hydrated = false;
+        this._logger = null;
+        this._ajax = null;
 
         this._oldProps = props;
         this._initialProps = {};
@@ -47,43 +52,50 @@ export default class Component {
         if (this._isSetup) return;
 
         this._boot();
-
         this._hydrateIfNeeded();
-        this._render();
-
         this._booted();
 
         this._isSetup = true;
     }
 
     _hydrateIfNeeded() {
-        const element = document.getElementById(this._hookId);
-        if (!element) {
-            throw new Error(`No found element by hookId: #${this._hookId}`);
+
+        let element;
+
+        if (this._hookId instanceof HTMLElement) {
+            element = this._hookId;
+            this._hookId = this._fallbackHookId;
+            
+        } else {
+            element = document.getElementById(this._hookId);
+            if (!element) {
+                throw new Error(`No found element by hookId: #${this._hookId}`);
+            }
         }
-
-        const props = element.dataset.componentProps;
-
-        if (!props) {
+        
+        if (!element.hasAttribute(Component.NODE_PROP_SEL) && 
+            !element.hasAttribute(Component.NODE_TYPE_SEL)) {
             this._hostEl = element;
             this._syncProps(this._oldProps);
             return;
         }
-
-        this._el = element;
+        
         this._hydrated = true;
+        this._el = element;
+        const props = element.getAttribute(Component.NODE_PROP_SEL);
+        
         this._hydrate();
-
-        this._syncProps(JSON.parse(props));
+        this._syncProps(JSON.parse(props ? props : "{}"));
         this._logger.info("component hydrated");
     }
 
     _boot() {
+        this._ajax = new Ajax();
         this._logger = new Logger(this.constructor.name, true);
         this._syncState({});
     }
 
-    _booting() {
+    _booted() {
         if (this._type === null) {
             throw new Error("Componnet type missing.");
         }
@@ -92,7 +104,6 @@ export default class Component {
         this._el.setAttribute("id", this._id);
     }
 
-    _booted() {}
 
     _defineState() {
         return {};
@@ -124,6 +135,7 @@ export default class Component {
 
         const hostEl = document.createElement("div");
         hostEl.setAttribute(Component.NODE_HYDRATED_SEL, true);
+        hostEl.setAttribute('id', this._fallbackHookId);
 
         const element = this._el.cloneNode(true);
 
@@ -132,11 +144,14 @@ export default class Component {
 
         this._hostEl = hostEl;
         this._el = element;
-        this._snapshot = this._el.innerHTML;
     }
 
     _generateComponentId() {
         return `component-${Component.NODE_COUNT++}`;
+    }
+
+    _generateComponentHookId() {
+        return `component-hook-${Component.HOOK_COUNT++}`;
     }
 
     _generateNodeId() {
@@ -350,7 +365,7 @@ export default class Component {
         }
     }
 
-    _dispatch(name, detail = {}) {
+    dispatch(name, detail = {}) {
         const event = new CustomEvent(`@${name}`, {
             detail,
             bubbles: true,
@@ -389,7 +404,7 @@ export default class Component {
             return;
         }
 
-        el.addEventListener(eventName, callback);
+        el.addEventListener(eventName, (e) => callback(this, e));
     }
 
     off(selector, eventName, callback) {

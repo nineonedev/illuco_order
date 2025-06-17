@@ -3,7 +3,7 @@
 namespace Framework\Database\Paginator;
 
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Http\Resources\ApiResource;
+use Framework\Http\ApiResource;
 use Framework\Support\Collection;
 
 class Paginator
@@ -74,14 +74,24 @@ class Paginator
         return $this->currentPage < $this->lastPage();
     }
 
+    public function hasPreviousPage(): bool
+    {
+        return $this->currentPage > 1;
+    }
+
+    public function hasNextPage(): bool
+    {
+        return $this->currentPage < $this->lastPage();
+    }
+
     public function nextPageUrl(): ?string
     {
-        return $this->hasMorePages() ? '?page=' . ($this->currentPage + 1) : null;
+        return $this->hasNextPage() ? '?page=' . ($this->currentPage + 1) : null;
     }
 
     public function previousPageUrl(): ?string
     {
-        return $this->currentPage > 1 ? '?page=' . ($this->currentPage - 1) : null;
+        return $this->hasPreviousPage() ? '?page=' . ($this->currentPage - 1) : null;
     }
 
     public function from(): int
@@ -94,6 +104,7 @@ class Paginator
         return min($this->from() + $this->items->count() - 1, $this->total);
     }
 
+    
     public function toArray(): array
     {
         return [
@@ -106,6 +117,8 @@ class Paginator
             'current_page' => $this->currentPage(),
             'last_page' => $this->lastPage(),
             'has_more_pages' => $this->hasMorePages(),
+            'has_next_page' => $this->hasNextPage(),
+            'has_previous_page' => $this->hasPreviousPage(),
             'next_page_url' => $this->nextPageUrl(),
             'prev_page_url' => $this->previousPageUrl(),
             'from' => $this->from(),

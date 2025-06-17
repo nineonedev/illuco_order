@@ -164,7 +164,7 @@ if (!function_exists('method_field')) {
     function method_field(string $method): string
     {
         $method = strtoupper($method);
-        return '<input type="hidden" name="_method" value="' . e($method) . '" />';
+        return '<input type="hidden" name="_method" id="form-action" value="' . e($method) . '" />';
     }
 }
 

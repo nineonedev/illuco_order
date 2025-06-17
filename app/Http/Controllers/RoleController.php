@@ -7,13 +7,14 @@ use App\Http\Requests\Auth\SaveRoleRequest;
 use App\Services\Auth\SaveRoleService;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
+use RuntimeException;
 
 class RoleController extends Controller
 {
     public function index(Request $request)
     {
         $page = $request->query('page') ?? 1;
-        $roles = RoleRepository::paginate(15, $page);
+        $roles = RoleRepository::queryStatic()->paginate(15, $page);
 
         return $this->render('admin.pages.roles.index', [
             'roles' => $roles,
@@ -27,7 +28,7 @@ class RoleController extends Controller
 
     public function edit(string $id)
     {
-        $role = RoleRepository::with(['permissions'])->find($id);
+        $role = RoleRepository::make()->with(['permissions'])->query()->find($id);
 
         if (!$role) {
             return $this->renderError(null, "정보를 찾을 수 없습니다.");
@@ -51,7 +52,7 @@ class RoleController extends Controller
 
     public function update(string $id, SaveRoleRequest $request)
     {
-        $role = RoleRepository::find($id);
+        $role = RoleRepository::queryStatic()->find($id);
 
         if (!$role) {
             return $this->renderError(null, "정보를 찾을 수 없습니다.");
@@ -71,19 +72,22 @@ class RoleController extends Controller
 
     public function destroy(string $id)
     {
-        $role = RoleRepository::find($id);
-        if (!$role) {
-            return $this->renderError(null, "정보를 찾을 수 없습니다.");
-        }
+        return $this->runInTransaction(function () use ($id) {
+            $role = RoleRepository::queryStatic()->find($id);
+            
+            if (!$role) {
+                throw new RuntimeException("정보를 찾을 수 없습니다.");
+            }
 
-        if (!RoleRepository::make()->delete($role)) {
-            return $this->renderError(null);
-        }
+            if (!RoleRepository::make()->delete($role)) {
+                throw new RuntimeException("삭제에 실패하였습니다.");
+            }
 
-        return $this->responseWith()
-            ->success(true)
-            ->message('삭제되었습니다.')
-            ->back()
-            ->send();
+            return $this->responseWith()
+                ->success(true)
+                ->message('삭제되었습니다.')
+                ->back()
+                ->send();
+        });
     }
 }

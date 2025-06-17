@@ -31,6 +31,27 @@ class Builder
         $this->table = $table;
     }
 
+    public function findOrFail($id, string $primaryKey = 'id'): object
+    {
+        $record = $this->where($primaryKey, '=', $id)->first();
+
+        if (!$record) {
+            throw new \RuntimeException("정보를 찾을 수 없습니다.");
+        }
+
+        return $record;
+    }
+
+    public function bulkDestroy(array $ids, string $primaryKey = 'id'): int
+    {
+        if (empty($ids)) {
+            return 0;
+        }
+
+        $this->whereIn($primaryKey, $ids);
+        return $this->delete();
+    }
+
     public function getBindings(): array
     {
         $bindings = [];

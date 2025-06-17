@@ -3,6 +3,7 @@
 namespace App\Domains\System\Repositories;
 
 use App\Domains\System\Entities\FileAttachment;
+use Exception;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Entities\MorphEntity;
 use Framework\Database\ORM\Repositories\Repository;
@@ -11,6 +12,9 @@ use Framework\Validation\Validator;
 
 class FileAttachmentRepository extends Repository
 {
+    const UPDATE_INPUT_KEY = '_file_attachment_updates';
+    const DELETE_INPUT_KEY = '_file_attachment_deleted';
+
     public static function table(): string
     {
         return 'file_attachments';
@@ -19,6 +23,148 @@ class FileAttachmentRepository extends Repository
     public static function entityClass(): string
     {
         return FileAttachment::class;
+    }
+
+    public function handleDelete(Entity $entity): void
+    {
+        $deletedIds = (array) request()->input(static::DELETE_INPUT_KEY, []);
+
+
+        foreach ($deletedIds as $id) {
+            $attachment = $this->find($id);
+            if ($attachment && $attachment->belongsToEntity($entity)) {
+                $this->delete($attachment);
+            }
+        }
+    }
+
+    public function handleUpdate(Entity $entity): void
+    {
+        $updates = request()->input(static::UPDATE_INPUT_KEY, []);
+        foreach ($updates as $id => $props) {
+            $attachment = $this->find($id);
+            if ($attachment && $attachment->belongsToEntity($entity)) {
+                $attachment->fill([
+                    'sort_order' => $props['sort_order'] ?? 0,
+                    'file_key'   => $props['file_key'] ?? null,
+                ]);
+                $this->save($attachment);
+            }
+        }
+    }
+
+    protected function deleteByFileKey(Entity $entity, string $fileKey): void
+    {
+        $attachments = static::query()
+            ->where(FileAttachment::getMorphType(), get_class($entity)::alias())
+            ->where(FileAttachment::getMorphId(), $entity->getPrimaryKey())
+            ->where('file_key', $fileKey)
+            ->get();
+
+        foreach ($attachments as $attachment) {
+            $this->delete($attachment);
+        }
+    }
+
+
+    public function handleUpload(Entity $entity, array $config = []): array
+    {
+        $uploaded = [];
+
+        foreach ($config as $fileKey => $ruleNames) {
+            $files = request()->file($fileKey);
+            if (!$files) continue;
+            if (!request()->hasFile($fileKey)) continue;
+
+            $this->deleteByFileKey($entity, $fileKey);
+
+            // 업로드 수행
+            if ($this->isSingleUpload($files)) {
+                $uploaded[] = $this->processUploadFile($entity, $files, $ruleNames, $fileKey, 0);
+            } else {
+                $normalized = $this->normalizeFiles($files);
+                foreach ($normalized as $i => $file) {
+                    $uploaded[] = $this->processUploadFile($entity, $file, $ruleNames, "{$fileKey}[{$i}]", $i);
+                }
+            }
+        }
+
+        return array_filter($uploaded);
+    }
+
+
+
+    public function uploadBulk(Entity $entity, array $fields = [], ?string $ruleNames = null): array
+    {
+        $uploaded = [];
+
+        foreach ($fields as $key) {
+            $files = request()->file($key);
+            
+            if (!$files) continue;
+
+            if ($this->isSingleUpload($files)) {
+                $attachment = $this->processUploadFile($entity, $files, $ruleNames, $key, 0);
+                if ($attachment) {
+                    $uploaded[] = $attachment;
+                }
+            } else {
+                $normalizedFiles = $this->normalizeFiles($files);
+                foreach ($normalizedFiles as $index => $file) {
+                    $fileKey = "{$key}[{$index}]";
+                    $attachment = $this->processUploadFile($entity, $file, $ruleNames, $fileKey, $index);
+                    if ($attachment) {
+                        $uploaded[] = $attachment;
+                    }
+                }
+            }
+        }
+
+        return $uploaded;
+    }
+
+    public function uploadBulkWithConfig(Entity $entity, array $config = []): array
+    {
+        $uploaded = [];
+
+        foreach ($config as $key => $ruleNames) {
+            $files = request()->file($key);
+
+            if (!$files) continue;
+
+            if ($this->isSingleUpload($files)) {
+                $attachment = $this->processUploadFile($entity, $files, $ruleNames, $key, 0);
+                if ($attachment) {
+                    $uploaded[] = $attachment;
+                }
+            } else {
+                $normalizedFiles = $this->normalizeFiles($files);
+                foreach ($normalizedFiles as $index => $file) {
+                    $fileKey = "{$key}[{$index}]";
+                    $attachment = $this->processUploadFile($entity, $file, $ruleNames, $fileKey, $index);
+                    if ($attachment) {
+                        $uploaded[] = $attachment;
+                    }
+                }
+            }
+        }
+
+        return $uploaded;
+    }
+
+    public function deleteAllFor(Entity $entity): void
+    {
+        /** @var class-string<MorphEntity> $morph */
+        $morph = static::entityClass();
+
+        $attachments = static::query()
+            ->where($morph::getMorphType(), get_class($entity)::alias())
+            ->where($morph::getMorphId(), $entity->getPrimaryKey())
+            ->get();
+
+        foreach ($attachments as $attachment) {
+            $this->delete($attachment);
+        }
     }
 
     /** 단일 파일 업로드 */
@@ -35,6 +181,7 @@ class FileAttachmentRepository extends Repository
     {
         /** @var class-string<MorphEntity> $entityClass */
         $entityClass = static::entityClass();
+        $alias = get_class($entity)::alias(); 
 
         // 입력 없으면 요청에서 morphType 기준으로 가져옴
         if (empty($files)) {
@@ -68,6 +215,10 @@ class FileAttachmentRepository extends Repository
     /** 내부: 단일 파일 업로드 처리 + 벨리데이션 + 저장 */
     protected function processUploadFile(Entity $entity, array $file, ?string $rules, string $fileKey = null, int $sortOrder = 0): ?FileAttachment
     {
+        if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+        
         $rules ??= 'uploaded|uploadedOk';
 
         $validator = Validator::make([$file], [0 => $rules]);
@@ -113,11 +264,12 @@ class FileAttachmentRepository extends Repository
     /** 특정 엔티티에 속한 첨부 파일 조회 */
     public function hasMany(Entity $entity): array
     {
-        /** @var class-string<MorphEntity> $entityClass */
-        $entityClass = static::entityClass();
+        /** @var class-string<MorphEntity> $morph */
+        $morph = static::entityClass();
 
-        return static::where($entityClass::getMorphType(), $entityClass::morphType())
-            ->where($entityClass::getMorphId(), $entity->getPrimaryKey())
+        return static::query()
+            ->where($morph::getMorphType(), get_class($entity)::alias())
+            ->where($morph::getMorphId(), $entity->getPrimaryKey())
             ->get();
     }
 
@@ -141,11 +293,26 @@ class FileAttachmentRepository extends Repository
         return FileAttachment::make(array_merge(
             $uploadedFile->toArray(),
             [
-                $entityClass::getMorphType() => $entityClass::morphType(),
+                $entityClass::getMorphType() => get_class($entity)::alias(),
                 $entityClass::getMorphId() => $entity->getPrimaryKey(),
+                'upload_path' => $uploadedFile->getUploadPath(),
                 'file_key' => $fileKey,
                 'sort_order' => $sortOrder,
             ]
         ));
+    }
+
+    public function delete(Entity $entity): bool
+{
+        $disk = disk()->setRoot($entity->path);
+        $disk->load();
+
+        if (!$disk->has($entity->name)) {
+            return false;
+        }
+
+        $disk->delete($entity->name);
+
+        return parent::delete($entity);
     }
 }

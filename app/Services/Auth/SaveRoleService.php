@@ -6,6 +6,7 @@ use App\Domains\Auth\Entities\Role;
 use App\Domains\Auth\Repositories\PermissionRepository;
 use App\Domains\Auth\Repositories\RoleRepository;
 use App\Supports\Services\Service;
+use Exception;
 use Framework\Database\ORM\Entities\Entity;
 use RuntimeException;
 
@@ -23,6 +24,7 @@ class SaveRoleService extends Service
             throw new RuntimeException('역할 저장 실패');
         }
 
+        
         $permissions = $this->parsePermissionInputs($permissionInputs);
         $permissionIds = $this->resolvePermissionIds($permissions);
         $role->permissions()->sync($permissionIds);
@@ -35,6 +37,10 @@ class SaveRoleService extends Service
         $permissions = [];
 
         foreach ($permissionInputs as $resource => $actions) {
+            $resource = is_string($resource) && class_exists($resource) 
+                ? $resource::alias() 
+                : $resource;
+
             foreach ($actions as $action) {
                 $permissions[] = [
                     'resource' => $resource, 
@@ -56,7 +62,8 @@ class SaveRoleService extends Service
         foreach ($permissions as $permission) {
             if (!isset($permission['resource'], $permission['action'])) continue;
 
-            $found = PermissionRepository::where('resource', $permission['resource'])
+            $found = PermissionRepository::queryStatic()
+                ->where('resource', $permission['resource'])
                 ->where('action', $permission['action'])
                 ->first();
 

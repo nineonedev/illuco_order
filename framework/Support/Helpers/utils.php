@@ -15,9 +15,9 @@ function output_lines(array $lines, bool $highlight = false): void
 
 
 if (!function_exists('e')) {
-    function e(string $string): string
+    function e(?string $string): string
     {
-        return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
     }
 }
 
@@ -94,17 +94,13 @@ if (!function_exists('json')) {
     /**
      * @param string|array $response
      */
-    function json($response, $decode = false): string
-    {
+    function json($response, $decode = false, $options = JSON_UNESCAPED_UNICODE): string {
         if ($decode && is_string($response)) {
             return json_decode($response);
         }
-
-        header('Content-Type: application/json'); 
-        return json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        return json_encode($response, $options);
     }
 }
-
 
 if (!function_exists('dump')) {
     function dump(...$vars): void

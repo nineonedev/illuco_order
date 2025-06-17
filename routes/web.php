@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClaimController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
@@ -83,6 +84,17 @@ Route::middleware(['web'])->group(function(){
                     Route::post('/', [ClaimController::class, 'store'])->name('store');
                     Route::put('{id}', [ClaimController::class, 'update'])->name('update');
                     Route::delete('{id}', [ClaimController::class, 'destroy'])->name('destroy');
+                });
+
+            Route::prefix('customers')
+                ->name('customers')
+                ->group(function(){
+                    Route::get('/', [CustomerController::class, 'index'])->name('index');
+                    Route::get('/create', [CustomerController::class, 'create'])->name('create');
+                    
+                    Route::post('/', [CustomerController::class, 'store'])->name('store');
+                    Route::put('{id}', [CustomerController::class, 'update'])->name('update');
+                    Route::delete('{id}', [CustomerController::class, 'destroy'])->name('destroy');
                 });
 
         });

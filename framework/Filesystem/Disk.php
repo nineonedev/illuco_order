@@ -44,6 +44,19 @@ class Disk
         return $clone;
     }
 
+    public function setRoot(string $newRoot): self
+    {
+        if (!is_dir($newRoot)) {
+            throw new RuntimeException("Invalid disk root path: {$newRoot}");
+        }
+
+        $this->root = $newRoot;
+        $this->workDir = null;
+        $this->files = [];
+
+        return $this;
+    }
+
     /**
      * 실제 파일이 저장될 경로(디렉토리)
      * @param string $name 파일명 (없으면 디렉토리 자체)

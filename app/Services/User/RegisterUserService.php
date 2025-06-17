@@ -2,8 +2,12 @@
 
 namespace App\Services\User;
 
+use App\Domains\Auth\Entities\Role;
+use App\Domains\Auth\Repositories\RoleRepository;
+use App\Domains\Auth\Repositories\RoleUserRepository;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Repositories\UserRepository;
+use App\Services\Auth\SaveRoleService;
 use App\Supports\Services\Service;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Support\Exceptions\ValidationException;
@@ -17,29 +21,52 @@ class RegisterUserService extends Service
         $this->userable = $userable;
     }
 
-    /**
-     * 실제 실행 로직 (BaseService에서 runInTransaction에 의해 호출됨)
-     */
     protected function handle(array $payload): array
     {
         /** @var class-string<Entity> $userableClass */
         $userableClass = get_class($this->userable);
 
-        // userable 먼저 저장
+        // 1. userable 저장 (ex. Admin)
         $this->userable = $userableClass::resolveRepository()->save($this->userable);
 
-        $attributes = User::morphAttributes($userableClass::alias(), $this->userable->getPrimaryKey(), $payload);
+        // 2. User 생성 속성 준비 (morph 포함)
+        $attributes = User::morphAttributes(
+            $userableClass::alias(),
+            $this->userable->getPrimaryKey(),
+            $payload
+        );
 
+        // 3. 이메일 중복 검사
         $email = $attributes['email'] ?? null;
-        if ($email && UserRepository::existsBy(['email' => $email])) {
+        if ($email && UserRepository::queryStatic()->existsBy(['email' => $email])) {
             throw new ValidationException(transfer('rule.unique', 'system.email'));
         }
 
-        // user 생성
+        // 4. User 생성
         $user = User::make($attributes);
         $user = UserRepository::make()->save($user);
 
-        $user->setRelation('userable', $this->userable->toArray());
+        // 5. 관리자 Role이 없다면 생성
+        $roleRepo = RoleRepository::make();
+        $adminRole = $roleRepo->query()->where('name', 'admin')->first();
+
+        if (!$adminRole) {
+            $adminRole = [
+                'name' => 'admin',
+                'description' => '최고 관리자',
+            ];
+
+            $service = new SaveRoleService();
+            $result = $service->run([
+                'role' => $adminRole,
+                'permissions' => context()->get('permissions', []),
+            ]);
+
+            $adminRole = Role::make($result->getData()['role']);
+            $user->setRelation(Role::alias(), $adminRole);
+        }
+
+        $user->setRelation($userableClass::alias(), $this->userable->toArray());
         return ['user' => $user->toArray()];
     }
 }

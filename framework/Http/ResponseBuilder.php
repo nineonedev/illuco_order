@@ -151,6 +151,21 @@ class ResponseBuilder
     {
         return $this->redirectTo !== null;
     }
+    
+    public function withQuery(array $extra = [])
+    {
+        $query = array_merge($_GET, $extra);
+        $queryString = http_build_query($query);
+
+        if ($this->redirectTo) {
+            $glue = strpos($this->redirectTo, '?') === false ? '?' : '&';
+            $this->redirectTo .= $glue . $queryString;
+
+            $this->data(['redirect' => $this->redirectTo]);
+        }
+
+        return $this;
+    }
 
     protected function responseRedirect(): RedirectResponse
     {

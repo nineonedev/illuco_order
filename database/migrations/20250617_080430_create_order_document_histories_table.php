@@ -8,14 +8,11 @@ return new class implements Migration
 {
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('order_document_histories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('order_id')->constrained('orders')->onDeleteCascade();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteSetNull();
-            $table->foreignId('dealer_id')->nullable()->constrained('dealers')->onDeleteSetNull();
-            $table->string('name');
-            $table->string('country')->nullable();
-            $table->string('phone_number')->nullable();
-            $table->string('email')->nullable();
+            $table->string('status'); // 당시 주문 상태
             $table->text('description')->nullable();
             $table->timestamps();
         });
@@ -23,6 +20,6 @@ return new class implements Migration
 
     public function down(): void
     {
-        Schema::drop('customers'); 
+        Schema::drop('order_document_histories'); 
     }
 };

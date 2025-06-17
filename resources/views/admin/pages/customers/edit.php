@@ -1,7 +1,7 @@
 <?php extend('layouts.admin'); ?>
 <?php section('title') ?>
-주문자 생성
-<?php endSection() ?>
+고객 수정
+<?php end_section() ?>
 
 <?php section('content') ?>
 
@@ -9,10 +9,10 @@
 
     <div class="no-page-row">
         <div class="no-page-head">
-            <h1 class="no-heading-sm">주문자 생성</h1>
+            <h1 class="no-heading-sm">고객 수정</h1>
         </div>
         <!-- Head -->
-        
+    
         <form method="post" enctype="multipart/form-data" action="<?= route('notices.store') ?>">
             <div class="no-form-group">
                 <div class="no-form-control --md">
@@ -138,7 +138,7 @@
                         </div>
                         <span class="no-form-checkbox-text">노출여부</span>
                     </label>
-                    <p class="no-form-checkbox-helper-text">해당 주문자를 노출시킵니다.</p>
+                    <p class="no-form-checkbox-helper-text">해당 고객를 노출시킵니다.</p>
                     <span class="no-form-control-space"></span>
                 </div>
 
@@ -148,6 +148,9 @@
                 <a href="<?= route('guests.index') ?>" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
+                <button type="button" class="no-btn-error-outline --sm">
+                    <span>삭제</span>
+                </button>
                 <button type="submit" class="no-btn-primary --sm">
                     <span>저장</span>
                 </button>
@@ -158,4 +161,4 @@
     <!-- Row -->
 </div>
 
-<?php endSection() ?>
+<?php end_section() ?>

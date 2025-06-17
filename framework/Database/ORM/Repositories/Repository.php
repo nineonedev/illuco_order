@@ -60,17 +60,6 @@ abstract class Repository
         return new static();
     }
 
-    public static function __callStatic($method, $arguments)
-    {
-        $builder = query(new static());
-
-        if (method_exists($builder, $method)) {
-            return $builder->$method(...$arguments);
-        }
-
-        throw new \BadMethodCallException("Method [$method] does not exist.");
-    }
-
     /**
      * @return Entity|SoftDeletes
      */
@@ -80,6 +69,15 @@ abstract class Repository
         return new $class($attributes);
     }
 
+    public function query(): EntityQueryBuilder
+    {
+        return $this->builder;
+    }
+
+    public static function queryStatic(): EntityQueryBuilder
+    {
+        return static::make()->query();
+    }
 
     public function withTransaction(callable $callback)
     {
@@ -192,8 +190,16 @@ abstract class Repository
         return $this;
     }
 
-    public function setWith(array $relations): self
+    public function with(array $relations): self
     {
+        $relations = array_map(function($rel){
+            if (is_string($rel) && class_exists($rel)) {
+                return $rel::alias(); 
+            }
+
+            return $rel; 
+        }, $relations);
+        
         $this->with = $relations;
         return $this;
     }
@@ -215,8 +221,50 @@ abstract class Repository
         return $entities;
     }
 
-    public function query(): EntityQueryBuilder
+    public function find($id): ?Entity
     {
-        return $this->builder;
+        return $this->query()->find($id);
     }
+
+    public function findOrFail($id): Entity
+    {
+        $entity = $this->find($id);
+        if (!$entity) {
+            throw new RuntimeException('Entity not found.');
+        }
+        return $entity;
+    }
+
+    public function all(): array
+    {
+        return $this->query()->get();
+    }
+
+    public function findWhere(array $conditions): ?Entity
+    {
+        $query = $this->query();
+        foreach ($conditions as $key => $value) {
+            $query->where($key, $value);
+        }
+        return $query->first();
+    }
+
+    public function findWhereOrFail(array $conditions): Entity
+    {
+        $entity = $this->findWhere($conditions);
+        if (!$entity) {
+            throw new RuntimeException('Entity not found for given condition.');
+        }
+        return $entity;
+    }
+
+    public function getWhere(array $conditions): array
+    {
+        $query = $this->query();
+        foreach ($conditions as $key => $value) {
+            $query->where($key, $value);
+        }
+        return $query->get();
+    }
+
 }

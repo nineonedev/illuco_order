@@ -14,7 +14,7 @@ class DateTimeCast implements CastInterface
      */
     public function set($value)
     {
-        if (is_null($value)) {
+        if (is_null($value) || $value === '') {
             return null;
         }
 

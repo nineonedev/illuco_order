@@ -2,7 +2,9 @@
 
 namespace Framework\Routing;
 
+use Closure;
 use Framework\Core\Application;
+use Framework\Http\Contracts\ResponseInterface;
 use Framework\Http\Response;
 use Framework\Http\ResponseBuilder;
 use Framework\Http\Responses\JsonResponse;
@@ -27,19 +29,14 @@ abstract class Controller
     }
 
     protected function runInTransaction(
-        \Closure $callback,
-        ?string $view = null,
-        string $successMessage = '성공적으로 처리되었습니다.',
-        string $errorMessage = '처리 중 오류가 발생했습니다.'
-    ) {
-        try {
-            $result = transaction()->run($callback);
-            return $this->response(true, $view, $successMessage, is_array($result) ? $result : []);
+        Closure $callback
+    ): ResponseInterface {
+         try {
+            return transaction()->run($callback);
         } catch (\Throwable $e) {
-            return $this->response(false, null, $errorMessage . ' (' . $e->getMessage() . ')');
+            return $this->renderError(null, '처리 중 오류 발생: ' . $e->getMessage());
         }
     }
-
 
     /**
      * 통합 응답 처리 (성공/실패 분기)

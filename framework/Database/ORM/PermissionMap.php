@@ -52,7 +52,7 @@ class PermissionMap
                     continue;
                 }
 
-                PermissionRepository::firstOrCreate([
+                PermissionRepository::queryStatic()->firstOrCreate([
                     'resource' => $resource,
                     'action'   => $action,
                 ]);

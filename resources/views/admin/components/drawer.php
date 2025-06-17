@@ -99,16 +99,16 @@
                         </a>
                     </li>
                     <!-- Gnb Item -->
-                    <li class="no-drawer-gnb-item <?//= is_route_active('guests.index') ?>">
-                        <a href="<?//=route('guests.index')?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                    <li class="no-drawer-gnb-item <?//= is_route_prefix_active('admin.customers') ?>">
+                        <a href="<?= route('admin.customers.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
                                 <i class="fa-light fa-user"></i>
                             </div>
                             <div class="no-drawer-gnb-link__text">
-                                <span>주문자</span>
+                                <span>고객</span>
                             </div>
                             <div data-tooltip-text>
-                                <span>주문자</span>
+                                <span>고객</span>
                                 <span data-tooltip-arrow></span>
                             </div>
                         </a>
@@ -154,21 +154,6 @@
                 <hr class="no-hr --lg">
 
                 <ul class="no-drawer-gnb">
-                    <li class="no-drawer-gnb-item <?//= is_route_prefix_active('admin.agents') ?>">
-                        <a href="<?//=route('agents.index')?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
-                            <div class="no-drawer-gnb-link__icon">
-                                <i class="fa-light fa-building"></i>
-                            </div>
-                            <div class="no-drawer-gnb-link__text">
-                                <span>대리점</span>
-                            </div>
-                            <div data-tooltip-text>
-                                <span>대리점</span>
-                                <span data-tooltip-arrow></span>
-                            </div>
-                        </a>
-                    </li>
-                    <!-- Gnb Item -->
                     <li class="no-drawer-gnb-item <?//= is_route_prefix_active('admin.employees') ?>">
                         <a href="<?//=route('employees.index')?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
@@ -184,6 +169,22 @@
                         </a>
                     </li>
                     <!-- Gnb Item -->
+                    <li class="no-drawer-gnb-item <?//= is_route_prefix_active('admin.agents') ?>">
+                        <a href="<?//=route('agents.index')?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                            <div class="no-drawer-gnb-link__icon">
+                                <i class="fa-light fa-building"></i>
+                            </div>
+                            <div class="no-drawer-gnb-link__text">
+                                <span>대리점</span>
+                            </div>
+                            <div data-tooltip-text>
+                                <span>대리점</span>
+                                <span data-tooltip-arrow></span>
+                            </div>
+                        </a>
+                    </li>
+                    <!-- Gnb Item -->
+                     
                     <li class="no-drawer-gnb-item">
                         <a href="" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
@@ -243,7 +244,7 @@
                     <li class="no-drawer-gnb-item ">
                         <a href="<?= route('admin.roles.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
-                                <i class="fa-light fa-megaphone"></i>
+                                <i class="fa-light fa-shield-check"></i>
                             </div>
                             <div class="no-drawer-gnb-link__text">
                                 <span>권한 생성</span>

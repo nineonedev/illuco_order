@@ -17,6 +17,7 @@ return new class implements Migration
             $table->integer('size')->nullable();
             $table->string('path')->nullable();
             $table->string('extension', 20);
+            $table->string('upload_path')->nullable();
             $table->string('file_key')->nullable();
             $table->integer('sort_order')->default(0);
 

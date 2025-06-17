@@ -1,4 +1,6 @@
-<?php extend('layouts.admin'); ?>
+<?php extend('layouts.admin'); 
+
+use App\Domains\Communication\Entities\Notice;?>
 <?php section('controller', 'notice') ?>
 <?php section('action', 'create') ?>
 <?php section('title', '공지사항 생성') ?>
@@ -14,7 +16,15 @@
         </div>
         <!-- Head -->
         
-        <form method="post" id="frm" enctype="multipart/form-data" action="<?= route('admin.notices.store') ?>">
+        <form  
+            data-component-props
+            method="post" 
+            id="frm" 
+            enctype="multipart/form-data" 
+            action="<?= route('admin.notices.store') ?>"
+        >
+            <?= csrf_field() ?>
+            
             <div class="no-form-inner">
                 <div class="no-form-group">
                     <div class="no-form-control --md">
@@ -27,8 +37,56 @@
                         <span class="no-form-control-space"></span>
                     </div>
                     <!-- FormControl -->
+
+                    <div class="no-form-control --md">
+                        <label for="status" class="no-form-control-inner">
+                            <select name="status" id="status" class="no-form-control-input --select">
+                                <option value="">-- 상태 선택 --</option>
+                                <option value="<?= Notice::STATUS_DRAFT ?>">
+                                    작성중
+                                </option>
+                                <option value="<?= Notice::STATUS_PUBLISHED ?>">
+                                    게시중
+                                </option>
+                                <option value="<?= Notice::STATUS_SCHEDULED ?>">
+                                    예약게시
+                                </option>
+                                <option value="<?= Notice::STATUS_ARCHIVED ?>">
+                                    보관됨
+                                </option>
+                            </select>
+                            <fieldset class="no-form-control-label">
+                                <legend class="no-form-control-text">상태</legend>
+                            </fieldset>
+                        </label>
+                        <span class="no-form-control-space"></span>
+                    </div>
                     
-                    <div class="no-form-base --md" id="content" data-component-props='{"name": "content", "value": 123}'>
+                    <div class="no-form-flex">
+                        <div class="no-form-control --md">
+                            <label for="visible_from" class="no-form-control-inner">
+                                <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" placeholder="" >
+                                <fieldset class="no-form-control-label">
+                                    <legend class="no-form-control-text">노출 시작일</legend>
+                                </fieldset>
+                            </label>
+                            <span class="no-form-control-space"></span>
+                        </div>
+                        <!-- FormControl -->
+
+                        <div class="no-form-control --md">
+                            <label for="visible_to" class="no-form-control-inner">
+                                <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" placeholder="" >
+                                <fieldset class="no-form-control-label">
+                                    <legend class="no-form-control-text">노출 종료일</legend>
+                                </fieldset>
+                            </label>
+                            <span class="no-form-control-space"></span>
+                        </div>
+                        <!-- FormControl -->
+                    </div>
+                    
+                    <div class="no-form-base --md" id="content" data-component-props='{"name": "content"}'>
                         <label for="content" class="no-form-base-label">
                             <span>내용</span>
                         </label>
@@ -38,8 +96,8 @@
                     <!-- FormControl -->
 
                     <div class="no-form-checkbox --sm">
-                        <label for="is_notice" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="is_notice" id="is_notice" class="no-form-checkbox-input">
+                        <label for="is_pinned" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="is_pinned" id="is_pinned" class="no-form-checkbox-input">
                             <div class="no-form-checkbox-ripple">
                                 <span class="no-form-checkbox-box">
                                     <div class="no-form-checkbox-icon">
@@ -47,56 +105,18 @@
                                     </div>
                                 </span>
                             </div>
-                            <span class="no-form-checkbox-text">공지로 등록</span>
+                            <span class="no-form-checkbox-text">상단 고정</span>
                         </label>
                         <p class="no-form-checkbox-helper-text">해당 공지글을 목록의 최상단에 위치시킵니다.</p>
-                    </div>
-
-                    <div class="no-form-checkbox --sm">
-                        <label for="is_visible" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="is_visible" id="is_visible" class="no-form-checkbox-input" checked>
-                            <div class="no-form-checkbox-ripple">
-                                <span class="no-form-checkbox-box">
-                                    <div class="no-form-checkbox-icon">
-                                        <i class="fa-solid fa-check"></i>
-                                    </div>
-                                </span>
-                            </div>
-                            <span class="no-form-checkbox-text">노출여부</span>
-                        </label>
-                        <p class="no-form-checkbox-helper-text">해당 공지글을 노출시킵니다.</p>
                         <span class="no-form-control-space"></span>
                         <span class="no-form-control-space"></span>
                     </div>
 
-                    <div id="file-hook"></div>
-
-                    <?php for ($i = 1; $i <= 5; $i++) : ?>
-                    <div class="no-form-control no-form-file">
-                        <label for="file_attachable[]" class="no-form-control-inner no-form-file-inner">
-                            <input 
-                                type="file" 
-                                name="file_attachable[]" 
-                                id="file_attachable[]" 
-                                class="no-form-control-input" 
-                                placeholder="" 
-                            >
-                            <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text">첨부파일<?=$i?></legend>
-                            </fieldset>
-                            <button class="no-form-file-input" type="button">
-                                <div class="no-form-file-icon">
-                                    <i class="fa-light fa-paperclip-vertical"></i>
-                                </div>
-                                <span class="no-form-file-text"-text>선택된 파일 없음</span>
-                                <span class="no-form-file-button-text">파일선택</span>
-                            </button>
-                        </label>
-                        <span class="no-form-control-space"></span>
-                    </div>
-                    <!-- FormControl -->
-                    <?php endfor; ?>
-
+                    <div data-component-type="file" data-component-props='{"file_key": "attach_1"}'></div>
+                    <div data-component-type="file" data-component-props='{"file_key": "attach_2"}'></div>
+                    <div data-component-type="file" data-component-props='{"file_key": "attach_3"}'></div>
+                    <div data-component-type="file" data-component-props='{"file_key": "attach_4"}'></div>
+                    <div data-component-type="file" data-component-props='{"file_key": "attach_5"}'></div>
                 </div>
                 
                 <div class="no-form-action">

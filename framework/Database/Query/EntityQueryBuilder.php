@@ -23,7 +23,7 @@ class EntityQueryBuilder extends Builder
     
     public function with(array $relations): self
     {
-        $this->repository->setWith($relations);
+        $this->repository->with($relations);
         return $this;
     }
 
@@ -103,4 +103,23 @@ class EntityQueryBuilder extends Builder
     {
         return json_encode($this->toArray(), JSON_UNESCAPED_UNICODE);
     }
+
+    /**
+     * @param Entity[] $entities
+     */
+    public function deleteForAll(array $entities): int
+    {
+        if (empty($entities)) {
+            return 0;
+        }
+
+        $primaryKey = $entities[0]->getPrimaryKeyName();
+        
+        $ids = array_map(function (Entity $entity) {
+            return $entity->getPrimaryKey();
+        }, $entities);
+
+        return $this->whereIn($primaryKey, $ids)->delete();
+    }
+
 }

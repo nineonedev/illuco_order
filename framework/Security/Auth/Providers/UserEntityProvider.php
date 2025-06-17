@@ -10,9 +10,9 @@ class UserEntityProvider implements UserProviderInterface
     {
         // 유연한 인증 필드 지원: 이메일 or username
         if (isset($credentials['email'])) {
-            $user = UserRepository::where('email', $credentials['email'])->first();
+            $user = UserRepository::queryStatic()->where('email', $credentials['email'])->first();
         } elseif (isset($credentials['username'])) {
-            $user = UserRepository::where('username', $credentials['username'])->first();
+            $user = UserRepository::queryStatic()->where('username', $credentials['username'])->first();
         } else {
             return null;
         }
@@ -26,7 +26,7 @@ class UserEntityProvider implements UserProviderInterface
 
     public function retrieveById($identifier): ?AuthenticatableInterface
     {
-        $user = UserRepository::find($identifier);
+        $user = UserRepository::queryStatic()->find($identifier);
         
         if ($user instanceof AuthenticatableInterface) {
             return $user;

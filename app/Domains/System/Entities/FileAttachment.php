@@ -3,6 +3,7 @@
 namespace App\Domains\System\Entities;
 
 use App\Domains\System\Repositories\FileAttachmentRepository;
+use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Entities\MorphEntity;
 
 
@@ -16,6 +17,7 @@ class FileAttachment extends MorphEntity
         'size', 
         'extension',
         'path',
+        'upload_path',
         'sort_order',
         'file_key',
     ];
@@ -36,13 +38,9 @@ class FileAttachment extends MorphEntity
         return FileAttachmentRepository::class;
     }
 
-    public function storagePath(): string
+    public function belongsToEntity(Entity $entity): bool
     {
-        return rtrim($this->path, DS) . DS . $this->name;
-    }
-
-    public function uploadPath(): string
-    {
-        return upload_path($this->path . DS . $this->name);
+        return $this->{static::getMorphType()} === get_class($entity)::alias()
+            && $this->{static::getMorphId()} === $entity->getPrimaryKey();
     }
 }

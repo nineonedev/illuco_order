@@ -1,7 +1,7 @@
 <?php extend('layouts.admin'); ?>
 <?php section('title') ?>
-주문자 수정
-<?php endSection() ?>
+주문자 생성
+<?php end_section() ?>
 
 <?php section('content') ?>
 
@@ -9,15 +9,16 @@
 
     <div class="no-page-row">
         <div class="no-page-head">
-            <h1 class="no-heading-sm">주문자 수정</h1>
+            <h1 class="no-heading-sm">주문자 생성</h1>
         </div>
         <!-- Head -->
-    
-        <form method="post" enctype="multipart/form-data" action="<?= route('notices.store') ?>">
+        
+        <form method="post" enctype="multipart/form-data" action="<?= route('admin.customers.store') ?>">
+            <?= csrf_field() ?>
             <div class="no-form-group">
                 <div class="no-form-control --md">
-                    <label for="countries" class="no-form-control-inner">
-                        <input type="text" name="countries" id="countries" class="no-form-control-input" placeholder="" >
+                    <label for="country" class="no-form-control-inner">
+                        <input type="text" name="country" id="country" class="no-form-control-input" placeholder="" >
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">국가선택</legend>
                         </fieldset>
@@ -26,9 +27,10 @@
                 </div>
                 
                 <!-- FormControl -->
+
                 <div class="no-form-control --md">
-                    <label for="agent_id" class="no-form-control-inner">
-                        <input type="text" name="agent_id" id="agent_id" class="no-form-control-input" placeholder="" >
+                    <label for="dealer_id" class="no-form-control-inner">
+                        <input type="text" name="dealer_id" id="dealer_id" class="no-form-control-input" placeholder="" >
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">대리점 선택</legend>
                         </fieldset>
@@ -49,19 +51,8 @@
                 <!-- FormControl -->
 
                 <div class="no-form-control --md">
-                    <label for="age" class="no-form-control-inner">
-                        <input type="number" name="age" id="age" class="no-form-control-input" placeholder="" >
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">나이</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-                <!-- FormControl -->
-
-                <div class="no-form-control --md">
-                    <label for="phone" class="no-form-control-inner">
-                        <input type="text" name="phone" id="phone" class="no-form-control-input" placeholder="" >
+                    <label for="phone_number" class="no-form-control-inner">
+                        <input type="tel" name="phone_number" id="phone_number" class="no-form-control-input" placeholder="" >
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">연락처</legend>
                         </fieldset>
@@ -73,7 +64,7 @@
 
                 <div class="no-form-control --md">
                     <label for="email" class="no-form-control-inner">
-                        <input type="text" name="email" id="email" class="no-form-control-input" placeholder="" >
+                        <input type="email" name="email" id="email" class="no-form-control-input" placeholder="" >
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이메일</legend>
                         </fieldset>
@@ -82,8 +73,16 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
+                <div class="no-form-control --textarea">
+                    <label for="description" class="no-form-control-inner">
+                        <textarea type="text" name="description" id="description" class="no-form-control-input" placeholder="" rows="8"></textarea>
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">설명</legend>
+                        </fieldset>
+                    </label>
+                </div>
                 
-                <div class="--flex-column">
+                <!-- <div class="--flex-column">
                     <fieldset class="no-form-group">
                         <legend class="no-form-base-label">성별</legend>
                         <div class="no-form-listing">
@@ -123,10 +122,10 @@
                         </div>
                     </fieldset>
                     <span class="no-form-control-space"></span>
-                </div>
+                </div> -->
 
 
-                <div class="no-form-checkbox --sm">
+                <!-- <div class="no-form-checkbox --sm">
                     <label for="is_visible" class="no-form-checkbox-pointer">
                         <input type="checkbox" name="is_visible" id="is_visible" class="no-form-checkbox-input" checked>
                         <div class="no-form-checkbox-ripple">
@@ -140,17 +139,14 @@
                     </label>
                     <p class="no-form-checkbox-helper-text">해당 주문자를 노출시킵니다.</p>
                     <span class="no-form-control-space"></span>
-                </div>
+                </div> -->
 
             </div>
             
             <div class="no-form-action">
-                <a href="<?= route('guests.index') ?>" class="no-btn-primary-outline --sm">
+                <a href="<?= route('admin.customers.index') ?>" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
-                <button type="button" class="no-btn-error-outline --sm">
-                    <span>삭제</span>
-                </button>
                 <button type="submit" class="no-btn-primary --sm">
                     <span>저장</span>
                 </button>
@@ -161,4 +157,4 @@
     <!-- Row -->
 </div>
 
-<?php endSection() ?>
+<?php end_section() ?>

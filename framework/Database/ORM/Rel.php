@@ -24,6 +24,13 @@ class Rel
     /** @var array<string,class-string<MorphEntity>> */
     protected static $morphableMap = [];
 
+    public static function info(): void
+    {
+        dump(static::$relationMap);
+        dump(static::$morphMap);
+        dump(static::$morphableMap);
+    }
+
     public static function setConfig(array $relationMap, bool $dryRun = false, bool $debug = false): void
     {
         foreach ($relationMap as $entityClass => $relations) {

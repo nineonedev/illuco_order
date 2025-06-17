@@ -20,18 +20,14 @@ class AuthController extends Controller
 
     public function signin()
     {
-        if (!UserRepository::exists()) {
+        if (!UserRepository::queryStatic()->exists()) {
             return $this->responseWith()
                 ->redirectRoute('auth.signup')
                 ->send();
         }
 
         if (auth()->check()) {
-            return $this->responseWith()
-                ->success(true)
-                ->message('로그인에 성공하였습니다.')
-                ->redirectRoute('admin.dashboard')
-                ->send();
+            return $this->redirectToDashboard("로그인에 성공하였습니다.");
         }
 
         return $this->render('home.pages.auth.signin');
@@ -39,10 +35,10 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $admin = new Admin(); 
+        $admin = new Admin();
 
-        $service = new RegisterUserService($admin);
-        $result = $service->runInTransaction($request->safe());
+        $result = (new RegisterUserService($admin))
+            ->runInTransaction($request->safe());
 
         return $result->toResponse();
     }
@@ -50,7 +46,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         if (auth()->check()) {
-            return $this->render(null, [], lang('validation.already_logged_in'));
+            return $this->redirectToDashboard(lang('validation.already_logged_in'));
         }
 
         $credentials = $request->safe();
@@ -59,15 +55,8 @@ class AuthController extends Controller
             return $this->renderError(null, lang('validation.login_failed'))
                 ->withInput($request->all());
         }
-        
-        $user = auth()->user();
 
-        return $this->responseWith()
-            ->success(true)
-            ->redirectRoute('admin.dashboard')
-            ->data(['user' => $user])
-            ->message(lang('validation.login_success'))
-            ->send();
+        return $this->redirectToDashboard(lang('validation.login_success'), auth()->user());
     }
 
     public function logout()
@@ -81,12 +70,12 @@ class AuthController extends Controller
             ->send();
     }
 
-
     public function edit()
     {
-        $id = auth()->id();
-        $user = UserRepository::with([User::morphType()])->find($id);
-        
+        $user = UserRepository::make()
+            ->with([User::morphType()])
+            ->query()
+            ->find(auth()->id());
 
         if (!$user) {
             throw new UnauthenticatedException();
@@ -95,9 +84,21 @@ class AuthController extends Controller
         return $this->render('home.pages.auth.me', ['user' => $user]);
     }
 
-
     public function update()
     {
-        
+        // TODO: 사용자 정보 수정 로직
+    }
+
+    /**
+     * 인증 후 대시보드 리다이렉션 응답
+     */
+    protected function redirectToDashboard(string $message, ?User $user = null)
+    {
+        return $this->responseWith()
+            ->success(true)
+            ->message($message)
+            ->redirectRoute('admin.dashboard')
+            ->data(['user' => $user])
+            ->send();
     }
 }

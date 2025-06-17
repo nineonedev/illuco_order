@@ -119,4 +119,23 @@ class UploadedFile
     {
         return $this->error === UPLOAD_ERR_OK && is_uploaded_file($this->path);
     }
+
+    public function getStoragePath(): ?string
+    {
+        return $this->storagePath;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->newName; 
+    }
+
+    public function getUploadPath(): string
+    {
+        if (!$this->storagePath || !$this->newName) {
+            throw new RuntimeException("File must be moved before accessing upload path.");
+        }
+        
+        return upload_path($this->getStoragePath() . DS . $this->getName());
+    }
 }

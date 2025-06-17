@@ -4,19 +4,32 @@ export default class Ajax {
         this._defaultHeaders = headers;
     }
 
+    static make(silent = false, headers = {}) {
+        return new this(silent, headers); 
+    }
+
     csrfToken() {
         return document.querySelector('meta[name="_csrf_token"]')?.content;
     }
 
     async request(method, url, data = {}, options = {}) {
         const isFormData = data instanceof FormData;
-        const upperMethod = method.toUpperCase();
+        const originalMethod = method.toUpperCase();
+        const override = ['PUT', 'PATCH', 'DELETE'].includes(originalMethod);
 
-        const needsOverride = ['PATCH', 'PUT', 'DELETE'].includes(upperMethod);
-        const actualMethod = needsOverride ? 'POST' : upperMethod;
+        const actualMethod = override ? 'POST' : originalMethod;
 
-        if (!isFormData && needsOverride) {
-            data._method = upperMethod;
+        // _method 처리
+        if (override) {
+            if (isFormData) {
+                if(data.has('_method')) {
+                    data.set('_method', originalMethod);
+                } else {
+                    data.append('_method', originalMethod);
+                }
+            } else {
+                data = { ...data, _method: originalMethod };
+            }
         }
 
         const headers = {
@@ -27,12 +40,14 @@ export default class Ajax {
             ...options.headers,
         };
 
+
         const config = {
             method: actualMethod,
             headers,
             ...options,
         };
 
+        
         if (actualMethod !== 'GET') {
             config.body = isFormData ? data : JSON.stringify(data);
             if (!isFormData) {
@@ -45,8 +60,7 @@ export default class Ajax {
             const resData = await response.json();
 
             if (!response.ok) {
-                const errorMessage = resData?.message || response.statusText;
-                throw new Error(`[Error ${response.status}] ${errorMessage}`);
+                throw new Error(`[${response.status}] ${resData?.message || response.statusText}`);
             }
 
             if (resData.message && !this._silent) alert(resData.message);
@@ -56,7 +70,7 @@ export default class Ajax {
 
         } catch (e) {
             if (!this._silent) alert(e.message);
-            console.warn(`[Ajax ERROR] ${method} ${url}`, e);
+            console.warn(`[Ajax ERROR] ${originalMethod} ${url}`, e);
             throw e;
         }
     }

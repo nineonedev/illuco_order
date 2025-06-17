@@ -32,6 +32,16 @@
     }
 }
 
+.no-form-flex {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    
+    @include mq(md){
+        grid-template-columns: 1fr;
+    }
+}
+
 .no-form-listing {
     display: flex;
     flex-wrap: wrap;
@@ -320,13 +330,13 @@
                 }
             }
 
+            &.--select{
+                opacity: 1;
+            }
+
             &:disabled {
                 opacity: 0.5;
                 cursor: not-allowed;
-            }
-
-            &:read-only {
-                opacity: 0.5;
             }
 
             &.--invalid {
@@ -829,6 +839,26 @@
 
     input[type="file"] {
         display: none;
+    }
+
+    &-preview{
+        margin-top: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+
+        &__img{
+            max-width: 12rem;
+            border-radius: 0.4rem;
+            overflow: hidden;
+            aspect-ratio: 16/10;
+
+            img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
 
     &-text {

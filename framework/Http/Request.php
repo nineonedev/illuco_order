@@ -127,10 +127,14 @@ class Request {
     {
         return $this->post[$key] ?? $default; 
     }
-
-    public function query(string $key, $default = null)
+    
+    public function query(?string $key = null, $default = null)
     {
-        return $this->get[$key] ?? $default; 
+        if ($key === null) {
+            return $this->get;
+        }
+
+        return $this->get[$key] ?? $default;
     }
 
     public function input(string $key, $default = null)
