@@ -19,12 +19,11 @@ export default class Component {
         this._DOM = {};
         this._refs = {};
         this._watchers = {};
-        this._children = {};
         this._lifecycle = {
             mounted: [],
             destroyed: [],
         };
-        
+
         this._children = [];
         this._isSetup = false;
         this._hydrated = false;
@@ -53,37 +52,48 @@ export default class Component {
 
         this._boot();
         this._hydrateIfNeeded();
-        this._booted();
 
         this._isSetup = true;
     }
 
-    _hydrateIfNeeded() {
+    /**
+     *
+     * @param {Component} component
+     */
+    addChild(component) {
+        if (!(component instanceof Component)) {
+            return;
+        }
 
+        this._children.push(component);
+    }
+
+    _hydrateIfNeeded() {
         let element;
 
         if (this._hookId instanceof HTMLElement) {
             element = this._hookId;
             this._hookId = this._fallbackHookId;
-            
         } else {
             element = document.getElementById(this._hookId);
             if (!element) {
                 throw new Error(`No found element by hookId: #${this._hookId}`);
             }
         }
-        
-        if (!element.hasAttribute(Component.NODE_PROP_SEL) && 
-            !element.hasAttribute(Component.NODE_TYPE_SEL)) {
+
+        if (
+            !element.hasAttribute(Component.NODE_PROP_SEL) &&
+            !element.hasAttribute(Component.NODE_TYPE_SEL)
+        ) {
             this._hostEl = element;
             this._syncProps(this._oldProps);
             return;
         }
-        
+
         this._hydrated = true;
         this._el = element;
         const props = element.getAttribute(Component.NODE_PROP_SEL);
-        
+
         this._hydrate();
         this._syncProps(JSON.parse(props ? props : "{}"));
         this._logger.info("component hydrated");
@@ -95,7 +105,7 @@ export default class Component {
         this._syncState({});
     }
 
-    _booted() {
+    _mounted() {
         if (this._type === null) {
             throw new Error("Componnet type missing.");
         }
@@ -103,7 +113,6 @@ export default class Component {
         this._el.setAttribute(Component.NODE_TYPE_SEL, this._type);
         this._el.setAttribute("id", this._id);
     }
-
 
     _defineState() {
         return {};
@@ -135,7 +144,7 @@ export default class Component {
 
         const hostEl = document.createElement("div");
         hostEl.setAttribute(Component.NODE_HYDRATED_SEL, true);
-        hostEl.setAttribute('id', this._fallbackHookId);
+        hostEl.setAttribute("id", this._fallbackHookId);
 
         const element = this._el.cloneNode(true);
 
@@ -173,6 +182,7 @@ export default class Component {
             this._el = content;
         }
 
+        this._mounted();
         this._connectBindings();
         this._callMountedHooks();
     }

@@ -36,8 +36,8 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    
-    @include mq(md){
+
+    @include mq(md) {
         grid-template-columns: 1fr;
     }
 }
@@ -127,6 +127,14 @@
     &:focus {
         box-shadow: 0 0 0 0.2rem var(--clr-primary-main);
     }
+}
+
+.iti {
+    @extend %form-control;
+}
+
+.iti input.iti__tel-input {
+    @extend %form-input;
 }
 
 .no-form-base {
@@ -330,7 +338,7 @@
                 }
             }
 
-            &.--select{
+            &.--select {
                 opacity: 1;
             }
 
@@ -841,13 +849,13 @@
         display: none;
     }
 
-    &-preview{
+    &-preview {
         margin-top: 0.8rem;
         display: flex;
         align-items: center;
         gap: 1.6rem;
 
-        &__img{
+        &__img {
             max-width: 12rem;
             border-radius: 0.4rem;
             overflow: hidden;

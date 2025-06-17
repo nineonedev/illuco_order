@@ -18,6 +18,8 @@
     },
     "dependencies": {
         "bootstrap": "^4.6.2",
+        "choices.js": "^11.1.0",
+        "flatpickr": "^4.6.13",
         "jquery": "^3.7.1",
         "sortablejs": "^1.15.6",
         "summernote": "^0.9.1"

@@ -1,9 +1,9 @@
 import Component from "../../Modules/Core/Component";
 
 export default class File extends Component {
-    static UPDATE_INPUT_KEY = '_file_attachment_updates';
-    static DELETE_INPUT_KEY = '_file_attachment_deleted';
- 
+    static UPDATE_INPUT_KEY = "_file_attachment_updates";
+    static DELETE_INPUT_KEY = "_file_attachment_deleted";
+
     _boot() {
         this._type = "file";
         super._boot();
@@ -40,7 +40,9 @@ export default class File extends Component {
         } = this._props;
 
         const deleteCheckboxId = `delete_file_${id}`;
-        const fileInputId = `file_input_${id ?? Math.random().toString(36).slice(2)}`;
+        const fileInputId = `file_input_${
+            id ?? Math.random().toString(36).slice(2)
+        }`;
 
         return `
             <div class="no-form-control no-form-file">
@@ -66,10 +68,14 @@ export default class File extends Component {
                     </button>
                 </label>
 
-                ${id && name && path ? `
+                ${
+                    id && name && path
+                        ? `
                     <div class="no-form-file-preview">
                         <div class="no-form-file-preview__img">
-                            <img src="${upload_path}" alt="${original_name ?? ''}" />
+                            <img src="${upload_path}" alt="${
+                              original_name ?? ""
+                          }" />
                         </div>
                         <div class="no-form-checkbox --sm">
                             <label for="${deleteCheckboxId}" class="no-form-checkbox-pointer">
@@ -93,16 +99,21 @@ export default class File extends Component {
                         </div>
 
                         <!-- 수정용 데이터 전달 -->
-                        <input type="hidden" name="${File.UPDATE_INPUT_KEY}[${id}][file_key]" value="${file_key}" />
-                        <input type="hidden" name="${File.UPDATE_INPUT_KEY}[${id}][sort_order]" value="${sort_order}" />
+                        <input type="hidden" name="${
+                            File.UPDATE_INPUT_KEY
+                        }[${id}][file_key]" value="${file_key}" />
+                        <input type="hidden" name="${
+                            File.UPDATE_INPUT_KEY
+                        }[${id}][sort_order]" value="${sort_order}" />
                     </div>
-                ` : ``}
+                `
+                        : ``
+                }
 
                 <span class="no-form-control-space"></span>
             </div>
         `;
     }
-
 
     _bindEvents() {
         this.on(this.refs.button, "click", this._handleSelect.bind(this));

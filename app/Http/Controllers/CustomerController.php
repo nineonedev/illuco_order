@@ -51,6 +51,8 @@ class CustomerController extends Controller
     {
         return $this->runInTransaction(function () use ($request) {
             $customer = new Customer($request->all());
+            $customer->user_id = auth()->id();
+            
             $this->save($customer);
 
             return $this->render(null, ['customer' => $customer]);

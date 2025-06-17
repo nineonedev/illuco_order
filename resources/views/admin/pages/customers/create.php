@@ -1,10 +1,12 @@
+<?php
+
+?>
 <?php extend('layouts.admin'); ?>
-<?php section('title') ?>
-주문자 생성
-<?php end_section() ?>
+<?php section('controller', 'customer') ?>
+<?php section('action', 'create') ?>
+<?php section('title', '주문자 생성') ?>
 
 <?php section('content') ?>
-
 <div class="no-form-container">
 
     <div class="no-page-row">
@@ -13,35 +15,41 @@
         </div>
         <!-- Head -->
         
-        <form method="post" enctype="multipart/form-data" action="<?= route('admin.customers.store') ?>">
+        <form id="frm" method="post" enctype="multipart/form-data" action="<?= route('admin.customers.store') ?>">
             <?= csrf_field() ?>
             <div class="no-form-group">
-                <div class="no-form-control --md">
-                    <label for="country" class="no-form-control-inner">
-                        <input type="text" name="country" id="country" class="no-form-control-input" placeholder="" >
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">국가선택</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
+                <div id="country-select-hook">
+                    <div class="no-form-control --md">
+                        <label for="country" class="no-form-control-inner">
+                            <input type="text" name="country" id="country" class="no-form-control-input" placeholder="" >
+                            <fieldset class="no-form-control-label">
+                                <legend class="no-form-control-text">국가선택</legend>
+                            </fieldset>
+                        </label>
+                        <span class="no-form-control-space"></span>
+                    </div>
                 </div>
                 
                 <!-- FormControl -->
 
-                <div class="no-form-control --md">
-                    <label for="dealer_id" class="no-form-control-inner">
-                        <input type="text" name="dealer_id" id="dealer_id" class="no-form-control-input" placeholder="" >
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">대리점 선택</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
+                <div id="datetime"></div>
+
+                <div id="agents" data-component-type="select" data-component-props='{"label": "대리점 선택", "name": "dealer_id"}'>
+                    <div class="no-form-control --md">
+                        <label for="dealer_id" class="no-form-control-inner">
+                            <input type="text" name="dealer_id" id="dealer_id" class="no-form-control-input" placeholder="" >
+                            <fieldset class="no-form-control-label">
+                                <legend class="no-form-control-text"></legend>
+                            </fieldset>
+                        </label>
+                        <span class="no-form-control-space"></span>
+                    </div>
                 </div>
                 <!-- FormControl -->
 
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">
-                        <input type="text" name="name" id="name" class="no-form-control-input" placeholder="" >
+                        <input type="text" name="name" id="name" class="no-form-control-input" placeholder="" required >
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이름</legend>
                         </fieldset>

@@ -2,7 +2,7 @@ import $ from "jquery";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "summernote/dist/summernote.min.js";
 import Component from "../../Modules/Core/Component";
-import Ajax from "../../modules/core/Ajax";
+import Ajax from "../../Modules/Core/Ajax";
 
 export default class LongText extends Component {
     _boot() {
