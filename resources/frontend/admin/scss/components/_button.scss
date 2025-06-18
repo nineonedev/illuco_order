@@ -292,7 +292,5 @@ $color-types: (
 button:disabled {
     color: var(--clr-action-on-disabled) !important;
     background-color: var(--clr-action-disabled) !important;
-    border: none;
-    padding: 0.6rem 1.6rem;
     cursor: not-allowed;
 }

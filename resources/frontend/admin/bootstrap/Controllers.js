@@ -4,6 +4,7 @@ import DealerController from "../controllers/DealerController";
 import EmployeeController from "../controllers/EmployeeController";
 import NoticeController from "../controllers/NoticeController";
 import ProductTemplateController from "../controllers/ProductTemplateController";
+import RoleController from "../controllers/RoleController";
 
 export default {
     notice: NoticeController,
@@ -12,4 +13,5 @@ export default {
     dealer: DealerController,
     admin: AdminController,
     product_template: ProductTemplateController,
+    role: RoleController,
 };

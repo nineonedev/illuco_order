@@ -1,7 +1,10 @@
+<?php 
+
+?>
 <?php extend('layouts.admin'); ?>
-<?php section('title') ?>
-권한 수정
-<?php end_section() ?>
+<?php section('controller', 'role') ?>
+<?php section('action', 'edit') ?>
+<?php section('title', '권한 수정') ?>
 
 <?php section('content') ?>
 <div class="no-page-container">
@@ -10,14 +13,20 @@
             <h1 class="no-heading-sm">권한 수정</h1>
         </div>
 
-        <form method="post" enctype="multipart/form-data" action="<?= route('admin.roles.update', ['id' => $role->id]) ?>" class="no-form-container" id="frm">
+        <form 
+            method="post" 
+            enctype="multipart/form-data" 
+            action="<?= route('admin.roles.update', ['id' => $role->id]) ?>" 
+            class="no-form-container" 
+            id="frm"
+        >
             <?= csrf_field() ?>
             <?= put_field() ?>
 
             <div class="no-form-group">
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">
-                        <input type="text" name="name" id="name" class="no-form-control-input" value="<?= e($role->name) ?>" placeholder="">
+                        <input type="text" name="name" id="name" class="no-form-control-input" value="<?= e($role->name) ?>" placeholder="" required>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이름</legend>
                         </fieldset>
@@ -96,10 +105,10 @@
             </div>
 
             <div class="no-form-action">
-                <a href="<?= route('admin.roles.index') ?>" class="no-btn-primary-outline --sm">
+                <a href="<?= route('admin.roles.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
-                <button type="submit" class="no-btn-error-outline --sm" data-action="delete">
+                <button type="button" class="no-btn-error-outline --sm" data-action="delete">
                     <span>삭제</span>
                 </button>
                 <button type="submit" class="no-btn-primary --sm">
@@ -109,46 +118,4 @@
         </form>
     </div>
 </div>
-<?php end_section() ?>
-
-<?php section('script') ?>
-<script>
-    const form = document.querySelector('#frm');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        e.submitter.disabled = true;
-
-        const fd = new FormData(e.target);
-        try {
-            if (e.submitter.dataset.action === 'delete') {
-                fd.set('_method', 'delete');
-                
-                if(!confirm('정말로 삭제하시겠습니까?')) {
-                    return;
-                }
-            } 
-
-            const response = await fetch(e.target.action, {
-                headers: { 'Accept': 'application/json' },
-                method: e.target.method, 
-                body: fd,
-            });
-
-            const resData = await response.json();
-            const { message, data, success } = resData;
-
-            alert(message);
-
-            if (success && data.redirect){
-                location.href = data.redirect;
-            }
-
-        } catch (err) {
-            alert(err.message);
-        } finally {
-            e.submitter.disabled = false;
-        }
-    });
-</script>
 <?php end_section() ?>

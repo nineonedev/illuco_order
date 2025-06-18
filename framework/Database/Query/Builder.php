@@ -290,7 +290,7 @@ class Builder
         return $this->connection->insert($sql, $bindings);
     }
 
-    public function insertOrIgnore(array $rows): int
+    public function insertOrIgnore(array $rows): ?int
     {
         [$sql, $bindings] = $this->grammar->compileInsertOrIgnore($this->table, $rows);
         return $this->connection->insert($sql, $bindings);

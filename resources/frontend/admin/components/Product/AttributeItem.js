@@ -11,25 +11,32 @@ export default class AttributeItem extends Component {
 
     _defineProps() {
         return {
+            id: null,
             label: '',
             name: '',
             type: '',
             required: false,
             sort_order: 0,
             template_id: null,
-            action: '', // PATCH API 주소
+        };
+    }
+
+    _defineState() {
+        return {
+            ...this._props
         };
     }
 
     _template() {
         this._formId = this._generateNodeId();
+        const {sort_order, template_id, id} = this._state;
 
         return `
             <li class="no-product-attribute-item">
-                <form data-ref="form" id="${this._formId}" method="post" action="${this._props.action}">
+                <form data-ref="form" id="${this._formId}" method="post" action="/admin/product-attributes/${id}">
                     <input type="hidden" name="_method" value="PATCH">
-                    <input type="hidden" name="sort_order" value="${this._props.sort_order}">
-                    <input type="hidden" name="template_id" value="${this._props.template_id}">
+                    <input type="hidden" name="sort_order" value="${sort_order}">
+                    <input type="hidden" name="template_id" value="${template_id}">
 
                     <div class="no-product-attribute-item-flex">
                         <div data-ref="type"></div>
@@ -50,7 +57,8 @@ export default class AttributeItem extends Component {
     }
 
     _bindEvents() {
-        const { label, name, type, required } = this._props;
+        const { label, name, type, required } = this._state;
+        console.log(1);
 
         this._labelInput = Text.make(this.refs.label, {
             label: "이름",
@@ -88,10 +96,10 @@ export default class AttributeItem extends Component {
         }).render();
 
         this.on(this.refs.form, 'submit', this._handleUpdate.bind(this));
-        this.on(this.refs.destroyBtn, 'click', this._handleRemove.bind(this));
+        this.on(this.refs.destroyBtn, 'click', this._handleDestroy.bind(this));
     }
 
-    _handleUpdate(e) {
+    _handleUpdate(comp, e) {
         e.preventDefault();
         const t = e.target;
         const fd = new FormData(t);
@@ -104,11 +112,10 @@ export default class AttributeItem extends Component {
         });
     }
 
-    _handleRemove() {
-        this.dispatch('attr.remove', {
+    _handleDestroy() {
+        this.dispatch('attr.destroy', {
             component: this,
             props: this._props,
         });
-        this._el.remove();
     }
 }

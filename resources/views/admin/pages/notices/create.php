@@ -33,7 +33,7 @@ use App\Domains\Communication\Entities\Notice;
                 <div class="no-form-group">
                     <div class="no-form-control --md">
                         <label for="title" class="no-form-control-inner">
-                            <input type="text" name="title" id="title" class="no-form-control-input" placeholder="" >
+                            <input type="text" name="title" id="title" class="no-form-control-input" placeholder="" required>
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">제목</legend>
                             </fieldset>

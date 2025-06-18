@@ -1,5 +1,7 @@
 <?php
 
+use App\Domains\Order\Entities\Customer;
+use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
@@ -12,4 +14,6 @@ return [
     FileAttachment::class => ['create', 'read', 'update', 'delete'],
     Claim::class =>  ['create', 'read', 'update', 'delete'],
     Notice::class =>  ['create', 'read', 'update', 'delete'],
+    Customer::class => ['create', 'read', 'update', 'delete'],
+    ProductTemplate::class => ['create', 'read', 'update', 'delete'],
 ];

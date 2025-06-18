@@ -27,7 +27,7 @@ use App\Domains\Communication\Entities\Notice;?>
                     <!-- 제목 -->
                     <div class="no-form-control --md">
                         <label for="title" class="no-form-control-inner">
-                            <input type="text" name="title" id="title" class="no-form-control-input" value="<?= e(old('title', $notice->title)) ?>">
+                            <input type="text" name="title" id="title" class="no-form-control-input" required value="<?= e(old('title', $notice->title)) ?>">
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">제목</legend>
                             </fieldset>

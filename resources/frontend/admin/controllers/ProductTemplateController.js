@@ -63,10 +63,13 @@ export default class ProductTemplateController extends Controller {
         this.attributeList = AttributeList.make('attr-hook', {
             attributes: [],
         });
+        
         this.attributeList.render();
 
         
         this._listen('attr.store', this._storeAttribute.bind(this));
+        this._listen('attr.update', this._updateAttribute.bind(this)); 
+        this._listen('attr.destroy', this._destroyAttribute.bind(this)); 
         await this._fetchAttributes();
     }
 
@@ -76,10 +79,38 @@ export default class ProductTemplateController extends Controller {
         const {data} = result;
         this.attributeList.setState({attributes: data.template.attributes});
     }
+    
+    async _updateAttribute ({component, data, action, submitter }) {
+
+        try {
+            submitter.disabled = true;
+            const result = await this._ajax.put(action, data);
+            this._logger.success(result); 
+
+            if (result.success) {
+                const {data} = result; 
+                component.setState(data.attribute);
+            }
+            
+        } finally {
+            submitter.disabled = false; 
+        }
+    }
+
+    async _destroyAttribute ({component, props}) {
+        if (!confirm('정말로 삭제하시겠습니까?')) {
+            return; 
+        }
+
+        const result = await this._ajax.delete(`/admin/product-attributes/${props.id}`);
+        this._logger.success(result); 
+
+        if (result.success) {
+            component._el.remove();
+        }
+    }
 
     async _storeAttribute({submitter, listEl, data, action}, event) {
-        this._logger.success(Object.fromEntries(data));
-
         try {
             submitter.disabled = true; 
             
@@ -87,7 +118,6 @@ export default class ProductTemplateController extends Controller {
             this._logger.success(result); 
 
             if (result.success) {
-                
                 await this._fetchAttributes(); 
             }
 

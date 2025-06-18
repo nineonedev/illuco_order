@@ -1,7 +1,10 @@
+<?php 
+
+?>
 <?php extend('layouts.admin'); ?>
-<?php section('title') ?>
-권한 생성
-<?php end_section() ?>
+<?php section('controller', 'role') ?>
+<?php section('action', 'create') ?>
+<?php section('title', '권한 생성') ?>
 
 <?php section('content') ?>
 
@@ -17,7 +20,7 @@
             <div class="no-form-group">
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">
-                        <input type="text" name="name" id="name" class="no-form-control-input" placeholder="" >
+                        <input type="text" name="name" id="name" class="no-form-control-input" placeholder="" required>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이름</legend>
                         </fieldset>
@@ -86,7 +89,7 @@
             </div>
             
             <div class="no-form-action">
-                <a href="<?=route('admin.roles.index')?>" class="no-btn-primary-outline --sm">
+                <a href="<?=route('admin.roles.index')?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
                 <button type="submit" class="no-btn-primary --sm">
@@ -99,47 +102,4 @@
 </div>
 
 
-<?php end_section() ?>
-
-<?php section('script') ?>
-<script>
-    const form = document.querySelector('#frm');
-    
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
-        e.submitter.disabled = true; 
-        
-        const fd = new FormData(e.target); 
-        
-        try {
-            const response = await fetch(e.target.action, {
-                headers: {
-                    'Accept': 'application/json'
-                },
-                method: e.target.method,
-                body: fd,
-            }); 
-
-            const resData = await response.json(); 
-            const {message, data, success} = resData;
-
-            console.log(resData);
-            
-            alert(message);
-
-            // if (success && data.redirect){
-            //     location.href = data.redirect;
-            // }
-
-        } catch ($error) {
-            alert($error.message); 
-
-        } finally {
-
-            e.submitter.disabled = false; 
-        }
-        
-        
-    })
-</script>
 <?php end_section() ?>

@@ -1,5 +1,7 @@
 <?php
 
+use App\Domains\Order\Entities\Customer;
+use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
@@ -12,6 +14,8 @@ return [
     Dealer::alias() => 'Dealer',
     Claim::alias() => 'Claim',
     FileAttachment::alias() => 'File Attachment',
+    Customer::alias() => 'Customer',
+    ProductTemplate::alias() => 'Product Manage',
 
     'email' => 'Email',
 
