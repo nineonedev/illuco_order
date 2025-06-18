@@ -4,6 +4,8 @@ use App\Domains\Auth\Entities\Permission;
 use App\Domains\Auth\Entities\Role;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
+use App\Domains\Product\Entities\ProductAttribute;
+use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\Dealer;
@@ -58,7 +60,21 @@ Rel::setConfig([
     ],
     FileAttachment::class => [
         Rel::morphTo([
-            Notice::class, Claim::class,
+            Notice::class, Claim::class, ProductTemplate::class,
         ]),
     ],
+
+    // ===================================================================
+    // Product
+    // ===================================================================
+    ProductTemplate::class => [
+        Rel::morphOne(FileAttachment::class),
+        Rel::hasMany('attributes', ProductAttribute::class, 'template_id')
+    ],
+    ProductAttribute::class => [
+        Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
+    ],
+    // ===================================================================
+    // Order
+    // ===================================================================
 ]);

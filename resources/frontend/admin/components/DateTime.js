@@ -1,7 +1,4 @@
 import Component from "../../Modules/Core/Component";
-import flatpickr from "flatpickr";
-import { Korean } from "flatpickr/dist/l10n/ko.js"; // 한글 설정
-import "flatpickr/dist/flatpickr.min.css";
 
 export default class DateTime extends Component {
     _boot() {
@@ -44,7 +41,7 @@ export default class DateTime extends Component {
             dateFormat,
             defaultDate,
             time_24hr: true,
-            locale: Korean,
+            locale: window.flatpickr.l10ns.ko,
         });
     }
 }

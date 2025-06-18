@@ -1,8 +1,8 @@
 <?php 
 
-namespace App\Domains\Order\Entities;
+namespace App\Domains\Product\Entities;
 
-use App\Domains\Order\Repositories\ProductTemplateRepository;
+use App\Domains\Product\Repositories\ProductTemplateRepository;
 use Framework\Database\ORM\Entities\Entity;
 
 class ProductTemplate extends Entity
@@ -11,8 +11,14 @@ class ProductTemplate extends Entity
         'category_id',
         'name',
         'code',
+        'model',
         'sort_order',
         'description',
+    ];
+
+    protected array $casts = [
+        'category_id' => '?int',  
+        'sort_order' => 'int',
     ];
 
     public static function repositoryClass(): string

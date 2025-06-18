@@ -2,40 +2,33 @@
 
 namespace Framework\Validation\Rules;
 
-
 class Unique extends Rule
 {
     protected $table;
     protected $column;
+    protected $exceptId;
 
-    public function __construct($table, $column = null)
+    public function __construct($table, $column = null, $exceptId = null)
     {
         $this->table = $table;
         $this->column = $column;
+        $this->exceptId = $exceptId;
     }
 
-    /**
-     * Validate that the value is unique in the database.
-     *
-     * @param mixed $value
-     * @return bool
-     */
     public function passes($value): bool
     {
-        $column = $this->column ?: $this->field; 
-        $query = db($this->table);
-        $result = $query->where($column, '=', $value)->get();
+        $column = $this->column ?: $this->field;
+        $query = db($this->table)->where($column, '=', $value);
 
-        return empty($result);
+        if ($this->exceptId !== null) {
+            $query->where('id', '!=', $this->exceptId);
+        }
+
+        return empty($query->get());
     }
 
-    /**
-     * Get the error message for the validation rule.
-     *
-     * @return string
-     */
     public function message(): string
     {
-        return transfer('rule.unique', 'system.'.$this->field);
+        return lang('validation.unique') ?? "{$this->field} 값이 이미 존재합니다.";
     }
 }

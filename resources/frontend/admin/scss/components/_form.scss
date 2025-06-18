@@ -876,16 +876,40 @@
         align-items: center;
         gap: 1.6rem;
 
-        &__img {
+        &__viwer {
             max-width: 12rem;
             border-radius: 0.4rem;
             overflow: hidden;
-            aspect-ratio: 16/10;
+            aspect-ratio: 16 / 10;
+            position: relative;
 
-            img {
+            img,
+            video,
+            iframe {
                 object-fit: cover;
                 width: 100%;
                 height: 100%;
+                display: block;
+            }
+
+            iframe {
+                object-fit: contain;
+                border: none;
+            }
+        }
+
+        &__download {
+            display: inline-block;
+            font-size: 0.95rem;
+            color: var(--clr-slate-900);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--clr-input-border);
+            border-radius: 0.4rem;
+            background-color: var(--clr-slate-50);
+
+            &:hover {
+                background-color: var(--clr-slate-100);
             }
         }
     }

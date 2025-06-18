@@ -16,6 +16,7 @@ class CastFactory
         'float'    => FloatCast::class,
         'array'    => ArrayCast::class,
         'datetime' => DateTimeCast::class,
+        '?int'     => NullableIntCast::class,
     ];
 
     /**

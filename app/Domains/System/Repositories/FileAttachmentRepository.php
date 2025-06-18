@@ -25,6 +25,28 @@ class FileAttachmentRepository extends Repository
         return FileAttachment::class;
     }
 
+    public static function uploadWithoutEntity(string $key = 'file', ?string $ruleNames = null): ?array
+    {
+        $file = request()->file($key);
+
+        if (!$file || !isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+
+        $rules = $ruleNames ?? 'uploaded|uploadedOk';
+
+        $validator = Validator::make([$file], [0 => $rules]);
+        if ($validator->fails()) {
+            return null;
+        }
+
+        $uploadedFile = UploadedFile::createFromGlobal($file);
+        $disk = disk()->toWork('temp'); // 업로드 경로 예: /storage/temp/
+        $uploadedFile->storeAs($disk);
+        return $uploadedFile->toArray();
+    }
+
+
     public function handleDelete(Entity $entity): void
     {
         $deletedIds = (array) request()->input(static::DELETE_INPUT_KEY, []);

@@ -1,7 +1,7 @@
 import Controller from "../../modules/core/Controller";
 import File from "../components/File";
 import LongText from "../components/LongText";
-import DateTime from '../components/DateTime';
+import DateTime from "../components/DateTime";
 
 export default class NoticeController extends Controller {
     form;
@@ -11,36 +11,10 @@ export default class NoticeController extends Controller {
         this._logger.info("index");
     }
 
-    create() {
-        this._logger.info("create");
-
-        this._prepare();
-
-        this.form = document.getElementById("frm");
-        this.cancelBtn = document.querySelector('[data-action="cancel"]');
-
-        this.form.addEventListener("submit", this._store.bind(this));
-    }
-
-    edit() {
-        this._logger.info("edit");
-
-        this._prepare();
-
-        this.form = document.getElementById("frm");
-        this.cancelBtn = document.querySelector('[data-action="cancel"]');
-
-        this.form.addEventListener("submit", this._update.bind(this));
-
-        const deleteBtn = this.form.querySelector('[data-action="delete"]');
-        deleteBtn?.addEventListener("click", () => {
-            const data = new FormData(this.form);
-            data.set("_method", "delete");
-            this._destroy(this.form.action, data);
-        });
-    }
-
     _prepare() {
+        this.form = document.getElementById("frm");
+        this.cancelBtn = document.querySelector('[data-action="cancel"]');
+
         LongText.make("content", { name: "content" }).render();
 
         document.querySelectorAll('[data-component-type="file"]').forEach(el => {
@@ -49,42 +23,42 @@ export default class NoticeController extends Controller {
 
         document.querySelectorAll('[data-component-type="datetime"]').forEach(el => {
             DateTime.make(el).render();
-        })
-        
+        });
     }
 
-    async _store(e) {
-        e.preventDefault();
+    create() {
+        this._logger.info("create");
+        this._prepare();
 
-        const form = e.target;
-        const data = new FormData(form);
-        const action = form.action;
-
-        e.submitter.disabled = true;
-        const result = await this._ajax.post(action, data);
-        e.submitter.disabled = false;
-
-        this._logger.success(result);
-        if (result.success) {
-            this.cancelBtn?.click();
-        }
+        this.form.addEventListener("submit", async (e) => {
+            const result = await this._process(e, (data, action) =>
+                this._ajax.post(action, data, true)
+            );
+            if (result?.success && this.cancelBtn) {
+                this.cancelBtn.click();
+            }
+        });
     }
 
-    async _update(e) {
-        e.preventDefault();
+    edit() {
+        this._logger.info("edit");
+        this._prepare();
 
-        const form = e.target;
-        const data = new FormData(form);
-        const action = form.action;
+        this.form.addEventListener("submit", async (e) => {
+            const result = await this._process(e, (data, action) =>
+                this._ajax.put(action, data, true)
+            );
+            if (result?.success) {
+                location.reload();
+            }
+        });
 
-        e.submitter.disabled = true;
-        const result = await this._ajax.put(action, data);
-        e.submitter.disabled = false;
-
-        this._logger.success(result);
-        if (result.success) {
-            location.reload();
-        }
+        const deleteBtn = this.form.querySelector('[data-action="delete"]');
+        deleteBtn?.addEventListener("click", () => {
+            const data = new FormData(this.form);
+            data.set("_method", "delete");
+            this._destroy(this.form.action, data);
+        });
     }
 
     async _destroy(action, data) {

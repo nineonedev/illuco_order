@@ -3,6 +3,7 @@
 namespace Framework\Validation;
 
 use Framework\Support\Exceptions\ValidationException;
+use Framework\Validation\Rules\Nullable;
 
 class Validator
 {
@@ -68,11 +69,20 @@ class Validator
     {
         foreach ($this->rules as $field => $rules) {
             foreach ($rules as $rule) {
+                $value = $this->data[$field] ?? null;
+
                 $ruleInstance = RuleFactory::create($rule['name'], $rule['params']);
                 $ruleInstance->setField($field);
 
-                if (!$ruleInstance->passes($this->data[$field] ?? null)) {
-                    $this->errors[$field] = $this->messages[$field] ?? $ruleInstance->message();
+                if ($ruleInstance instanceof Nullable) {
+                    if ($ruleInstance->passes($value)) {
+                        continue 2; 
+                    }
+                    continue; 
+                }
+
+                if (!$ruleInstance->passes($value ?? null)) {
+                    $this->errors[$field][] = $this->messages[$field] ?? $ruleInstance->message();
                 }
             }
         }

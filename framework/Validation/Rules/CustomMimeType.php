@@ -2,7 +2,7 @@
 
 namespace Framework\Validation\Rules;
 
-class CompositeMimeType extends Rule
+class CustomMimeType extends Rule
 {
     protected $rules = [];
 

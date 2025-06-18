@@ -12,6 +12,7 @@ export default class Select extends Component {
         return {
             name: "select",
             label: "선택",
+            value: "",
             options: [], // [{ value: "kr", label: "대한민국" }, ...]
         };
     }
@@ -33,11 +34,14 @@ export default class Select extends Component {
     }
 
     _renderOptions(options) {
+        const {value:selectedValue} = this._props; 
         return options
             .map((opt) => {
                 const value = typeof opt === "string" ? opt : opt.value;
                 const label = typeof opt === "string" ? opt : opt.label;
-                return `<option value="${value}">${label}</option>`;
+                const selected = selectedValue === value ? 'selected' : '';
+
+                return `<option value="${value}" ${selected}>${label}</option>`;
             })
             .join("");
     }

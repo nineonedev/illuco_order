@@ -120,7 +120,7 @@
                 
                 <ul class="no-drawer-gnb">
                     <li class="no-drawer-gnb-item <? //is_route_active('products.index') ?>">
-                        <a href="<?//=route('products.index')?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                        <a href="<?= route('admin.product_templates.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
                                 <i class="fa-light fa-shop"></i>
                             </div>

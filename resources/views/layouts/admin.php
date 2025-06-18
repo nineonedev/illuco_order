@@ -14,6 +14,7 @@
     
     
     <link href="<?=asset_path('lib/fontawesome/css/all.min.css')?>" rel="stylesheet" />
+    <link href="<?=asset_path('lib/flatpickr/flatpickr.min.css')?>" rel="stylesheet" />
     <link href="<?=asset_path('css/admin.min.css?v='.time())?>" rel="stylesheet" />
     
     <?= yield_section('style') ?>
@@ -42,6 +43,9 @@
     </div>
     <!-- Root -->
     
+    <script src="<?=asset_path('lib/flatpickr/flatpickr.min.js')?>"></script>
+    <script src="<?=asset_path('lib/flatpickr/ko.js')?>"></script>
+
     <script src="<?=asset_path('js/admin.min.js?v='.time())?>"></script>
     <?= yield_section('script') ?>
 </body>

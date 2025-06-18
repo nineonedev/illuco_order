@@ -92,6 +92,7 @@ class UploadedFile
             'error'         => $this->error,
             'path'          => $this->storagePath,
             'extension'     => $this->extension(),
+            'upload_path'   => $this->getUploadPath(),
         ];
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domains\Order\Repositories;
+namespace App\Domains\Product\Repositories;
 
-use App\Domains\Order\Entities\ProductTemplate;
+use App\Domains\Product\Entities\ProductTemplate;
 use Framework\Database\ORM\Repositories\Repository;
 
 class ProductTemplateRepository extends Repository

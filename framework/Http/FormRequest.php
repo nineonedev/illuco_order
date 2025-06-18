@@ -2,6 +2,7 @@
 
 namespace Framework\Http;
 
+use Exception;
 use Framework\Support\Exceptions\Http\UnauthorizedException;
 use Framework\Support\Exceptions\ValidationException; 
 
@@ -25,10 +26,12 @@ abstract class FormRequest extends Request
 
         $this->ensureValidator($this->rules());
 
+
         foreach ($this->messages() as $field => $message) {
             $this->validator->addMessage($field, $message); 
         }
 
+        
         if (!$this->validator->validate()) {
             $this->failedValidation();
             return; 

@@ -12,7 +12,7 @@ export default class LongText extends Component {
 
     _defineProps() {
         return {
-            uploadUrl: "/admin/file-attachments",
+            uploadUrl: "/admin/upload",
             label: "내용",
             name: "content",
             value: "",
@@ -54,17 +54,14 @@ export default class LongText extends Component {
             callbacks: {
                 onImageUpload: function (files) {
                     const fd = new FormData();
+                    const file = files[0];
+                    fd.append('file', file);
 
-                    [...files].forEach((file) => {
-                        fd.append("file_attachable[]", file);
-                    });
-
-                    console.log(Object.fromEntries(files));
-                    return;
-
-                    ajax.post(uploadUrl, formData)
+                    ajax.post(uploadUrl, fd)
                         .then((res) => {
-                            target.summernote("insertImage", data.location);
+                            if (res.success) {
+                                target.summernote("insertImage", res.data.file.upload_path);
+                            }
                         })
                         .catch((err) => {
                             console.error("Upload failed:", err);

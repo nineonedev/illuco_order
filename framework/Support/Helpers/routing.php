@@ -105,3 +105,23 @@ function locale_route(string $name, array $params = [])
 
     return '/' . $locale . ltrim($url, '/');
 }
+
+if (!function_exists('route_param')) {
+    /**
+     * 현재 라우트에서 파라미터 값을 가져온다 (예: /users/{id} → route_param('id'))
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    function route_param(string $key, $default = null)
+    {
+        $route = request()->route();
+
+        if ($route === null) {
+            return $default;
+        }
+
+        return $route->parameter($key, $default);
+    }
+}

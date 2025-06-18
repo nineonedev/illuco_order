@@ -7,7 +7,7 @@ use App\Domains\Communication\Repositories\NoticeRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
 use App\Domains\System\Supports\FileAttachmentList;
-use Framework\Database\ORM\Entities\Entity;
+use App\Http\Requests\Communication\SaveNoticeRequest;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -66,7 +66,7 @@ class NoticeController extends Controller
         return $this->render('admin.pages.notices.edit', ['notice' => $notice]);
     }
 
-    public function store(Request $request)
+    public function store(SaveNoticeRequest $request)
     {
         return $this->runInTransaction(function () use ($request) {
             $notice = new Notice($request->all());
@@ -79,7 +79,7 @@ class NoticeController extends Controller
         });
     }
 
-    public function update(string $id, Request $request)
+    public function update(string $id, SaveNoticeRequest $request)
     {
         return $this->runInTransaction(function () use ($id, $request) {
             $notice = $this->repo()->findOrFail($id);

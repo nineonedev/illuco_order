@@ -72,10 +72,8 @@ export default class File extends Component {
                     id && name && path
                         ? `
                     <div class="no-form-file-preview">
-                        <div class="no-form-file-preview__img">
-                            <img src="${upload_path}" alt="${
-                              original_name ?? ""
-                          }" />
+                        <div class="no-form-file-preview__viewer">
+                             ${this._renderPreview(path, original_name, this._props.extension, upload_path)}
                         </div>
                         <div class="no-form-checkbox --sm">
                             <label for="${deleteCheckboxId}" class="no-form-checkbox-pointer">
@@ -115,8 +113,37 @@ export default class File extends Component {
         `;
     }
 
+    _renderPreview(fileUrl, fileName, extension, resolvedUrl) {
+        const ext = (extension || "").toLowerCase();
+
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+            return `<img src="${resolvedUrl}" alt="${fileName}">`;
+        }
+
+        if (['mp4', 'webm', 'ogg'].includes(ext)) {
+            return `
+                <video controls class="no-form-file-preview__video">
+                    <source src="${resolvedUrl}" type="video/${ext}">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+        }
+
+        if (['pdf'].includes(ext)) {
+            return `
+                <iframe src="${resolvedUrl}" class="no-form-file-preview__doc" frameborder="0"></iframe>
+            `;
+        }
+
+        return `
+            <a href="${resolvedUrl}" target="_blank" class="no-form-file-preview__download">
+                📎 ${fileName ?? '파일 다운로드'}
+            </a>
+        `;
+    }
+
+
     _bindEvents() {
-        console.log(this.refs);
         this.on(this.refs.button, "click", this._handleSelect.bind(this));
         this.on(this.refs.input, "change", this._handleChange.bind(this));
     }

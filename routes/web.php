@@ -7,6 +7,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductAttributeController;
 use App\Http\Controllers\ProductTemplateController;
 use App\Http\Controllers\RoleController;
 use Framework\Support\Facades\Route;
@@ -45,6 +46,7 @@ Route::middleware(['web'])->group(function(){
             Route::get('test', [AdminController::class, 'test'])->name('test');
             Route::get('seting', [AdminController::class, 'setting'])->name('setting'); 
             
+            Route::post('upload', [AdminController::class, 'upload'])->name('upload'); 
 
             Route::prefix('me')
                 ->name('me')
@@ -58,7 +60,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [RoleController::class, 'index'])->name('index');
                     Route::get('/create', [RoleController::class, 'create'])->name('create');
-                    Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
+                    Route::get('{id}/edit', [RoleController::class, 'edit'])->name('edit');
                     
                     Route::post('/', [RoleController::class, 'store'])->name('store');
                     Route::put('{id}', [RoleController::class, 'update'])->name('update');
@@ -84,7 +86,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [ClaimController::class, 'index'])->name('index');
                     Route::get('/create', [ClaimController::class, 'create'])->name('create');
-                    Route::get('/edit/{id}', [ClaimController::class, 'edit'])->name('edit');
+                    Route::get('{id}/edit', [ClaimController::class, 'edit'])->name('edit');
                     
                     Route::post('/', [ClaimController::class, 'store'])->name('store');
                     Route::put('{id}', [ClaimController::class, 'update'])->name('update');
@@ -96,7 +98,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [CustomerController::class, 'index'])->name('index');
                     Route::get('/create', [CustomerController::class, 'create'])->name('create');
-                    Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('edit');
+                    Route::get('{id}/edit', [CustomerController::class, 'edit'])->name('edit');
                     
                     Route::post('/', [CustomerController::class, 'store'])->name('store');
                     Route::put('{id}', [CustomerController::class, 'update'])->name('update');
@@ -128,15 +130,24 @@ Route::middleware(['web'])->group(function(){
                 });
 
             Route::prefix('product-templates')
-                ->name('product.templates')
+                ->name('product_templates')
                 ->group(function(){
                     Route::get('/', [ProductTemplateController::class, 'index'])->name('index');
                     Route::get('/create', [ProductTemplateController::class, 'create'])->name('create');
-                    Route::get('/edit/{id}', [ProductTemplateController::class, 'edit'])->name('edit');
+                    Route::get('{id}/edit', [ProductTemplateController::class, 'edit'])->name('edit');
+                    Route::get('{id}', [ProductTemplateController::class, 'show'])->name('show');
                     
                     Route::post('/', [ProductTemplateController::class, 'store'])->name('store');
                     Route::put('{id}', [ProductTemplateController::class, 'update'])->name('update');
                     Route::delete('{id}', [ProductTemplateController::class, 'destroy'])->name('destroy');
+                });
+
+            Route::prefix('product-attributes')
+                ->name('product_attributes')
+                ->group(function(){
+                    Route::post('/', [ProductAttributeController::class, 'store'])->name('store');
+                    Route::put('{id}', [ProductAttributeController::class, 'update'])->name('update');
+                    Route::delete('{id}', [ProductAttributeController::class, 'destroy'])->name('destroy');
                 });
 
         });

@@ -58,6 +58,7 @@ export default class Component {
 
         this._boot();
         this._hydrateIfNeeded();
+        this._booted();
 
         this._isSetup = true;
     }
@@ -101,13 +102,16 @@ export default class Component {
         const props = element.getAttribute(Component.NODE_PROP_SEL);
 
         this._hydrate();
-        this._syncProps(JSON.parse(props ? props : "{}"));
+        this._syncProps({...JSON.parse(props ? props : "{}"), ...this._oldProps});
         this._logger.info("component hydrated");
     }
 
     _boot() {
         this._ajax = new Ajax();
         this._logger = new Logger(this.constructor.name, true);
+    }
+
+    _booted(){
         this._syncState({});
     }
 
@@ -189,7 +193,6 @@ export default class Component {
         const content = template.content.firstElementChild;
 
         if (!this._el) {
-            this._hostEl.innerHTML = "";
             this._hostEl.appendChild(content);
             this._el = content;
         } else {
@@ -346,8 +349,6 @@ export default class Component {
     }
 
     setState(newState = {}, shouldRender = true) {
-        const prevState = { ...this._state };
-
         Object.keys(newState).forEach((key) => {
             const oldVal = this._state[key];
             const newVal = newState[key];
@@ -357,11 +358,7 @@ export default class Component {
                 this._triggerWatchers(key, newVal, oldVal);
             }
         });
-
-        // this._logger.info(`State updated`, {
-        //     from: prevState,
-        //     to: this._state,
-        // });
+        // Object.assign(this._state, newState);
 
         if (shouldRender) {
             this._render();

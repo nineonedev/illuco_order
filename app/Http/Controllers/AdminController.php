@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\User\Repositories\FileRepository;
-use App\Domains\User\Repositories\UserRepository;
-use Framework\Http\Request;
+use App\Domains\System\Repositories\FileAttachmentRepository;
 use Framework\Routing\Controller;
 
 class AdminController extends Controller
@@ -27,5 +25,16 @@ class AdminController extends Controller
     public function setting()
     {
         return $this->render('admin.pages.setting'); 
+    }
+
+    public function upload()
+    {
+        $file = FileAttachmentRepository::make()->uploadWithoutEntity('file');
+
+        if (!$file) {
+            return $this->renderError(null, '파일 업로드에 실패했습니다.');
+        } 
+
+        return $this->render(null, ['file'=> $file]);
     }
 }

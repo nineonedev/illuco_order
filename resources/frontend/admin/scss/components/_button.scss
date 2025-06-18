@@ -24,19 +24,7 @@
     padding: var(--button-padding-y) var(--button-padding-x);
     border: var(--button-border-width) solid transparent;
 
-    &.--lg {
-        --button-padding-x: 2.4rem;
-        --button-padding-y: 1.2rem;
-    }
-    &.--md {
-        --button-padding-x: 1.6rem;
-        --button-padding-y: 0.6rem;
-    }
-    &.--sm {
-        --button-padding-x: 1.4rem;
-        --button-font-size: 1.4rem;
-    }
-
+    
     i {
         font-size: inherit;
     }
@@ -71,16 +59,70 @@ $color-types: (
     .no-btn-#{"#{$type}"} {
         @extend %btn;
         @include button($type);
+        &.--lg {
+            --button-padding-x: 2.4rem;
+            --button-padding-y: 1.2rem;
+        }
+        &.--md {
+            --button-padding-x: 1.6rem;
+            --button-padding-y: 0.6rem;
+        }
+        &.--sm {
+            --button-padding-x: 1.4rem;
+            --button-font-size: 1.4rem;
+        }
+        &.--xs {
+            --button-min-widht: 0;
+            --button-padding-x: 0.8rem;
+            --button-font-size: 1.2rem;
+        }
+
     }
     .no-btn-#{"#{$type}"}-outline {
         @extend %btn;
         @include button-outline($type);
+        &.--lg {
+            --button-padding-x: 2.4rem;
+            --button-padding-y: 1.2rem;
+        }
+        &.--md {
+            --button-padding-x: 1.6rem;
+            --button-padding-y: 0.6rem;
+        }
+        &.--sm {
+            --button-padding-x: 1.4rem;
+            --button-font-size: 1.4rem;
+        }
+        &.--xs {
+            --button-min-widht: 0;
+            --button-padding-x: 0.8rem;
+            --button-font-size: 1.2rem;
+        }
+
     }
 
     .no-link-#{"#{$type}"} {
         @extend %btn;
         color: var(--clr-#{$type}-dark);
         background: none;
+        &.--lg {
+            --button-padding-x: 2.4rem;
+            --button-padding-y: 1.2rem;
+        }
+        &.--md {
+            --button-padding-x: 1.6rem;
+            --button-padding-y: 0.6rem;
+        }
+        &.--sm {
+            --button-padding-x: 1.4rem;
+            --button-font-size: 1.4rem;
+        }
+        &.--xs {
+            --button-min-widht: 0;
+            --button-padding-x: 0.8rem;
+            --button-font-size: 1.2rem;
+        }
+
 
         &:hover {
             color: var(--clr-#{$type}-dark);

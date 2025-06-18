@@ -5,20 +5,25 @@ namespace Framework\Validation;
 use Framework\Validation\Rules\Archive;
 use Framework\Validation\Rules\ArrayRule;
 use Framework\Validation\Rules\Audio;
+use Framework\Validation\Rules\Boolean;
 use Framework\Validation\Rules\Date;
 use Framework\Validation\Rules\DateISO;
 use Framework\Validation\Rules\Digit;
 use Framework\Validation\Rules\Document;
 use Framework\Validation\Rules\Email;
 use Framework\Validation\Rules\Equal;
+use Framework\Validation\Rules\Exists;
 use Framework\Validation\Rules\FileExtension;
 use Framework\Validation\Rules\FileSize;
+use Framework\Validation\Rules\FloatRule;
 use Framework\Validation\Rules\Image;
+use Framework\Validation\Rules\Integer;
 use Framework\Validation\Rules\Max;
 use Framework\Validation\Rules\MaxLength;
 use Framework\Validation\Rules\MimeType;
 use Framework\Validation\Rules\Min;
 use Framework\Validation\Rules\MinLength;
+use Framework\Validation\Rules\Nullable;
 use Framework\Validation\Rules\Number;
 use Framework\Validation\Rules\Pattern;
 use Framework\Validation\Rules\Phone;
@@ -47,6 +52,14 @@ class RuleFactory
     {
         // Map the rule string to the appropriate rule class
         switch ($rule) {
+            case 'boolean': 
+                return new Boolean();
+            case 'float': 
+                return new FloatRule();
+            case 'integer':
+                return new Integer();
+            case 'nullable': 
+                return new Nullable();
             case 'array':
                 return new ArrayRule();
             case 'string': 
@@ -85,6 +98,8 @@ class RuleFactory
                 return new Required();
             case 'unique':
                 return new Unique(...$parameters);
+            case 'exists':
+                return new Exists(...$parameters);
             case 'uploaded':
                 return new Uploaded();
             case 'uploadedOk':
