@@ -1,8 +1,11 @@
-<?php extend('layouts.admin'); ?>
+<?php 
 
-<?php section('title') ?>
-공지사항
-<?php end_section() ?>
+?>
+
+<?php extend('layouts.admin'); ?>
+<?php section('controller', 'notice') ?>
+<?php section('action', 'index') ?>
+<?php section('title', '공지사항 목록') ?>
 
 <?php section('content') ?>
 <div class="no-page-container">

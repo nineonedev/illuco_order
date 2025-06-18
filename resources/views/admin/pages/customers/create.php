@@ -17,8 +17,16 @@
         
         <form id="frm" method="post" enctype="multipart/form-data" action="<?= route('admin.customers.store') ?>">
             <?= csrf_field() ?>
+
             <div class="no-form-group">
-                <div id="country-select-hook">
+                <div 
+                    id="country-hook" 
+                    data-component-type="country-select" 
+                    data-component-props='{
+                        "name": "country",
+                        "label": "국가 선택",
+                        "value": "KR"
+                    }'>
                     <div class="no-form-control --md">
                         <label for="country" class="no-form-control-inner">
                             <input type="text" name="country" id="country" class="no-form-control-input" placeholder="" >
@@ -31,10 +39,14 @@
                 </div>
                 
                 <!-- FormControl -->
-
-                <div id="datetime"></div>
-
-                <div id="agents" data-component-type="select" data-component-props='{"label": "대리점 선택", "name": "dealer_id"}'>
+                <div 
+                    id="dealer-hook" 
+                    data-component-type="select" 
+                    data-component-props='{
+                        "name": "dealer_id",
+                        "label": "대리점 선택"
+                    }'
+                >
                     <div class="no-form-control --md">
                         <label for="dealer_id" class="no-form-control-inner">
                             <input type="text" name="dealer_id" id="dealer_id" class="no-form-control-input" placeholder="" >
@@ -152,7 +164,7 @@
             </div>
             
             <div class="no-form-action">
-                <a href="<?= route('admin.customers.index') ?>" class="no-btn-primary-outline --sm">
+                <a href="<?= route('admin.customers.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
                 <button type="submit" class="no-btn-primary --sm">

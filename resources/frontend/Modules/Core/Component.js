@@ -23,6 +23,7 @@ export default class Component {
             mounted: [],
             destroyed: [],
         };
+        this._isWrapperOnly = false; 
 
         this._children = [];
         this._isSetup = false;
@@ -42,6 +43,11 @@ export default class Component {
 
     static make(hookId, props = {}) {
         return new this(hookId, props);
+    }
+
+    setWrapperMode(flag = true) {
+        this._isWrapperOnly = flag;
+        return this;
     }
 
     /** =============================
@@ -168,6 +174,15 @@ export default class Component {
     }
 
     _render() {
+        if (this._isWrapperOnly) {
+            this._el = this._hostEl;
+            
+            this._mounted();
+            this._connectBindings();
+            this._callMountedHooks();
+            return;
+        }
+        
         const html = this._template();
         const template = document.createElement("template");
         template.innerHTML = html.trim();
@@ -185,6 +200,18 @@ export default class Component {
         this._mounted();
         this._connectBindings();
         this._callMountedHooks();
+    }
+
+    afterRender(callback) {
+        if (typeof callback === "function") {
+            setTimeout(() => {
+                try {
+                    callback.call(this, this);
+                } catch (e) {
+                    this._logger.error("afterRender hook error", e);
+                }
+            }, 0);
+        }
     }
 
     render() {

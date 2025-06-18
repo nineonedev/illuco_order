@@ -4,10 +4,13 @@ namespace App\Domains\User\Entities;
 
 use App\Domains\User\Repositories\UserRepository;
 use Framework\Database\ORM\Entities\MorphEntity;
+use Framework\Database\ORM\Traits\SoftDeletes;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
 
 class User extends MorphEntity implements  AuthenticatableInterface
 {
+    use SoftDeletes;
+
     protected array $fillable = [
         'name',
         'username',

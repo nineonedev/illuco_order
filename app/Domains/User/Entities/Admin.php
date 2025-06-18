@@ -7,6 +7,10 @@ use Framework\Database\ORM\Entities\Entity;
 
 class Admin extends Entity
 {
+    protected array $fillable = [
+        'admin_key',
+    ];
+
     public static function repositoryClass(): string
     {
         return AdminRepository::class;

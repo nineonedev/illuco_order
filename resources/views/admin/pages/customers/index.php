@@ -28,7 +28,7 @@
                             <div class="no-form-search__icon">
                                 <i class="fa-light fa-magnifying-glass"></i>
                             </div>
-                            <input type="search" name="q" id="q" class="no-form-search-input" placeholder="Search">
+                            <input type="search" name="q" id="q" class="no-form-search-input" placeholder="Search" value="<?=request()->query('q', '')?>">
                         </label>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                         <?php foreach ($customers->items() as $customer): ?>
                         <tr class="no-table-hover">
                             <td><?= e($customer->name) ?></td>
-                            <td><?= e($customer->country) ?></td>
+                            <td><?= lang('system.countries.'.e($customer->country)) ?></td>
                             <td><?= e($customer->phone_number) ?></td>
                             <td><?= e($customer->address) ?></td>
                             <td><?= date('Y-m-d', strtotime($customer->created_at ?? 'now')) ?></td>

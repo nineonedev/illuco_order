@@ -25,6 +25,7 @@
         <?= yield_section('content') ?>
     </main>
     
+    <script src="<?=asset_path('js/admin.min.js?v='.time())?>"></script>
     <?= yield_section('script') ?>
 </body>
 </html>

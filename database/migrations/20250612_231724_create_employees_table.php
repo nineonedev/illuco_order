@@ -10,7 +10,9 @@ return new class implements Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id(); 
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
+            $table->string('department')->nullable();
+            $table->string('position')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

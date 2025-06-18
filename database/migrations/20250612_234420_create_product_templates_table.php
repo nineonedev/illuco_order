@@ -13,6 +13,7 @@ return new class implements Migration
             $table->foreignId('category_id')->nullable()->constrained('product_categories')->onDeleteSetNull();
             $table->string('name');
             $table->string('code')->unique();
+            $table->string('model')->unique();
             $table->integer('sort_order')->default(0);
             $table->text('description')->nullable();
             $table->timestamps();

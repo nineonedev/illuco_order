@@ -213,6 +213,15 @@ class ExceptionHandler
             $payload['meta'] = static::$metaData;
         }
 
+        if (!empty($payload['errors'])) {
+            $first = reset($payload['errors']);
+            if (is_array($first)) {
+                $payload['message'] = reset($first);
+            } else {
+                $payload['message'] = $first;
+            }
+        }
+
         Response::json($payload, $code)->send();
     }
 

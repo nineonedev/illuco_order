@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Domains\User\Entities\Admin;
+use App\Domains\User\Entities\Dealer;
+use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
+use App\Domains\User\Repositories\AdminRepository;
 use App\Domains\User\Repositories\UserRepository;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\User\RegisterUserService;
+use App\Services\User\UpdateUserService;
+use Framework\Http\Request;
 use Framework\Routing\Controller;
 use Framework\Support\Exceptions\Http\UnauthenticatedException;
 
@@ -70,6 +76,22 @@ class AuthController extends Controller
             ->send();
     }
 
+    public function update(string $id, UpdateUserRequest $request)
+    {
+        $admin = AdminRepository::make()->findOrFail($id);
+        $admin->fill($request->safe());
+        $data = $request->safe();
+
+        if (empty($data['password'])) {
+            unset($data['password']); 
+        }
+
+        $result = (new UpdateUserService($admin))
+            ->runInTransaction($data);
+
+        return $result->toResponse();
+    }
+
     public function edit()
     {
         $user = UserRepository::make()
@@ -81,17 +103,25 @@ class AuthController extends Controller
             throw new UnauthenticatedException();
         }
 
-        return $this->render('home.pages.auth.me', ['user' => $user]);
+        $userable = $user->userable;
+        $userable->setRelation(User::alias(), $user); 
+
+        switch (true) {
+            case $userable instanceof Admin:
+                return $this->render('home.pages.auth.me', [$userable::alias() => $userable]);
+
+            case $userable instanceof Dealer:
+                return $this->render('admin.dealers.edit', [$userable::alias() => $userable]);
+
+            case $userable instanceof Employee:
+                return $this->render('admin.employees.edit', [$userable::alias() => $userable]);
+
+            default:
+                throw new \RuntimeException('Unknown user type.');
+        }
     }
 
-    public function update()
-    {
-        // TODO: 사용자 정보 수정 로직
-    }
-
-    /**
-     * 인증 후 대시보드 리다이렉션 응답
-     */
+   
     protected function redirectToDashboard(string $message, ?User $user = null)
     {
         return $this->responseWith()

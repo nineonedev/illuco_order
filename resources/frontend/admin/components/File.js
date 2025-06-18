@@ -116,6 +116,7 @@ export default class File extends Component {
     }
 
     _bindEvents() {
+        console.log(this.refs);
         this.on(this.refs.button, "click", this._handleSelect.bind(this));
         this.on(this.refs.input, "change", this._handleChange.bind(this));
     }
@@ -124,10 +125,11 @@ export default class File extends Component {
         this.refs.input.click();
     }
 
-    _handleChange(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+    _handleChange(form, e) {
+        const input = e.target;
+        if (!input || !input.files || input.files.length === 0) return;
 
+        const file = input.files[0];
         this.refs.fallback.textContent = file.name;
     }
 }

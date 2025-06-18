@@ -111,6 +111,25 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * @return static
+     */
+    public function redirect(string $url, int $statusCode = 302)
+    {
+        return $this->setStatusCode($statusCode)
+                    ->setHeader('Location', $url)
+                    ->setContent('Redirecting...');
+    }
+
+    /**
+     * @return static
+     */
+    public function redirectRoute(string $routeName, array $params = [], int $statusCode = 302)
+    {
+        $url = route($routeName, $params);
+        return $this->redirect($url, $statusCode);
+    }
+
+    /**
      * 실제로 HTTP 응답을 전송한다
      */
     public function send(): void

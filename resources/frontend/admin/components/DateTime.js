@@ -16,16 +16,17 @@ export default class DateTime extends Component {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             defaultDate: null,
+            value: '',
         };
     }
 
     _template() {
-        const { label, name } = this._props;
+        const { label, name, value } = this._props;
         const nodeId = this._generateNodeId();
         return `
             <div class="no-form-control --md">
                 <label for="${nodeId}" class="no-form-control-inner">
-                    <input type="text" name="${name}" id="${nodeId}" data-ref="input" class="no-form-control-input" placeholder="">
+                    <input type="text" name="${name}" id="${nodeId}" data-ref="input" class="no-form-control-input" placeholder="" value="${value}">
                     <fieldset class="no-form-control-label">
                         <legend class="no-form-control-text">${label}</legend>
                     </fieldset>

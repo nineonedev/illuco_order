@@ -1,13 +1,8 @@
+<?php extend('layouts.auth'); ?>
+<?php section('controller', 'admin') ?>
+<?php section('action', 'signIn') ?>
+<?php section('title', '로그인') ?>
 
-<?php
-
-use App\Domains\User\Services\RememberToken;
-
-extend('layouts.auth') ?>
-
-<?php section('title'); ?>
-로그인
-<?php end_section() ?>
 
 <?php section('content') ?>
 
@@ -25,7 +20,7 @@ extend('layouts.auth') ?>
                 </p>
             </header>
             <div>
-                <form method="post" action="<?= route('auth.login') ?>" id="auth-form">
+                <form method="post" action="<?= route('auth.login') ?>" id="frm">
                     <?= csrf_field() ?>
                     <div class="no-form-control">
                         <label for="email" class="no-form-control-inner">
@@ -86,47 +81,4 @@ extend('layouts.auth') ?>
     </div>
 </section>
 
-<?php end_section() ?>
-
-<?php section('script') ?>
-<script>
-    const frm = document.querySelector('form'); 
-
-    frm.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
-        e.submitter.disabled = true; 
-        
-        const fd = new FormData(e.target); 
-        
-        try {
-            const response = await fetch(e.target.action, {
-                headers: {
-                    'Accept': 'application/json'
-                },
-                method: e.target.method,
-                body: fd,
-            }); 
-
-            const resData = await response.json(); 
-            const {message, data, success} = resData;
-
-            console.log(resData);
-            
-            alert(message);
-
-            if (success && data.redirect){
-                location.href = data.redirect;
-            }
-
-        } catch ($error) {
-            alert($error.message); 
-
-        } finally {
-
-            e.submitter.disabled = false; 
-        }
-        
-        
-    })
-</script>
 <?php end_section() ?>

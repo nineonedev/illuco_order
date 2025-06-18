@@ -53,27 +53,27 @@ use App\Domains\Communication\Entities\Notice;?>
                     </div>
 
                     <div class="no-form-flex">
-                        <!-- 노출 시작일 -->
-                        <div class="no-form-control --md">
+                        <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_from", "label": "노출 시작일", "value": "<?=$notice->visible_from?>"}'>
                             <label for="visible_from" class="no-form-control-inner">
-                                <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" value="<?= e(old('visible_from', $notice->visible_from)) ?>">
+                                <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
                                     <legend class="no-form-control-text">노출 시작일</legend>
                                 </fieldset>
                             </label>
                             <span class="no-form-control-space"></span>
                         </div>
+                        <!-- FormControl -->
 
-                        <!-- 노출 종료일 -->
-                        <div class="no-form-control --md">
+                        <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_to", "label": "노출 종료일", "value": "<?=$notice->visible_to?>"}'>
                             <label for="visible_to" class="no-form-control-inner">
-                                <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" value="<?= e(old('visible_to', $notice->visible_to)) ?>">
+                                <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
                                     <legend class="no-form-control-text">노출 종료일</legend>
                                 </fieldset>
                             </label>
                             <span class="no-form-control-space"></span>
                         </div>
+                        <!-- FormControl -->
                     </div>
 
                     <!-- 내용 -->
@@ -122,7 +122,7 @@ use App\Domains\Communication\Entities\Notice;?>
                 </div>
 
                 <div class="no-form-action">
-                    <a href="<?= route('admin.notices.index') ?>" class="no-btn-primary-outline --sm">
+                    <a href="<?= route('admin.notices.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                         <span>취소</span>
                     </a>
                     

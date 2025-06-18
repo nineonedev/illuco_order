@@ -4,11 +4,12 @@ namespace App\Services\User;
 
 use App\Domains\Auth\Entities\Role;
 use App\Domains\Auth\Repositories\RoleRepository;
-use App\Domains\Auth\Repositories\RoleUserRepository;
+use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Repositories\UserRepository;
 use App\Services\Auth\SaveRoleService;
 use App\Supports\Services\Service;
+use Exception;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Support\Exceptions\ValidationException;
 
@@ -50,7 +51,7 @@ class RegisterUserService extends Service
         $roleRepo = RoleRepository::make();
         $adminRole = $roleRepo->query()->where('name', 'admin')->first();
 
-        if (!$adminRole) {
+        if ($this->userable instanceof Admin) {
             $adminRole = [
                 'name' => 'admin',
                 'description' => '최고 관리자',

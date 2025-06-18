@@ -9,6 +9,7 @@ class App {
         const controllerName = document.body.dataset.controller;
         const actionName = document.body.dataset.action;
 
+
         if (!controllerName || !actionName) {
             console.warn(
                 "[App] data-controller 또는 data-action이 비어 있습니다."

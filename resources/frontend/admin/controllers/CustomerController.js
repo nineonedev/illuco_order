@@ -1,84 +1,88 @@
 import Controller from "../../modules/core/Controller";
-import LanguageSelect from "../components/LanguageSelect";
-import DateTime from "../components/DateTime";
 import Select from "../components/Select";
-import Form from "../components/Form";
+import CountrySelect from '../components/CountrySelect';
 
 export default class CustomerController extends Controller {
+    form;
+    cancelBtn;
+
     index() {
         this._logger.info("index");
     }
 
+    _prepare() {
+        CountrySelect.make('country-hook').render();
+        Select.make("dealer-hook").render();
+    }
+
     create() {
         this._logger.info("create");
+        this._prepare();
 
-        const languageSel = LanguageSelect.make("country-select-hook", {
-            name: "country",
-            label: "국가 선택",
-            country: "kr",
-        });
-        languageSel.render();
-
-        const agent = Select.make("agents");
-        agent.render();
-
-        const datetime = DateTime.make("datetime");
-        datetime.render();
-
-        const form = Form.make("frm", { onSubmit: this._store.bind(this) });
+        this.form = document.getElementById('frm'); 
+        this.form.addEventListener('submit', this._store.bind(this));
+        this.cancelBtn = document.querySelector('[data-action="cancel"]');
     }
 
     edit() {
         this._logger.info("edit");
+        this._prepare();
+        
+        this.form = document.getElementById('frm'); 
+        this.form.addEventListener('submit', this._update.bind(this));
+        this.cancelBtn = document.querySelector('[data-action="cancel"]');
 
-        const form = Form.make("frm", { onSubmit: this._update.bind(this) });
-        form.onMounted((form) => {
-            const deleteBtn = form.qs('[data-action="delete"]');
-            form.on(deleteBtn, "click", () =>
-                form.dispatch("destroy", {
-                    data: new FormData(form._el),
-                    action: form._el.action,
-                })
-            );
-        });
-        form.render();
-
-        const languageSel = LanguageSelect.make("country-select-hook", {
-            name: "country",
-            label: "국가 선택",
-            country: "kr",
-        });
-        languageSel.render();
-
-        const agent = Select.make("agents");
-        agent.render();
-
-        const datetime = DateTime.make("datetime");
-        datetime.render();
-
-        this._listen("destroy", this._destroy.bind(this));
+        this.form.querySelector('[data-action="delete"]').addEventListener('click', () => {
+            const data = new FormData(this.form);
+            data.set('_method', 'delete');
+            this._destroy(this.form.action, data);
+        })
     }
 
-    async _store({ data, action }, evt) {
-        evt.submitter.disabled = true;
+    async _store(e) {
+        e.preventDefault();
+
+        const t = e.target;
+        const data = new FormData(t); 
+        const action = t.action; 
+
+        e.submitter.disabled = true;
         const result = await this._ajax.post(action, data);
-        evt.submitter.disabled = false;
+        e.submitter.disabled = false;
 
-        this._loggee.success(result);
+        this._logger.success(result);
+
+        if(result.success){
+            this.cancelBtn.click();
+        }
+
     }
 
-    async _update(data, evt) {
-        evt.submitter.disabled = true;
+    async _update(e) {
+        e.preventDefault();
+
+        const t = e.target;
+        const data = new FormData(t); 
+        const action = t.action; 
+
+        e.submitter.disabled = true;
         const result = await this._ajax.put(action, data);
-        evt.submitter.disabled = false;
+        e.submitter.disabled = false;
 
-        this._loggee.success(result);
+        this._logger.success(result);
+        if(result.success){
+            location.reload(); 
+        }
+
     }
 
-    async _destroy({ data, action }, evt) {
+    async _destroy(action, data) {
         if (!confirm("정말로 삭제하시겠습니까?")) return;
-
         const result = await this._ajax.delete(action, data);
-        this._loggee.success(result);
+        this._logger.success(result);
+
+        if (result.success) {
+            this.cancelBtn.click();
+        }
     }
 }

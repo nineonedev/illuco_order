@@ -10,6 +10,7 @@ return new class implements Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id(); 
+            $table->string('admin_key')->nullable();
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ return new class implements Migration
             $table->string('username')->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->softDeletes();
             
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ use Framework\Database\ORM\Casts\CastFactory;
 use Framework\Database\ORM\Rel;
 use Framework\Database\ORM\Relations\Relation;
 use Framework\Database\ORM\Repositories\Repository;
+use Framework\Database\ORM\Traits\SoftDeletes;
 use Framework\Database\Paginator\Paginator;
 
 abstract class Entity
@@ -38,7 +39,12 @@ abstract class Entity
     }
 
     protected function setup(): void {}
-    protected function boot(): void {}
+    protected function boot(): void {
+
+        if (trait_used(SoftDeletes::class, $this)) {
+            $this->fillable = array_merge($this->fillable, [$this->getSoftDeleteColumn()]);
+        }
+    }
 
     public static function make(array $attributes = [])
     {

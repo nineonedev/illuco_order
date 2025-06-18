@@ -1,7 +1,7 @@
 <?php 
 
 return [
-    'locale' => 'kr',
+    'locale' => 'ko',
     'fallback' => 'en',
     'default' => 'app',
     'translators' => [

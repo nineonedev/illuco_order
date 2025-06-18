@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Repositories\CustomerRepository;
+use App\Domains\User\Entities\Dealer;
+use App\Domains\User\Entities\User;
+use Framework\Database\ORM\Entities\Entity;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -32,7 +35,7 @@ class CustomerController extends Controller
 
     public function create()
     {
-        return $this->render('admin.pages.customers.create');
+        return $this->render('admin.pages.customers.create', [], '정상적으로 생성되었습니다.');
     }
 
     public function edit(string $id)

@@ -1,5 +1,10 @@
 @use "../abstracts" as *;
 
+.no-form-label{
+    margin-bottom: 0.8rem;
+    display: block;
+}
+ 
 .no-form-control-space {
     width: 100%;
     height: 2rem;
@@ -128,6 +133,22 @@
         box-shadow: 0 0 0 0.2rem var(--clr-primary-main);
     }
 }
+
+
+.choices__list--dropdown, .choices__list[aria-expanded] {
+    z-index: 2;
+}
+
+.choices{
+      overflow: visible;
+}
+.choices[data-type*=select-one] .choices__inner {
+    padding-bottom: 0;
+}
+.choices__inner {
+   @extend %form-input;  
+}
+
 
 .iti {
     @extend %form-control;
@@ -382,7 +403,7 @@
 
     &-helper-text {
         display: block;
-        font-size: var(--input-font-size);
+        font-size: calc(var(--input-font-size) / 1.05);
         color: var(--clr-form-helper-text);
         line-height: 1.618;
         margin-top: 0.8rem;

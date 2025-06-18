@@ -1,17 +1,7 @@
-<?php
-
-use App\Domains\User\Entities\Admin;
-use App\User\Repositories\PostRepository;
-use App\User\Repositories\UserRepository;
-use App\User\Resources\UserResource;
-use Framework\Database\ORM\RelationMap;
-
-?>
-<?php extend('layouts.auth') ?>
-
-<?php section('title'); ?>
-로그인
-<?php end_section() ?>
+<?php extend('layouts.auth'); ?>
+<?php section('controller', 'admin') ?>
+<?php section('action', 'signUp') ?>
+<?php section('title', '회원가입') ?>
 
 <?php section('content') ?>
 
@@ -29,7 +19,7 @@ use Framework\Database\ORM\RelationMap;
                 </p>
             </header>
             <div>
-                <form method="post" id="auth-form">
+                <form method="post" action="<?= route('auth.register') ?>" id="frm">
                     <?= csrf_field() ?>
                     <div class="no-form-control">
                         <label for="name" class="no-form-control-inner">
@@ -97,28 +87,4 @@ use Framework\Database\ORM\RelationMap;
     </div>
 </section>
 
-<?php end_section() ?>
-
-<?php section('script') ?>
-<script>
-    const frm = document.querySelector('form'); 
-
-    frm.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
-        
-        const fd = new FormData(e.target); 
-
-        const response = await fetch(e.target.action, {
-            headers: {
-                'Accept': 'application/json',
-            },
-            method: e.target.method,
-            body: fd,
-        }); 
-        const resData = await response.json(); 
-
-        console.log(resData);
-        
-    })
-</script>
 <?php end_section() ?>

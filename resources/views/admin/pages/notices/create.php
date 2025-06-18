@@ -1,6 +1,10 @@
-<?php extend('layouts.admin'); 
+<?php 
 
-use App\Domains\Communication\Entities\Notice;?>
+use App\Domains\Communication\Entities\Notice;
+
+?>
+
+<?php extend('layouts.admin'); ?>
 <?php section('controller', 'notice') ?>
 <?php section('action', 'create') ?>
 <?php section('title', '공지사항 생성') ?>
@@ -63,7 +67,7 @@ use App\Domains\Communication\Entities\Notice;?>
                     </div>
                     
                     <div class="no-form-flex">
-                        <div class="no-form-control --md">
+                        <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_from", "label": "노출 시작일"}'>
                             <label for="visible_from" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
@@ -74,7 +78,7 @@ use App\Domains\Communication\Entities\Notice;?>
                         </div>
                         <!-- FormControl -->
 
-                        <div class="no-form-control --md">
+                        <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_to", "label": "노출 종료일"}'>
                             <label for="visible_to" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
@@ -120,7 +124,7 @@ use App\Domains\Communication\Entities\Notice;?>
                 </div>
                 
                 <div class="no-form-action">
-                    <a href="<?=route('admin.notices.index')?>" class="no-btn-primary-outline --sm">
+                    <a href="<?=route('admin.notices.index')?>" data-action="cancel" class="no-btn-primary-outline --sm">
                         <span>취소</span>
                     </a>
                     <button type="submit" class="no-btn-primary --sm">

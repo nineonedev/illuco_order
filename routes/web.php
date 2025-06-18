@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DealerController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductTemplateController;
 use App\Http\Controllers\RoleController;
 use Framework\Support\Facades\Route;
 
@@ -20,12 +23,13 @@ Route::middleware(['web'])->group(function(){
     ->group(function () {
 
         Route::get('signin', [AuthController::class, 'signin'])->name('signin');
-        Route::post('signin', [AuthController::class, 'login'])->name('login');
-        
         Route::get('signup', [AuthController::class, 'signup'])->name('signup');
-        Route::post('signup', [AuthController::class, 'register'])->name('register');
         
+        Route::post('signin', [AuthController::class, 'login'])->name('login');
+        Route::post('signup', [AuthController::class, 'register'])->name('register');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+        Route::put('{id}', [AuthController::class, 'update'])->name('update');
     });
 
     // ============================================================================================================
@@ -80,6 +84,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [ClaimController::class, 'index'])->name('index');
                     Route::get('/create', [ClaimController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}', [ClaimController::class, 'edit'])->name('edit');
                     
                     Route::post('/', [ClaimController::class, 'store'])->name('store');
                     Route::put('{id}', [ClaimController::class, 'update'])->name('update');
@@ -91,10 +96,47 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [CustomerController::class, 'index'])->name('index');
                     Route::get('/create', [CustomerController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}', [CustomerController::class, 'edit'])->name('edit');
                     
                     Route::post('/', [CustomerController::class, 'store'])->name('store');
                     Route::put('{id}', [CustomerController::class, 'update'])->name('update');
                     Route::delete('{id}', [CustomerController::class, 'destroy'])->name('destroy');
+                });
+
+            Route::prefix('dealers')
+                ->name('dealers')
+                ->group(function(){
+                    Route::get('/', [DealerController::class, 'index'])->name('index');
+                    Route::get('/create', [DealerController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}', [DealerController::class, 'edit'])->name('edit');
+                    
+                    Route::post('/', [DealerController::class, 'store'])->name('store');
+                    Route::put('{id}', [DealerController::class, 'update'])->name('update');
+                    Route::delete('{id}', [DealerController::class, 'destroy'])->name('destroy');
+                });
+
+            Route::prefix('employees')
+                ->name('employees')
+                ->group(function(){
+                    Route::get('/', [EmployeeController::class, 'index'])->name('index');
+                    Route::get('/create', [EmployeeController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
+                    
+                    Route::post('/', [EmployeeController::class, 'store'])->name('store');
+                    Route::put('{id}', [EmployeeController::class, 'update'])->name('update');
+                    Route::delete('{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+                });
+
+            Route::prefix('product-templates')
+                ->name('product.templates')
+                ->group(function(){
+                    Route::get('/', [ProductTemplateController::class, 'index'])->name('index');
+                    Route::get('/create', [ProductTemplateController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}', [ProductTemplateController::class, 'edit'])->name('edit');
+                    
+                    Route::post('/', [ProductTemplateController::class, 'store'])->name('store');
+                    Route::put('{id}', [ProductTemplateController::class, 'update'])->name('update');
+                    Route::delete('{id}', [ProductTemplateController::class, 'destroy'])->name('destroy');
                 });
 
         });

@@ -2,6 +2,7 @@
 
 namespace Framework\Database\ORM\Repositories;
 
+use Exception;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Loaders\EagerLoader;
 use Framework\Database\ORM\Loaders\LazyLoader;
@@ -117,12 +118,11 @@ abstract class Repository
     protected function updateEntity(Entity $entity): ?Entity
     {
         $this->observer->fire(RepositoryEvent::BEFORE_UPDATE, $entity);
-
         $affected = $this->builder
             ->where($entity->getPrimaryKeyName(), $entity->getPrimaryKey())
             ->update($entity->getAttributes());
+            
 
-        $this->observer->fire(RepositoryEvent::AFTER_UPDATE, $entity);
         $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
 
         // return $affected > 0 ? $entity : null;
@@ -145,9 +145,11 @@ abstract class Repository
     { 
         /** @var SoftDeletes|Entity $entity */
         $entity->markDeleted();
+        
         $this->observer->fire(RepositoryEvent::BEFORE_DELETE, $entity);
 
         $column = $entity->getSoftDeleteColumn();
+
         $success = $this->builder
             ->where($entity->getPrimaryKeyName(), $entity->getPrimaryKey())
             ->update([$column => $entity->deletedAt()]);
