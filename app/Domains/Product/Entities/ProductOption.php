@@ -2,28 +2,25 @@
 
 namespace App\Domains\Product\Entities;
 
-use App\Domains\Product\Repositories\ProductAttributeRepository;
+use App\Domains\Product\Repositories\ProductOptionRepository;
 use Framework\Database\ORM\Entities\Entity;
 
-class ProductAttribute extends Entity
+class ProductOption extends Entity
 {
     protected array $fillable = [
         'label',
-        'name',
-        'type',
-        'required',
+        'value',
         'sort_order',
-        'description',
-        'default_value',
+        'attribute_id',
     ];
 
     protected array $casts = [
         'sort_order' => 'int',
-        'required' => 'bool',
+        'attribute_id' => 'int',
     ];
 
     public static function repositoryClass(): string
     {
-        return ProductAttributeRepository::class;
+        return ProductOptionRepository::class;
     }
 }

@@ -5,6 +5,7 @@ use App\Domains\Auth\Entities\Role;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
 use App\Domains\Product\Entities\ProductAttribute;
+use App\Domains\Product\Entities\ProductOption;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\User\Entities\Admin;
@@ -68,11 +69,15 @@ Rel::setConfig([
     // Product
     // ===================================================================
     ProductTemplate::class => [
-        Rel::morphOne(FileAttachment::class),
-        Rel::hasMany('attributes', ProductAttribute::class, 'template_id')
+        Rel::morphMany(FileAttachment::class),
+        Rel::belongsToMany('attributes', ProductAttribute::class, 'product_attribute_template', 'template_id', 'attribute_id'),
     ],
     ProductAttribute::class => [
-        Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
+        Rel::belongsToMany('templates', ProductTemplate::class, 'product_attribute_template', 'attribute_id', 'template_id'),
+        Rel::hasMany('options', ProductOption::class, 'attribute_id'),
+    ],
+    ProductOption::class => [
+        Rel::belongsTo('attribute', ProductAttribute::class, 'attribute_id'),
     ],
     // ===================================================================
     // Order

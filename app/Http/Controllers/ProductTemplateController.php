@@ -39,7 +39,7 @@ class ProductTemplateController extends Controller
         ]);
     }
 
-    public function show(int $id, Request $request) 
+    public function show(string $id, Request $request) 
     {
         $template = $this->repo()->with([FileAttachment::class, 'attributes'])->findOrFail($id);
         
@@ -51,7 +51,7 @@ class ProductTemplateController extends Controller
         return $this->render('admin.pages.products.templates.create');
     }
 
-    public function edit(int $id)
+    public function edit(string $id)
     {
         $template = $this->repo()->with([FileAttachment::class])->findOrFail($id);
         $attachments = is_array($template->fileattachment) ? $template->fileattachment : [$template->fileattachment];
@@ -74,14 +74,17 @@ class ProductTemplateController extends Controller
     {
         return $this->runInTransaction(function () use ($request) {
             $productTemplate = new ProductTemplate($request->safe());
-            $this->repo()->save($productTemplate);
+            $productTemplate = $this->repo()->save($productTemplate);
             $this->fileRepo()->handleUpload($productTemplate, $this->uploadConfig());
 
-            return $this->render(null, ['template' => $productTemplate], '제품 템플릿이 생성되었습니다.');
+            return $this->render(null, [
+                'template' => $productTemplate->toArray(), 
+                'redirect' => route('admin.product_templates.edit', ['id' => $productTemplate->id])
+            ], '제품 템플릿이 생성되었습니다.');
         });
     }
 
-    public function update(int $id, SaveProductTemplateRequest $request)
+    public function update(string $id, SaveProductTemplateRequest $request)
     {
         return $this->runInTransaction(function () use ($id, $request) {
             $template = $this->repo()->findOrFail($id);
@@ -95,7 +98,7 @@ class ProductTemplateController extends Controller
         });
     }
 
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         return $this->runInTransaction(function () use ($id) {
             $template = $this->repo()->with([FileAttachment::class])->findOrFail($id);

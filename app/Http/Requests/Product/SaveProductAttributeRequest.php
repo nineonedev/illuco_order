@@ -9,13 +9,20 @@ class SaveProductAttributeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'template_id' => 'required|integer',
-            'name'        => 'required|string',
-            'type'        => 'required|string',
-            'label'       => 'required|string',
-            'required'    => 'nullable|boolean',
-            'sort_order'  => 'nullable|integer',
-            'description' => 'nullable|string',
+            'name'          => 'required|string',
+            'type'          => 'required|string',
+            'label'         => 'required|string',
+            'required'      => 'nullable|boolean',
+            'default_value' => 'nullable|string',
+            'sort_order'    => 'nullable|integer',
+            'description'   => 'nullable|string',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if (!$this->input('required')) {
+            $this->merge(['required' => 0]);
+        }
     }
 }

@@ -36,12 +36,12 @@ class FileAttachmentList
         return $this->attachments[$key] ?? null;
     }
 
-    public function props(string $key): string
+    public function props(string $key, array $data = []): string
     {
         $attachment = $this->get($key);
         return $attachment 
-            ? json($attachment->toArray()) 
-            : json(['file_key' => $key]);    
+            ? json(array_merge($attachment->toArray(), $data)) 
+            : json(array_merge(['file_key' => $key], $data));    
     }
 
     /**

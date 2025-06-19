@@ -42,10 +42,11 @@
         <!-- Root Inner -->
     </div>
     <!-- Root -->
+
+    <?= yield_section('portal') ?>
     
     <script src="<?=asset_path('lib/flatpickr/flatpickr.min.js')?>"></script>
     <script src="<?=asset_path('lib/flatpickr/ko.js')?>"></script>
-
     <script src="<?=asset_path('js/admin.min.js?v='.time())?>"></script>
     <?= yield_section('script') ?>
 </body>

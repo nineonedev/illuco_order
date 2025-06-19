@@ -8,6 +8,7 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductAttributeController;
+use App\Http\Controllers\ProductOptionController;
 use App\Http\Controllers\ProductTemplateController;
 use App\Http\Controllers\RoleController;
 use Framework\Support\Facades\Route;
@@ -145,9 +146,19 @@ Route::middleware(['web'])->group(function(){
             Route::prefix('product-attributes')
                 ->name('product_attributes')
                 ->group(function(){
+                    Route::get('/{id}', [ProductAttributeController::class, 'show'])->name('show');
+
                     Route::post('/', [ProductAttributeController::class, 'store'])->name('store');
                     Route::put('{id}', [ProductAttributeController::class, 'update'])->name('update');
                     Route::delete('{id}', [ProductAttributeController::class, 'destroy'])->name('destroy');
+                });
+
+            Route::prefix('product-options')
+                ->name('product_options')
+                ->group(function(){
+                    Route::post('/', [ProductOptionController::class, 'store'])->name('store');
+                    Route::put('{id}', [ProductOptionController::class, 'update'])->name('update');
+                    Route::delete('{id}', [ProductOptionController::class, 'destroy'])->name('destroy');
                 });
 
         });

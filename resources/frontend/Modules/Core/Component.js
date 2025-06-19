@@ -9,7 +9,7 @@ export default class Component {
     static NODE_TYPE_SEL = "data-component-type";
     static NODE_HYDRATED_SEL = "data-component-hydrated";
 
-    constructor(hookId, props = {}) {
+    constructor(hookId, props = {}, setup = true) {
         this._id = this._generateComponentId();
         this._fallbackHookId = this._generateComponentHookId();
         this._hookId = hookId;
@@ -23,7 +23,6 @@ export default class Component {
             mounted: [],
             destroyed: [],
         };
-        this._isWrapperOnly = false; 
 
         this._children = [];
         this._isSetup = false;
@@ -38,16 +37,18 @@ export default class Component {
         this._props = {};
         this._state = {};
 
-        this._setup();
+        if (setup) {
+            this._setup();
+        }
     }
 
-    static make(hookId, props = {}) {
-        return new this(hookId, props);
+    static make(hookId, props = {}, setup = true) {
+        return new this(hookId, props, setup);
     }
 
-    setWrapperMode(flag = true) {
-        this._isWrapperOnly = flag;
-        return this;
+    setHookId(hookId){
+        this._hookId = hookId; 
+        return this; 
     }
 
     /** =============================
@@ -77,33 +78,42 @@ export default class Component {
 
     _hydrateIfNeeded() {
         let element;
-
         if (this._hookId instanceof HTMLElement) {
             element = this._hookId;
-            this._hookId = this._fallbackHookId;
+
+            if (element.hasAttribute('id')) {
+                this._hookId = element.getAttribute('id'); 
+            } else {
+                this._hookId = this._fallbackHookId; 
+            }
+
+            element.setAttribute('id', this._hookId); 
+
         } else {
-            element = document.getElementById(this._hookId);
+            element = document.getElementById(this._hookId); 
             if (!element) {
-                throw new Error(`No found element by hookId: #${this._hookId}`);
+                this._logger.error(`Element not found by hookId: ${this._hookId}`, this);
+                throw new Error(`Element not found by hookId: ${this._hookId}`);
             }
         }
+        const isHydratable = element.hasAttribute(Component.NODE_PROP_SEL);
 
-        if (
-            !element.hasAttribute(Component.NODE_PROP_SEL) &&
-            !element.hasAttribute(Component.NODE_TYPE_SEL)
-        ) {
-            this._hostEl = element;
+        if (isHydratable) {
+            this._hydrated = true;
+            const props = element.getAttribute(Component.NODE_PROP_SEL);
+            this._syncProps({
+                ...JSON.parse(props || "{}"),
+                ...this._oldProps
+            });
+            element.setAttribute('data-hydrated', true);
+            this._logger.info("component hydrated");
+
+        } else {
             this._syncProps(this._oldProps);
-            return;
         }
 
-        this._hydrated = true;
-        this._el = element;
-        const props = element.getAttribute(Component.NODE_PROP_SEL);
-
-        this._hydrate();
-        this._syncProps({...JSON.parse(props ? props : "{}"), ...this._oldProps});
-        this._logger.info("component hydrated");
+        
+        this._hostEl = element;
     }
 
     _boot() {
@@ -113,15 +123,6 @@ export default class Component {
 
     _booted(){
         this._syncState({});
-    }
-
-    _mounted() {
-        if (this._type === null) {
-            throw new Error("Componnet type missing.");
-        }
-
-        this._el.setAttribute(Component.NODE_TYPE_SEL, this._type);
-        this._el.setAttribute("id", this._id);
     }
 
     _defineState() {
@@ -149,21 +150,6 @@ export default class Component {
     /** =============================
      * Rendering
      ============================== */
-    _hydrate() {
-        if (!(this._el && this._hydrated)) return;
-
-        const hostEl = document.createElement("div");
-        hostEl.setAttribute(Component.NODE_HYDRATED_SEL, true);
-        hostEl.setAttribute("id", this._fallbackHookId);
-
-        const element = this._el.cloneNode(true);
-
-        hostEl.appendChild(element);
-        this._el.replaceWith(hostEl);
-
-        this._hostEl = hostEl;
-        this._el = element;
-    }
 
     _generateComponentId() {
         return `component-${Component.NODE_COUNT++}`;
@@ -178,15 +164,18 @@ export default class Component {
     }
 
     _render() {
-        if (this._isWrapperOnly) {
-            this._el = this._hostEl;
-            
-            this._mounted();
-            this._connectBindings();
-            this._callMountedHooks();
-            return;
+        if (!this._isSetup) {
+            this._setup();
         }
-        
+
+        this._beforeRender();
+        this._performRender();
+        this._connectBindings();
+        this._afterRender(); 
+        this._callMountedHooks();
+    }
+
+    _performRender(){
         const html = this._template();
         const template = document.createElement("template");
         template.innerHTML = html.trim();
@@ -200,25 +189,28 @@ export default class Component {
             this._el = content;
         }
 
-        this._mounted();
-        this._connectBindings();
-        this._callMountedHooks();
-    }
-
-    afterRender(callback) {
-        if (typeof callback === "function") {
-            setTimeout(() => {
-                try {
-                    callback.call(this, this);
-                } catch (e) {
-                    this._logger.error("afterRender hook error", e);
-                }
-            }, 0);
+        if (this._type === null) {
+            throw new Error("Componnet type missing.");
         }
+
+        this._el.setAttribute(Component.NODE_TYPE_SEL, this._type);
+        this._el.setAttribute("id", this._id);
     }
 
-    render() {
-        this._render();
+    _beforeRender(){
+        
+    }
+
+    _afterRender(){
+        
+    }
+
+    render(shouldRender = true) {
+        if (shouldRender) {
+            this._render();
+        }
+
+        return this; 
     }
 
     _template() {
@@ -295,15 +287,55 @@ export default class Component {
     }
 
     destroy() {
+       // 1. 라이프사이클 훅 실행
         this._callDestroyedHooks();
-        this._el?.remove();
-        this._hostEl?.remove();
-        this._logger.info("Component destroyed");
+
+        // 2. 자식 컴포넌트 모두 제거
+        this._children.forEach(child => {
+            if (typeof child.destroy === 'function') {
+                child.destroy();
+            }
+        });
+        this._children = [];
+
+        // 3. DOM 제거
+        if (this._el && this._el.parentNode) {
+            this._el.remove();
+        }
+        this._el = null;
+
+        // host 엘리먼트는 유지하거나, 제거할 경우 다음도 가능:
+        // if (this._hostEl && this._hostEl.parentNode) {
+        //     this._hostEl.remove();
+        // }
+        this._hostEl = null;
+
+        // 4. 내부 상태 초기화
+        this._refs = {};
+        this._DOM = {};
+        this._slots = {};
+        this._watchers = {};
+        this._props = {};
+        this._state = {};
+        this._initialProps = {};
+        this._initialState = {};
+        this._computed = {};
+
+        // 5. 플래그 초기화
+        this._isSetup = false;
+        this._hydrated = false;
+
+        // 6. 로그
+        this._logger?.info("Component destroyed");
     }
 
     /** =============================
      * State Management
      ============================== */
+    get slots() {
+        return this._slots;
+    }
+
     get refs() {
         return this._refs;
     }
@@ -329,12 +361,12 @@ export default class Component {
         return result;
     }
 
-    watch(keyPath, callback) {
-        if (!this._watchers[keyPath]) {
-            this._watchers[keyPath] = [];
+    watch(state, callback) {
+        if (!this._watchers[state]) {
+            this._watchers[state] = [];
         }
 
-        this._watchers[keyPath].push(callback);
+        this._watchers[state].push(callback);
     }
 
     _triggerWatchers(keyPath, newVal, oldVal) {
@@ -358,7 +390,6 @@ export default class Component {
                 this._triggerWatchers(key, newVal, oldVal);
             }
         });
-        // Object.assign(this._state, newState);
 
         if (shouldRender) {
             this._render();

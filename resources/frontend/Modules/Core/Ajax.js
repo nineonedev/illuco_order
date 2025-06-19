@@ -75,6 +75,11 @@ export default class Ajax {
         }
     }
 
+    setSilent(silent = false) {
+        this._silent = silent;
+        return this;
+    }
+
     get(url, options = {}) {
         return this.request('GET', url, {}, options);
     }

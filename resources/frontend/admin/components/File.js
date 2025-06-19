@@ -117,7 +117,11 @@ export default class File extends Component {
         const ext = (extension || "").toLowerCase();
 
         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
-            return `<img src="${resolvedUrl}" alt="${fileName}">`;
+            return `
+                <div class="no-form-file-preview__image">
+                    <img src="${resolvedUrl}" alt="${fileName}">
+                </div>
+            `;
         }
 
         if (['mp4', 'webm', 'ogg'].includes(ext)) {

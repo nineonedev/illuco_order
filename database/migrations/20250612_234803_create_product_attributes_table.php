@@ -10,11 +10,10 @@ return new class implements Migration
     {
         Schema::create('product_attributes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('template_id')->constrained('product_templates')->onDeleteCascade();
             $table->string('name');
-            
             $table->string('label')->nullable();
             $table->string('type')->default('text');
+            $table->string('default_value')->nullable();
             $table->boolean('required')->default(false);
             $table->integer('sort_order')->default(0);
             $table->timestamps();

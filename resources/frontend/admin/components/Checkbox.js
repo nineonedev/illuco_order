@@ -11,7 +11,7 @@ export default class Checkbox extends Component {
             name: "checkbox",
             label: "체크박스",
             required: false,
-            value: '',
+            value: false,
             helperText: '',
             spacing: false
         };
