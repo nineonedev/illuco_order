@@ -18,24 +18,14 @@
                 <div 
                     id="country-hook" 
                     data-component-type="country-select" 
-                    data-component-props='<?= e(json_encode([
-                        "name" => "country",
-                        "label" => "국가 선택",
-                        "value" => $customer->country ?? "KR",
-                    ])) ?>'>
+                    data-component-props='{
+                        "name": "country",
+                        "label": "국가 선택",
+                        "value": "<?= $customer->country ?? "KR" ?>"
+                    }'>
                 </div>
+                <input type="hidden" name="dealer_id" id="dealer_id" class="no-form-control-input" value="<?= e($customer->dealer_id) ?>" >
 
-                <div id="dealer-hook">
-                    <div class="no-form-control --md">
-                        <label for="dealer_id" class="no-form-control-inner">
-                            <input type="text" name="dealer_id" id="dealer_id" class="no-form-control-input" value="<?= e($customer->dealer_id) ?>" >
-                            <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text">딜러 ID</legend>
-                            </fieldset>
-                        </label>
-                        <span class="no-form-control-space"></span>
-                    </div>
-                </div>
 
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">

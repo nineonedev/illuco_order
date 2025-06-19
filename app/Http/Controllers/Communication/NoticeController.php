@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Communication;
+
 
 use App\Domains\Communication\Entities\Notice;
 use App\Domains\Communication\Repositories\NoticeRepository;

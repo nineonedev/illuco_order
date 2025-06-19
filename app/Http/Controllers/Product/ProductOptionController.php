@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Product;
 
 use App\Domains\Product\Entities\ProductOption;
 use App\Domains\Product\Repositories\ProductOptionRepository;

@@ -214,14 +214,20 @@ abstract class Repository
             ? new EagerLoader()
             : new LazyLoader();
 
-        $validRelations = array_filter($this->with, fn ($rel) => Rel::getRelation($entities[0], $rel));
+        // 🔥 중첩 관계를 첫 단계만 추출 (e.g., 'attributes.options' → 'attributes')
+        $topLevelRelations = array_unique(array_map(function ($relation) {
+            return explode('.', $relation)[0];
+        }, $this->with));
+        // ✅ 실제 relation 객체가 존재하는 것만 추림
+        $validRelations = array_filter($topLevelRelations, fn ($rel) => Rel::getRelation($entities[0], $rel));
 
         if (!empty($validRelations)) {
-            $loader->load($entities, $validRelations);
+            $loader->load($entities, $this->with); // 여기는 전체 중첩 관계 전달
         }
 
         return $entities;
     }
+
 
     public function find($id): ?Entity
     {

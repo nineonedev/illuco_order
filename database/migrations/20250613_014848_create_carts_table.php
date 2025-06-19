@@ -10,7 +10,7 @@ return new class implements Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id(); 
-            $table->morphs('orderer');
+            $table->foreignId('customer_id')->constrained('customers')->onDeleteCascade();
             $table->timestamps();
         });
     }

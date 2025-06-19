@@ -12,7 +12,7 @@ return new class implements Migration
             $table->id(); 
             $table->foreignId('template_id')->constrained('product_templates')->onDeleteCascade();
             $table->foreignId('attribute_id')->constrained('product_attributes')->onDeleteCascade();
-            $table->text('text')->nullable();
+            $table->text('value')->nullable();
             $table->timestamps();
         });
     }

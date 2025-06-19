@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Product;
 
 use App\Domains\Product\Entities\ProductAttribute;
 use App\Domains\Product\Entities\ProductTemplate;
@@ -41,7 +41,7 @@ class ProductTemplateController extends Controller
 
     public function show(string $id, Request $request) 
     {
-        $template = $this->repo()->with([FileAttachment::class, 'attributes'])->findOrFail($id);
+        $template = $this->repo()->with([FileAttachment::class, 'attributes.options'])->findOrFail($id);
         
         return $this->render('admin.pages.products.templates.show', ['template' => $template->toArray()]);
     }
@@ -53,8 +53,9 @@ class ProductTemplateController extends Controller
 
     public function edit(string $id)
     {
-        $template = $this->repo()->with([FileAttachment::class])->findOrFail($id);
+        $template = $this->repo()->with([FileAttachment::class, 'attributes.options'])->findOrFail($id);
         $attachments = is_array($template->fileattachment) ? $template->fileattachment : [$template->fileattachment];
+        
 
         $template->setRelation(FileAttachment::alias(), FileAttachmentList::make($attachments));
 

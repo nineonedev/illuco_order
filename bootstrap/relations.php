@@ -4,6 +4,9 @@ use App\Domains\Auth\Entities\Permission;
 use App\Domains\Auth\Entities\Role;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
+use App\Domains\Order\Entities\Customer;
+use App\Domains\Order\Entities\Cart;
+use App\Domains\Order\Entities\CartItem;
 use App\Domains\Product\Entities\ProductAttribute;
 use App\Domains\Product\Entities\ProductOption;
 use App\Domains\Product\Entities\ProductTemplate;
@@ -13,6 +16,7 @@ use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
 use Framework\Database\ORM\Rel;
+use Framework\Database\Schema\AbstractColumnDefinition;
 
 Rel::setConfig([
     // ===================================================================
@@ -78,6 +82,16 @@ Rel::setConfig([
     ],
     ProductOption::class => [
         Rel::belongsTo('attribute', ProductAttribute::class, 'attribute_id'),
+    ],
+    Customer::class => [
+        Rel::hasOne('cart', Cart::class, 'customer_id'),
+    ],
+    Cart::class => [
+        Rel::belongsTo('customer', Customer::class, 'customer_id'),
+        Rel::hasMany('cartitems', CartItem::class, 'cart_id'),
+    ],
+    CartItem::class => [
+        Rel::belongsTo('cart', Cart::class, 'cart_id'),
     ],
     // ===================================================================
     // Order

@@ -3,28 +3,34 @@ import Choices from "choices.js";
 import "choices.js/public/assets/styles/choices.min.css";
 
 export default class Select extends Component {
-    _boot() {
-        this._type = "select";
-        super._boot();
-    }
+    _type = "select";
 
     _defineProps() {
         return {
             name: "select",
             label: "선택",
             value: "",
+            fallback: false,
             options: [], // [{ value: "kr", label: "대한민국" }, ...]
+            onChange: () => {}
         };
     }
 
+    _defineState(){
+        return {
+            ...this._props
+        }
+    }
+
     _template() {
-        const { label, name, options } = this._props;
+        const { label, name, options, fallback} = this._props;
         const nodeId = this._generateNodeId();
         return `
             <div class="no-form-control --md">   
                 <label for="${nodeId}" class="no-form-control-inner">
                     <span class="no-form-label">${label}</span>
                     <select id="${nodeId}" name="${name}" data-ref="select" class="no-form-control-input">
+                        ${fallback ? `<option value="">-- 선택 --</option>` : `` }
                         ${this._renderOptions(options)}
                     </select>
                 </label>
@@ -34,7 +40,7 @@ export default class Select extends Component {
     }
 
     _renderOptions(options) {
-        const {value:selectedValue} = this._props; 
+        const {selectedValue} = this._props; 
         return options
             .map((opt) => {
                 const value = typeof opt === "string" ? opt : opt.value;
@@ -47,10 +53,22 @@ export default class Select extends Component {
     }
 
     _bindEvents() {
-        new Choices(this.refs.select, {
+        const selectEl = this.refs.select;
+
+        new Choices(selectEl, {
             searchEnabled: true,
             itemSelectText: "",
             shouldSort: false,
         });
+
+        console.log(this._props.onChange);
+        
+
+        if (typeof this._props.onChange === "function") {
+            selectEl.addEventListener("change", (e) => {
+                const value = e.target.value;
+                this._props.onChange(value, e);
+            });
+        }
     }
 }

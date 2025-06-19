@@ -140,28 +140,5 @@ use App\Domains\Product\Entities\ProductTemplate;
 <?php end_section() ?>
 
 <?php section('portal') ?>
-<div id="modal-hook">
-    <!-- <dialog open class="no-main-modal --open">
-        <div class="no-main-modal-wrapper">
-            <div class="no-main-modal-inner">
-                <header class="no-main-modal-header">
-                    <h2 class="no-main-modal-header__title">속성 수정</h2>
-                </header>
-                <section class="no-main-modal-content">
-                    <div>
-                        <button type="button" class="no-prod-attr-tab --active">속성</button>
-                        <button type="button" class="no-prod-attr-tab">옵션</button>
-                        <button type="button" class="no-prod-attr-tab">규칙</button>
-                    </div>
-                    <div>
-                        <div class="no-prod-attr-tab-content"></div>
-                    </div>
-                </section>
-                <button class="no-main-modal-close" aria-label="닫기">
-                    <i class="fa-regular fa-xmark"></i>
-                </button>
-            </div>
-        </div>
-    </dialog> -->
-</div>
+<div id="modal-hook"></div>
 <?php end_section() ?>

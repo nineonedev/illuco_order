@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Order;
 
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Repositories\CustomerRepository;
-use App\Domains\User\Entities\Dealer;
-use App\Domains\User\Entities\User;
-use Framework\Database\ORM\Entities\Entity;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -30,6 +27,19 @@ class CustomerController extends Controller
         return $this->render('admin.pages.customers.index', [
             'customers' => $query->paginate($request->query('perpage', 15), $request->query('page', 1)),
             'query'     => $request->query(),
+        ]);
+    }
+
+    public function show(string $id)
+    {
+        $customer = $this->repo()->with(['cart.cartitems'])->find($id);
+
+        if (!$customer) {
+            throw new RuntimeException("고객 정보를 찾을 수 없습니다.");
+        }
+
+        return $this->render('admin.pages.customers.edit', [
+            'customer' => $customer->toArray(),
         ]);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Communication;
 
 use Framework\Http\Request;
 use Framework\Routing\Controller;

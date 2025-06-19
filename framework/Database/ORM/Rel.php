@@ -33,26 +33,33 @@ class Rel
 
     public static function setConfig(array $relationMap, bool $dryRun = false, bool $debug = false): void
     {
+        $finalMap = [];
+
         foreach ($relationMap as $entityClass => $relations) {
             foreach ($relations as $i => $rel) {
                 $type = $rel['type'] ?? null;
 
+                // MorphTo는 morphMap도 설정 필요
                 if ($type === MorphTo::class) {
                     $morphables = $rel['morphables'] ?? [];
-                    $relationMap[$entityClass][$i] = array_merge($rel, static::createMorphData($entityClass));
+                    $rel = array_merge($rel, static::createMorphData($entityClass));
                     static::setMorph([$entityClass => $morphables]);
                 }
 
                 if ($debug || $dryRun) {
                     echo "[Rel ManualConfig] {$entityClass} → {$rel['name']} ({$rel['type']})\n";
                 }
+
+                // 저장할 relationMap 구성
+                $finalMap[$entityClass][] = $rel;
             }
         }
 
         if (!$dryRun) {
-            static::$relationMap = $relationMap;
+            static::$relationMap = $finalMap;
         }
     }
+
 
     protected static function createMorphData(string $related)
     {

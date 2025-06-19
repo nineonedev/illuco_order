@@ -49,7 +49,7 @@ export default class AttributeList extends Component {
     }
     
     getCurrentSortOrder(){
-        return this._state.attributes.length ? this._state.attributes.length + 1 : 0; 
+        return this._state.attributes && this._state.attributes.length ? this._state.attributes.length + 1 : 0; 
     }
 
     _afterRender(){

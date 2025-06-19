@@ -1,16 +1,22 @@
 <?php
 
-use App\Http\Controllers\ClaimController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\DealerController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductAttributeController;
-use App\Http\Controllers\ProductOptionController;
-use App\Http\Controllers\ProductTemplateController;
+use App\Http\Controllers\DealerController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Communication\ClaimController;
+use App\Http\Controllers\Communication\NoticeController;
+use App\Http\Controllers\Order\CartController;
+use App\Http\Controllers\Order\CartItemController;
+use App\Http\Controllers\Order\CustomerController;
+use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\Order\OrderHistoryController;
+use App\Http\Controllers\Order\OrderItemController;
+use App\Http\Controllers\Product\ProductValueController;
+use App\Http\Controllers\Product\ProductAttributeController;
+use App\Http\Controllers\Product\ProductOptionController;
+use App\Http\Controllers\Product\ProductTemplateController;
 use Framework\Support\Facades\Route;
 
 Route::middleware(['web'])->group(function(){
@@ -100,6 +106,7 @@ Route::middleware(['web'])->group(function(){
                     Route::get('/', [CustomerController::class, 'index'])->name('index');
                     Route::get('/create', [CustomerController::class, 'create'])->name('create');
                     Route::get('{id}/edit', [CustomerController::class, 'edit'])->name('edit');
+                    Route::get('{id}', [CustomerController::class, 'show'])->name('show');
                     
                     Route::post('/', [CustomerController::class, 'store'])->name('store');
                     Route::put('{id}', [CustomerController::class, 'update'])->name('update');
@@ -160,6 +167,63 @@ Route::middleware(['web'])->group(function(){
                     Route::put('{id}', [ProductOptionController::class, 'update'])->name('update');
                     Route::delete('{id}', [ProductOptionController::class, 'destroy'])->name('destroy');
                 });
+
+            // carts
+            Route::prefix('cart')
+                ->name('cart')
+                ->group(function(){
+                    Route::get('/', [CartController::class, 'index'])->name('index');
+                    Route::post('/', [CartController::class, 'store'])->name('store');
+                    Route::put('{id}', [CartController::class, 'update'])->name('update');
+                    Route::delete('{id}', [CartController::class, 'destroy'])->name('destroy');
+                });
+
+            // cart-items
+            Route::prefix('cart-items')
+                ->name('cart_items')
+                ->group(function(){
+                    Route::post('/', [CartItemController::class, 'store'])->name('store');
+                    Route::put('{id}', [CartItemController::class, 'update'])->name('update');
+                    Route::delete('{id}', [CartItemController::class, 'destroy'])->name('destroy');
+                });
+
+            // orders
+            Route::prefix('orders')
+                ->name('orders')
+                ->group(function(){
+                    Route::get('/', [OrderController::class, 'index'])->name('index');
+                    Route::get('{id}', [OrderController::class, 'show'])->name('show');
+                    Route::post('/', [OrderController::class, 'store'])->name('store');
+                    Route::put('{id}', [OrderController::class, 'update'])->name('update');
+                    Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy');
+                });
+
+            // order-items
+            Route::prefix('order-items')
+                ->name('order_items')
+                ->group(function(){
+                    Route::post('/', [OrderItemController::class, 'store'])->name('store');
+                    Route::put('{id}', [OrderItemController::class, 'update'])->name('update');
+                    Route::delete('{id}', [OrderItemController::class, 'destroy'])->name('destroy');
+                });
+
+            // order-document-histories
+            Route::prefix('order-histories')
+                ->name('order_histories')
+                ->group(function(){
+                    Route::get('{order_id}', [OrderHistoryController::class, 'index'])->name('index');
+                    Route::post('/', [OrderHistoryController::class, 'store'])->name('store');
+                });
+
+            // product-values
+            Route::prefix('product-values')
+                ->name('product_values')
+                ->group(function(){
+                    Route::post('/', [ProductValueController::class, 'store'])->name('store');
+                    Route::put('{id}', [ProductValueController::class, 'update'])->name('update');
+                    Route::delete('{id}', [ProductValueController::class, 'destroy'])->name('destroy');
+                });
+
 
         });
 

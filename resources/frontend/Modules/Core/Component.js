@@ -78,6 +78,11 @@ export default class Component {
 
     _hydrateIfNeeded() {
         let element;
+        if (this._hookId === 'dealer-hook') {
+            console.log(this, document.getElementById(this._hookId));
+                
+        }
+
         if (this._hookId instanceof HTMLElement) {
             element = this._hookId;
 
@@ -96,6 +101,7 @@ export default class Component {
                 throw new Error(`Element not found by hookId: ${this._hookId}`);
             }
         }
+
         const isHydratable = element.hasAttribute(Component.NODE_PROP_SEL);
 
         if (isHydratable) {
@@ -182,6 +188,7 @@ export default class Component {
         const content = template.content.firstElementChild;
 
         if (!this._el) {
+            this._hostEl.innerHTML = ''; // 추가
             this._hostEl.appendChild(content);
             this._el = content;
         } else {

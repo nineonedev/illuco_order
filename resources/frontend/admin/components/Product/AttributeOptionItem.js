@@ -1,7 +1,5 @@
 import Component from "../../../Modules/Core/Component";
-import Select from "../Select";
 import Text from "../Text";
-import Checkbox from "../Checkbox";
 
 export default class AttributeOptionItem extends Component {
     _type = 'attribute-option-item'; 
@@ -37,7 +35,7 @@ export default class AttributeOptionItem extends Component {
                         <button type="button" class="no-btn-error" data-ref="deleteBtn">
                             <span>삭제</span>
                         </button>
-                        <button type="submit" class="no-btn-primary">
+                        <button type="submit" class="no-btn-primary" data-ref="updateBtn">
                             <span>수정</span>
                         </button>
                     </div>
@@ -48,7 +46,6 @@ export default class AttributeOptionItem extends Component {
 
     _render(){
         const {label, value} = this.state;
-
         super._render();
         
         Text.make(this.refs.label, {
@@ -66,21 +63,32 @@ export default class AttributeOptionItem extends Component {
     }
 
     _bindEvents(){
-        this.on(this._refs.form, 'submit', this._handleSubmit.bind(this));
+        this.on(this._refs.form, 'submit', this._handleUpdate.bind(this));
         this.on(this._refs.deleteBtn, 'click', this._handleDelete.bind(this));
     }
 
-    _handleSubmit(self, e){
+    setButtonDisabled(disabled = true){
+        this.refs.deleteBtn.disabled = disabled;
+        this.refs.updateBtn.disabled = disabled;
+    }
+
+    _handleUpdate(self, e){
         e.preventDefault(); 
         const t = e.target;
         const fd = new FormData(t); 
 
-        this.dispatch('opt.update', {
-            data: t,
-        })
+        this.dispatch('option.update', {
+            data: fd,
+            onDisabled: this.setButtonDisabled.bind(this),
+            component: this,
+        });
     }
 
     _handleDelete(self, e) {
-
+        this.dispatch('option.destroy', {
+            data: this._state,
+            onDisabled: this.setButtonDisabled.bind(this),
+            component: this,
+        });
     }
 }

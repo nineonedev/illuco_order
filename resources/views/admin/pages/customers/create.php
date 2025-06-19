@@ -27,15 +27,6 @@
                         "label": "국가 선택",
                         "value": "KR"
                     }'>
-                    <div class="no-form-control --md">
-                        <label for="country" class="no-form-control-inner">
-                            <input type="text" name="country" id="country" class="no-form-control-input" placeholder="" >
-                            <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text">국가선택</legend>
-                            </fieldset>
-                        </label>
-                        <span class="no-form-control-space"></span>
-                    </div>
                 </div>
                 
                 <!-- FormControl -->
@@ -47,15 +38,6 @@
                         "label": "대리점 선택"
                     }'
                 >
-                    <div class="no-form-control --md">
-                        <label for="dealer_id" class="no-form-control-inner">
-                            <input type="text" name="dealer_id" id="dealer_id" class="no-form-control-input" placeholder="" >
-                            <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text"></legend>
-                            </fieldset>
-                        </label>
-                        <span class="no-form-control-space"></span>
-                    </div>
                 </div>
                 <!-- FormControl -->
 

@@ -15,6 +15,6 @@ class Integer extends Rule
 
     public function message(): string
     {
-        return lang('validation.integer');
+        return lang('rule.integer');
     }
 }

@@ -4,14 +4,19 @@ import Checkbox from "../Checkbox";
 import Select from "../Select";
 import Text from "../Text";
 import AttributeManager from "./AttributeManager";
+import AttributeOptionItem from "./AttributeOptionItem";
 
 export default class AttributeEditor extends Component {
     _type = 'attribute-editor';
 
+    _boot(){
+        super._boot();
+        this._optionListId = this._generateNodeId();
+    }
+
     _defineProps() {
         return {
             attribute: {},
-            options: [],
             status: 'attr',
         };
     }
@@ -19,7 +24,6 @@ export default class AttributeEditor extends Component {
     _defineState() {
         return {
             ...this._props,
-            status: 'attr',
         };
     }
 
@@ -44,8 +48,8 @@ export default class AttributeEditor extends Component {
     _render(){
         super._render(); 
 
-        const {status, attribute, options } = this._state;
-        const {type, name, default_value, label, required} = attribute;
+        const {status, attribute } = this._state;
+        const {type, name, default_value, label, required, options} = attribute;
 
 
         if (status === 'attr') {
@@ -110,7 +114,7 @@ export default class AttributeEditor extends Component {
 
             if(options && options.length > 0) {
                 options.forEach(opt => {
-
+                    const optItem = AttributeOptionItem.make(this._optionListId, {...opt}).render();
                 });
             }
             
@@ -191,8 +195,8 @@ export default class AttributeEditor extends Component {
     }
 
     _renderOptions(){
-        const {attribute, options} = this._state;
-        const {id, type} = attribute;
+        const {attribute} = this._state;
+        const {id, type, options} = attribute;
 
         if (!['select', 'multi-select'].includes(type)) {
             return `<div>
@@ -214,15 +218,16 @@ export default class AttributeEditor extends Component {
                         </button>
                     </div>
                 </form>
-                <ol class="no-prod-opt-list">${options.length ? this._renderOptionItems(options) : '<p>등록된 옵션이 없습니다.</p>'}</ol>
+                ${options.length ? `<ol class="no-prod-opt-list" id="${this._optionListId}"></ol>` : '<p>등록된 옵션이 없습니다.</p>'}
             </div>
         `;
     }
 
-    _renderOptionItems(options = []){
-        return options.forEach(opt => {
-            return ``
-        })
+    resetOptionform(){
+        if (this.refs.form && this._state.status === 'option') {
+            this.refs.form.reset();
+        }
+            
     }
 
     _renderRules(){

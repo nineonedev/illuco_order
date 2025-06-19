@@ -60,6 +60,17 @@ export default class ProductTemplateController extends Controller {
         });
     }
 
+    async _destroy(action, data) {
+        if (!confirm("정말로 삭제하시겠습니까?")) return;
+
+        const result = await this._ajax.delete(action, data);
+        this._logger.success(result);
+
+        if (result.success) {
+            this.cancelBtn?.click();
+        }
+    }
+
     async edit() {
         this._logger.info("edit");
         this._prepare();
@@ -93,30 +104,37 @@ export default class ProductTemplateController extends Controller {
         this._listen('attr.destroy', this._destroyAttribute.bind(this));
 
         this._listen('option.store', this._storeOption.bind(this));
+        this._listen('option.update', this._updateOption.bind(this));
+        this._listen('option.destroy', this._destroyOption.bind(this));
 
         await this._allAttributes();
     }
 
-    async _storeOption({data, onDisabled}) {
+    // ============================================================
+    // Option 
+    // ============================================================
+    async _destroyOption({data, onDisabled, component}) {
         // this._logger.success(Object.fromEntries(data)); 
+        if (!confirm('정말로 삭제하시겠습니까?')){
+            return;
+        }
 
         try {
             onDisabled(true); 
-            const result = await new Ajax(true).post('/admin/product-options', data);
+            const result = await new Ajax(false).delete(`/admin/product-options/${data.id}`);
             this._logger.success(result); 
 
             if (result.success) {
                 const option = result.data.option;
-                console.log('옵션 생성됨.', option);
-                
-                const attribute = await this.findAttribute({id: option.attribute_id});
-                console.log(attribute);
-                
+                console.log('옵션 삭제됨.', option);
+                // component.destroy();
+
+                const {attribute} = await this.findAttribute({id: data.attribute_id});
 
                 this.attrModal.setState({
                     header: `${attribute.label} 속성 수정`,
                     content: AttributeEditor.make(null, {
-                        options: attribute.options, 
+                        attribute: attribute,
                         status: 'option'
                     }, false),
                     open: true,
@@ -128,143 +146,153 @@ export default class ProductTemplateController extends Controller {
         }
     }
 
-    async findAttribute({id, onDisabled = () => {}}) {
-        const url = `/admin/product-attributes/${id}`;
+    async _updateOption({data, onDisabled, component}) {
+        // this._logger.success(Object.fromEntries(data)); 
+
+        const id = data.get('id'); 
+
         try {
             onDisabled(true); 
-            const result = await new Ajax(true).get(url);
+            const result = await new Ajax(false).put(`/admin/product-options/${id}`, data);
+            this._logger.success(result); 
+
             if (result.success) {
-                return result.data; 
+                const option = result.data.option;
+                console.log('옵션 수정됨.', option);
+                component.setState({...option});
             }
+
         } finally{
             onDisabled(false); 
         }
-
-        return {};
     }
 
-    async _openAttribute(data){
-        this._logger.info(data);
-        const {attribute} = await this.findAttribute(data);
+    async _storeOption({data, onDisabled}) {
+        // this._logger.success(Object.fromEntries(data)); 
 
-        this.attrModal.setState({
-            header: `${attribute.label} 속성 수정`,
-            content: AttributeEditor.make(null, {
-                attribute: attribute, 
-                options: attribute.options || [],
-            }, false),
-            open: true,
-        });
-    }
-
-    async _updateAttribute({data, onDisabled = () => {}}){
-        const id = data.get('id');
-        const url = `/admin/product-attributes/${id}`;
         try {
-            onDisabled(true);
-            const result = await new Ajax(true).put(url, data);
+            onDisabled(true); 
+            const result = await new Ajax(false).post('/admin/product-options', data);
+            this._logger.success(result); 
+
             if (result.success) {
-                const attributes = await this._allAttributes();
-                const attr = attributes.find(a => a.id == id);
+                const option = result.data.option;
+                console.log('옵션 생성됨.', option);
+                
+                const {attribute} = await this.findAttribute({id: option.attribute_id});
 
                 this.attrModal.setState({
-                    content: AttributeEditor.make(null, {attribute: attr, }, false),
-                })
+                    header: `${attribute.label} 속성 수정`,
+                    content: AttributeEditor.make(null, {
+                        attribute: attribute,
+                        status: 'option'
+                    }, false),
+                    open: true,
+                });
             }
+
         } finally{
             onDisabled(false); 
         }
     }
 
-    async _destroyAttribute({id, onDisabled = () => {}}){
-        if (!confirm('정말로 삭제하시겠습니까?')){
-            return;
-        }
-
-        const url = `/admin/product-attributes/${id}`;
-        try {
-            onDisabled(true);
-            const result = await new Ajax(true).delete(url);
-            if (result.success) {
-                await this._allAttributes();
-                this.attrModal.setState({open: false, header: null, content: null});
-            }
-        } finally{
-            onDisabled(false); 
-        }
-
-        return {};
-    }
-
-    async _allAttributes() {
-        const action = this.form.dataset.showAction;
-        const result = await new Ajax(true).get(action);
-        const {data} = result;
-        this.attrManager.renderList({attributes: data.template.attributes});
-
-        return data.template.attributes;
-    }
-
-    async _storeAttribute({submitter, data, action}, event) {
-        const sortOrder = this.attrManager.getCurrentSortOrder(); 
-        data.append('sort_order', sortOrder);
-
-        try {
-            submitter.disabled = true; 
-            
-            const result = await new Ajax(false).post(action, data);
-
-            if (result.success) {
-                this.attrManager.resetForm();
-                await this._allAttributes(); 
+    // ============================================================
+    // Attribute 
+    // ============================================================
+    async findAttribute({id, onDisabled = () => {}}) {
+            const url = `/admin/product-attributes/${id}`;
+            try {
+                onDisabled(true); 
+                const result = await new Ajax(true).get(url);
+                if (result.success) {
+                    return result.data; 
+                }
+            } finally{
+                onDisabled(false); 
             }
 
-        } finally {
-            submitter.disabled = false; 
+            return {};
         }
-    }
 
+        async _openAttribute(data){
+            this._logger.info(data);
+            const {attribute} = await this.findAttribute(data);
 
-    async _destroy(action, data) {
-        if (!confirm("정말로 삭제하시겠습니까?")) return;
-
-        const result = await this._ajax.delete(action, data);
-        this._logger.success(result);
-
-        if (result.success) {
-            this.cancelBtn?.click();
+            this.attrModal.setState({
+                header: `${attribute.label} 속성 수정`,
+                content: AttributeEditor.make(null, {
+                    attribute: attribute, 
+                }, false),
+                open: true,
+            });
         }
-    }
+
+        async _updateAttribute({data, onDisabled = () => {}}){
+            const id = data.get('id');
+            const url = `/admin/product-attributes/${id}`;
+            try {
+                onDisabled(true);
+                const result = await new Ajax(false).put(url, data);
+                if (result.success) {
+                    const attributes = await this._allAttributes();
+                    const attr = attributes.find(a => a.id == id);
+
+                    this.attrModal.setState({
+                        content: AttributeEditor.make(null, {attribute: attr}, false),
+                    })
+                }
+            } finally{
+                onDisabled(false); 
+            }
+        }
+
+        async _destroyAttribute({id, onDisabled = () => {}}){
+            if (!confirm('정말로 삭제하시겠습니까?')){
+                return;
+            }
+
+            const url = `/admin/product-attributes/${id}`;
+            try {
+                onDisabled(true);
+                const result = await new Ajax(false).delete(url);
+                if (result.success) {
+                    await this._allAttributes();
+                    this.attrModal.setState({open: false, header: null, content: null});
+                }
+            } finally{
+                onDisabled(false); 
+            }
+
+            return {};
+        }
+
+        async _allAttributes() {
+            const action = this.form.dataset.showAction;
+            const result = await new Ajax(true).get(action);
+            const {data} = result;
+            this.attrManager.renderList({attributes: data.template.attributes});
+
+            return data.template.attributes;
+        }
+
+        async _storeAttribute({submitter, data, action}, event) {
+            const sortOrder = this.attrManager.getCurrentSortOrder(); 
+            data.append('sort_order', sortOrder);
+
+            try {
+                submitter.disabled = true; 
+                
+                const result = await new Ajax(false).post(action, data);
+
+                if (result.success) {
+                    this.attrManager.resetForm();
+                    await this._allAttributes(); 
+                }
+
+            } finally {
+                submitter.disabled = false; 
+            }
+        }
 
     
-    
-    // async _updateAttribute ({component, data, action, submitter }) {
-
-    //     try {
-    //         submitter.disabled = true;
-    //         const result = await this._ajax.put(action, data);
-    //         this._logger.success(result); 
-
-    //         if (result.success) {
-    //             const {data} = result; 
-    //             component.setState(data.attribute);
-    //         }
-            
-    //     } finally {
-    //         submitter.disabled = false; 
-    //     }
-    // }
-
-    // async _destroyAttribute ({component, props}) {
-    //     if (!confirm('정말로 삭제하시겠습니까?')) {
-    //         return; 
-    //     }
-
-    //     const result = await this._ajax.delete(`/admin/product-attributes/${props.id}`);
-    //     this._logger.success(result); 
-
-    //     if (result.success) {
-    //         component._el.remove();
-    //     }
-    // }
 }
