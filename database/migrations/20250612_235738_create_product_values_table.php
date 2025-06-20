@@ -10,7 +10,7 @@ return new class implements Migration
     {
         Schema::create('product_values', function (Blueprint $table) {
             $table->id(); 
-            $table->foreignId('template_id')->constrained('product_templates')->onDeleteCascade();
+            $table->foreignId('product_id')->constrained('products')->onDeleteCascade();
             $table->foreignId('attribute_id')->constrained('product_attributes')->onDeleteCascade();
             $table->text('value')->nullable();
             $table->timestamps();

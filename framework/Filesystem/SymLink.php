@@ -20,10 +20,17 @@ class SymLink
         $linkDir = dirname($this->link);
 
         if (!is_dir($linkDir)) {
+            if (!@is_writable(dirname($linkDir))) {
+                // 공유호스팅 같은 경우 mkdir 시도 자체 무시
+                error_log("Skipped mkdir for {$linkDir} (permission denied or shared hosting)");
+                return;
+            }
+
             if (!@mkdir($linkDir, 0755, true)) {
                 throw new RuntimeException("Failed to create directory for link: {$linkDir}");
             }
         }
+
 
         // 이미 존재할 때
         if (file_exists($this->link)) {

@@ -66,6 +66,27 @@ use App\Domains\Product\Entities\ProductTemplate;
                         <span class="no-form-control-space"></span>
                     </div>
 
+                    <!-- 단가 -->
+                    <div class="no-form-control --md">
+                        <label for="price" class="no-form-control-inner">
+                            <input 
+                                type="number" 
+                                name="price" 
+                                id="price" 
+                                class="no-form-control-input"
+                                value="<?= e(old('price', $template->price)) ?>" 
+                                step="0.01" 
+                                min="0"
+                                required
+                            >
+                            <fieldset class="no-form-control-label">
+                                <legend class="no-form-control-text">단가 (USD)</legend>
+                            </fieldset>
+                        </label>
+                        <span class="no-form-control-space"></span>
+                    </div>
+
+
                     <!-- 카테고리 ID -->
                     <div 
                         class="no-form-control --md" 

@@ -44,6 +44,7 @@
     <!-- Root -->
 
     <?= yield_section('portal') ?>
+    <div id="portal"></div>
     
     <script src="<?=asset_path('lib/flatpickr/flatpickr.min.js')?>"></script>
     <script src="<?=asset_path('lib/flatpickr/ko.js')?>"></script>

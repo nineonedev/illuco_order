@@ -14,6 +14,7 @@ return new class implements Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('model')->unique();
+            $table->decimal('price', 10, 2)->default(0);
             $table->integer('sort_order')->default(0);
             $table->text('description')->nullable();
             $table->timestamps();

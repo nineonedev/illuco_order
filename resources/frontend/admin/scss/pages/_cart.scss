@@ -31,6 +31,7 @@
         flex-direction: column;
         text-align: center;
         gap: 1.6rem;
+        padding-top: 2.4rem;
 
         i {
             font-size: 6rem;
@@ -84,11 +85,15 @@
                 overflow: hidden;
                 border-radius: 0.4rem;
                 border: 1px solid var(--clr-text-primary);
+                max-width: 14rem;
 
                 .--input {
-                    display: inline-block;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     text-align: center;
-                    width: 2rem;
+                    flex: 1;
+                    
                     input {
                         width: 100%;
                         text-align: center;
@@ -96,9 +101,15 @@
                 }
                 .--increase {
                     padding: 0.8rem 1.2rem;
+                    &:hover{
+                        background-color: var(--clr-background-secondary);
+                    }
                 }
                 .--decrease {
                     padding: 0.8rem 1.2rem;
+                    &:hover{
+                        background-color: var(--clr-background-secondary);
+                    }
                 }
             }
         }

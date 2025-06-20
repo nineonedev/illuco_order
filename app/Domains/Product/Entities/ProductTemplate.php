@@ -12,6 +12,7 @@ class ProductTemplate extends Entity
         'name',
         'code',
         'model',
+        'price',
         'sort_order',
         'description',
     ];
@@ -19,6 +20,7 @@ class ProductTemplate extends Entity
     protected array $casts = [
         'category_id' => '?int',  
         'sort_order' => 'int',
+        'price' => 'decimal',
     ];
 
     public static function repositoryClass(): string

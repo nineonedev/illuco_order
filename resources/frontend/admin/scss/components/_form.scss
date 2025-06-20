@@ -134,6 +134,32 @@
     }
 }
 
+.no-form-section{
+    padding: 2.4rem 0;
+
+    &__title{
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+    }
+}
+
+.no-form-empty-fallback {
+    text-align: center;
+    background-color: var(--clr-slate-100);
+    color: var(--clr-primary-main);
+    font-weight: 500;
+    padding: 2.4rem;
+}
+
+
+.no-form-search-btn{
+    @extend %form-input;
+    @extend %form-control;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
 .choices__list--dropdown, .choices__list[aria-expanded] {
     z-index: 2;

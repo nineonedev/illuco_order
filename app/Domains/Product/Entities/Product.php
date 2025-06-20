@@ -18,7 +18,7 @@ class Product extends Entity
 
     protected array $casts = [
         'template_id' => 'int',
-        'price' => 'float',
+        'price' => 'decimal',
     ];
 
     public static function repositoryClass(): string

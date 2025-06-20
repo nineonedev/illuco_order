@@ -31,6 +31,16 @@ class Builder
         $this->table = $table;
     }
 
+    public function newQuery(): self
+    {
+        return new self(
+            $this->connection,
+            $this->grammar,
+            $this->table
+        );
+    }
+
+
     public function findOrFail($id, string $primaryKey = 'id'): object
     {
         $record = $this->where($primaryKey, '=', $id)->first();

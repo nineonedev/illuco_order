@@ -7,9 +7,11 @@ use App\Domains\Communication\Entities\Notice;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Entities\Cart;
 use App\Domains\Order\Entities\CartItem;
+use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductAttribute;
 use App\Domains\Product\Entities\ProductOption;
 use App\Domains\Product\Entities\ProductTemplate;
+use App\Domains\Product\Entities\ProductValue;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\Dealer;
@@ -79,9 +81,18 @@ Rel::setConfig([
     ProductAttribute::class => [
         Rel::belongsToMany('templates', ProductTemplate::class, 'product_attribute_template', 'attribute_id', 'template_id'),
         Rel::hasMany('options', ProductOption::class, 'attribute_id'),
+        Rel::hasMany('values', ProductValue::class, 'attribute_id'),
     ],
     ProductOption::class => [
         Rel::belongsTo('attribute', ProductAttribute::class, 'attribute_id'),
+    ],
+    ProductValue::class => [
+        Rel::belongsTo('attribute', ProductAttribute::class, 'attribute_id'),
+        Rel::belongsTo('product', Product::class, 'product_id'),
+    ],
+    Product::class => [
+        Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
+        Rel::hasMany('values', ProductValue::class, 'product_id'),
     ],
     Customer::class => [
         Rel::hasOne('cart', Cart::class, 'customer_id'),
@@ -92,6 +103,7 @@ Rel::setConfig([
     ],
     CartItem::class => [
         Rel::belongsTo('cart', Cart::class, 'cart_id'),
+        Rel::belongsTo('product', Product::class, 'product_id'),
     ],
     // ===================================================================
     // Order

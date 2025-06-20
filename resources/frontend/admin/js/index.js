@@ -1,4 +1,4 @@
-import Controllers from "../bootstrap/Controllers";
+import Controllers from "./bootstrap/Controllers";
 import "../scss/index.scss";
 class App {
     static init() {

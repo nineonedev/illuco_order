@@ -194,16 +194,54 @@ abstract class Repository
 
     public function with(array $relations): self
     {
-        $relations = array_map(function($rel){
+        $relations = $this->flattenRelations($relations);
+
+        $relations = array_map(function($rel) {
             if (is_string($rel) && class_exists($rel)) {
                 return $rel::alias(); 
             }
-
             return $rel; 
         }, $relations);
-        
+
         $this->with = $relations;
+        $this->withTree = $this->mergeNestedRelations($relations);
+
         return $this;
+    }
+    protected function flattenRelations(array $relations, string $prefix = ''): array
+    {
+        $flattened = [];
+
+        foreach ($relations as $key => $value) {
+            if (is_array($value)) {
+                $newPrefix = is_int($key) ? $prefix : trim("{$prefix}.{$key}", '.');
+                $flattened = array_merge($flattened, $this->flattenRelations($value, $newPrefix));
+            } else {
+                $relation = is_int($key) ? $value : "{$key}.{$value}";
+                $flattened[] = trim("{$prefix}.{$relation}", '.');
+            }
+        }
+
+        return $flattened;
+    }
+
+    protected function mergeNestedRelations(array $relations): array
+    {
+        $tree = [];
+
+        foreach ($relations as $relation) {
+            $segments = explode('.', $relation);
+            $ref = &$tree;
+
+            foreach ($segments as $segment) {
+                if (!isset($ref[$segment])) {
+                    $ref[$segment] = [];
+                }
+                $ref = &$ref[$segment];
+            }
+        }
+
+        return $tree;
     }
 
     public function loadRelations(array $entities): array
@@ -214,16 +252,8 @@ abstract class Repository
             ? new EagerLoader()
             : new LazyLoader();
 
-        // 🔥 중첩 관계를 첫 단계만 추출 (e.g., 'attributes.options' → 'attributes')
-        $topLevelRelations = array_unique(array_map(function ($relation) {
-            return explode('.', $relation)[0];
-        }, $this->with));
-        // ✅ 실제 relation 객체가 존재하는 것만 추림
-        $validRelations = array_filter($topLevelRelations, fn ($rel) => Rel::getRelation($entities[0], $rel));
-
-        if (!empty($validRelations)) {
-            $loader->load($entities, $this->with); // 여기는 전체 중첩 관계 전달
-        }
+        // string 기반 중첩 경로 전달 (예: cart.items.product.values)
+        $loader->load($entities, $this->with);
 
         return $entities;
     }

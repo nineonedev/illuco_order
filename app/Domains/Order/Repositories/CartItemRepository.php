@@ -2,7 +2,7 @@
 
 namespace App\Domains\Order\Repositories;
 
-use App\Domains\Order\Entities\Cart;
+use App\Domains\Order\Entities\CartItem;
 use Framework\Database\ORM\Repositories\Repository;
 
 class CartItemRepository extends Repository
@@ -14,6 +14,6 @@ class CartItemRepository extends Repository
 
     public static function entityClass(): string
     {
-        return Cart::class;
+        return CartItem::class;
     }
 }

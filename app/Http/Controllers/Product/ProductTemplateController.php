@@ -26,13 +26,14 @@ class ProductTemplateController extends Controller
 
     public function index(Request $request)
     {
-        $query = $this->repo()->with([FileAttachment::class])->query();
+        $query = $this->repo()->with([FileAttachment::class, 'attributes.options'])->query();
 
         if ($name = $request->input('name')) {
             $query->where('name', 'like', "%{$name}%");
         }
 
-        $templates = $query->paginate(20);
+        $paginator = $query->paginate($request->query('perpage', 15), $request->query('page', 1));
+        $templates = $request->expectsJson() ? $paginator->toArray() : $paginator;
 
         return $this->render('admin.pages.products.templates.index', [
             'templates' => $templates
@@ -42,8 +43,10 @@ class ProductTemplateController extends Controller
     public function show(string $id, Request $request) 
     {
         $template = $this->repo()->with([FileAttachment::class, 'attributes.options'])->findOrFail($id);
+
+        $template = $request->expectsJson() ? $template->toArray() : $template;
         
-        return $this->render('admin.pages.products.templates.show', ['template' => $template->toArray()]);
+        return $this->render('admin.pages.products.templates.show', ['template' => $template]);
     }
 
     public function create()

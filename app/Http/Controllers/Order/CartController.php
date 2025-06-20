@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Order;
 
 use App\Domains\Order\Repositories\CustomerRepository;
 use App\Domains\Product\Repositories\ProductTemplateRepository;
+use App\Services\Order\AddItemToCartService;
+use Exception;
+use Framework\Http\Request;
 use Framework\Routing\Controller;
 use Framework\Support\Collection;
 
@@ -11,38 +14,13 @@ class CartController extends Controller
 {
     public function index()
     {
-        $customers = CustomerRepository::make()->all();
-        $templates = ProductTemplateRepository::make()->all();
-
-        return $this->render('admin.pages.cart.index', [
-            'customers' => array_map(function($customer){
-                return [
-                    'label' => "($customer->country) $customer->name", 
-                    'value' => $customer->id,
-                ];
-            }, $customers),
-            'templates' => array_map(function ($template) {
-                return [
-                    'label' => "($template->code) $template->name",
-                    'value' => $template->id,
-                ];
-            }, $templates),
-        ]);
+        return $this->render('admin.pages.cart.index');
     }
 
-    public function show()
+    public function store(Request $request)
     {
-
-    }
-
-    public function create()
-    {
-
-    }
-
-    public function edit()
-    {
-
+        $result = (new AddItemToCartService())->runInTransaction($request->all());
+        return $result->toResponse(); 
     }
 
     public function update()

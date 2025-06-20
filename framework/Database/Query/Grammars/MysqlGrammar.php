@@ -2,7 +2,6 @@
 
 namespace Framework\Database\Query\Grammars;
 
-use Exception;
 use Framework\Database\Query\Builder;
 
 class MysqlGrammar extends Grammar

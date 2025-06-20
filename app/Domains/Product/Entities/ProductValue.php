@@ -8,13 +8,13 @@ use Framework\Database\ORM\Entities\Entity;
 class ProductValue extends Entity
 {
     protected array $fillable = [
-        'template_id',
+        'product_id',
         'attribute_id',
         'value',
     ];
 
     protected array $casts = [
-        'template_id' => 'int',
+        'product_id' => 'int',
         'attribute_id' => 'int',
     ];
 
