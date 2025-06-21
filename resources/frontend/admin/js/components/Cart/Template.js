@@ -1,4 +1,5 @@
 import View from "../../core/View";
+import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
 import InputFactory from "../Inputs/InputFactroy";
 import SearchButton from "./SearchButton";
@@ -22,7 +23,10 @@ export default class Template extends View {
        return `
             <div class="no-page-row">
                 <div class="no-page-head">
-                    <h2 class="no-heading-sm">주문</h2>
+                    <div class="no-page-head__between">
+                        <h2 class="no-heading-sm">주문</h2>
+                        <div data-ref="fresh"></div>
+                    </div>
                 </div>
 
                 <div data-ref="search"></div>
@@ -42,29 +46,26 @@ export default class Template extends View {
             onClick: this._handleClick.bind(this)
         }).render();
 
-        if (Helper.isEmptyObject(this._state.template)){ 
-            this._renderFallback();
-            return;
-        } 
+        Button.make(this.refs.fresh, {
+            label: '초기화', 
+            className: 'no-btn-success-outline --xs',
+            onClick: this._handleFresh.bind(this),
+        }).render();
 
         this._renderForm();
     }
 
+    _handleFresh(){
+        this.setState({template: null});
+    }
+
     _handleClick(buttonView, evt){
-        this._dispatch('fetch.templates', {template: this, button: buttonView, evt: evt});
+        this._dispatch('fetch.templates', {view: this, button: buttonView, evt: evt});
     }
 
     _renderForm(){
         TemplateForm.make(this.refs.group, {
             template: this._state.template
         }).render();
-    }
-
-    _renderFallback(){
-        this.refs.group.innerHTML = `
-            <div class="no-form-empty-fallback">
-                <p>선택된 제품이 없습니다. 제품을 선택해주세요.</p>
-            </div>
-        `
     }
 }

@@ -32,6 +32,10 @@ body {
     @extend %element;
 }
 
+dialog {
+    @extend %element;
+}
+
 ::selection {
     background: var(--clr-primary-main);
     color: var(--clr-primary-contrast);

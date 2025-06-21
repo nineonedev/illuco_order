@@ -145,10 +145,11 @@
 
 .no-form-empty-fallback {
     text-align: center;
-    background-color: var(--clr-slate-100);
+    background-color: var(--clr-slate-200);
     color: var(--clr-primary-main);
     font-weight: 500;
     padding: 2.4rem;
+    border-radius: var(--button-radius);
 }
 
 

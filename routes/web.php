@@ -190,7 +190,9 @@ Route::middleware(['web'])->group(function(){
                 ->name('orders')
                 ->group(function(){
                     Route::get('/', [OrderController::class, 'index'])->name('index');
-                    Route::get('{id}', [OrderController::class, 'show'])->name('show');
+                    Route::get('edit/{id}', [OrderController::class, 'show'])->name('show');
+                    Route::get('{id}', [OrderController::class, 'edit'])->name('edit');
+
                     Route::post('/', [OrderController::class, 'store'])->name('store');
                     Route::put('{id}', [OrderController::class, 'update'])->name('update');
                     Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy');

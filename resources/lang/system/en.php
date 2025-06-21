@@ -1,6 +1,7 @@
 <?php
 
 use App\Domains\Order\Entities\Customer;
+use App\Domains\Order\Entities\Order;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\Communication\Entities\Claim;
@@ -24,6 +25,14 @@ return [
     'update' => 'Update',
     'delete' => 'Delete',
 
+    'order' => [
+        'status' => [
+            Order::STATUS_RECEIVED   => 'Order Received',
+            Order::STATUS_CONFIRMED  => 'Order Confirmed',
+            Order::STATUS_PREPARING  => 'Product Preparing',
+            Order::STATUS_SHIPPED   => 'Shipped',
+        ]
+    ],
     'countries' => [
         'US' => 'United States',
         'KR' => 'South Korea',

@@ -7,6 +7,8 @@ use App\Domains\Communication\Entities\Notice;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Entities\Cart;
 use App\Domains\Order\Entities\CartItem;
+use App\Domains\Order\Entities\Order;
+use App\Domains\Order\Entities\OrderItem;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductAttribute;
 use App\Domains\Product\Entities\ProductOption;
@@ -108,4 +110,14 @@ Rel::setConfig([
     // ===================================================================
     // Order
     // ===================================================================
+    Order::class => [
+        Rel::belongsTo('user', User::class, 'user_id'),
+        Rel::belongsTo('customer', Customer::class, 'customer_id'),
+        Rel::hasMany('items', OrderItem::class, 'order_id'),
+    ],
+
+    OrderItem::class => [
+        Rel::belongsTo('order', Order::class, 'order_id'),
+        Rel::belongsTo('product', Product::class, 'product_id'),
+    ],
 ]);

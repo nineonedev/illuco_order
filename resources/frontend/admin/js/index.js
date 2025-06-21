@@ -1,8 +1,9 @@
 import Controllers from "./bootstrap/Controllers";
-import "../scss/index.scss";
+
 class App {
     static init() {
         document.addEventListener("DOMContentLoaded", this.run.bind(this));
+        import('../scss/index.scss');
     }
 
     static run() {

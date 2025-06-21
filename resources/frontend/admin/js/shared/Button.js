@@ -3,11 +3,12 @@ import View from "../core/View";
 export default class Button extends View {
     _defineProps(){
         return {
-            label: '버튼',
+            label: '',
             type: 'submit',
             className: '',
             disabled: false,
             children: "",
+            ariaLabel: '',
             onClick: () => {},
         }
     }
@@ -19,7 +20,7 @@ export default class Button extends View {
     }
     
     _template(){
-        const {label, disabled, type, className, children} = this._state;
+        const {label, disabled, type, className, children, ariaLabel} = this._state;
 
         let content; 
 
@@ -35,7 +36,12 @@ export default class Button extends View {
         }
 
         return `
-            <button type="${type}" class="${className}" ${disabled ? 'disabled' : ''}>
+            <button 
+                type="${type}" 
+                class="${className}" 
+                ${disabled ? 'disabled' : ''} 
+                ${ariaLabel ? `aria-label="${ariaLabel}"` : ``} 
+            >
                 ${content}
             </button>
         `;

@@ -20,6 +20,13 @@ if (!function_exists('lang')) {
     }
 }
 
+if (!function_exists('__')) {
+    function __(string $key, array $replace = [], ?string $locale = null): ?string
+    {
+        return lang($key, $replace, $locale);
+    }
+}
+
 if (!function_exists('transfer')) {
     /**
      * @example transfer('rule.between', 'system.age', [10, 20])

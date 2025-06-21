@@ -1,20 +1,22 @@
 import View from "../../core/View";
 import Button from "../../shared/Button";
+import Helper from "../../supports/Helper";
 import CheckboxInput from "../Inputs/CheckboxInput";
+import LongTextInput from "../Inputs/LongTextInput";
 import CartItem from "./CartItem";
 
 export default class CartItemList extends View {
     _boot() {
         this._listHookId = this._generateHookId();
         this._aggtHookId = this._generateHookId();
-        this._orderButton = null;
         super._boot();
     }
 
     _defineProps() {
         return {
             cartitems: [],
-            onUpdateCart: () => {}
+            total_maount: 0,
+            memo: '',
         };
     }
 
@@ -25,6 +27,11 @@ export default class CartItemList extends View {
     }
 
 
+    _defineComputed(){
+        return {
+            total: () => this._children.reduce((acc,cur) => acc + (cur.state.product.price * cur.state.quantity), 0),
+        }
+    }
 
     cartItems() {
         return this._state.cartitems || [];
@@ -49,23 +56,55 @@ export default class CartItemList extends View {
                     <div data-ref="deleteBtn"></div>
                 </div>
                 <ol id="${this._listHookId}" class="no-cart-items"></ol>
+
+                <hr class="no-hr --xl">
+
+                <div data-ref="memo"></div>
+
+                <hr class="no-hr --xl">
+
+                <fieldset class="no-form-section">
+                    <legend class="no-form-section__title">집계 정보</legend>
+                    <div class="no-cart-aggregation">
+                        <dl>
+                            <dt>총 주문 금액</dt>
+                            <dd><span data-ref="price">$0</span></dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                <span>총 주문 예상 금액</span>
+                            </dt>
+                            <dd><b data-ref="total">$0</b></dd>
+                        </dl>
+                    </div>
+                </fieldset>
+
+                <hr class="no-hr --xl">
+                
                 <div id="${this._aggtHookId}" class="no-cart-to-order"></div>
             </div>
         `;
     }
 
     _render() {
-        super._render();
-
-        if (!this.hasItems()) return;
-
         this._children = [];
         this._deleteBtn = null;
         this._checkbox = null;
+        this._orderButton = null;
+        this._memo = null;
+
+        super._render();
+        if (!this.hasItems()) return;
 
         for (const item of this._state.cartitems) {
-            this.addCartItem(item);
+            this.renderCartItem(item);
         }
+
+        this._memo = LongTextInput.make(this.refs.memo, {
+            label: '메모', 
+            value: this._state.memo,
+            rows: 8,
+        }).render();
 
         // 전체 선택 체크박스
         this._checkbox = CheckboxInput.make(this.refs.check, {
@@ -120,6 +159,10 @@ export default class CartItemList extends View {
     }
 
     addCartItem(cartitem) {
+        this.setState({cartitems: [...this._children.map(c => c.state), cartitem]});
+    }
+
+    renderCartItem(cartitem){
         const cartItem = CartItem.make(this._listHookId, {
             ...cartitem,
             onCheck: this._handleCheck.bind(this),
@@ -128,7 +171,6 @@ export default class CartItemList extends View {
         }).render();
 
         this.addChild(cartItem);
-        this._props.onUpdateCart();
     }
 
     removeCartItem(id) {
@@ -142,19 +184,10 @@ export default class CartItemList extends View {
         // UI에서만 제거하고, 상태는 관리
         this._children[itemIdx].destroy();
         this._children.splice(itemIdx, 1);
-
-        this.setState({
-            cartitems: this._state.cartitems.filter(item => +item.id !== +id)
-        }, false);
         
-        // 업데이트된 상태 반영
-        this._props.onUpdateCart();
-
-        if (this._children.length === 0) {
-            this.setState({ cartitems: [] });
-        } else {
-            this._updateOrderStatus(); // 갯수 바뀌었으면 업데이트 필요
-        }
+        this.setState({
+            cartitems: this._children.map(c => c.state),
+        });
     }
 
     updateCartItem(id, cartitem = {}) {
@@ -166,6 +199,7 @@ export default class CartItemList extends View {
         }
 
         item.setState({ ...cartitem });
+        this._updateOrderStatus();
     }
 
     // 주문 처리
@@ -178,7 +212,13 @@ export default class CartItemList extends View {
             return;
         }
 
-        console.log('Ordering...', this.getCheckedIds());
+
+        this._dispatch('order.create', {
+            ids: this.getCheckedIds(),
+            button: this._orderButton,
+            memo: this._memo.state.value,
+            totalAmount: this._computed.total()
+        });
     }
 
     _handleCheck({ value, view }) {
@@ -202,6 +242,16 @@ export default class CartItemList extends View {
     _updateOrderStatus() {
         this._updateCheckedItemIds();
         this._updateOrderButton();
+        this._updateAggregation();
+    }
+
+    _updateAggregation(){
+        const totalPrice = this._computed.total();
+        const formattedTotalPrice = Helper.formatCurrency(totalPrice);
+
+        this.setState({total: totalPrice}, false);
+        this.refs.price.textContent = formattedTotalPrice;
+        this.refs.total.textContent = formattedTotalPrice;
     }
 
     updateOrderStatus() {

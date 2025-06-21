@@ -2,6 +2,7 @@
 
 namespace Framework\Security\Auth;
 
+use App\Domains\User\Entities\User;
 use Framework\Security\Auth\Contracts\GuardInterface;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
 use Framework\Security\Auth\Providers\UserProviderInterface;
@@ -60,7 +61,7 @@ class SessionGuard implements GuardInterface
         $this->user = $user; 
     }
 
-    public function user(): ?AuthenticatableInterface
+    public function user(): ?User
     {
         if ($this->user) {
             return $this->user; 

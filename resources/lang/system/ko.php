@@ -1,6 +1,7 @@
 <?php
 
 use App\Domains\Order\Entities\Customer;
+use App\Domains\Order\Entities\Order;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\Communication\Entities\Claim;
@@ -23,6 +24,15 @@ return [
     'read'   => '조회',
     'update' => '수정',
     'delete' => '삭제',
+
+    'order' => [
+        'status' => [
+            Order::STATUS_RECEIVED   => '주문 접수됨',
+            Order::STATUS_CONFIRMED  => '주문 확인됨',
+            Order::STATUS_PREPARING  => '상품 준비 중',
+            Order::STATUS_SHIPPED    => '출고 완료',
+        ]
+    ],
 
     'countries' => [
         'US' => '미국',

@@ -26,11 +26,28 @@ export default class TemplateForm extends View {
         }
     }
 
+    hasTemplate(){
+        return this._state.template && !Helper.isEmptyObject(this._state.template);
+    }
+
     _template() {
+        if (!this.hasTemplate()) {
+            return `
+                <div class="no-form-empty-fallback">
+                    <p>선택된 제품이 없습니다. 제품을 선택해주세요.</p>
+                </div>
+            `;
+        }
+
+        const {template, quantity} = this._state;
+        const {id, price} = template
+        const formattedPrice = Helper.formatCurrency(price);
+        const totalPrice = Helper.formatCurrency(price * (quantity ?? 1)); 
+
         return `
             <div>
                 <form method="post" data-ref="form"  enctype="multipart/form-data">
-                    <input type="hidden" name="product[template_id]" value="${this._state.template.id}"/>
+                    <input type="hidden" name="product[template_id]" value="${id}"/>
                     <hr class="no-hr --xl">
 
                     <fieldset class="no-form-section">
@@ -49,18 +66,20 @@ export default class TemplateForm extends View {
 
                     <fieldset class="no-form-section">
                         <legend class="no-form-section__title">집계 정보</legend>
-                        <div class="aggregation">
+                        <div class="no-cart-aggregation">
                             <dl>
-                                <dt>
-                                    <span>발주 수량</span>
-                                </dt>
-                                <dd id="${this._aggtHookId}"></dd>
+                                <dt>단가</dt>
+                                <dd><span data-ref="price">${formattedPrice}</span></dd>
+                            </dl>
+                            <dl>
+                                <dt>수량</dt>
+                                <dd><span data-ref="quantity">${quantity ?? 1}</span></dd>
                             </dl>
                             <dl>
                                 <dt>
                                     <span>총 제품 가격</span>
                                 </dt>
-                                <dd><b data-ref="total">$${this._state.template.price}</b></dd>
+                                <dd><b data-ref="total">${totalPrice}</b></dd>
                             </dl>
                         </div>
 
@@ -73,22 +92,20 @@ export default class TemplateForm extends View {
     }
 
     _render(){
+        super._render();
+        
+        if (!this.hasTemplate()) return; 
+
         this._submitBtn = null;
         
-        super._render();
         this._renderTemplate();
         this._renderAttributes();
         this._renderAggregate();
-
-        this._submitBtn = Button.make(this._submitHookId, {
-            className: 'no-btn-primary --sm',
-            label: '장바구니에 추가',
-        }).render();
     }
 
     _renderTemplate(){
         this._inputs = [];
-        const {template} = this._state;
+        const {template, quantity} = this._state;
 
         if (Helper.isEmptyObject(template)) return; 
 
@@ -130,14 +147,29 @@ export default class TemplateForm extends View {
             readOnly: true,
         }).render();
 
-        // const descriptionInput = InputFactory.make('longText').make(this._tempHookId,{
-        //     label: '설명',
-        //     name: 'product[description]',
-        //     value: description,
-        //     readOnly: true,
-        // }).render();
+        const descriptionInput = InputFactory.make('longText').make(this._tempHookId,{
+            label: '설명',
+            name: 'product[description]',
+            rows: '4',
+            value: description,
+            readOnly: true,
+        }).render();
+        
+        const counterInput = InputFactory.make('counter').make(this._tempHookId, {
+            label: '발주 수량',
+            name: 'quantity',
+            value: quantity ?? 1,
+            onChange: this._handlePrice.bind(this)
+        }).render();
 
-        this._inputs.push(nameInput, textInput, modelInput, priceInput);
+        this._inputs.push(
+            nameInput, 
+            textInput, 
+            modelInput, 
+            priceInput, 
+            descriptionInput, 
+            counterInput
+        );
         
     }
 
@@ -163,22 +195,22 @@ export default class TemplateForm extends View {
     }
 
     _renderAggregate(){
-        const input = InputFactory
-            .make('counter')
-            .make(this._aggtHookId, {
-            name: 'quantity',
-            onChange: this._handlePrice.bind(this)
+       
+        this._submitBtn = Button.make(this._submitHookId, {
+            className: 'no-btn-primary --sm',
+            label: '장바구니에 추가',
         }).render();
-
-        this._inputs.push(input);
     }
 
     _handlePrice({value, view}, e){
         const total = this._state.template.price * value;
-        this.refs.total.textContent = `$${total.toFixed(2)}`;
+        this.refs.quantity.textContent = Number.parseInt(value);
+        this.refs.total.textContent = Helper.formatCurrency(total);
     }
 
     _bindEvents(){
+        if (!this.hasTemplate()) return;
+
        this.on(this.refs.form, 'submit', (view, e) => {
             e.preventDefault(); 
 

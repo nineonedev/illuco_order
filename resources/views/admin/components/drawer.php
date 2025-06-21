@@ -36,7 +36,7 @@
 
                 <ul class="no-drawer-gnb">
                     <li class="no-drawer-gnb-item <?//= is_route_active('orders.index') ?>">
-                        <a href="<?= '#'//route('orders.index') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                        <a href="<?= route('admin.orders.index') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
                                 <i class="fa-light fa-receipt"></i>
                             </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\User\Entities\User;
 use Framework\Security\Auth\AuthManager;
 use Framework\Security\Auth\Contracts\GuardInterface;
 use Framework\Security\Auth\Contracts\GateInterface;
@@ -25,7 +26,7 @@ if (!function_exists('guard')) {
 }
 
 if (!function_exists('user')) {
-    function user()
+    function user(): User
     {
         return guard()->user();
     }

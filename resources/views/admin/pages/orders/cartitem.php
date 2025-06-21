@@ -2,7 +2,7 @@
 
 <?php section('title') ?>
 주문
-<?php endSection() ?>
+<?php end_section() ?>
 
 <?php section('content') ?>
 <div class="no-form-outer no-cart">
@@ -16,7 +16,7 @@
                 </div>
                 <!-- Head -->
 
-                <form method="post" enctype="multipart/form-data" action="<?= route('claims.store') ?>">
+                <form method="post" enctype="multipart/form-data" action="">
                     <div class="no-form-group">
                         <h2 class="no-form-group-title no-body-lg">
                             대상선택
@@ -451,7 +451,7 @@
                             <div class="no-cart-item-present-block">
                                 <div class="no-cart-item-present__img">
                                     <figure>
-                                        <img src="<?=asset('img/sub/prod.png')?>" alt="">
+                                        <img src="" alt="">
                                     </figure>
                                 </div>
                                 <div class="no-cart-item-present__counter">
@@ -498,4 +498,4 @@
     </div>
 </div>
 
-<?php endSection() ?>
+<?php end_section() ?>

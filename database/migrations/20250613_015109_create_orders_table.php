@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\Order\Entities\Order;
 use Framework\Database\Contracts\Migration;
 use Framework\Database\Schema\Blueprint;
 use Framework\Support\Facades\Schema;
@@ -17,8 +18,9 @@ return new class implements Migration
             $table->string('orderer_phone')->nullable();
             
             $table->text('memo')->nullable();
-            $table->string('order_status')->default('pending');
-            $table->unsignedInteger('total_amount')->default(0);
+            $table->string('order_status')->default(Order::STATUS_RECEIVED);
+            $table->decimal('total_amount', 10, 2)->default(0);
+            $table->index('order_status');
             $table->timestamps();
         });
     }

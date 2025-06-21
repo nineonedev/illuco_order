@@ -87,17 +87,20 @@ export default class CartItem extends View {
         const optionMap = JSON.parse(product?.option_json ?? '{}');
         const optionText = attributes.map(attr => {
             const value = optionMap[attr.id];
+
             if (Array.isArray(value)) {
                 // 예: 다중 선택형
                 const labels = attr.options
                     .filter(opt => value.includes(opt.value))
                     .map(opt => opt.label)
                     .join(', ');
-                return `${attr.label} - ${labels}`;
+                    
+                return `${attr.label}: ${labels ?? '-'}`;
             } else {
-                return `${attr.label} - ${value}`;
+                return `${attr.label}: ${value ?? '-'}`;
             }
-        }).join(', ');
+        }).join(', ') ?? '-';
+        
 
         this._checkbox = InputFactory
             .make('checkbox')
@@ -118,7 +121,7 @@ export default class CartItem extends View {
             children: `<i class="fa-regular fa-xmark"></i>`,
             type: 'button',
             onClick: this._handleDelete.bind(this)
-        })  
+        }).render();
 
         this._counter = InputFactory
             .make('counter')

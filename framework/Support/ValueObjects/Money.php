@@ -7,10 +7,20 @@ class Money
     protected int $amount;
     protected string $currency;
 
-    public function __construct(int $amount, string $currency = 'KRW')
+    public function __construct(int $amount, string $currency = 'USD')
     {
         $this->amount = $amount;
         $this->currency = strtoupper($currency);
+    }
+
+    public static function fromFloat(float $amount, string $currency = 'USD'): self
+    {
+        return new self((int) round($amount * 100), $currency);
+    }
+
+    public static function make(int $amount, string $currency = 'USD')
+    {
+        return new static($amount, $currency);
     }
 
     public function value(): int
@@ -57,5 +67,10 @@ class Money
         if ($this->currency !== $other->currency) {
             throw new \InvalidArgumentException('Currencies must match.');
         }
+    }
+
+    public function __toString(): string
+    {
+        return $this->format();
     }
 }

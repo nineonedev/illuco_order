@@ -44,6 +44,7 @@ export default class View {
     _boot(){
         if (this._booted) return;
 
+        this._setup();
         this._register();
         this._configureHookAndHost(this._hookId);
         this._hydrateIfNeeded();
@@ -51,6 +52,10 @@ export default class View {
         this._booted = true; 
     }
 
+    _setup(){
+        this._computed = {...this._computed, ...this._defineComputed()};
+    }
+    
     _register(){
         this._logger = Logger.make(this.constructor.name);
     }

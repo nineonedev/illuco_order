@@ -1,9 +1,27 @@
 import TextInput from "./TextInput";
 
 export default class LongTextInput extends TextInput {
+
+    _defineProps(){
+        return {
+            ...super._defineProps(),
+            rows: 6,
+        };
+    }
     
     _template() {
-        const { label, name, value, disabled, readOnly, helperText, invalid, spacing, invalidMessage } = this._state;
+        const { 
+            label, 
+            name, 
+            value, 
+            disabled, 
+            readOnly, 
+            helperText, 
+            invalid, 
+            spacing, 
+            invalidMessage,
+            rows,
+        } = this._state;
         const nodeId = this._generateElementId();
         
         return `
@@ -15,7 +33,7 @@ export default class LongTextInput extends TextInput {
                         id="${nodeId}" 
                         class="no-form-control-input" 
                         placeholder="" 
-                        rows="8"
+                        rows="${rows}"
                         ${disabled ? 'disabled' : ''}
                         ${readOnly ? 'readOnly' : ''}
                         >${value}</textarea>

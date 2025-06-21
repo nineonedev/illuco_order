@@ -30,6 +30,36 @@ export default class CartController extends Controller {
         this._listen('update.cartitem', this._updateCartItem.bind(this));
         this._listen('delete.cartitem', this._deleteCartItem.bind(this));
         this._listen('delete.cartitems', this._deleteManyCartItems.bind(this));
+
+        this._listen('order.create', this._createOrder.bind(this));
+    }
+
+    async _createOrder({ids, totalAmount, memo, button}){
+        this._logger.info(ids, button);
+
+        const customer = this.cart.getCustomer();
+
+        const orderData = new URLSearchParams({
+            ids: ids, 
+            customer_id: customer?.id, 
+            total_amount: totalAmount,
+            memo: memo,
+        })
+
+        try {
+            button.setState({disabled: true}); 
+            this.loader.show();
+            const result = await Ajax.make(false).post('/admin/orders', orderData);
+            this._logger.success(result);
+            this.cart.setCartItems([]);
+
+        } catch (err) {
+            this._logger.error(err);
+            alert('주문 처리 중 문제가 발생하였습니다.');
+        } finally {
+            this.loader.hide();
+            button.setState({disabled: false}); 
+        }
     }
 
     async _deleteManyCartItems({ ids, views, button }) {
@@ -46,7 +76,8 @@ export default class CartController extends Controller {
             }
 
         } catch (err) {
-            alert('삭제 중 문제가 발생하였습니다.');
+            this._logger.error(err);
+            alert('삭제 처리 중 문제가 발생하였습니다.');
         } finally {
             this.loader.hide();
             button.setState({disabled: false}); 
@@ -66,7 +97,9 @@ export default class CartController extends Controller {
             this.cart.removeCartItem(id);
             
         } catch (err){
-            alert('삭제 중 문제가 발생하였습니다.');
+            this._logger.error(err);
+
+            alert('삭제 처리 중 문제가 발생하였습니다.');
         } finally {
             this.loader.hide();
             button.setState({disabled: false}); 
@@ -103,7 +136,9 @@ export default class CartController extends Controller {
         }
 
         data.append('customer_id', customer.id);
-            
+         
+        this._logger.info(data, button);
+        
         try {
             button.setState({disabled: true});
             this.loader.show();
@@ -113,7 +148,8 @@ export default class CartController extends Controller {
             this.cart.addCartItem(result.data.cartitem);
 
         } catch (err){
-            alert('장바구니 추가에 실패하였습니다.'); // 추가되었는데 에러 왜 뜨는지 확인 필요!!
+            console.error('장바구니 추가 중 오류 발생:', err);
+            alert('장바구니 추가에 실패하였습니다. 다시 시도해주세요.'); 
         } finally {
             this.loader.hide();
             button.setState({disabled: false});

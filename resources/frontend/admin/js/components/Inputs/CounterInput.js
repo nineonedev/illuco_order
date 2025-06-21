@@ -3,6 +3,7 @@ import View from "../../core/View";
 export default class CounterInput extends View {
     _defineProps() {
         return {
+            label: '',
             name: "counter",
             value: 1,
             min: 1,
@@ -19,30 +20,33 @@ export default class CounterInput extends View {
     }
 
     _template() {
-        const { name, value, min, disabled, readOnly } = this._state;
+        const { name, value, min, disabled, readOnly, label } = this._state;
         const inputId = this._generateElementId();
 
         return `
-            <div class="no-cart-item-present__counter">
-                <button type="button" class="--decrease" data-ref="decrease" ${disabled ? 'disabled' : ''}>
-                    <i class="fa-regular fa-minus"></i>
-                </button>
-                <div class="--input">
-                    <input 
-                        type="number" 
-                        id="${inputId}"
-                        name="${name}" 
-                        value="${value}" 
-                        min="${min}" 
-                        ${disabled ? "disabled" : ""} 
-                        ${readOnly ? "readonly" : ""}
-                        data-ref="input"
-                    />
+            <fieldset class="no-form-group">
+                ${label ? `<legend class="no-form-base-label">${label}</legend>` : ``}
+                <div class="no-cart-item-present__counter">
+                    <button type="button" class="--decrease" data-ref="decrease" ${disabled ? 'disabled' : ''}>
+                        <i class="fa-regular fa-minus"></i>
+                    </button>
+                    <div class="--input">
+                        <input 
+                            type="number" 
+                            id="${inputId}"
+                            name="${name}" 
+                            value="${value}" 
+                            min="${min}" 
+                            ${disabled ? "disabled" : ""} 
+                            ${readOnly ? "readonly" : ""}
+                            data-ref="input"
+                        />
+                    </div>
+                    <button type="button" class="--increase" data-ref="increase" ${disabled ? 'disabled' : ''}>
+                        <i class="fa-regular fa-plus"></i>
+                    </button>
                 </div>
-                <button type="button" class="--increase" data-ref="increase" ${disabled ? 'disabled' : ''}>
-                    <i class="fa-regular fa-plus"></i>
-                </button>
-            </div>
+            </fieldset>
         `;
     }
 
