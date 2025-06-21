@@ -365,14 +365,7 @@ export default class View {
         return this;
     }
 
-    destroy() {
-        this._children.forEach((child) => {
-            if (typeof child.destroy === "function") {
-                child.destroy();
-            }
-        });
-        this._children = [];
-
+    remove(){
         if (this._el && this._el.parentNode) {
             this._el.remove();
         }
@@ -380,7 +373,17 @@ export default class View {
         if (this._hostEl && this._hostCreated && this._hostEl.parentNode) {
             this._hostEl.remove();
         }
+    }
 
+    destroy() {
+        this._children.forEach((child) => {
+            if (typeof child.destroy === "function") {
+                child.destroy();
+            }
+        });
+        this._children = [];
+        
+        this.remove();
         this._refs = {};
         this._props = {};
         this._state = {};

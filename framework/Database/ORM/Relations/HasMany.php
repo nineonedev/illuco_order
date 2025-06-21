@@ -33,7 +33,10 @@ class HasMany extends Relation
     public function getEagerResults(array $entities): array
     {
         if (!$this->query) return [];
-        return $this->query->get();
+
+        $results = $this->query->get();
+
+        return $results;
     }
 
     /**
@@ -45,14 +48,26 @@ class HasMany extends Relation
         $grouped = [];
         foreach ($results as $item) {
             $fk = $item->get($this->foreignKey);
+            
             $grouped[$fk][] = $item;
         }
 
         foreach ($entities as $entity) {
             $key = $entity->get($this->localKey);
-            $entity->setRelation($relationName, $grouped[$key] ?? []);
+
+            $existing = $entity->getRelation($relationName);
+            $current = $grouped[$key] ?? [];
+
+            if (is_array($existing)) {
+                // 기존 값과 병합
+                $entity->setRelation($relationName, array_merge($existing, $current));
+            } else {
+                // 기존 값 없으면 그대로 설정
+                $entity->setRelation($relationName, $current);
+            }
         }
     }
+
 
     /**
      * Lazy load: 단일 엔티티의 hasMany 관계를 바로 로드

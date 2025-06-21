@@ -10,6 +10,7 @@ import RadioInput from './RadioInput';
 import CheckboxGroupInput from './CheckboxGroupInput';
 import CounterInput from './CounterInput';
 import CountrySelectInput from './CountrySelectInput';
+import CheckboxInput from './CheckboxInput';
 
 export default class InputFactory {
     static map = {
@@ -30,6 +31,10 @@ export default class InputFactory {
             instance: RadioInput,
         },
         checkbox: {
+            label: '체크박스',
+            instance: CheckboxInput
+        },
+        'checkbox-group': {
             label: '체크박스',
             instance: CheckboxGroupInput,
         },

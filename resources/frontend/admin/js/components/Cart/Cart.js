@@ -59,8 +59,30 @@ export default class Cart extends View {
 
 
         this._cartItemList = CartItemList.make(this._cartItemsHook, {
-            cartitems: this._state.customer.cart?.cartitems,
+            cartitems: this._state.customer.cart?.cartitems || [],
+            onUpdateCart: this._updateCartCount.bind(this),
         }).render();
+    }
+
+    _updateCartCount(){
+        this.refs.count.textContent = this._cartItemList.cartItems().length;
+    }
+
+    updateOrderStatus(){
+        this._cartItemList.updateOrderStatus();
+    }
+
+    addCartItem(cartitem){
+        this._cartItemList.addCartItem(cartitem);
+        this._updateCartCount();
+    }
+
+    removeCartItem(id){
+        this._cartItemList.removeCartItem(id);
+    }
+
+    updateCartItem(id, cartitem = {}){
+        this._cartItemList.updateCartItem(id, cartitem);
     }
 
     _handleClick(buttonView, evt){
@@ -70,7 +92,7 @@ export default class Cart extends View {
     _renderCustomerZone(){
         const {customer} = this._state;
         
-        if (Helper.isEmptyObject(customer)) {
+        if (Helper.isEmptyObject(customer) && !customer.name) {
             return `
                 <p class="no-form-empty-fallback">선택된 고객이 없습니다.</p>
             `;

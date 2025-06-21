@@ -174,9 +174,16 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [CartController::class, 'index'])->name('index');
                     Route::post('/', [CartController::class, 'store'])->name('store');
-                    Route::put('/', [CartController::class, 'update'])->name('update');
-                    Route::delete('/', [CartController::class, 'destroy'])->name('destroy');
                 });
+
+            Route::prefix('cartitems')
+            ->name('cartitems')
+            ->group(function(){
+                Route::put('{id}', [CartItemController::class, 'update'])->name('update');
+                
+                Route::delete('/', [CartItemController::class, 'destroyMany'])->name('destroyMany');
+                Route::delete('{id}', [CartItemController::class, 'destroy'])->name('destroy');
+            });
 
             // orders
             Route::prefix('orders')

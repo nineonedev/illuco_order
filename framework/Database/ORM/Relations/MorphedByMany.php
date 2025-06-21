@@ -57,14 +57,22 @@ class MorphedByMany extends Relation implements Pivotable
         // pivot의 morph_id 기준으로 그룹핑 (각 부모별 여러개)
         $grouped = [];
         foreach ($results as $item) {
-            // 주의: join 시 pivot 데이터를 별도 배열에 할당하는 ORM 설계라면 아래처럼 접근
             $morphId = $item->{$this->pivotTable}[$this->morphId] ?? null;
-            if ($morphId !== null) $grouped[$morphId][] = $item;
+            if ($morphId !== null) {
+                $grouped[$morphId][] = $item;
+            }
         }
 
         foreach ($entities as $entity) {
             $key = $entity->get($entity->getPrimaryKeyName());
-            $entity->setRelation($relationName, $grouped[$key] ?? []);
+            $existing = $entity->getRelation($relationName);
+            $current = $grouped[$key] ?? [];
+
+            if (is_array($existing)) {
+                $entity->setRelation($relationName, array_merge($existing, $current));
+            } else {
+                $entity->setRelation($relationName, $current);
+            }
         }
     }
 

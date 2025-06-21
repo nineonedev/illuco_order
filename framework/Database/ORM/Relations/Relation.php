@@ -71,4 +71,10 @@ abstract class Relation
      * @return mixed
      */
     abstract public function getResults();
+
+    protected function makeEntity(array $attributes): Entity
+    {
+        $class = $this->relatedEntityClass;
+        return new $class($attributes);
+    }
 }

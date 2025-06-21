@@ -2,6 +2,7 @@
 
 use Framework\Support\Date;
 use Framework\Support\DateTimeEx;
+use Framework\Support\Logger;
 use Framework\Support\Str;
 
 if (!function_exists('now')) {
@@ -15,6 +16,13 @@ if (!function_exists('class_basename')) {
     function class_basename(string $class_string): string
     {
         return Str::classBasename($class_string);
+    }
+}
+
+if (!function_exists('logger')) {
+    function logger(): Logger
+    {
+        return app(Logger::class);
     }
 }
 

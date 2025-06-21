@@ -1,4 +1,5 @@
 import View from "../../core/View";
+import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
 import InputFactory from "../Inputs/InputFactroy";
 
@@ -8,6 +9,7 @@ export default class TemplateForm extends View {
         this._tempHookId = this._generateHookId();
         this._attrHookId = this._generateHookId();
         this._aggtHookId = this._generateHookId();
+        this._submitHookId = this._generateHookId();
         super._boot();
 
     }
@@ -64,21 +66,24 @@ export default class TemplateForm extends View {
 
                     </fieldset>
                     
-                    <div class="no-form-action">
-                        <button type="submit" class="no-btn-primary --sm">
-                            <span>장바구니에 추가</span>
-                        </button>
-                    </div>
+                    <div class="no-form-action" id="${this._submitHookId}"></div>
                 </form>
             </div>
         `;
     }
 
     _render(){
+        this._submitBtn = null;
+        
         super._render();
         this._renderTemplate();
         this._renderAttributes();
         this._renderAggregate();
+
+        this._submitBtn = Button.make(this._submitHookId, {
+            className: 'no-btn-primary --sm',
+            label: '장바구니에 추가',
+        }).render();
     }
 
     _renderTemplate(){
@@ -158,9 +163,10 @@ export default class TemplateForm extends View {
     }
 
     _renderAggregate(){
-        const input = InputFactory.make('counter', {
+        const input = InputFactory
+            .make('counter')
+            .make(this._aggtHookId, {
             name: 'quantity',
-        }).make(this._aggtHookId, {
             onChange: this._handlePrice.bind(this)
         }).render();
 
@@ -180,7 +186,8 @@ export default class TemplateForm extends View {
 
             this._dispatch('add.cart', {
                 data: fd, 
-                view: this, submitter: e.submitter
+                view: this, 
+                button: this._submitBtn
             });
         });
     }

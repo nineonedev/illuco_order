@@ -15,27 +15,29 @@ class CustomerController extends Controller
         return CustomerRepository::make();
     }
 
-    public function index(Request $request)
+        public function index(Request $request)
     {
         $query = $this->repo()->with([
             'cart.cartitems.product.values',
-            'cart.cartitems.product.template.attributes.options',
-            // 'cart.cartitems.product.template.fileattachment',
+            'cart.cartitems.product.template' => [
+                'attributes.options',
+                'fileattachment'
+            ],
         ])->query();
 
         $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
             $q->where('name', 'like', "%{$keyword}%")
-              ->orWhere('email', 'like', "%{$keyword}%");
+            ->orWhere('email', 'like', "%{$keyword}%");
         });
-    
-        $customers = $query->paginate($request->query('perpage', 15), $request->query('page', 1));
 
+        $customers = $query->paginate($request->query('perpage', 15), $request->query('page', 1));
 
         return $this->render('admin.pages.customers.index', [
             'customers' => $request->expectsJson() ? $customers->toArray() : $customers,
             'query'     => $request->query(),
         ]);
     }
+
 
     public function show(string $id)
     {

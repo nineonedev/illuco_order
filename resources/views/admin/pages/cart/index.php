@@ -1,3 +1,6 @@
+<?php 
+
+?>
 <?php extend('layouts.admin'); ?>
 <?php section('controller', 'cart') ?>
 <?php section('action', 'index') ?>

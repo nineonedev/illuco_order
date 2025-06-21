@@ -50,7 +50,12 @@ class BelongsToMany extends Relation implements Pivotable
 
     public function getEagerResults(array $entities): array
     {
-        return $this->query->get();
+        $rawResults = $this->query->get();
+
+        return array_map(function ($row) {
+            if ($row instanceof Entity) return $row;
+            return $this->makeEntity((array)$row); 
+        }, $rawResults);
     }
 
     public function match(array $entities, array $results, string $relationName): void
@@ -68,7 +73,14 @@ class BelongsToMany extends Relation implements Pivotable
 
         foreach ($entities as $entity) {
             $key = $entity->get($entity->getPrimaryKeyName());
-            $entity->setRelation($relationName, $grouped[$key] ?? []);
+            $existing = $entity->getRelation($relationName);
+            $current = $grouped[$key] ?? [];
+
+            if (is_array($existing)) {
+                $entity->setRelation($relationName, array_merge($existing, $current));
+            } else {
+                $entity->setRelation($relationName, $current);
+            }
         }
     }
 

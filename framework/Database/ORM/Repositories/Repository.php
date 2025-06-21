@@ -24,6 +24,8 @@ abstract class Repository
     /** @var string[] */
     protected array $with = [];
 
+    protected array $withTree = []; 
+
     public function __construct()
     {
         $this->builder = query($this);

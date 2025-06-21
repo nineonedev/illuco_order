@@ -1,4 +1,4 @@
-import View from '../../core/View';
+import View from "../core/View";
 
 export default class Modal extends View {
     _defineProps() {

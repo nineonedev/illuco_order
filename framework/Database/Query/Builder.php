@@ -52,7 +52,17 @@ class Builder
         return $record;
     }
 
-    public function bulkDestroy(array $ids, string $primaryKey = 'id'): int
+    public function findMany(array $ids, string $primaryKey = 'id'): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $this->whereIn($primaryKey, $ids);
+        return $this->get(); // 기존 `get()` 메서드로 결과 조회
+    }
+
+    public function bulkDelete(array $ids, string $primaryKey = 'id'): int
     {
         if (empty($ids)) {
             return 0;

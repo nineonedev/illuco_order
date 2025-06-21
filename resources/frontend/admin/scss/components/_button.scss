@@ -76,6 +76,12 @@ $color-types: (
             --button-padding-x: 0.8rem;
             --button-font-size: 1.2rem;
         }
+        &.--xxs {
+            --button-min-widht: 0;
+            --button-padding-x: 0.8rem;
+            --button-padding-y: 0.4rem;
+            --button-font-size: 1.1rem;
+        }
 
     }
     .no-btn-#{"#{$type}"}-outline {
@@ -97,6 +103,12 @@ $color-types: (
             --button-min-widht: 0;
             --button-padding-x: 0.8rem;
             --button-font-size: 1.2rem;
+        }
+        &.--xxs {
+            --button-min-widht: 0;
+            --button-padding-x: 0.8rem;
+            --button-padding-y: 0.4rem;
+            --button-font-size: 1.1rem;
         }
 
     }
@@ -199,6 +211,18 @@ $color-types: (
     &:active {
         background: var(--clr-action-active-background);
         color: var(--clr-primary-main);
+    }
+
+    &.--sm {
+        --button-size: 2.4rem;
+    }
+
+    &.--md {
+        --button-size: 3.2rem;
+    }
+
+    &.--lg {
+        --button-size: 4rem;
     }
 
     &:disabled,

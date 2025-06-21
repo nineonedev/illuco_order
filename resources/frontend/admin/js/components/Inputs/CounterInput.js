@@ -24,7 +24,7 @@ export default class CounterInput extends View {
 
         return `
             <div class="no-cart-item-present__counter">
-                <button type="button" class="--decrease" data-ref="decrease">
+                <button type="button" class="--decrease" data-ref="decrease" ${disabled ? 'disabled' : ''}>
                     <i class="fa-regular fa-minus"></i>
                 </button>
                 <div class="--input">
@@ -39,7 +39,7 @@ export default class CounterInput extends View {
                         data-ref="input"
                     />
                 </div>
-                <button type="button" class="--increase" data-ref="increase">
+                <button type="button" class="--increase" data-ref="increase" ${disabled ? 'disabled' : ''}>
                     <i class="fa-regular fa-plus"></i>
                 </button>
             </div>
@@ -75,7 +75,7 @@ export default class CounterInput extends View {
     _updateValue(val) {
         this._state.value = val;
         this.refs.input.value = val;
-
+        
         if (typeof this._props.onChange === "function") {
             this._props.onChange({ value: val, view: this });
         }

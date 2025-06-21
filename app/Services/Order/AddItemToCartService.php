@@ -61,19 +61,27 @@ class AddItemToCartService extends Service
         $cartItem = CartItemRepository::make()->save($cartItem);
 
         if (!$cartItem) {
+            logger()->error("장바구니 추가 실패", [
+                'cart_item' => $cartItem,
+                'product_id' => $product->id,
+                'cart_id' => $cart->id,
+                'quantity' => $quantity
+            ]);
             throw new RuntimeException("장바구니 추가에 실패하였습니다.");
         }
 
-        $customer = CustomerRepository::make()
-            ->with(['cart.cartitems.product.values'])
-            ->query()
-            ->find($customer_id);
+        $cartItem->load([
+            'product.values',
+            'product.template' => [
+                'attributes.options',
+                'fileattachment',
+            ],
+        ]);
 
         return [
-            'success' => true,
             'message' => '장바구니에 추가되었습니다.',
             'data' => [
-                'customer' => $customer->toArray(),
+                'cartitem' => $cartItem->toArray(),
             ]
         ];
     }

@@ -50,9 +50,17 @@ class BelongsTo extends Relation
 
         foreach ($entities as $entity) {
             $fk = $entity->get($this->foreignKey);
-            $entity->setRelation($relationName, $grouped[$fk] ?? null);
+
+            // 기존 값이 있더라도 항상 덮어쓰되, null은 무시 가능
+            if (isset($grouped[$fk])) {
+                $entity->setRelation($relationName, $grouped[$fk]);
+            } else {
+                // 필요하면 null 할당도 가능
+                $entity->setRelation($relationName, null);
+            }
         }
     }
+
 
     /**
      * Lazy load: 단일 엔티티에서 바로 부모 로드

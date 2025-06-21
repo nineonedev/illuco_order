@@ -1,5 +1,18 @@
 export default class Helper {
     /**
+     * 숫자를 통화 형식으로 변환
+     * 예: 13.22 -> "$13.22"
+     */
+    static formatCurrency(value, currency = 'USD', locale = 'en-US') {
+        const number = Number(value);
+        if (isNaN(number)) return '$0.00'; // fallback
+        return number.toLocaleString(locale, {
+            style: 'currency',
+            currency,
+        });
+    }
+    
+    /**
      * 객체가 비어 있는지 확인
      */
     static isEmptyObject(obj) {

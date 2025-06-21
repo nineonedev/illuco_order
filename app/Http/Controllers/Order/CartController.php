@@ -22,14 +22,4 @@ class CartController extends Controller
         $result = (new AddItemToCartService())->runInTransaction($request->all());
         return $result->toResponse(); 
     }
-
-    public function update()
-    {
-
-    }
-
-    public function destroy()
-    {
-
-    }
 }

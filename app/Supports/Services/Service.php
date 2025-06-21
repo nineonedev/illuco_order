@@ -41,7 +41,10 @@ abstract class Service
                 return $this->handle($payload);
             });
 
-            return Result::success($result);
+            $data = $result['data'] ?? $result;
+            $message = $result['message'] ?? null; 
+
+            return Result::success($data, $message);
 
         } catch (\Throwable $e) {
 

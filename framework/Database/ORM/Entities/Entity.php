@@ -4,6 +4,7 @@ namespace Framework\Database\ORM\Entities;
 
 use Framework\Database\ORM\Casts\CastFactory;
 use Framework\Database\ORM\Rel;
+use Framework\Database\ORM\Relations\Pivot;
 use Framework\Database\ORM\Relations\Relation;
 use Framework\Database\ORM\Repositories\Repository;
 use Framework\Database\ORM\Traits\SoftDeletes;
@@ -46,6 +47,32 @@ abstract class Entity
         }
     }
 
+    public function load(array $relations): self
+    {
+        if (!static::repositoryClass()) {
+            throw new \RuntimeException('No repository defined for ' . static::class);
+        }
+
+        /** @var Repository $repo */
+        $repo = static::resolveRepository();
+        $primaryKey = $this->getPrimaryKey();
+
+        // 기본적으로 1건 조회에 with(...) 붙여서 로드
+        $reloaded = $repo->with($relations)->query()->find($primaryKey);
+
+        if (!$reloaded) {
+            throw new \RuntimeException('Entity not found with ID: ' . $primaryKey);
+        }
+
+        // 관계만 덮어쓰기
+        foreach ($reloaded->getRelations() as $key => $value) {
+            $this->setRelation($key, $value);
+        }
+
+        return $this;
+    }
+
+
     public static function make(array $attributes = [])
     {
         return new static($attributes);
@@ -79,14 +106,32 @@ abstract class Entity
         return $this->meta[$key] ?? $default;
     }
 
-    public function setRelation(string $name, $value): void
+    public function setRelation(string $relation, $value): self
     {
-        $this->relations[$name] = $value;
+        if (isset($this->relations[$relation]) && is_object($this->relations[$relation])) {
+            // 병합할 수 있다면 merge
+            $existing = $this->relations[$relation];
+            if ($existing instanceof Entity && $value instanceof Entity) {
+                foreach ($value->getRelations() as $subRelation => $subValue) {
+                    $existing->setRelation($subRelation, $subValue);
+                }
+                return $this;
+            }
+        }
+
+        $this->relations[$relation] = $value;
+        return $this;
     }
+
 
     public function getRelation(string $name)
     {
         return $this->relations[$name] ?? null;
+    }
+
+    public function getRelations()
+    {
+        return $this->relations ?? [];
     }
 
     public function hasRelation(string $name): bool
@@ -182,7 +227,7 @@ abstract class Entity
 
     public function __isset(string $key): bool
     {
-        return isset($this->attributes[$key]);
+        return isset($this->attributes[$key]) || $this->hasRelation($key) || isset($this->meta[$key]);
     }
 
     public function __unset(string $key): void
@@ -248,34 +293,56 @@ abstract class Entity
     {
         $arr = [];
 
+        // 1. 기본 속성 캐스팅 포함
         foreach ($this->attributes as $key => $value) {
             $arr[$key] = $this->castAttribute($key, $value);
         }
 
+        // 2. 관계 데이터 포함
         foreach ($this->relations as $relation => $data) {
             if (is_array($data)) {
+                $seen = [];
                 $arr[$relation] = [];
 
                 foreach ($data as $item) {
-                    $arr[$relation][] = $item instanceof self ? $item->toArray() : $item;
+                    $key = $item instanceof Entity
+                        ? get_class($item) . ':' . ($item->getPrimaryKey() ?? spl_object_hash($item))
+                        : serialize($item);
+
+                    if (in_array($key, $seen, true)) {
+                        continue;
+                    }
+
+                    $seen[] = $key;
+                    $arr[$relation][] = $item instanceof Entity
+                        ? $item->toArray()
+                        : $item;
                 }
-
-            } elseif ($data instanceof \Traversable) {
-                $arr[$relation] = [];
-
-                foreach ($data as $item) {
-                    $arr[$relation][] = $item instanceof self ? $item->toArray() : $item;
-                }
-
-            } elseif ($data instanceof self) {
+            } elseif ($data instanceof Entity) {
                 $arr[$relation] = $data->toArray();
             } else {
                 $arr[$relation] = $data;
             }
         }
 
-        return array_merge($arr, $this->meta);
+
+        // 3. pivot 메타 병합 (Pivot 객체일 경우만)
+        $pivot = $this->pivot();
+        if ($pivot instanceof Pivot) {
+            $arr['pivot'] = $pivot->toArray();
+        }
+
+        // 4. 기타 메타 정보 병합 (rowNumber 등)
+        $meta = $this->meta;
+
+        // rowNumber 별도 명시
+        if ($this->rowNumber() !== null) {
+            $meta[Paginator::ROW_NUMBER_KEY] = $this->rowNumber();
+        }
+
+        return array_merge($arr, $meta);
     }
+
 
     public function __call(string $method, array $args)
     {

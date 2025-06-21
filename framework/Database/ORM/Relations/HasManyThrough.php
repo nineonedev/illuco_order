@@ -54,16 +54,24 @@ class HasManyThrough extends Relation
 
     public function match(array $entities, array $results, string $relationName): void
     {
-        // results를 중간테이블의 firstKey로 그룹핑 (부모별 여러개)
         $grouped = [];
         foreach ($results as $item) {
             $fk = $item->{$this->firstKey} ?? null;
-            if ($fk !== null) $grouped[$fk][] = $item;
+            if ($fk !== null) {
+                $grouped[$fk][] = $item;
+            }
         }
 
         foreach ($entities as $entity) {
             $key = $entity->get($this->localKey);
-            $entity->setRelation($relationName, $grouped[$key] ?? []);
+            $existing = $entity->getRelation($relationName);
+            $current = $grouped[$key] ?? [];
+
+            if (is_array($existing)) {
+                $entity->setRelation($relationName, array_merge($existing, $current));
+            } else {
+                $entity->setRelation($relationName, $current);
+            }
         }
     }
 

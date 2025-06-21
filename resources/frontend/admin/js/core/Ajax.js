@@ -5,7 +5,7 @@ export default class Ajax {
     }
 
     static make(silent = false, headers = {}) {
-        return new this(silent, headers); 
+        return new this(silent, headers);
     }
 
     csrfToken() {
@@ -13,20 +13,22 @@ export default class Ajax {
     }
 
     async request(method, url, data = {}, options = {}) {
-        const isFormData = data instanceof FormData;
         const originalMethod = method.toUpperCase();
         const override = ['PUT', 'PATCH', 'DELETE'].includes(originalMethod);
-
         const actualMethod = override ? 'POST' : originalMethod;
+
+        const isFormData = data instanceof FormData;
+        const isUrlEncoded = data instanceof URLSearchParams;
+        const isJson = !isFormData && !isUrlEncoded;
 
         // _method 처리
         if (override) {
             if (isFormData) {
-                if(data.has('_method')) {
-                    data.set('_method', originalMethod);
-                } else {
-                    data.append('_method', originalMethod);
-                }
+                data.has('_method')
+                    ? data.set('_method', originalMethod)
+                    : data.append('_method', originalMethod);
+            } else if (isUrlEncoded) {
+                data.set('_method', originalMethod);
             } else {
                 data = { ...data, _method: originalMethod };
             }
@@ -40,18 +42,19 @@ export default class Ajax {
             ...options.headers,
         };
 
-
         const config = {
             method: actualMethod,
             headers,
             ...options,
         };
 
-        
         if (actualMethod !== 'GET') {
-            config.body = isFormData ? data : JSON.stringify(data);
-            if (!isFormData) {
+            config.body = isFormData || isUrlEncoded ? data : JSON.stringify(data);
+
+            if (isJson) {
                 config.headers['Content-Type'] = 'application/json';
+            } else if (isUrlEncoded) {
+                config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
             }
         }
 
@@ -67,7 +70,6 @@ export default class Ajax {
             if (resData.redirect) location.href = resData.redirect;
 
             return resData;
-
         } catch (e) {
             if (!this._silent) alert(e.message);
             console.warn(`[Ajax ERROR] ${originalMethod} ${url}`, e);

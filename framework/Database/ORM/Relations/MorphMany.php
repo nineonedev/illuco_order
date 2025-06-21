@@ -48,9 +48,17 @@ class MorphMany extends Relation
             $id = $item->get($this->morphId);
             $grouped[$id][] = $item;
         }
+
         foreach ($entities as $entity) {
             $key = $entity->get($this->localKey);
-            $entity->setRelation($relationName, $grouped[$key] ?? []);
+            $existing = $entity->getRelation($relationName);
+            $current = $grouped[$key] ?? [];
+
+            if (is_array($existing)) {
+                $entity->setRelation($relationName, array_merge($existing, $current));
+            } else {
+                $entity->setRelation($relationName, $current);
+            }
         }
     }
 

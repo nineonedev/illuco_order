@@ -13,6 +13,7 @@ export default class TextInput extends View {
             required: false,
             invalid: false,
             invalidMessage: '',
+            helperText: '',
             spacing: true,
             onChange: (e) => {},
         };
