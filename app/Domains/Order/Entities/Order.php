@@ -41,6 +41,7 @@ class Order extends Entity
         'memo',
         'order_status',
         'total_amount',
+        'created_at',
     ];
 
     protected array $casts = [

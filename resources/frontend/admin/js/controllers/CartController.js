@@ -51,7 +51,7 @@ export default class CartController extends Controller {
             this.loader.show();
             const result = await Ajax.make(false).post('/admin/orders', orderData);
             this._logger.success(result);
-            this.cart.setCartItems([]);
+            this.cart.setState({customer: null});
 
         } catch (err) {
             this._logger.error(err);
