@@ -2,7 +2,7 @@
 
 namespace Framework\Support;
 
-class Collection implements \IteratorAggregate, \Countable, \ArrayAccess {
+class Collection implements \IteratorAggregate, \Countable {
     protected array $items = []; 
 
     public function __construct(array $items = [])
@@ -15,33 +15,33 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess {
         return new static($items); 
     }
 
-    public function offsetExists($offset): bool
-    {
-        return isset($this->items[$offset]);
-    }
+    // public function offsetExists($offset): bool
+    // {
+    //     return isset($this->items[$offset]);
+    // }
 
-    /**
-     * @param mixed $offset
-     * @return mixed
-     */
-    public function offsetGet($offset)
-    {
-        return $this->items[$offset] ?? null;
-    }
+    // /**
+    //  * @param mixed $offset
+    //  * @return mixed
+    //  */
+    // public function offsetGet($offset)
+    // {
+    //     return $this->items[$offset] ?? null;
+    // }
 
-    public function offsetSet($offset, $value): void
-    {
-        if (is_null($offset)) {
-            $this->items[] = $value;
-        } else {
-            $this->items[$offset] = $value;
-        }
-    }
+    // public function offsetSet($offset, $value): void
+    // {
+    //     if (is_null($offset)) {
+    //         $this->items[] = $value;
+    //     } else {
+    //         $this->items[$offset] = $value;
+    //     }
+    // }
 
-    public function offsetUnset($offset): void
-    {
-        unset($this->items[$offset]);
-    }
+    // public function offsetUnset($offset): void
+    // {
+    //     unset($this->items[$offset]);
+    // }
     
     public function pluck($key): self
     {
