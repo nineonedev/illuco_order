@@ -131,6 +131,16 @@ abstract class Repository
         return $entity;
     }
 
+    public function forceDelete(Entity $entity): bool
+    {
+        return $this->performHardDelete($entity);
+    }
+
+    public function softDelete(Entity $entity): bool
+    {
+        return $this->performSoftDelete($entity);
+    }
+
     public function delete(Entity $entity): bool
     {
         return $this->isSoftDeletable($entity)
@@ -270,7 +280,7 @@ abstract class Repository
     {
         $entity = $this->find($id);
         if (!$entity) {
-            throw new RuntimeException('Entity not found.');
+            throw new RuntimeException('정보를 찾을 수 없습니다.');
         }
         return $entity;
     }
@@ -293,7 +303,7 @@ abstract class Repository
     {
         $entity = $this->findWhere($conditions);
         if (!$entity) {
-            throw new RuntimeException('Entity not found for given condition.');
+            throw new RuntimeException('정보를 찾을 수 없습니다.');
         }
         return $entity;
     }

@@ -5,6 +5,7 @@ namespace Framework\Database\ORM\Relations;
 use Exception;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\RelationMap;
+use Framework\Database\Query\Builder;
 
 /**
  * 다형성 1:1 관계 (ex: User, Post → Image)
@@ -35,6 +36,23 @@ class MorphOne extends Relation
         $this->localKey = $localKey;
         $this->typeValue = $typeValue ?? get_class($parent)::alias();
     }
+
+    public function getRelatedQuery(): Builder
+    {
+        return $this->query;
+    }
+
+    public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void
+    {
+        $relatedQuery
+            ->whereColumn(
+                $this->morphId,
+                '=',
+                $parentQuery->getTable() . '.' . $this->localKey
+            )
+            ->where($this->morphType, $this->typeValue);
+    }
+
 
     public function addEagerConstraints(array $entities): void
     {

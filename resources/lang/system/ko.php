@@ -27,6 +27,7 @@ return [
 
     'order' => [
         'status' => [
+            Order::STATUS_CANCELED   => '주문 취소',
             Order::STATUS_RECEIVED   => '주문 접수됨',
             Order::STATUS_CONFIRMED  => '주문 확인됨',
             Order::STATUS_PREPARING  => '상품 준비 중',

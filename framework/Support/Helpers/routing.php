@@ -125,3 +125,41 @@ if (!function_exists('route_param')) {
         return $route->parameter($key, $default);
     }
 }
+
+
+if (!function_exists('route_name')) {
+    /**
+     * 현재 라우트 이름 반환
+     *
+     * @return string|null
+     */
+    function route_name(): ?string
+    {
+        $route = request()->route();
+        return $route ? $route->getName() : null;
+    }
+}
+
+if (!function_exists('route_is')) {
+    /**
+     * 현재 라우트 이름이 특정 prefix로 시작하는지 검사
+     *
+     * @param string $prefix
+     * @return bool
+     */
+    function route_is(string $prefix): bool
+    {
+        $name = route_name();
+        return $name !== null && strpos($name, $prefix) === 0;
+    }
+}
+
+
+if (!function_exists('route_with_query')) {
+    function route_with_query(string $name, array $params = []): string
+    {
+        $base = route($name, $params);
+        $query = http_build_query($_GET);
+        return $query ? "{$base}?{$query}" : $base;
+    }
+}

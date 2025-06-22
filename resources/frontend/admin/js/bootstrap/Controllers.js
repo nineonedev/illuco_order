@@ -4,6 +4,7 @@ import CustomerController from "../controllers/CustomerController";
 import DealerController from "../controllers/DealerController";
 import EmployeeController from "../controllers/EmployeeController";
 import NoticeController from "../controllers/NoticeController";
+import OrderController from "../controllers/OrderController";
 import ProductTemplateController from "../controllers/ProductTemplateController";
 import RoleController from "../controllers/RoleController";
 
@@ -15,5 +16,6 @@ export default {
     admin: AdminController,
     product_template: ProductTemplateController,
     role: RoleController,
-    cart: CartController
+    cart: CartController,
+    order: OrderController
 };

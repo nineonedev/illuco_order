@@ -3,6 +3,7 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\Query\Builder;
 
 class BelongsTo extends Relation
 {
@@ -23,7 +24,7 @@ class BelongsTo extends Relation
      */
     public function addEagerConstraints(array $entities): void
     {
-        $fks = array_map(fn($e) => $e->get($this->foreignKey), $entities);
+        $fks = array_filter(array_map(fn($e) => $e->get($this->foreignKey), $entities));
         $this->query->whereIn($this->ownerKey, $fks);
     }
 
@@ -52,16 +53,28 @@ class BelongsTo extends Relation
             $fk = $entity->get($this->foreignKey);
 
             // 기존 값이 있더라도 항상 덮어쓰되, null은 무시 가능
-            if (isset($grouped[$fk])) {
+            if (array_key_exists($fk, $grouped)) {
                 $entity->setRelation($relationName, $grouped[$fk]);
             } else {
-                // 필요하면 null 할당도 가능
                 $entity->setRelation($relationName, null);
             }
         }
     }
 
+    public function getRelatedQuery(): Builder
+    {
+        return $this->query;
+    }
 
+    public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void
+    {
+        $relatedQuery->whereColumn(
+            $this->ownerKey,
+            '=',
+            $parentQuery->getTable() . '.' . $this->foreignKey
+        );
+    }
+    
     /**
      * Lazy load: 단일 엔티티에서 바로 부모 로드
      */

@@ -4,6 +4,8 @@ namespace Framework\Database\Query;
 
 use Closure;
 use Framework\Database\Contracts\ConnectionInterface;
+use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Rel;
 use Framework\Database\Paginator\Paginator;
 use Framework\Database\Query\Clauses\JoinClause;
 use Framework\Database\Query\Grammars\Grammar;
@@ -370,6 +372,83 @@ class Builder
 
         return $this;
     }
+
+    public function whereColumn(string $first, string $operator, string $second): self
+    {
+        $this->wheres[] = [
+            'type' => 'column',
+            'first' => $first,
+            'operator' => $operator,
+            'second' => $second,
+            'boolean' => 'and',
+        ];
+        return $this;
+    }
+
+    public function orWhereColumn(string $first, string $operator, string $second): self
+    {
+        $this->wheres[] = [
+            'type' => 'column',
+            'first' => $first,
+            'operator' => $operator,
+            'second' => $second,
+            'boolean' => 'or',
+        ];
+        return $this;
+    }
+
+        public function whereHas(string $relation, Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'and', false);
+    }
+
+    public function orWhereHas(string $relation, Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'or', false);
+    }
+
+    public function whereDoesntHave(string $relation, Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'and', true);
+    }
+
+    public function orWhereDoesntHave(string $relation, Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'or', true);
+    }
+
+
+    protected function whereHasTyped(string $relation, Closure $callback, string $boolean, bool $not): self
+    {
+        // 💡 이 Builder는 EntityQueryBuilder이므로 repository를 통해 엔티티를 직접 추론 가능
+        if (!property_exists($this, 'repository')) {
+            throw new \RuntimeException("EntityQueryBuilder must have repository property.");
+        }
+
+        /** @var class-string<Entity> $entityClass */
+        $entityClass = $this->repository::entityClass();
+        $entity = new $entityClass();
+
+        $relationObj = Rel::getRelation($entity, $relation);
+
+        if (!$relationObj) {
+            throw new \RuntimeException("Relation [{$relation}] is not defined on entity [{$entityClass}].");
+        }
+
+        $relatedQuery = $relationObj->getRelatedQuery();
+        $callback($relatedQuery);
+
+        $relationObj->addExistsConstraints($relatedQuery, $this);
+
+        $this->wheres[] = [
+            'type' => $not ? 'notExists' : 'exists',
+            'query' => $relatedQuery,
+            'boolean' => $boolean,
+        ];
+
+        return $this;
+    }
+
 
     /**
      * @param string|\Closure $column

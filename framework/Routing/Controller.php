@@ -72,6 +72,16 @@ abstract class Controller
         return $this->renderHybrid(true, $data, $message, $status, $view, $meta);
     }
 
+    protected function renderBack(
+        string $message = '처리가 완료되었습니다.',
+        array $params = [],
+        int $status = 302
+    ): RedirectResponse {
+        return Response::back()
+            ->with('success', $message)
+            ->withMany($params);
+    }
+
     protected function renderError(
         ?string $view = null,
         string $message = 'Error',

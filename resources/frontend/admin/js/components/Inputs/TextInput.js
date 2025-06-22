@@ -1,10 +1,9 @@
 import View from "../../core/View";
 
 export default class TextInput extends View {
-    _inputType = 'text';
-
     _defineProps() {
         return {
+            type: 'text',
             name: "text-field",
             label: "라벨",
             value: '',
@@ -26,15 +25,17 @@ export default class TextInput extends View {
     }
 
     _template() {
-        const { label, name, value, disabled, readOnly, helperText, invalid, invalidMessage, spacing } = this._state;
+        const { label, name, value, disabled, readOnly, helperText, invalid, invalidMessage, spacing, type } = this._state;
         const nodeId = this._generateElementId();
         
+        const hidden = type === 'hidden' ? `style="display: none;"` : '';
+
         return `
-            <div class="no-form-control">
+            <div class="no-form-control" ${hidden}>
                 <label for="${nodeId}" class="no-form-control-inner">
                     <input 
                         data-ref="input"
-                        type="${this._inputType}" 
+                        type="${type}" 
                         name="${name}" 
                         id="${nodeId}" 
                         value="${value}" 

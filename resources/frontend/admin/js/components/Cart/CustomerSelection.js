@@ -18,18 +18,20 @@ export default class CustomerSelection extends View {
         const {data} = paginator;
 
         return `
-            <table class="no-page-index-table">
-                <thead>
-                    <tr>
-                        <th>이름</th>
-                        <th>국가</th>
-                        <th>이메일</th>
-                        <th>연락처</th>
-                        <th>관리</th>
-                    </tr>
-                </thead>
-                <tbody>${data.map(this._renderItem).join('')}</tbody>
-            </table>
+            <div class="no-page-index-table-outer">
+                <table class="no-page-index-table">
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>국가</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>${data.map(this._renderItem).join('')}</tbody>
+                </table>
+            </div>
         `;
     }
 

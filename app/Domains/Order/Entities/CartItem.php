@@ -23,4 +23,9 @@ class CartItem extends Entity
     {
         return CartItemRepository::class;
     }
+
+    public function getAttributeJson(): array
+    {
+        return $this->product->attribute_json ?? [];
+    }
 }

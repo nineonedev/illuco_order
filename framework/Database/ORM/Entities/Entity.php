@@ -108,13 +108,38 @@ abstract class Entity
 
     public function setRelation(string $relation, $value): self
     {
-        if (isset($this->relations[$relation]) && is_object($this->relations[$relation])) {
-            // 병합할 수 있다면 merge
+        if (isset($this->relations[$relation])) {
             $existing = $this->relations[$relation];
+
+            // Entity 타입일 경우 -> 하위 관계 병합
             if ($existing instanceof Entity && $value instanceof Entity) {
                 foreach ($value->getRelations() as $subRelation => $subValue) {
                     $existing->setRelation($subRelation, $subValue);
                 }
+                return $this;
+            }
+
+            // 배열 타입일 경우 -> 중복 제거 (같은 클래스 + 같은 PK 기준)
+            if (is_array($existing) && is_array($value)) {
+                $merged = array_merge($existing, $value);
+
+                // Entity 기준 중복 제거
+                $unique = [];
+                $seenKeys = [];
+
+                foreach ($merged as $item) {
+                    if ($item instanceof Entity) {
+                        $key = get_class($item) . ':' . $item->getPrimaryKey();
+                        if (!in_array($key, $seenKeys, true)) {
+                            $seenKeys[] = $key;
+                            $unique[] = $item;
+                        }
+                    } else {
+                        $unique[] = $item;
+                    }
+                }
+
+                $this->relations[$relation] = $unique;
                 return $this;
             }
         }
@@ -122,6 +147,7 @@ abstract class Entity
         $this->relations[$relation] = $value;
         return $this;
     }
+
 
 
     public function getRelation(string $name)

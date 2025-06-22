@@ -18,21 +18,23 @@ export default class TemplateSelection extends View {
         const { data } = paginator;
 
         return `
-            <table class="no-page-index-table">
-                <thead>
-                    <tr>
-                        <th>이미지</th>
-                        <th>제품명</th>
-                        <th>모델명</th>
-                        <th>코드</th>
-                        <th>단가(USD)</th>
-                        <th>관리</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${data.map(this._renderItem).join('')}
-                </tbody>
-            </table>
+            <div class="no-page-index-table-outer">
+                <table class="no-page-index-table">
+                    <thead>
+                        <tr>
+                            <th>이미지</th>
+                            <th>제품명</th>
+                            <th>모델명</th>
+                            <th>코드</th>
+                            <th>단가(USD)</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map(this._renderItem).join('')}
+                    </tbody>
+                </table>
+            </div>
         `;
     }
 

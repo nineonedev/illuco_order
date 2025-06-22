@@ -93,7 +93,12 @@ export default class Cart extends View {
     }
 
     setCartItems(cartitems = []){
-        this._cartItemList.setState({cartitems: cartitems});
+        const remainingCartItems = cartitems.map(item => {
+            const cartitem = this._cartItemList.children.find(c => +c.state.id === +item.id);
+            return cartitem ? {...cartitem.state, ...item} : item;
+        });
+
+        this._cartItemList.setState({cartitems: remainingCartItems});
         this._updateCartCount();
     }
 

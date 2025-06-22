@@ -25,6 +25,7 @@ body {
 .no-page {
     flex: 1;
     padding-top: 2.4rem;
+    padding-bottom: 12rem;
 
     .no-page-row {
         display: flex;
@@ -36,7 +37,6 @@ body {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 4.8rem;
-        padding-bottom: 12rem;
 
         @include mq(lg){
             grid-template-columns: 1fr;

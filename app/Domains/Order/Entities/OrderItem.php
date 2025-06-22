@@ -11,16 +11,23 @@ class OrderItem extends Entity
         'order_id',
         'product_id',
         'quantity',
+        'price',
     ];
 
     protected array $casts = [
         'order_id' => 'int',
         'product_id' => 'int',
         'quantity' => 'int',
+        'price' => 'decimal',
     ];
 
     public static function repositoryClass(): string
     {
         return OrderItemRepository::class;
+    }
+
+    public function getAttributeJson(): array
+    {
+        return $this->product->attribute_json ?? [];
     }
 }

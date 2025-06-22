@@ -17,6 +17,7 @@ return new class implements Migration
             $table->decimal('price', 10, 2)->default(0);
             $table->integer('sort_order')->default(0);
             $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

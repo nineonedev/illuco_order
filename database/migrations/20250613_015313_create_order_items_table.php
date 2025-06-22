@@ -13,6 +13,7 @@ return new class implements Migration
             $table->foreignId('order_id')->constrained('orders')->onDeleteCascade();
             $table->foreignId('product_id')->constrained('products')->onDeleteCascade();
             $table->unsignedInteger('quantity')->default(1);
+            $table->decimal('price', 10, 2)->default(0);
             $table->timestamps();
         });
     }

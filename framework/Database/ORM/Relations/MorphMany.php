@@ -3,6 +3,7 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\Query\Builder;
 
 class MorphMany extends Relation
 {
@@ -25,6 +26,23 @@ class MorphMany extends Relation
         $this->localKey = $localKey;
         $this->typeValue = $typeValue ?? get_class($parent)::alias();
     }
+
+    public function getRelatedQuery(): Builder
+    {
+        return $this->query;
+    }
+
+    public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void
+    {
+        $relatedQuery
+            ->whereColumn(
+                $this->morphId,
+                '=',
+                $parentQuery->getTable() . '.' . $this->localKey
+            )
+            ->where($this->morphType, $this->typeValue);
+    }
+
 
     public function addEagerConstraints(array $entities): void
     {

@@ -10,6 +10,7 @@ class ProductValue extends Entity
     protected array $fillable = [
         'product_id',
         'attribute_id',
+        'attribute_type',
         'value',
     ];
 

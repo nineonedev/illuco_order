@@ -26,6 +26,10 @@ abstract class Relation
         $this->query = $this->queryForEntity($relatedEntityClass);
     }
 
+    abstract public function getRelatedQuery(): Builder;
+
+    abstract public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void;
+
     public function getRelatedEntityClass(): string
     {
         return $this->relatedEntityClass;

@@ -27,6 +27,7 @@ return [
 
     'order' => [
         'status' => [
+            Order::STATUS_CANCELED   => 'Order Canceled',
             Order::STATUS_RECEIVED   => 'Order Received',
             Order::STATUS_CONFIRMED  => 'Order Confirmed',
             Order::STATUS_PREPARING  => 'Product Preparing',

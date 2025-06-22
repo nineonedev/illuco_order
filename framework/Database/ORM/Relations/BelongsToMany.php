@@ -3,6 +3,7 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\Query\Builder;
 use Framework\Database\Query\EntityQueryBuilder;
 use Framework\Support\Facades\DB;
 
@@ -28,6 +29,30 @@ class BelongsToMany extends Relation implements Pivotable
         $this->relatedKey = $relatedKey;
         $this->relatedEntityPrimaryKey = $relatedEntityPrimaryKey;
     }
+
+    public function getRelatedQuery(): Builder
+    {
+        return $this->query;
+    }
+
+    public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void
+    {
+        $relatedTable = $relatedQuery->getTable();
+
+        $relatedQuery
+            ->join(
+                $this->pivotTable,
+                "{$relatedTable}.{$this->relatedEntityPrimaryKey}",
+                '=',
+                "{$this->pivotTable}.{$this->relatedKey}"
+            )
+            ->whereColumn(
+                "{$this->pivotTable}.{$this->foreignKey}",
+                '=',
+                $parentQuery->getTable() . '.' . $this->parent->getPrimaryKeyName()
+            );
+    }
+
 
     public function addEagerConstraints(array $entities): void
     {

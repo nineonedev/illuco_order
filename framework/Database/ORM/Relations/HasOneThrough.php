@@ -4,6 +4,7 @@ namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\ORM;
+use Framework\Database\Query\Builder;
 
 class HasOneThrough extends Relation
 {
@@ -30,6 +31,31 @@ class HasOneThrough extends Relation
         $this->secondKey = $secondKey;
         $this->localKey = $localKey;
     }
+
+    public function getRelatedQuery(): Builder
+    {
+        return $this->query;
+    }
+
+    public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void
+    {
+        $throughTable = $this->throughEntityClass::table();
+        $relatedTable = $relatedQuery->getTable();
+
+        $relatedQuery
+            ->join(
+                $throughTable,
+                "{$throughTable}.{$this->firstKey}",
+                '=',
+                "{$relatedTable}.{$this->secondKey}"
+            )
+            ->whereColumn(
+                "{$throughTable}.{$this->firstKey}",
+                '=',
+                $parentQuery->getTable() . '.' . $this->localKey
+            );
+    }
+
 
     public function addEagerConstraints(array $entities): void
     {

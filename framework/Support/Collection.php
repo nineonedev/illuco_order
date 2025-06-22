@@ -2,7 +2,7 @@
 
 namespace Framework\Support;
 
-class Collection implements \IteratorAggregate, \Countable {
+class Collection implements \IteratorAggregate, \Countable, \ArrayAccess {
     protected array $items = []; 
 
     public function __construct(array $items = [])
@@ -13,6 +13,34 @@ class Collection implements \IteratorAggregate, \Countable {
     public static function create(array $items = [])
     {
         return new static($items); 
+    }
+
+    public function offsetExists($offset): bool
+    {
+        return isset($this->items[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return $this->items[$offset] ?? null;
+    }
+
+    public function offsetSet($offset, $value): void
+    {
+        if (is_null($offset)) {
+            $this->items[] = $value;
+        } else {
+            $this->items[$offset] = $value;
+        }
+    }
+
+    public function offsetUnset($offset): void
+    {
+        unset($this->items[$offset]);
     }
     
     public function pluck($key): self
@@ -34,6 +62,28 @@ class Collection implements \IteratorAggregate, \Countable {
     {
         return $this->items; 
     }
+
+    /**
+     * @return static
+     */
+    public function keyBy($key)
+    {
+        $results = [];
+
+        foreach ($this->items as $item) {
+            // 배열인 경우
+            if (is_array($item) && isset($item[$key])) {
+                $results[$item[$key]] = $item;
+            }
+            // 객체인 경우
+            elseif (is_object($item) && isset($item->{$key})) {
+                $results[$item->{$key}] = $item;
+            }
+        }
+
+        return new static($results);
+    }
+
 
     public function get($key, $default = null)
     {

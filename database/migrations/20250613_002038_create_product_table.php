@@ -16,6 +16,7 @@ return new class implements Migration
             $table->string('model')->nullable();
             $table->decimal('price', 10, 2)->default(0);
             $table->json('option_json')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -4,6 +4,7 @@ namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Rel;
+use Framework\Database\Query\Builder;
 
 /**
  * 다형성 역방향 관계 (ex: Image → Post/User 등 morph 대상)
@@ -26,6 +27,16 @@ class MorphTo extends Relation
         $this->morphType = $morphType;
         $this->morphId = $morphId;
         $this->typesMap = $typesMap ?: Rel::morphableMap();
+    }
+
+    public function getRelatedQuery(): Builder
+    {
+        throw new \LogicException("MorphTo 관계는 getRelatedQuery()를 사용할 수 없습니다.");
+    }
+
+    public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void
+    {
+        throw new \LogicException("MorphTo 관계는 addExistsConstraints()를 지원하지 않습니다.");
     }
 
     public function addEagerConstraints(array $entities): void

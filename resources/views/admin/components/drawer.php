@@ -35,16 +35,16 @@
                 <hr class="no-hr --lg">
 
                 <ul class="no-drawer-gnb">
-                    <li class="no-drawer-gnb-item <?//= is_route_active('orders.index') ?>">
+                    <li class="no-drawer-gnb-item <?= route_is('admin.orders') ? '--active' : ''  ?>">
                         <a href="<?= route('admin.orders.index') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                             <div class="no-drawer-gnb-link__icon">
                                 <i class="fa-light fa-receipt"></i>
                             </div>
                             <div class="no-drawer-gnb-link__text">
-                                <span>주문내역</span>
+                                <span>주문 목록</span>
                             </div>
                             <div data-tooltip-text>
-                                <span>주문내역</span>
+                                <span>주문 목록</span>
                                 <span data-tooltip-arrow></span>
                             </div>
                         </a>

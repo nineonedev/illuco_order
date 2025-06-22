@@ -3,6 +3,7 @@
 namespace Framework\Database\ORM\Relations;
 
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\Query\Builder;
 
 class HasMany extends Relation
 {
@@ -17,6 +18,21 @@ class HasMany extends Relation
         $this->foreignKey = $foreignKey;
         $this->localKey = $localKey;
     }
+
+    public function getRelatedQuery(): Builder
+    {
+        return $this->query;
+    }
+
+    public function addExistsConstraints(Builder $relatedQuery, Builder $parentQuery): void
+    {
+        $relatedQuery->whereColumn(
+            $this->foreignKey,
+            '=',
+            $parentQuery->getTable() . '.' . $this->localKey
+        );
+    }
+
 
     /**
      * 여러 부모 엔티티에 대해 eager load시 제약조건 추가 (whereIn)

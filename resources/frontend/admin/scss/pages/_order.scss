@@ -1,0 +1,205 @@
+
+@use '../abstracts' as *;
+
+.no-order-option-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+}
+
+.no-order-option-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--clr-slate-50);
+    border-radius: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    font-size: 1.1rem; 
+    line-height: 1.5;
+    color: var(--clr-gray-800);
+
+    .label {
+        font-weight: 500;
+        color: var(--clr-gray-600);
+    }
+
+    .value {
+        font-weight: 600;
+        color: var(--clr-primary-main);
+    }
+}
+
+
+.no-order-summary {
+    border: 1px solid var(--clr-gray-200);
+    padding: 2rem;
+    background: var(--clr-background-primary);
+    border-radius: 0.6rem;
+    margin-bottom: 2rem;
+
+    &__title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        gap: 1.6rem;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        .label {
+            font-size: 1.2rem;
+            color: var(--clr-gray-600);
+            margin-bottom: 0.4rem;
+        }
+        .value {
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+    }
+}
+
+.no-order-memo {
+    border: 1px solid var(--clr-gray-200);
+    padding: 2rem;
+    background: var(--clr-background-primary);
+    border-radius: 0.6rem;
+    margin-bottom: 2rem;
+
+    &__title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1.2rem;
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+
+        @include mq(lg){
+            grid-template-columns: 1fr;
+        }
+
+        .memo {
+            label {
+                font-size: 1.2rem;
+                color: var(--clr-gray-600);
+                margin-bottom: 0.4rem;
+                display: block;
+            }
+            p {
+                white-space: pre-line;
+                font-size: 1.3rem;
+            }
+        }
+
+        .summary {
+            label {
+                font-size: 1.2rem;
+                color: var(--clr-gray-600);
+                display: block;
+                margin-bottom: 0.4rem;
+            }
+            .amount {
+                font-weight: 700;
+                font-size: 1.5rem;
+                color: var(--clr-common-on-background);
+            }
+        }
+    }
+}
+
+.no-order-restore {
+    margin-top: 3rem;
+
+    &__title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1.6rem;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    &__card {
+        display: flex;
+        background: var(--clr-background-secondary);
+        border: 1px solid var(--clr-card-border);
+        border-radius: 0.6rem;
+        padding: 1.5rem;
+        gap: 2rem;
+
+        .thumbnail {
+            width: 15rem;
+            height: 15rem;
+            background: var(--clr-background-paper);
+            border-radius: 0.4rem;
+            overflow: hidden;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .placeholder {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: var(--clr-gray-400);
+                background: var(--clr-gray-200);
+                font-size: 1.2rem;
+            }
+        }
+
+        .info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+
+            .name {
+                font-size: 1.4rem;
+                font-weight: 600;
+            }
+
+            .sub {
+                font-size: 1.2rem;
+                color: var(--clr-gray-600);
+            }
+
+            .options {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                .chip {
+                    background: var(--clr-gray-100);
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 0.4rem;
+                    font-size: 1.1rem;
+                    color: var(--clr-gray-800);
+                }
+            }
+        }
+    }
+}
+
+.no-order-update {
+    margin-top: 3rem;
+
+    &__title {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1.6rem;
+    }
+}

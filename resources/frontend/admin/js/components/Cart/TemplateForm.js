@@ -182,14 +182,20 @@ export default class TemplateForm extends View {
         if (attributes && attributes.length > 0) {
 
             for (const attr of attributes) {
+                const hiddenInput = InputFactory.make('text')
+                    .make(this._attrHookId, {
+                        type: 'hidden',
+                        name: `attributes[${attr.id}][type]`
+                    }).render();
+                    
                 const input = InputFactory
                     .make(attr.type)
                     .make(this._attrHookId, {
                         ...attr, 
-                        name: `attributes[${attr.id}]`
+                        name: `attributes[${attr.id}][value]`
                     }).render();
 
-                this._inputs.push(input);
+                this._inputs.push(input, hiddenInput);
             }
         }
     }

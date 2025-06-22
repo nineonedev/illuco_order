@@ -4,6 +4,7 @@ namespace App\Domains\Order\Repositories;
 
 use App\Domains\Order\Entities\CartItem;
 use Framework\Database\ORM\Repositories\Repository;
+use RuntimeException;
 
 class CartItemRepository extends Repository
 {
@@ -17,3 +18,4 @@ class CartItemRepository extends Repository
         return CartItem::class;
     }
 }
+

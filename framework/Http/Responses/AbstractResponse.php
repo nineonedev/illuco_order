@@ -73,6 +73,19 @@ abstract class AbstractResponse implements ResponseInterface
         return $this->content;
     }
 
+    public function with(string $key, $value)
+    {
+        $this->withSession($key, $value);
+    }
+
+    public function withMany(array $params)
+    {
+        foreach ($params as $key => $value) {
+            $this->withSession($key, $value);
+        }
+        return $this;
+    }
+
     /**
      * @return static
      */

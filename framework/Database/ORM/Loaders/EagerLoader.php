@@ -28,6 +28,8 @@ class EagerLoader extends AbstractLoader
         $relation = Rel::getRelation($entity, $relationName);
         if (!$relation) return;
 
+        logger()->debug("Loading: " . $relationName . ' of ' . get_class($entity));
+
         // 부모 관계 로딩
         $relation->addEagerConstraints($entities);
         $results = $relation->getEagerResults($entities);

@@ -43,10 +43,12 @@ class MysqlGrammar extends Grammar
             $parts = [];
             foreach ($wheres as $i => $where) {
                 $boolean = $i > 0 ? strtoupper($where['boolean'] ?? 'and') . ' ' : '';
-
+                
                 if ($where['type'] === 'basic') {
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " {$where['operator']} ?";
                     $bindings[] = $where['value'];
+                } elseif ($where['type'] === 'column') {
+                    $parts[] = "{$boolean}" . $this->wrap($where['first']) . " {$where['operator']} " . $this->wrap($where['second']);
                 } elseif ($where['type'] === 'in') {
                     $in = implode(', ', array_fill(0, count($where['values']), '?'));
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$in})";
@@ -54,6 +56,10 @@ class MysqlGrammar extends Grammar
                 } elseif ($where['type'] === 'exists') {
                     [$subSql, $subBindings] = $this->compileSelect($where['query']);
                     $parts[] = "{$boolean}EXISTS ({$subSql})";
+                    $bindings = array_merge($bindings, $subBindings);
+                } elseif ($where['type'] === 'notExists') {
+                    [$subSql, $subBindings] = $this->compileSelect($where['query']);
+                    $parts[] = "{$boolean}NOT EXISTS ({$subSql})";
                     $bindings = array_merge($bindings, $subBindings);
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";
@@ -174,6 +180,8 @@ class MysqlGrammar extends Grammar
                 if ($where['type'] === 'basic') {
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " {$where['operator']} ?";
                     $bindings[] = $where['value'];
+                } elseif ($where['type'] === 'column') {
+                    $parts[] = "{$boolean}" . $this->wrap($where['first']) . " {$where['operator']} " . $this->wrap($where['second']);
                 } elseif ($where['type'] === 'in') {
                     $placeholders = implode(', ', array_fill(0, count($where['values']), '?'));
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$placeholders})";
@@ -184,6 +192,14 @@ class MysqlGrammar extends Grammar
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NOT NULL";
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";
+                } elseif ($where['type'] === 'exists') {
+                    [$subSql, $subBindings] = $this->compileSelect($where['query']);
+                    $parts[] = "{$boolean}EXISTS ({$subSql})";
+                    $bindings = array_merge($bindings, $subBindings);
+                } elseif ($where['type'] === 'notExists') {
+                    [$subSql, $subBindings] = $this->compileSelect($where['query']);
+                    $parts[] = "{$boolean}NOT EXISTS ({$subSql})";
+                    $bindings = array_merge($bindings, $subBindings);
                 }
             }
 
@@ -209,6 +225,8 @@ class MysqlGrammar extends Grammar
                 if ($where['type'] === 'basic') {
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " {$where['operator']} ?";
                     $bindings[] = $where['value'];
+                } elseif ($where['type'] === 'column') {
+                    $parts[] = "{$boolean}" . $this->wrap($where['first']) . " {$where['operator']} " . $this->wrap($where['second']);
                 } elseif ($where['type'] === 'in') {
                     $in = implode(', ', array_fill(0, count($where['values']), '?'));
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$in})";
@@ -224,6 +242,14 @@ class MysqlGrammar extends Grammar
                     $nestedSql = preg_replace('/^delete from `[a-zA-Z0-9_]+` where /', '', $nestedSql);
                     $parts[] = "{$boolean}({$nestedSql})";
                     $bindings = array_merge($bindings, $nestedBindings);
+                } elseif ($where['type'] === 'exists') {
+                    [$subSql, $subBindings] = $this->compileSelect($where['query']);
+                    $parts[] = "{$boolean}EXISTS ({$subSql})";
+                    $bindings = array_merge($bindings, $subBindings);
+                } elseif ($where['type'] === 'notExists') {
+                    [$subSql, $subBindings] = $this->compileSelect($where['query']);
+                    $parts[] = "{$boolean}NOT EXISTS ({$subSql})";
+                    $bindings = array_merge($bindings, $subBindings);
                 }
             }
             if (!empty($parts)) {

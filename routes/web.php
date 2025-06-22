@@ -190,20 +190,20 @@ Route::middleware(['web'])->group(function(){
                 ->name('orders')
                 ->group(function(){
                     Route::get('/', [OrderController::class, 'index'])->name('index');
-                    Route::get('edit/{id}', [OrderController::class, 'show'])->name('show');
-                    Route::get('{id}', [OrderController::class, 'edit'])->name('edit');
+                    Route::get('edit/{id}', [OrderController::class, 'edit'])->name('edit');
+                    Route::get('{id}', [OrderController::class, 'show'])->name('show');
+
 
                     Route::post('/', [OrderController::class, 'store'])->name('store');
-                    Route::put('{id}', [OrderController::class, 'update'])->name('update');
+                    Route::post('/restore-all/{orderId}', [OrderController::class, 'restoreAll'])->name('restore_all');
+                    Route::post('/restore/{orderItemId}', [OrderController::class, 'restoreItem'])->name('restore_item');
                     Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy');
+                    Route::put('{id}', [OrderController::class, 'update'])->name('update');
                 });
 
-            // order-items
-            Route::prefix('order-items')
-                ->name('order_items')
+            Route::prefix('orderitems')
+                ->name('orderitems')
                 ->group(function(){
-                    Route::post('/', [OrderItemController::class, 'store'])->name('store');
-                    Route::put('{id}', [OrderItemController::class, 'update'])->name('update');
                     Route::delete('{id}', [OrderItemController::class, 'destroy'])->name('destroy');
                 });
 

@@ -12,8 +12,11 @@ return new class implements Migration
             $table->id(); 
             $table->foreignId('product_id')->constrained('products')->onDeleteCascade();
             $table->foreignId('attribute_id')->constrained('product_attributes')->onDeleteCascade();
+            $table->string('attribute_type');
             $table->text('value')->nullable();
             $table->timestamps();
+
+            $table->index(['product_id', 'attribute_id', 'attribute_type']);
         });
     }
 
