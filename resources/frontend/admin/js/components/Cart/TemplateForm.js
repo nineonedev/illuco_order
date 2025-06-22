@@ -185,7 +185,8 @@ export default class TemplateForm extends View {
                 const hiddenInput = InputFactory.make('text')
                     .make(this._attrHookId, {
                         type: 'hidden',
-                        name: `attributes[${attr.id}][type]`
+                        name: `attributes[${attr.id}][type]`,
+                        value: attr.type
                     }).render();
                     
                 const input = InputFactory

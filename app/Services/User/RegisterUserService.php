@@ -47,6 +47,8 @@ class RegisterUserService extends Service
         $user = User::make($attributes);
         $user = UserRepository::make()->save($user);
 
+        $this->userable->load(['user']);
+
         // 5. 관리자 Role이 없다면 생성
         $roleRepo = RoleRepository::make();
         $adminRole = $roleRepo->query()->where('name', 'admin')->first();
@@ -65,6 +67,7 @@ class RegisterUserService extends Service
 
             $adminRole = Role::make($result->getData()['role']);
             $user->setRelation(Role::alias(), $adminRole);
+            $user->roles()->attach($adminRole);
         }
 
         $user->setRelation($userableClass::alias(), $this->userable->toArray());

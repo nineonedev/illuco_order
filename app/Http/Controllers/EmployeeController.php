@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\Auth\Repositories\RoleRepository;
 use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Repositories\EmployeeRepository;
@@ -62,6 +63,18 @@ class EmployeeController extends Controller
         $employee = new Employee($request->all());
         $result = (new RegisterUserService($employee))
             ->runInTransaction($request->safe());
+
+        // 3. 'dealer' 역할을 가져옴
+        $employeeRole = RoleRepository::make()
+            ->with(['users']) // 'users' 관계를 가져옴
+            ->query()
+            ->where('name', 'employee')
+            ->first();
+
+        // 4. Role이 존재하면 사용자 연결
+        if ($employeeRole) {
+            $employeeRole->users()->attach($employee->user);
+        }
 
         return $result->toResponse();
     }

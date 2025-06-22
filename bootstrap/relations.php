@@ -20,7 +20,6 @@ use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
 use Framework\Database\ORM\Rel;
-use Framework\Database\Schema\AbstractColumnDefinition;
 
 Rel::setConfig([
     // ===================================================================

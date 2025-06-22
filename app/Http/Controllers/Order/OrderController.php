@@ -6,11 +6,14 @@ use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Entities\OrderItem;
 use App\Domains\Order\Repositories\CartItemRepository;
+use App\Domains\Order\Repositories\CartRepository;
 use App\Domains\Order\Repositories\CustomerRepository;
 use App\Domains\Order\Repositories\OrderItemRepository;
 use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\Product\Entities\Product;
+use App\Domains\Product\Entities\ProductValue;
 use App\Domains\Product\Repositories\ProductRepository;
+use App\Domains\Product\Repositories\ProductValueRepository;
 use App\Domains\User\Entities\User;
 use App\Services\Order\OrderRestoreService;
 use Exception;
@@ -161,62 +164,147 @@ class OrderController extends Controller
     {
         return $this->runInTransaction(function () use ($orderItemId) {
             // 주문 아이템 조회
-            $orderItem = OrderRepository::make()
+            $orderItem = OrderItemRepository::make()
                 ->query()
-                ->with(['product', 'order'])
+                ->with([
+                    'product' => [
+                        'template.attributes',
+                        'values',
+                    ],
+                    'order.customer.cart'
+                ])
                 ->find($orderItemId);
 
             if (!$orderItem) {
-                throw new RuntimeException("주문 아이템을 찾을 수 없습니다.");
+                throw new RuntimeException("주문 아이템을 찾을 수 없습니다. 아이템이 존재하지 않거나 이미 복원된 상태일 수 있습니다.");
             }
 
+            // 주문 상태가 수정 불가능한 경우 처리
             if ($orderItem->order->isFinalized()) {
-                throw new RuntimeException("주문 상태가 수정 불가능합니다.");
+                throw new RuntimeException("주문이 완료된 상태입니다. 더 이상 수정할 수 없습니다.");
             }
 
             // 장바구니로 복원
-            $cart = $orderItem->order->cart; // 주문에 연결된 장바구니 가져오기
-            $cartItem = new CartItem([
-                'cart_id' => $cart->id,
-                'product_id' => $orderItem->product_id,
-                'quantity' => $orderItem->quantity,
-            ]);
-            CartItemRepository::make()->save($cartItem);
+            $customer = $orderItem->order->customer;
+            $cart = $customer->cart;
 
-            return $this->render(null, ['cartitem' => $cartItem->toArray()]);
+            // 장바구니가 없으면 새로 생성
+            if (!$cart) {
+                $cart = CartRepository::make()->query()->firstOrCreate(['customer_id' => $customer->id]);
+            }
+
+            // 공통된 제품 복원 로직 호출
+            $cartItem = $this->restoreProduct($orderItem, $cart);
+
+            // 복원 성공 메시지
+            return $this->render(null, ['cartitem' => $cartItem->toArray()], '주문 아이템이 장바구니에 성공적으로 복원되었습니다.');
         });
     }
 
     // 전체 주문 아이템 복원
     public function restoreAll(string $orderId, Request $request)
     {
-        return $this->runInTransaction(function () use ($orderId) {
+        return $this->runInTransaction(function () use ($orderId, $request) {
             // 주문 조회
-            $order = OrderRepository::make()->find($orderId);
+            $order = OrderRepository::make()->with(['items'])->find($orderId);
             
             if (!$order) {
                 throw new RuntimeException("주문을 찾을 수 없습니다.");
             }
 
-            if ($order->isFinalized()) {
-                throw new RuntimeException("주문 아이템 복구가 불가능합니다.");
-            }
-
-            // 전체 주문 아이템 복원
+            // 모든 주문 아이템을 장바구니로 복원
             foreach ($order->items as $orderItem) {
-                $cart = $order->cart; // 주문에 연결된 장바구니 가져오기
-                $cartItem = new CartItem([
-                    'cart_id' => $cart->id,
-                    'product_id' => $orderItem->product_id,
-                    'quantity' => $orderItem->quantity,
-                ]);
-                CartItemRepository::make()->save($cartItem);
+                // 공통된 제품 복원 로직 호출
+                $this->restoreItem($orderItem, $request);
             }
 
-            return $this->render(null, ['message' => '모든 주문 아이템이 장바구니로 복원되었습니다.']);
+            return $this->render(null, [], '모든 주문 아이템이 장바구니로 복원되었습니다.');
         });
     }
 
+    // 공통된 제품 복원 로직
+    private function restoreProduct($orderItem, $cart)
+    {
+        $orderedProduct = $orderItem->product;
+        $productTemplate = $orderedProduct->template;  // 기존 제품의 템플릿을 가져옴
+        $attributes = $productTemplate->attributes; // 제품에 관련된 속성들
+        $values = $orderedProduct->values;
+
+        
+        $normalizedAttributes = [];
+
+        foreach ($attributes as $attribute) {
+            $attributeId = $attribute->id;
+
+            $value = null;
+            
+            foreach ($values as $val) {
+                if ($val->attribute_id === $attributeId) {
+                    $value = $val->value;
+                    break;
+                }
+            }
+
+            // 기존 값이 있으면
+            if ($value) {
+                $normalizedAttributes[$attributeId] = [
+                    'type' => $attribute->type,
+                    'value' => is_array($value) ? array_values($value) : [$value], // 값은 배열로 처리
+                ];
+            }
+        }
+
+        // 새로운 제품 생성
+        $newProductData = [
+            'template_id' => $productTemplate->id,
+            'name' => $productTemplate->name,  // 템플릿에서 name 가져오기
+            'code' => $productTemplate->code,  // 템플릿에서 code 가져오기
+            'model' => $productTemplate->model, // 템플릿에서 model 가져오기
+            'price' => $productTemplate->price, // 템플릿에서 price 가져오기
+        ];
+
+        $newProduct = new Product($newProductData);
+        $newProduct = ProductRepository::make()->save($newProduct);
+
+        // ProductValue 저장 (속성 타입 포함)
+        foreach ($normalizedAttributes as $attributeId => $data) {
+            $type = $data['type']; // 속성 타입 (ex: text, multi-select)
+
+            ProductValueRepository::make()->query()
+                ->where('product_id', $newProduct->id)
+                ->where('attribute_id', $attributeId)
+                ->where('attribute_type', $type)
+                ->delete();
+
+            foreach ($data['value'] as $value) {
+                // ProductValue 저장
+                $productValue = ProductValue::make([
+                    'product_id'     => $newProduct->id,
+                    'attribute_id'   => $attributeId,
+                    'attribute_type' => $type,  // 타입 저장
+                    'value'          => $value,
+                ]);
+
+                ProductValueRepository::make()->save($productValue);
+            }
+        }
+
+        // 장바구니 아이템 생성
+        $cartItem = new CartItem([
+            'cart_id' => $cart->id,
+            'product_id' => $newProduct->id, // 새로운 제품을 추가
+            'quantity' => $orderItem->quantity,
+        ]);
+
+        // 카트 아이템 저장
+        $saved = CartItemRepository::make()->save($cartItem);
+
+        if (!$saved) {
+            throw new RuntimeException("장바구니 아이템 저장 중 문제가 발생했습니다. 다시 시도해 주세요.");
+        }
+
+        return $cartItem;
+    }
 
     public function update(Request $request, int $id)
     {

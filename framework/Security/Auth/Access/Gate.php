@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\Security\Auth;
+namespace Framework\Security\Auth\Access;
 
 use Framework\Security\Auth\Contracts\GateInterface;
 use Framework\Support\Exceptions\Http\UnauthorizedException;

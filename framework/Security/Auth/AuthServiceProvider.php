@@ -31,5 +31,10 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->singleton(GateInterface::class, function () {
             return new GateManager(); 
         });
+
+        $this->app->singleton(GateInterface::class, function(){
+            $gateManager   = new GateManager();
+            return $gateManager;
+        });
     }
 }

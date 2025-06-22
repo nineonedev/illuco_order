@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\Auth\Entities\Role;
+use App\Domains\Auth\Repositories\RoleRepository;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\User;
@@ -63,11 +65,26 @@ class DealerController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        
+        // 1. Dealer 엔티티 생성
         $dealer = new Dealer($request->all());
+
+        // 2. 사용자 등록 서비스 호출
         $result = (new RegisterUserService($dealer))
             ->runInTransaction($request->safe());
 
+        // 3. 'dealer' 역할을 가져옴
+        $dealerRole = RoleRepository::make()
+            ->with(['users']) // 'users' 관계를 가져옴
+            ->query()
+            ->where('name', 'dealer')
+            ->first();
+
+        // 4. Role이 존재하면 사용자 연결
+        if ($dealerRole) {
+            $dealerRole->users()->attach($dealer->user);
+        }
+
+        // 5. 결과 반환
         return $result->toResponse();
     }
 

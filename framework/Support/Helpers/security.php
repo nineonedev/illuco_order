@@ -11,6 +11,8 @@ use Framework\Security\Encryption\EncrypterInterface;
 use Framework\Security\Cookie\CookieManager;
 use Framework\Security\Session\Contracts\SessionInterface;
 
+
+
 if (!function_exists('auth')) {
     function auth(): AuthManager
     {
@@ -26,11 +28,12 @@ if (!function_exists('guard')) {
 }
 
 if (!function_exists('user')) {
-    function user(): User
+    function user(): ?User
     {
         return guard()->user();
     }
 }
+
 
 if (!function_exists('gate')) {
     function gate(): GateInterface

@@ -28,7 +28,7 @@ export default class SelectInput extends View {
     }
 
     _template() {
-        const { label, name, options, fallback} = this._props;
+        const { label, name, options, fallback} = this._state;
         const nodeId = this._generateElementId();
         return `
             <div class="no-form-control --md">   

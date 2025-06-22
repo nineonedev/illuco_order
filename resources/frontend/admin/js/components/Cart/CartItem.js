@@ -78,43 +78,48 @@ export default class CartItem extends View {
     }
 
 
-    _render(){
+    _render() {
         super._render();
 
         const { product, quantity } = this._state;
 
         const attributes = product?.template?.attributes ?? [];
-        const optionMap = JSON.parse(product?.option_json ?? '{}');
+        const values = product?.values ?? []; // 변경된 부분, values를 사용
+
+        // 옵션 텍스트 생성
         const optionText = attributes.map(attr => {
-            const value = optionMap[attr.id];
+            // values에서 해당 속성의 값을 찾기
+            const value = values.find(val => val.attribute_id === attr.id)?.value;  // 속성 id로 값을 찾음
 
             if (Array.isArray(value)) {
-                // 예: 다중 선택형
+                // 다중 선택형인 경우
                 const labels = attr.options
-                    .filter(opt => value.includes(opt.value))
-                    .map(opt => opt.label)
-                    .join(', ');
-                    
-                return `${attr.label}: ${labels ?? '-'}`;
-            } else {
-                return `${attr.label}: ${value ?? '-'}`;
-            }
-        }).join(', ') ?? '-';
-        
+                    .filter(opt => value.includes(opt.value))  // 선택된 값만 필터링
+                    .map(opt => opt.label)  // 해당 옵션의 label을 가져옴
+                    .join(', ');  // 쉼표로 연결
 
+                return `${attr.label}: ${labels || '-'}`;  // 선택된 값이 없으면 `-` 표시
+            } else {
+                // 단일 선택형인 경우
+                return `${attr.label}: ${value || '-'}`;  // 값이 없으면 `-` 표시
+            }
+        }).join(', ') || '-';  // 모든 속성을 이어서 출력, 값이 없으면 `-`
+
+        // Checkbox
         this._checkbox = InputFactory
             .make('checkbox')
             .make(this._checkHookId, {
                 name: 'id',
                 label: product.name,
                 size: 'md',
-                helperText: optionText,
+                helperText: optionText,  // 옵션 텍스트를 헬퍼로 표시
                 spacing: false,
                 value: this._state.id,
                 checked: this._state.itemChecked, 
                 onChange: this._handleChange.bind(this),
             }).render();
 
+        // 삭제 버튼
         this._deleteBtn = Button.make(this._deleteBtnHookId, {
             className: 'no-btn-move --md',
             ariaLabel: '아이템 제거',
@@ -123,6 +128,7 @@ export default class CartItem extends View {
             onClick: this._handleDelete.bind(this)
         }).render();
 
+        // 수량 카운터
         this._counter = InputFactory
             .make('counter')
             .make(this._aggtHookId, {
@@ -131,6 +137,8 @@ export default class CartItem extends View {
             onChange: this._handlePrice.bind(this)
         }).render();
     }
+
+
 
     _handleDelete(){
         this._props.onDelete({id: this._props.id, view: this, button: this._deleteBtn});

@@ -8,6 +8,7 @@ export default class OrderController extends Controller {
     loader;
     modal;
     form;
+    cancelBtn;
 
     edit() {
         this._logger.info("index");
@@ -18,7 +19,7 @@ export default class OrderController extends Controller {
         this.form = form;
 
         const deleteBtn = form.querySelector('[data-action=delete]');
-        const cancelBtn = form.querySelector('[data-action=cancel]');
+        this.cancelBtn = form.querySelector('[data-action=cancel]');
         
         document.querySelectorAll('[data-view="order-item-form"]').forEach(form => {
             form.addEventListener('submit', this._restore.bind(this));
@@ -35,28 +36,13 @@ export default class OrderController extends Controller {
         }).render();
     }
 
-    async _update(e) {
+    
+
+    async _restoreAll(e){
         e.preventDefault();
-        
-        try {
-            e.submitter.disabled = true; 
-            this.loader.show();
-
-            const t = e.target; 
-            const fd = new FormData(t);
-            const result = await new Ajax(false).put(t.action, fd);
-            this._logger.success(result);
-
-        } finally {
-
-            this.loader.hide();
-            e.submitter.disabled = false; 
-        }
-    }
-
-    async _restoreAll(){
         const button = e.submitter;
         const form = e.target;
+        this._logger.info(button, form);
 
         try {
             button.disabled = true; 
@@ -73,8 +59,10 @@ export default class OrderController extends Controller {
     }
 
     async _restore(e) {
+        e.preventDefault();
         const button = e.submitter;
         const form = e.target;
+        this._logger.info(button, form);
 
         try {
             button.disabled = true; 
@@ -90,6 +78,27 @@ export default class OrderController extends Controller {
         }
     }
 
+    async _update(e) {
+        e.preventDefault();
+        const button = e.submitter; 
+        const form = e.target; 
+        this._logger.info(button, form); 
+        
+        try {
+            button.disabled = true; 
+            this.loader.show();
+            
+            const fd = new FormData(form);
+            const result = await new Ajax(false).put(form.action, fd);
+            this._logger.success(result);
+
+        } finally {
+
+            this.loader.hide();
+            button.disabled = false; 
+        }
+    }
+
     async _destroy(e) {
         
         if (!confirm('정말로 삭제하시겠습니까?')) {
@@ -98,6 +107,7 @@ export default class OrderController extends Controller {
 
         const button = e.currentTarget;
         const form = this.form;
+        this._logger.info(button, form);
 
         try {
             button.disabled = true; 

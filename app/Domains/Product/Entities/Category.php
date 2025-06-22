@@ -2,29 +2,24 @@
 
 namespace App\Domains\Product\Entities;
 
-use App\Domains\Product\Repositories\ProductRepository;
+use App\Domains\Product\Repositories\CategoryRepository;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Traits\SoftDeletes;
 
-class Product extends Entity
+class Category extends Entity
 {
     use SoftDeletes;
     
     protected array $fillable = [
-        'template_id',
-        'name',
-        'code',
-        'model',
-        'price',
+        
     ];
 
     protected array $casts = [
-        'template_id' => 'int',
-        'price' => 'decimal',
+        
     ];
 
     public static function repositoryClass(): string
     {
-        return ProductRepository::class;
+        return CategoryRepository::class;
     }
 }

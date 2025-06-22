@@ -2,6 +2,7 @@
 
 namespace Framework\Security\Auth\Providers;
 
+use App\Domains\User\Entities\User;
 use App\Domains\User\Repositories\UserRepository;
 
 class UserEntityProvider implements UserProviderInterface
@@ -10,9 +11,18 @@ class UserEntityProvider implements UserProviderInterface
     {
         // 유연한 인증 필드 지원: 이메일 or username
         if (isset($credentials['email'])) {
-            $user = UserRepository::queryStatic()->where('email', $credentials['email'])->first();
+            $user = UserRepository::make()
+                ->query()
+                ->with([User::morphType(), 'roles.permissions'])
+                ->where('email', $credentials['email'])
+                ->first();
+                
         } elseif (isset($credentials['username'])) {
-            $user = UserRepository::queryStatic()->where('username', $credentials['username'])->first();
+            $user = UserRepository::make()
+                ->query()
+                ->with([User::morphType(), 'roles.permissions'])
+                ->where('username', $credentials['username'])
+                ->first();
         } else {
             return null;
         }
@@ -26,7 +36,10 @@ class UserEntityProvider implements UserProviderInterface
 
     public function retrieveById($identifier): ?AuthenticatableInterface
     {
-        $user = UserRepository::queryStatic()->find($identifier);
+        $user = UserRepository::make()
+            ->query()
+            ->with([User::morphType(), 'roles.permissions'])
+            ->find($identifier);
         
         if ($user instanceof AuthenticatableInterface) {
             return $user;

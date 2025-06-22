@@ -213,6 +213,7 @@ abstract class Entity
     protected function castAttribute(string $key, $value)
     {
         if (!isset($this->casts[$key])) return $value;
+        
         return CastFactory::resolve($this->casts[$key])->get($value);
     }
 
@@ -224,6 +225,7 @@ abstract class Entity
 
     public function __get(string $key)
     {
+
         if (array_key_exists($key, $this->attributes)) {
             return $this->castAttribute($key, $this->attributes[$key]);
         }

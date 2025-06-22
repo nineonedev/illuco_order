@@ -1,5 +1,5 @@
 import Controller from "../core/Controller";
-import CountrySelect from "../components/CountrySelect";
+import CountrySelectInput from '../components/Inputs/CountrySelectInput';
 
 export default class DealerController extends Controller {
     form;
@@ -10,7 +10,7 @@ export default class DealerController extends Controller {
     }
 
     _prepare() {
-        CountrySelect.make('country-hook').render();
+        CountrySelectInput.make('country-hook').render();
         this.form = document.getElementById('frm');
         this.cancelBtn = document.querySelector('[data-action="cancel"]');
     }

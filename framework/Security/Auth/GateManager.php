@@ -24,7 +24,8 @@ class GateManager implements GateInterface
         $this->resolvePolicyIfNeeded($ability, $arguments);
 
         if (!isset($this->abilities[$ability])) {
-            throw new InvalidArgumentException("Ability [$ability] is not defined.");
+            return false; 
+            // throw new InvalidArgumentException("Ability [$ability] is not defined.");
         }
 
         return (bool) call_user_func($this->abilities[$ability], ...$arguments);

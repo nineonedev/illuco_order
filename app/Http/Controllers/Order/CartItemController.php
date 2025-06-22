@@ -64,15 +64,16 @@ class CartItemController extends Controller
                 throw new RuntimeException("아이템과 연관된 제품을 찾을 수 없습니다.");
             }
 
-            // 4. 다른 장바구니에서 해당 제품을 참조하는지 확인
-            $otherCartItemCount = $this->repo()->query()
-                ->where('product_id', $cartitem->product_id)
-                ->count();
-                
-            // 5. 다른 CartItem이 없다면 Product 삭제
-            if ($otherCartItemCount === 0) {
-                $prodRepo = ProductRepository::make();
-                $prodRepo->delete($product);  // Product 삭제
+            logger()->info("Deleting product with ID: {$product->id}");
+
+            // Product 삭제
+            $productDeleted = $prodRepo->delete($product); 
+
+            if (!$productDeleted) {
+                logger()->error("제품 삭제 실패", [
+                    'product_id' => $product->id,
+                ]);
+                throw new RuntimeException("제품 삭제에 실패하였습니다.");
             }
 
             return $this->render(null, [], "정상적으로 삭제되었습니다.");
@@ -93,21 +94,20 @@ class CartItemController extends Controller
         return $this->runInTransaction(function () use ($ids) {
             $deletedCount = 0;
 
-            // 여러 개의 CartItem에 대해 처리
+            // 각 CartItem 삭제 및 연관된 Product 삭제
             foreach ($ids as $id) {
-                $cartitem = $this->repo()->find($id);
+                $cartItem = $this->repo()->find($id);
 
-                if ($cartitem) {
-                    // 연관된 Product 삭제
-                    $prodRepo = ProductRepository::make();
-                    $product = $prodRepo->find($cartitem->product_id);
+                if ($cartItem) {
+                    // 연관된 Product 찾기
+                    $product = ProductRepository::make()->find($cartItem->product_id);
 
                     if ($product) {
-                        $prodRepo->delete($product); // Product 삭제
+                        ProductRepository::make()->delete($product);
                     }
 
                     // CartItem 삭제
-                    $this->repo()->delete($cartitem);
+                    $this->repo()->delete($cartItem);
                     $deletedCount++;
                 }
             }

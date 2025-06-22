@@ -69,7 +69,7 @@ use App\Domains\Order\Entities\Order;
                             <tr>
                                 <td style="width: 10rem">
                                     <?php if ($img = $product->template->fileattachment[0] ?? null): ?>
-                                        <img src="<?= e($img->upload_path) ?>" alt="제품 이미지" style="width: 100%; max-width: 8rem; border-radius: .4rem;">
+                                        <img src="<?= e($img->upload_path) ?>" alt="제품 이미지" style="width: 100%; min-width: 8rem; border-radius: .4rem;">
                                     <?php else: ?>
                                         <div class="no-order-restore__placeholder">No Image</div>
                                     <?php endif; ?>
@@ -94,7 +94,7 @@ use App\Domains\Order\Entities\Order;
                                     <form 
                                         data-view="order-item-form"
                                         method="post" 
-                                        action="<?= route('admin.orders.restore_item', ['id' => $item->id]) ?>"
+                                        action="<?= route('admin.orders.restore_item', ['orderItemId' => $item->id]) ?>"
                                     >
                                         <?= csrf_field() ?>
                                         <button type="submit" class="no-btn-success-outline --xs">복원</button>
@@ -135,7 +135,7 @@ use App\Domains\Order\Entities\Order;
                     </div>
                 </form>
                 <div class="no-form-action" style="margin-top: 2rem;">
-                    <form method="post" action="<?= route('admin.orders.restore_all') ?>">
+                    <form method="post" action="<?= route('admin.orders.restore_all', ['orderId' => $order->id]) ?>" id="restore-form">
                         <?= csrf_field() ?>
                         <button type="submit" class="no-btn-success">전체 다시 장바구니에 담기</button>
                     </form>

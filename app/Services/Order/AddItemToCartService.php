@@ -6,9 +6,11 @@ use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Repositories\CartItemRepository;
 use App\Domains\Order\Repositories\CartRepository;
 use App\Domains\Product\Entities\Product;
+use App\Domains\Product\Entities\ProductValue;
 use App\Domains\Product\Repositories\ProductRepository;
 use App\Domains\Product\Repositories\ProductValueRepository;
 use App\Supports\Services\Service;
+use Exception;
 use RuntimeException;
 
 class AddItemToCartService extends Service
@@ -37,34 +39,68 @@ class AddItemToCartService extends Service
                 'type'  => $type,
             ];
         }
-
+        
         // 2. 장바구니 조회 or 생성
         $cart = CartRepository::make()
             ->query()
             ->firstOrCreate(['customer_id' => $customer_id]);
 
         // 3. 제품 생성 (속성 포함)
-        $product = new Product(array_merge($productData, ['attribute_json' => $normalized]));
+        $product = new Product(array_merge($productData, [
+            // attribute_json 필드를 제외하고 필요한 기본 데이터만 포함
+            'template_id' => $productData['template_id'],
+            'name' => $productData['name'],
+            'code' => $productData['code'],
+            'model' => $productData['model'],
+            'price' => $productData['price']
+        ]));
+        
         $product = ProductRepository::make()->save($product);
 
         // 5. ProductValue 저장 (속성 타입 포함)
         foreach ($normalized as $attribute_id => $data) {
             $type = $data['type']; // 속성 타입 (ex: text, multi-select)
 
+            // 기존 ProductValue 삭제
             ProductValueRepository::make()->query()
                 ->where('product_id', $product->id)
                 ->where('attribute_id', $attribute_id)
                 ->where('attribute_type', $type)
                 ->delete();
 
+            // 새로운 ProductValue 저장
             foreach ($data['value'] as $value) {
-                // ProductValue 저장
-                ProductValueRepository::make()->query()->firstOrCreate([
-                    'product_id'     => $product->id,
-                    'attribute_id'   => $attribute_id,
-                    'attribute_type' => $type,  // 타입 저장
-                    'value'          => $value,
-                ]);
+
+                // 중복된 ProductValue가 존재하는지 확인
+                $existingProductValue = ProductValueRepository::make()->query()
+                    ->where('product_id', $product->id)
+                    ->where('attribute_id', $attribute_id)
+                    ->where('attribute_type', $type)
+                    ->where('value', $value)
+                    ->first();
+
+                // 중복이 없으면 새로 저장
+                if (!$existingProductValue) {
+                    $productValue = ProductValue::make([
+                        'product_id'     => $product->id,
+                        'attribute_id'   => $attribute_id,
+                        'attribute_type' => $type,  // 타입 저장
+                        'value'          => $value,
+                    ]);
+
+                    // ProductValue 저장
+                    $savedProductValue = ProductValueRepository::make()->save($productValue);
+
+                    if (!$savedProductValue) {
+                        logger()->error("ProductValue 저장 실패", [
+                            'product_id'     => $product->id,
+                            'attribute_id'   => $attribute_id,
+                            'attribute_type' => $type,
+                            'value'          => $value,
+                        ]);
+                        throw new RuntimeException("아이템 생성에 실패하였습니다.");
+                    }
+                }
             }
         }
 

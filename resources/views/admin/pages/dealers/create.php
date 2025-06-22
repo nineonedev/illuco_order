@@ -56,7 +56,7 @@
                         "label": "국가 선택",
                         "value": "KR"
                     }'>
-                    <div class="no-form-control --md">
+                    <!-- <div class="no-form-control --md">
                         <label for="country" class="no-form-control-inner">
                             <input type="text" name="country" id="country" class="no-form-control-input">
                             <fieldset class="no-form-control-label">
@@ -64,7 +64,7 @@
                             </fieldset>
                         </label>
                         <span class="no-form-control-space"></span>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- 코드 -->

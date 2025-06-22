@@ -27,7 +27,6 @@ export default class TextInput extends View {
     _template() {
         const { label, name, value, disabled, readOnly, helperText, invalid, invalidMessage, spacing, type } = this._state;
         const nodeId = this._generateElementId();
-        
         const hidden = type === 'hidden' ? `style="display: none;"` : '';
 
         return `
