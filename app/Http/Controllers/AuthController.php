@@ -111,10 +111,10 @@ class AuthController extends Controller
                 return $this->render('home.pages.auth.me', [$userable::alias() => $userable]);
 
             case $userable instanceof Dealer:
-                return $this->render('admin.dealers.edit', [$userable::alias() => $userable]);
+                return $this->render('admin.pages.dealers.edit', [$userable::alias() => $userable]);
 
             case $userable instanceof Employee:
-                return $this->render('admin.employees.edit', [$userable::alias() => $userable]);
+                return $this->render('admin.pages.employees.edit', [$userable::alias() => $userable]);
 
             default:
                 throw new \RuntimeException('Unknown user type.');
@@ -127,7 +127,7 @@ class AuthController extends Controller
         return $this->responseWith()
             ->success(true)
             ->message($message)
-            ->redirectRoute('admin.dashboard')
+            ->redirectRoute('admin.orders.index')
             ->data(['user' => $user])
             ->send();
     }

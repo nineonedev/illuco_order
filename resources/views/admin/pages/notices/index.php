@@ -33,17 +33,21 @@
                     </div>
                 </div>
 
+
+                <?php if (can('notice.create')): ?>
                 <div class="no-page-index-link">
                     <a href="<?= route('admin.notices.create') ?>" class="no-btn-primary --sm">
                         <span>Create</span>
                     </a>
                 </div>
+                <?php endif; ?>
             </div>
 
             <div class="no-page-index-table-outer">
                 <table class="no-page-index-table">
                     <thead>
                         <tr>
+                            <?php if (can('notice.create')): ?>
                             <th class="no-table-check">
                                 <div class="no-form-checkbox --xs">
                                     <label for="all" class="no-form-checkbox-pointer">
@@ -58,17 +62,21 @@
                                     </label>
                                 </div>
                             </th>
+                            <?php endif ?>
                             <th>공지</th>
                             <th>제목</th>
                             <th>작성자</th>
                             <th>공개여부</th>
                             <th>등록일</th>
+                            <?php if (can('notice.create')): ?>
                             <th>작업</th>
+                            <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($notices->items() as $i => $notice): ?>
                         <tr class="no-table-hover">
+                            <?php if (can('notice.create')): ?>
                             <td class="no-table-check">
                                 <div class="no-form-checkbox --xs">
                                     <label for="notice<?= $notice->id ?>" class="no-form-checkbox-pointer">
@@ -83,6 +91,7 @@
                                     </label>
                                 </div>
                             </td>
+                            <?php endif; ?>
                             <td>
                                 <?= $notice->is_pinned ? '<i class="fa-solid fa-megaphone"></i>' : '-' ?>
                             </td>
@@ -90,6 +99,8 @@
                             <td><?= e($notice->author_name ?? '관리자') ?></td>
                             <td><?= $notice->status === 'public' ? '공개' : '비공개' ?></td>
                             <td><?= date('Y-m-d', strtotime($notice->created_at ?? 'now')) ?></td>
+
+                            <?php if (can('notice.create')): ?>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
                                     <a href="<?= route('admin.notices.show', ['id' => $notice->id]) ?>" class="no-btn-action" data-tooltip>
@@ -118,6 +129,7 @@
                                     </a>
                                 </div>
                             </td>
+                            <?php endif; ?>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>

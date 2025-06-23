@@ -111,9 +111,11 @@
                 <a href="<?= route('admin.dealers.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
+                <?php if(can('dealer.delete')) : ?>
                 <button type="button" class="no-btn-error-outline --sm" data-action="delete">
                     <span>삭제</span>
                 </button>
+                <?php endif; ?>
                 <button type="submit" class="no-btn-primary --sm">
                     <span>저장</span>
                 </button>

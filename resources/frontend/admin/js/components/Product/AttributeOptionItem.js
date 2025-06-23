@@ -32,10 +32,10 @@ export default class AttributeOptionItem extends Component {
                     <div data-ref="value"></div>
 
                     <div class="no-prod-attr-actions">
-                        <button type="button" class="no-btn-error" data-ref="deleteBtn">
+                        <button type="button" class="no-btn-error-outline --xs" data-ref="deleteBtn">
                             <span>삭제</span>
                         </button>
-                        <button type="submit" class="no-btn-primary" data-ref="updateBtn">
+                        <button type="submit" class="no-btn-primary-outline --xs" data-ref="updateBtn">
                             <span>수정</span>
                         </button>
                     </div>

@@ -54,43 +54,43 @@ use App\Domains\Communication\Entities\Notice;?>
 
                     <div class="no-form-flex">
                         <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_from", "label": "노출 시작일", "value": "<?=$notice->visible_from?>"}'>
-                            <label for="visible_from" class="no-form-control-inner">
+                            <!-- <label for="visible_from" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
                                     <legend class="no-form-control-text">노출 시작일</legend>
                                 </fieldset>
                             </label>
-                            <span class="no-form-control-space"></span>
+                            <span class="no-form-control-space"></span> -->
                         </div>
                         <!-- FormControl -->
 
                         <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_to", "label": "노출 종료일", "value": "<?=$notice->visible_to?>"}'>
-                            <label for="visible_to" class="no-form-control-inner">
+                            <!-- <label for="visible_to" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
                                     <legend class="no-form-control-text">노출 종료일</legend>
                                 </fieldset>
                             </label>
-                            <span class="no-form-control-space"></span>
+                            <span class="no-form-control-space"></span> -->
                         </div>
                         <!-- FormControl -->
                     </div>
 
                     <!-- 내용 -->
                     <div class="no-form-base --md" id="content" data-component-props='{"name": "content", "value": <?= json_encode($notice->content) ?>}'>
-                        <label for="content" class="no-form-base-label">
+                        <!-- <label for="content" class="no-form-base-label">
                             <span>내용</span>
                         </label>
                         <textarea name="content" id="content" data-text-editor class="no-form-base-input"><?= e(old('content', $notice->content)) ?></textarea>
-                        <span class="no-form-control-space"></span>
+                        <span class="no-form-control-space"></span> -->
                     </div>
 
 
                     <!-- 상단 고정 -->
                     <div class="no-form-checkbox --sm">
-                        <label for="is_notice" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="is_notice" id="is_notice" class="no-form-checkbox-input"
-                                <?= old('is_notice', $notice->is_pinned) ? 'checked' : '' ?>>
+                        <label for="is_pinned" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="is_pinned" id="is_pinned" class="no-form-checkbox-input" value="1"
+                                <?= old('is_pinned', $notice->is_pinned) ? 'checked' : '' ?> />
                             <div class="no-form-checkbox-ripple">
                                 <span class="no-form-checkbox-box">
                                     <div class="no-form-checkbox-icon">

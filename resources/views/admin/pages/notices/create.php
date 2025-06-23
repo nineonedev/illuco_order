@@ -68,24 +68,24 @@ use App\Domains\Communication\Entities\Notice;
                     
                     <div class="no-form-flex">
                         <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_from", "label": "노출 시작일"}'>
-                            <label for="visible_from" class="no-form-control-inner">
+                            <!-- <label for="visible_from" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
                                     <legend class="no-form-control-text">노출 시작일</legend>
                                 </fieldset>
                             </label>
-                            <span class="no-form-control-space"></span>
+                            <span class="no-form-control-space"></span> -->
                         </div>
                         <!-- FormControl -->
 
                         <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_to", "label": "노출 종료일"}'>
-                            <label for="visible_to" class="no-form-control-inner">
+                            <!-- <label for="visible_to" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
                                     <legend class="no-form-control-text">노출 종료일</legend>
                                 </fieldset>
                             </label>
-                            <span class="no-form-control-space"></span>
+                            <span class="no-form-control-space"></span> -->
                         </div>
                         <!-- FormControl -->
                     </div>
@@ -101,7 +101,7 @@ use App\Domains\Communication\Entities\Notice;
 
                     <div class="no-form-checkbox --sm">
                         <label for="is_pinned" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="is_pinned" id="is_pinned" class="no-form-checkbox-input">
+                            <input type="checkbox" name="is_pinned" id="is_pinned" class="no-form-checkbox-input" value="1">
                             <div class="no-form-checkbox-ripple">
                                 <span class="no-form-checkbox-box">
                                     <div class="no-form-checkbox-icon">

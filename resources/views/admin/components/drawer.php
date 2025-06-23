@@ -13,9 +13,8 @@
             </div>
 
             <nav class="no-drawer-nav">
-                <ul class="no-drawer-gnb">
-                    <!-- 대시보드 메뉴 -->
-                    <?php //if (can('dashboard.read')): ?>
+                <!-- <ul class="no-drawer-gnb">
+                    <?php if (can('dashboard.read')): ?>
                         <li class="no-drawer-gnb-item <?= route_is('admin.dashboard') ? '--active' : '' ?>">
                             <a href="<?= route('admin.dashboard') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                 <div class="no-drawer-gnb-link__icon">
@@ -30,8 +29,8 @@
                                 </div>
                             </a>
                         </li>
-                    <?php //endif; ?>
-                </ul>
+                    <?php endif; ?>
+                </ul> -->
 
 
                 <ul class="no-drawer-gnb">
@@ -54,8 +53,8 @@
                     <?php endif; ?>
 
                     <!-- 주문 문서 관리 메뉴 -->
-                    <?php if (can('order.read')): ?>
-                        <li class="no-drawer-gnb-item <?= ''//route_is('admin.orders.docs') ? '--active' : '' ?>">
+                    <?php if (can('producttemplate.read')): ?>
+                        <!-- <li class="no-drawer-gnb-item <?= ''//route_is('admin.orders.docs') ? '--active' : '' ?>">
                             <a href="<?= '#' //route('admin.orders.docs') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                 <div class="no-drawer-gnb-link__icon">
                                     <i class="fa-light fa-file-invoice"></i>
@@ -68,7 +67,7 @@
                                     <span data-tooltip-arrow></span>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     <?php endif; ?>
 
                     <!-- 주문 메뉴 -->
@@ -83,24 +82,6 @@
                                 </div>
                                 <div data-tooltip-text>
                                     <span>주문</span>
-                                    <span data-tooltip-arrow></span>
-                                </div>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-
-                    <!-- 고객 메뉴 -->
-                    <?php if (can('customer.read')): ?>
-                        <li class="no-drawer-gnb-item <?= route_is('admin.customers') ? '--active' : '' ?>">
-                            <a href="<?= route('admin.customers.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
-                                <div class="no-drawer-gnb-link__icon">
-                                    <i class="fa-light fa-user"></i>
-                                </div>
-                                <div class="no-drawer-gnb-link__text">
-                                    <span>고객</span>
-                                </div>
-                                <div data-tooltip-text>
-                                    <span>고객</span>
                                     <span data-tooltip-arrow></span>
                                 </div>
                             </a>
@@ -184,6 +165,24 @@
                             </a>
                         </li>
                     <?php endif; ?>
+                    
+                    <!-- 고객 메뉴 -->
+                    <?php if (can('customer.read')): ?>
+                        <li class="no-drawer-gnb-item <?= route_is('admin.customers') ? '--active' : '' ?>">
+                            <a href="<?= route('admin.customers.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                                <div class="no-drawer-gnb-link__icon">
+                                    <i class="fa-light fa-user"></i>
+                                </div>
+                                <div class="no-drawer-gnb-link__text">
+                                    <span>고객</span>
+                                </div>
+                                <div data-tooltip-text>
+                                    <span>고객</span>
+                                    <span data-tooltip-arrow></span>
+                                </div>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
 
 
@@ -227,14 +226,14 @@
 
                 <ul class="no-drawer-gnb">
                     <!-- 권한 생성 메뉴 -->
-                    <?php if (can('role.read')): ?>
+                    <?php if (false): ?>
                         <li class="no-drawer-gnb-item <?= route_is('admin.roles') ? '--active' : '' ?>">
                             <a href="<?= route('admin.roles.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                 <div class="no-drawer-gnb-link__icon">
                                     <i class="fa-light fa-shield-check"></i>
                                 </div>
                                 <div class="no-drawer-gnb-link__text">
-                                    <span>권한 생성</span>
+                                    <span>권한 관리</span>
                                 </div>
                             </a>
                         </li>

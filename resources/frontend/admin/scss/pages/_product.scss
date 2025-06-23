@@ -135,3 +135,103 @@
         }
     }
 }
+
+
+.no-prod-attr-tab-content {
+  padding: 2rem;
+  background-color: var(--clr-background-paper); /* 배경색을 테마에 맞게 설정 */
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+// 탭 스타일
+.no-prod-attr-tab {
+  display: inline-block;
+  background-color: var(--clr-slate-200); /* 기본 탭 배경색 */
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  margin-right: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--clr-slate-300); /* 호버 시 색상 */
+  }
+
+  &.--active {
+    background-color: var(--clr-primary-main); /* 활성화된 탭의 배경색 */
+    color: var(--clr-primary-contrast); /* 활성화된 탭 텍스트 색상 */
+  }
+}
+
+
+.no-prod-opt-list {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 2.4rem;
+    gap: 0.8rem;
+
+    @include mq(lg){
+        grid-template-columns: 1fr;
+    }
+
+  .no-prod-opt-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.6rem;
+    border:1px solid var(--clr-background-secondary);
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+
+    form {
+        width: 100%;
+    }
+
+    &:hover {
+      border-color: var(--clr-slate-200);
+    }
+
+    .no-form-control-inner {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .no-prod-attr-actions {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &.no-btn-primary {
+          background-color: var(--clr-primary-main);
+          color: var(--clr-primary-contrast);
+
+          &:hover {
+            background-color: var(--clr-primary-dark);
+          }
+        }
+
+        &.no-btn-error {
+          background-color: var(--clr-error-main);
+          color: var(--clr-error-contrast);
+
+          &:hover {
+            background-color: var(--clr-error-dark);
+          }
+        }
+      }
+    }
+  }
+}

@@ -32,11 +32,11 @@ export default class AttributeEditor extends Component {
         return `
             <div>
                 <div>
-                    <button type="button" data-status="attr" class="no-prod-attr-tab">속성</button>
-                    <button type="button" data-status="option" class="no-prod-attr-tab">옵션</button>
-                    <button type="button" data-status="rule" class="no-prod-attr-tab">규칙</button>
+                    <button type="button" data-status="attr" class="no-prod-attr-tab ${this._state.status === 'attr' ? '--active' : ''}">속성</button>
+                    <button type="button" data-status="option" class="no-prod-attr-tab ${this._state.status === 'option' ? '--active' : ''}">옵션</button>
+                    <button type="button" data-status="rule" class="no-prod-attr-tab ${this._state.status === 'rule' ? '--active' : ''}">규칙</button>
                 </div>
-                <div>
+                <div style="margin-top: 2.4rem;">
                     ${status === 'attr' ? this._renderAttributes() : ``}
                     ${status === 'option' ? this._renderOptions() : ``}
                     ${status === 'rule' ? this._renderRules() : ``}
@@ -201,7 +201,7 @@ export default class AttributeEditor extends Component {
         const {id, type, options} = attribute;
 
         if (!['select', 'multi-select'].includes(type)) {
-            return `<div>
+            return `<div class="no-form-empty-fallback">
                 <p>선택 또는 다중 선택만 옵션추가가 가능합니다.</p>
                 <p>옵션 추가를 원하실 경우, 속성의 형태를 변경해주세요.</p>
             </div>`; 
@@ -220,7 +220,9 @@ export default class AttributeEditor extends Component {
                         </button>
                     </div>
                 </form>
-                ${options.length ? `<ol class="no-prod-opt-list" id="${this._optionListId}"></ol>` : '<p>등록된 옵션이 없습니다.</p>'}
+                <div style="margin-top: 2.4rem;">
+                    ${options.length ? `<ol class="no-prod-opt-list" id="${this._optionListId}"></ol>` : '<p class="no-form-empty-fallback">등록된 옵션이 없습니다.</p>'}
+                </div>
             </div>
         `;
     }
@@ -244,11 +246,11 @@ export default class AttributeEditor extends Component {
     }
 
     _bindEvents(){
-        this.qsAll('button[data-status]').forEach(btn => {
+        const buttons = this.qsAll('button[data-status]');
+
+        buttons.forEach(btn => {
             this.on(btn, 'click', this._handleTab.bind(this));
         }); 
-
-
     }
 
     _handleTab(self, e){

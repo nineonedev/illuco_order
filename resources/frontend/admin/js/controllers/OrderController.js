@@ -18,22 +18,36 @@ export default class OrderController extends Controller {
         const form = document.getElementById('frm'); 
         this.form = form;
 
-        const deleteBtn = form.querySelector('[data-action=delete]');
+        
+        const items = document.querySelectorAll('[data-view="order-item-form"]');
+
+        if(items) {
+            items.forEach(form => {
+                form.addEventListener('submit', this._restore.bind(this));
+            })
+
+        }
+
         this.cancelBtn = form.querySelector('[data-action=cancel]');
-        
-        document.querySelectorAll('[data-view="order-item-form"]').forEach(form => {
-            form.addEventListener('submit', this._restore.bind(this));
-        })
 
-        const restoreForm = document.getElementById('restore-form')
-        restoreForm.addEventListener('submit', this._restoreAll.bind(this));
-        
-        deleteBtn.addEventListener('click', this._destroy.bind(this));
-        form.addEventListener('submit', this._update.bind(this));
+        if(form){
+            const deleteBtn = form.querySelector('[data-action=delete]');
 
-        SelectInput.make('order_status', {
-            // onChange: this._handleChange.bind(this)
-        }).render();
+            SelectInput.make('order_status', {
+                // onChange: this._handleChange.bind(this)
+            }).render();
+                
+            const restoreForm = document.getElementById('restore-form')
+            if (restoreForm){
+                restoreForm.addEventListener('submit', this._restoreAll.bind(this));
+            }
+            
+            if(deleteBtn){
+                deleteBtn.addEventListener('click', this._destroy.bind(this));
+                form.addEventListener('submit', this._update.bind(this));
+            }
+        }
+
     }
 
     

@@ -108,6 +108,11 @@ use App\Domains\Order\Entities\Order;
             </section>
 
 
+            <?php if (user()->isDealer()) : ?>
+            <div class="no-form-action">
+                <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm">목록</a>
+            </div>
+            <?php else : ?>
             <!-- 4. 주문 상태 수정 -->
             <section class="no-order-update">
                 <h2 class="no-order-update__title">주문 상태 수정</h2>
@@ -141,6 +146,7 @@ use App\Domains\Order\Entities\Order;
                     </form>
                 </div>
             </section>
+            <?php endif; ?>
 
 
         </div>

@@ -16,7 +16,6 @@
         </div>
         <!-- Head -->
 
-        
         <div class="no-page-index-filter">
             <form action="" class="no-page-index-filter__form">
                 <div class="no-form-search --sm">
@@ -69,12 +68,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php for ($i = 0; $i < 10; $i++): ?>
+                    <?php foreach ($claims->items() as $claim): ?>
                     <tr class="no-table-hover">
                         <td class="no-table-check">
                             <div class="no-form-checkbox --xs">
-                                <label for="notice<?=$i?>" class="no-form-checkbox-pointer">
-                                    <input type="checkbox" name="notices[]" id="notice<?=$i?>" class="no-form-checkbox-input">
+                                <label for="claim<?= $claim->id ?>" class="no-form-checkbox-pointer">
+                                    <input type="checkbox" name="claims[]" id="claim<?= $claim->id ?>" class="no-form-checkbox-input">
                                     <div class="no-form-checkbox-ripple">
                                         <span class="no-form-checkbox-box">
                                             <div class="no-form-checkbox-icon">
@@ -85,81 +84,42 @@
                                 </label>
                             </div>
                         </td>
-                        <td>ABC 대리점</td>
-                        <td>IHL-1000</td>
-                        <td>시스템 점검 안내</td>
-                        <td>홍길동123</td>
-                        <td>Mr. Lee</td>
-                        <td>2025-05-14</td>
+                        <td><?= e($claim->dealer->name ?? '대리점 없음') ?></td>
+                        <td><?= e($claim->product->name ?? '제품 없음') ?></td>
+                        <td><?= e($claim->title) ?></td>
+                        <td><?= e($claim->orderer_name) ?></td>
+                        <td><?= e($claim->author_name ?? '관리자') ?></td>
+                        <td><?= date('Y-m-d', strtotime($claim->created_at ?? 'now')) ?></td>
                         <td class="no-table-action">
                             <div class="no-page-index-table__action">
-                                <a href="#" class="no-btn-action" data-tooltip>
+                                <a href="<?= route('admin.claims.show', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip>
                                     <div class="no-btn-action-ripple">
                                         <i class="fa-light fa-eye"></i>
-                                        <span data-tooltip-text>
-                                            <span>보기</span>
-                                            <span data-tooltip-arrow></span>
-                                        </span>
+                                        <span data-tooltip-text><span>보기</span><span data-tooltip-arrow></span></span>
                                     </div>
                                 </a>
-                                <a href="#" class="no-btn-action" data-tooltip>
-                                    <div class="no-btn-action-ripple">
-                                        <i class="fa-light fa-copy"></i>
-                                        <span data-tooltip-text>
-                                            <span>복사</span>
-                                            <span data-tooltip-arrow></span>
-                                        </span>
-                                    </div>
-                                </a>
-                                <a href="#" class="no-btn-action" data-tooltip>
+                                <a href="<?= route('admin.claims.edit', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip>
                                     <div class="no-btn-action-ripple">
                                         <i class="fa-light fa-pen-to-square"></i>
-                                        <span data-tooltip-text>
-                                            <span>수정</span>
-                                            <span data-tooltip-arrow></span>
-                                        </span>
+                                        <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
                                     </div>
                                 </a>
-                                <a href="#" class="no-btn-action" data-tooltip>
+                                <a href="<?= route('admin.claims.destroy', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
                                     <div class="no-btn-action-ripple">
                                         <i class="fa-light fa-trash-can"></i>
-                                        <span data-tooltip-text>
-                                            <span>삭제</span>
-                                            <span data-tooltip-arrow></span>
-                                        </span>
+                                        <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>
                                     </div>
                                 </a>
                             </div>
                         </td>
                     </tr>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
                 </tbody>
-
             </table>
-
         </form>
         <!-- Table -->
         
-        <div class="no-pagination">
-            <p class="no-pagination__text">Rows per page:</p>
-            <div class="no-pagination__input">
-                <select name="" id="">
-                    <option value="">25</option>
-                    <option value="">50</option>
-                    <option value="">100</option>
-                </select>
-            </div>
-            <div class="no-pagination__text">1-7 of 7</div>
-            <div class="no-pagination__btn">
-                <a href="#" class="no-btn-move --disabled">
-                    <i class="fa-duotone fa-light fa-chevron-left"></i>
-                </a>
-                <a href="#" class="no-btn-move">
-                    <i class="fa-duotone fa-light fa-chevron-right"></i>
-                </a>
-            </div>
-        </div>
-        <!-- Pagination -->
+        <?= include_view('admin.components.pagination', ['paginator' => $claims]) ?>
 
     </div>
     <!-- Row -->
