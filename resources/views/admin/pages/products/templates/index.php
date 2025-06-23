@@ -56,6 +56,7 @@
                                     </label>
                                 </div>
                             </th>
+                            <th>이미지</th>
                             <th>이름</th>
                             <th>코드</th>
                             <th>모델</th>
@@ -80,6 +81,13 @@
                                         </div>
                                     </label>
                                 </div>
+                            </td>
+                            <td>
+                                <!-- 제품 이름 앞에 이미지 삽입 -->
+                                 <?php if ($template->fileattachment && count($template->fileattachment) > 0): ?>
+                                    <img src="<?= $template->fileattachment[0]->upload_path ?>" alt="<?= e($template->name) ?>" class="product-image" style="width: 60px; height: auto; margin-right: 10px;">
+                                <?php endif; ?>
+                                
                             </td>
                             <td><?= e($template->name) ?></td>
                             <td><?= e($template->code) ?></td>

@@ -28,6 +28,7 @@ export default class CartController extends Controller {
         
         this._listen('add.cart', this._addToCart.bind(this));
         this._listen('update.cartitem', this._updateCartItem.bind(this));
+        this._listen('edit.cartitem', this._editCartItem.bind(this));
         this._listen('delete.cartitem', this._deleteCartItem.bind(this));
         this._listen('delete.cartitems', this._deleteManyCartItems.bind(this));
 
@@ -107,6 +108,33 @@ export default class CartController extends Controller {
         }
     }
 
+    async _editCartItem({ id, view, button }) {
+        this._logger.info(id, view, button);
+        
+        button.setState({disabled: true});
+        this.loader.show();
+        
+        try {
+            const result = await new Ajax(true).get(`/admin/cartitems/${id}`);
+            this._logger.success(result); 
+
+            const {data} = result;
+            const {template, values} =  data.cartitem.product;
+            
+            this._pickTemplate({template, values});
+
+        } catch (err) {
+            // 에러 처리
+            this._logger.error(err);
+            alert('제품 정보를 불러오는 중 문제가 발생했습니다.');
+        } finally {
+            // 로딩 스피너 숨기기
+            this.loader.hide();
+            button.setState({disabled: false});
+        }
+    }
+
+
     async _updateCartItem({id, data, view, button}){
         this._logger.info(id, data);
 
@@ -158,8 +186,8 @@ export default class CartController extends Controller {
 
     }
 
-    async _pickTemplate({template}, evt){
-        this.form.setState({template: template});
+    async _pickTemplate({template, values}, evt){
+        this.form.setState({template: template, values: values});
         this.modal.setState({
             open: false, 
             content: '',

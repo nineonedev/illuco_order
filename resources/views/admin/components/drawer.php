@@ -33,7 +33,6 @@
                     <?php //endif; ?>
                 </ul>
 
-                <hr class="no-hr --lg">
 
                 <ul class="no-drawer-gnb">
                     <!-- 주문 목록 메뉴 -->
@@ -109,7 +108,6 @@
                     <?php endif; ?>
                 </ul>
 
-                <hr class="no-hr --lg">
                 
                 <ul class="no-drawer-gnb">
                     <!-- 제품 메뉴 -->
@@ -149,7 +147,6 @@
                     <?php endif; ?>
                 </ul>
 
-                <hr class="no-hr --lg">
 
                 <ul class="no-drawer-gnb">
                     <!-- 직원 메뉴 -->
@@ -189,7 +186,6 @@
                     <?php endif; ?>
                 </ul>
 
-                <hr class="no-hr --lg">
 
                 <ul class="no-drawer-gnb">
                     <!-- 공지사항 메뉴 -->
@@ -231,7 +227,7 @@
 
                 <ul class="no-drawer-gnb">
                     <!-- 권한 생성 메뉴 -->
-                    <?php //if (can('role.read')): ?>
+                    <?php if (can('role.read')): ?>
                         <li class="no-drawer-gnb-item <?= route_is('admin.roles') ? '--active' : '' ?>">
                             <a href="<?= route('admin.roles.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                 <div class="no-drawer-gnb-link__icon">
@@ -242,7 +238,7 @@
                                 </div>
                             </a>
                         </li>
-                    <?php //endif; ?>
+                    <?php endif; ?>
                 </ul>
 
             </nav>

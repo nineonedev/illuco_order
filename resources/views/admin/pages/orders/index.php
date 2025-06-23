@@ -60,10 +60,12 @@ use Framework\Support\ValueObjects\Money;
                                     </label>
                                 </div>
                             </th>
-                            <th>이름</th>
+                            <th>주문자</th>
+                            <?php if (!user()->isDealer()) : ?>
+                            <th>대리점</th>
+                            <?php endif; ?>
                             <th>연락처</th>
                             <th>이메일</th>
-                            <th>대리점</th>
                             <th>총 금액</th>
                             <th>상태</th>
                             <th>주문일</th>
@@ -88,9 +90,19 @@ use Framework\Support\ValueObjects\Money;
                                 </div>
                             </td>
                             <td><?= e($order->orderer_name) ?></td>
+                            <?php if (!user()->isDealer()) : ?>
+                            <td>
+                                <?php if($order->user->isDealer()) : ?>
+                                <a href="<?= route('admin.dealers.edit', ['id' => $order->user->userable->id]) ?>">
+                                    <span><?= $order->user->name ?></span>
+                                </a>
+                                <?php else: ?>
+                                <span> - </span>
+                                <?php endif; ?>
+                            </td>
+                            <?php endif; ?>
                             <td><?= e($order->orderer_phone ?? '-') ?></td>
                             <td><?= e($order->orderer_email ?? '-') ?></td>
-                            <td><?= e($order->customer->name ?? '-') ?></td>
                             <td><?= Money::fromFloat($order->total_amount ?? 0) ?></td>
                             <td><?= __('system.order.status.' . $order->order_status) ?></td>
                             <td><?= date('Y-m-d', strtotime($order->created_at)) ?></td>

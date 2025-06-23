@@ -22,34 +22,27 @@ class DeleteUserService extends Service
     {
         $userableClass = get_class($this->userable);
         
-        db()->transaction()->begin();
+         // 1. 연결된 user 찾기
+        $user = UserRepository::queryStatic()
+            ->where(User::getMorphType(), $userableClass::alias())
+            ->where(User::getMorphId(), $this->userable->getPrimaryKey())
+            ->first();
 
-        try {
-            // 1. 연결된 user 찾기
-            $user = UserRepository::queryStatic()
-                ->where(User::getMorphType(), $userableClass::alias())
-                ->where(User::getMorphId(), $this->userable->getPrimaryKey())
-                ->first();
-
-            // 2. user 삭제
-            if ($user) {
-                if (!UserRepository::make()->delete($user)) {
-                    throw new ValidationException("사용자 삭제에 실패했습니다.");
-                }
+        // 2. user 삭제
+        if ($user) {
+            if (!UserRepository::make()->delete($user)) {
+                throw new ValidationException("사용자 삭제에 실패했습니다.");
             }
-
-            // 3. userable 삭제
-            $userableRepo = $userableClass::resolveRepository();
-            
-            if (!$userableRepo->delete($this->userable)) {
-                throw new ValidationException("연결된 개체 삭제에 실패했습니다.");
-            }
-
-            return ['message' => '삭제되었습니다.'];
-        } catch (Exception $e) {
-            db()->transaction()->rollBack();
-            throw $e; 
         }
+
+        // 3. userable 삭제
+        $userableRepo = $userableClass::resolveRepository();
+        
+        if (!$userableRepo->delete($this->userable)) {
+            throw new ValidationException("연결된 개체 삭제에 실패했습니다.");
+        }
+
+        return ['message' => '삭제되었습니다.'];
 
     }
 }

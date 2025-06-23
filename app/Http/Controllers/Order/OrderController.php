@@ -28,7 +28,15 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = OrderRepository::make()->with(['customer'])->query();
+        $query = OrderRepository::make()->with(['customer', 'user.userable'])->query();
+
+        // 대리점인 경우, 대리점에 해당하는 주문만 조회
+        if (user()->isDealer()) {
+            $dealerId = user()->userable->id; // 대리점의 ID
+            $query->whereHas('customer', function($q) use ($dealerId) {
+                $q->where('dealer_id', $dealerId); // 고객의 dealer_id 필터링
+            });
+        }
 
         $query->when($s = $request->query('status'), fn($q) => $q->where('order_status', $s))
             ->when($n = $request->query('name'), fn($q) => 

@@ -45,6 +45,9 @@
                     <thead>
                         <tr>
                             <th>이름</th>
+                            <?php if (!user()->isDealer()) :?>
+                            <th>대리점</th>
+                            <?php endif; ?>
                             <th>국가</th>
                             <th>전화번호</th>
                             <th>주소</th>
@@ -56,6 +59,17 @@
                         <?php foreach ($customers->items() as $customer): ?>
                         <tr class="no-table-hover">
                             <td><?= e($customer->name) ?></td>
+                            <?php if (!user()->isDealer()) :?>
+                            <td>
+                                <?php if ($customer->dealer) : ?>
+                                <a href="<?= route('admin.dealers.edit', ['id' => $customer->dealer->id]) ?>" class="no-direct-link">
+                                    <?= $customer->dealer->user->name ?>
+                                </a>
+                                <?php else : ?>
+                                <span> - </span>
+                                <?php endif; ?>
+                            </td>
+                            <?php endif; ?>
                             <td><?= lang('system.countries.'.e($customer->country)) ?></td>
                             <td><?= e($customer->phone_number) ?></td>
                             <td><?= e($customer->address) ?></td>

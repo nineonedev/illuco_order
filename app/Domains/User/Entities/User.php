@@ -42,4 +42,19 @@ class User extends MorphEntity implements  AuthenticatableInterface
     {
         return $this->password;
     }
+
+    public function isDealer(): bool
+    {
+        return $this->userable && $this->userable instanceof Dealer;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->userable && $this->userable instanceof Admin;
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->userable && $this->userable instanceof Employee;
+    }
 }

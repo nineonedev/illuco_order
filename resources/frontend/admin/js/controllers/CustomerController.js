@@ -12,7 +12,7 @@ export default class CustomerController extends Controller {
 
     _prepare() {
         CountrySelect.make('country-hook').render();
-        Select.make("dealer-hook").render();
+        // Select.make("dealer-hook").render();
     }
 
     create() {

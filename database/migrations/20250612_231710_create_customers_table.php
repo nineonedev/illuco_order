@@ -11,7 +11,7 @@ return new class implements Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteSetNull();
-            $table->foreignId('dealer_id')->nullable()->constrained('users')->onDeleteSetNull();
+            $table->foreignId('dealer_id')->nullable()->constrained('dealers')->onDeleteSetNull();
             $table->string('name');
             $table->string('country')->nullable();
             $table->string('phone_number')->nullable();

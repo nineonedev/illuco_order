@@ -1,5 +1,7 @@
 <?php
 
+use App\Domains\User\Entities\Dealer;
+
 ?>
 <?php extend('layouts.admin'); ?>
 <?php section('controller', 'customer') ?>
@@ -30,7 +32,7 @@
                 </div>
                 
                 <!-- FormControl -->
-                <div 
+                <!-- <div 
                     id="dealer-hook" 
                     data-component-type="select" 
                     data-component-props='{
@@ -38,8 +40,11 @@
                         "label": "대리점 선택"
                     }'
                 >
-                </div>
+                </div> -->
                 <!-- FormControl -->
+                <?php if (user()->userable instanceof Dealer) : ?>
+                <input type="hidden" name="dealer_id" value="<?=user()->userable->id?>">
+                <?php endif; ?>
 
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">

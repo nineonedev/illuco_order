@@ -27,6 +27,7 @@ export default class CartItem extends View {
             onCheck: () => {},
             onDelete: () => {},
             onUpdate: () => {},
+            onEdit: () => {},
             itemChecked: false,
         }
     }
@@ -71,7 +72,7 @@ export default class CartItem extends View {
                             </div>
                         </div>
                     </div>
-                    <div id="${this._aggtHookId}"></div>
+                    <div id="${this._aggtHookId}" class="no-cart-item-action"></div>
                 </div>
             </li>
         `;
@@ -128,6 +129,15 @@ export default class CartItem extends View {
             onClick: this._handleDelete.bind(this)
         }).render();
 
+
+        this._editBtn = Button.make(this._aggtHookId, {
+            className: 'no-btn-primary-outline --sm',
+            ariaLabel: '아이템 수정',
+            label: '수정',
+            type: 'button',
+            onClick: this._handleEdit.bind(this),
+        }).render();
+
         // 수량 카운터
         this._counter = InputFactory
             .make('counter')
@@ -139,6 +149,10 @@ export default class CartItem extends View {
     }
 
 
+
+    _handleEdit() {
+        this._props.onEdit({id: this._props.id, view: this, button: this._editBtn});
+    }
 
     _handleDelete(){
         this._props.onDelete({id: this._props.id, view: this, button: this._deleteBtn});

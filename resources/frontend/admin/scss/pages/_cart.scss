@@ -99,16 +99,24 @@
 
         &-head {
             display: flex;
-            align-items: center;
             justify-content: space-between;
             gap: 1.6rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1.6rem;
         }
-        &-present {
+
+        &-action{ 
             display: flex;
             align-items: center;
-            justify-content: space-between;
             gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        &-present {
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+
+            @include mq(md){}
 
             &-block {
                 display: flex;

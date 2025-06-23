@@ -16,7 +16,8 @@ export default class TemplateForm extends View {
 
     _defineProps() {
         return {
-            template: {}
+            template: {},
+            values: [],
         };
     }
 
@@ -117,7 +118,6 @@ export default class TemplateForm extends View {
             model,
             name
         } = template;
-        
 
         const nameInput = InputFactory.make('text').make(this._tempHookId,{
             label: '이름',
@@ -175,13 +175,16 @@ export default class TemplateForm extends View {
 
     _renderAttributes(){
         const {template} = this._state;
+
         
         if (Helper.isEmptyObject(template)) return; 
         const {attributes} = template; 
-
+        
         if (attributes && attributes.length > 0) {
-
+            
             for (const attr of attributes) {
+                const value = this._state.values.find(v => +v.attribute_id === +attr.id);
+
                 const hiddenInput = InputFactory.make('text')
                     .make(this._attrHookId, {
                         type: 'hidden',
@@ -193,7 +196,8 @@ export default class TemplateForm extends View {
                     .make(attr.type)
                     .make(this._attrHookId, {
                         ...attr, 
-                        name: `attributes[${attr.id}][value]`
+                        name: `attributes[${attr.id}][value]`,
+                        value: value ? value.value : '',
                     }).render();
 
                 this._inputs.push(input, hiddenInput);

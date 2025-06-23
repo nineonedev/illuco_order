@@ -9,6 +9,7 @@ export default class Template extends View {
     _defineProps(){
         return {
             template: {},
+            values: [],
             onSubmit: () => {}
         }
     }
@@ -65,7 +66,8 @@ export default class Template extends View {
 
     _renderForm(){
         TemplateForm.make(this.refs.group, {
-            template: this._state.template
+            template: this._state.template,
+            values: this._state.values || [],
         }).render();
     }
 }

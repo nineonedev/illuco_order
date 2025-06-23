@@ -12,7 +12,7 @@ return new class implements Migration
             $table->id();
             $table->foreignId('category_id')->nullable()->constrained('product_categories')->onDeleteSetNull();
             $table->string('name');
-            $table->string('code')->unique();
+            $table->string('code'); //->unique();
             $table->string('model')->unique();
             $table->decimal('price', 10, 2)->default(0);
             $table->integer('sort_order')->default(0);

@@ -158,6 +158,10 @@ export default class CartItemList extends View {
         this._dispatch('delete.cartitem', { id, view, button });
     }
 
+    _handleEdit({id, view, button}){
+        this._dispatch('edit.cartitem', { id, view, button });
+    }
+
     addCartItem(cartitem) {
         this.setState({cartitems: [...this._children.map(c => c.state), cartitem]});
     }
@@ -167,6 +171,7 @@ export default class CartItemList extends View {
             ...cartitem,
             onCheck: this._handleCheck.bind(this),
             onDelete: this._handleDelete.bind(this),
+            onEdit: this._handleEdit.bind(this),
             onUpdate: this._handleUpdate.bind(this)
         }).render();
 

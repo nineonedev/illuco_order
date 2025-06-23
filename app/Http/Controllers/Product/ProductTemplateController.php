@@ -58,8 +58,6 @@ class ProductTemplateController extends Controller
     {
         $template = $this->repo()->with([FileAttachment::class, 'attributes.options'])->findOrFail($id);
         $attachments = is_array($template->fileattachment) ? $template->fileattachment : [$template->fileattachment];
-        
-
         $template->setRelation(FileAttachment::alias(), FileAttachmentList::make($attachments));
 
         return $this->render('admin.pages.products.templates.edit', [

@@ -15,6 +15,32 @@ class CartItemController extends Controller
         return CartItemRepository::make();
     }
 
+   public function show(string $id, Request $request)
+    {
+        return $this->runInTransaction(function () use ($id) {
+            // CartItem 조회
+            $cartitem = $this->repo()->with([
+                'product' => [
+                    'values',
+                    'template' => [
+                        'attributes.options',
+                        'fileattachment',
+                    ]
+                ],
+            ])->find($id);
+
+
+            if (!$cartitem) {
+                throw new RuntimeException("아이템을 찾을 수 없습니다.");
+            }
+
+            // 필요한 데이터 반환
+            return $this->render(null, [
+                'cartitem' => $cartitem->toArray(),
+            ]);
+        });
+    }
+
     public function update(string $id, Request $request)
     {
         return $this->runInTransaction(function () use ($id, $request) {

@@ -10,6 +10,7 @@ class Customer extends Entity
     protected array $fillable = [
         'user_id',
         'country',
+        'dealer_id',
         'name',
         'phone_number',
         'email',

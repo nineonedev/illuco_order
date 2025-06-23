@@ -179,6 +179,7 @@ Route::middleware(['web'])->group(function(){
             Route::prefix('cartitems')
             ->name('cartitems')
             ->group(function(){
+                Route::get('{id}', [CartItemController::class, 'show'])->name('show');
                 Route::put('{id}', [CartItemController::class, 'update'])->name('update');
                 
                 Route::delete('/', [CartItemController::class, 'destroyMany'])->name('destroyMany');

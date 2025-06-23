@@ -53,6 +53,7 @@ Rel::setConfig([
     ],
     Dealer::class => [
         Rel::morphOne(User::class),
+        Rel::hasMany('customers', Customer::class, 'dealer_id'),
     ],
 
     // ===================================================================
@@ -97,6 +98,7 @@ Rel::setConfig([
     ],
     Customer::class => [
         Rel::hasOne('cart', Cart::class, 'customer_id'),
+        Rel::belongsTo('dealer', Dealer::class, 'dealer_id'),
     ],
     Cart::class => [
         Rel::belongsTo('customer', Customer::class, 'customer_id'),

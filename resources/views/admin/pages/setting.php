@@ -17,7 +17,7 @@
 
         <form action="#" method="post" class="no-form" enctype="multipart/form-data">
             <div class="no-form-group">
-                <div class="no-form-block">
+                <!-- <div class="no-form-block">
                     <div class="no-form-switch --sm">
                         <label for="use_notification" class="no-form-switch-pointer">
                             <input type="checkbox" name="use_notification" id="use_notification" class="no-form-switch-input">
@@ -33,7 +33,7 @@
                         <p class="no-form-switch-helper-text">주문이 접수될 때 지정한 담당자들에게 알림이 발송됩니다.</p>
                         <span class="no-form-control-space"></span>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="--flex-column">
                     <fieldset class="no-form-group">
@@ -82,7 +82,7 @@
                     </fieldset>
                     <span class="no-form-control-space"></span>
                 </div>
-                <div class="--flex-column">
+                <!-- <div class="--flex-column">
                     <fieldset class="no-form-group">
                         <legend class="no-form-base-label">언어</legend>
                         <div class="no-form-listing">
@@ -111,7 +111,7 @@
                         </div>
                     </fieldset>
                     <span class="no-form-control-space"></span>
-                </div>
+                </div> -->
 
             </div>
             

@@ -1,4 +1,6 @@
-<?php ?>
+<?php 
+
+use App\Domains\User\Entities\Dealer;?>
 <?php extend('layouts.admin'); ?>
 <?php section('controller', 'customer') ?>
 <?php section('action', 'edit') ?>
@@ -24,8 +26,10 @@
                         "value": "<?= $customer->country ?? "KR" ?>"
                     }'>
                 </div>
-                <input type="hidden" name="dealer_id" id="dealer_id" class="no-form-control-input" value="<?= e($customer->dealer_id) ?>" >
 
+                <?php if (user()->userable instanceof Dealer) : ?>
+                <input type="hidden" name="dealer_id" value="<?=user()->userable->id?>">
+                <?php endif; ?>
 
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">

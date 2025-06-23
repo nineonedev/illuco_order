@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Order;
 
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Repositories\CustomerRepository;
+use App\Domains\User\Entities\Dealer;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -15,15 +16,21 @@ class CustomerController extends Controller
         return CustomerRepository::make();
     }
 
-        public function index(Request $request)
+    public function index(Request $request)
     {
         $query = $this->repo()->with([
+            'dealer.user',
             'cart.cartitems.product.values',
             'cart.cartitems.product.template' => [
                 'attributes.options',
                 'fileattachment'
             ],
         ])->query();
+
+        if (user()->userable instanceof Dealer) {
+            $dealerId = user()->userable->id;
+            $query->where('dealer_id', $dealerId);
+        }
 
         $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
             $q->where('name', 'like', "%{$keyword}%")
@@ -74,10 +81,13 @@ class CustomerController extends Controller
         return $this->runInTransaction(function () use ($request) {
             $customer = new Customer($request->all());
             $customer->user_id = auth()->id();
-            
+            if (user()->userable instanceof Dealer) {
+                $customer->dealer_id = user()->userable->id;
+            }
+
             $this->save($customer);
 
-            return $this->render(null, ['customer' => $customer]);
+            return $this->render(null, ['customer' => $customer], '성공적으로 저장되었습니다.');
         });
     }
 
@@ -89,7 +99,7 @@ class CustomerController extends Controller
 
             $this->save($customer);
 
-            return $this->render(null, ['customer' => $customer]);
+            return $this->render(null, ['customer' => $customer], '성공적으로 저장되었습니다.');
         });
     }
 
