@@ -4,18 +4,21 @@ namespace App\Domains\Product\Entities;
 
 use App\Domains\Product\Repositories\CategoryRepository;
 use Framework\Database\ORM\Entities\Entity;
-use Framework\Database\ORM\Traits\SoftDeletes;
 
 class Category extends Entity
 {
-    use SoftDeletes;
-    
     protected array $fillable = [
-        
+        'slug',
+        'label',
+        'sort_order',
+        'parent_id',
+        'is_locked',
     ];
 
     protected array $casts = [
-        
+        'sort_order' => 'int',
+        'parent_id' => 'int',
+        'is_locked' => 'bool',
     ];
 
     public static function repositoryClass(): string

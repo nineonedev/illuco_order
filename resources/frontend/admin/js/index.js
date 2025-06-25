@@ -94,7 +94,6 @@ class App {
 
 
         document.querySelectorAll('.no-drawer-gnb').forEach(gnb => {
-            console.log(gnb);
             
             if (gnb.children.length === 0){
                 gnb.classList.add('--empty');

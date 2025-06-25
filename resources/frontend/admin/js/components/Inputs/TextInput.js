@@ -14,6 +14,7 @@ export default class TextInput extends View {
             invalidMessage: '',
             helperText: '',
             spacing: true,
+            required: true,
             onChange: (e) => {},
         };
     }
@@ -25,7 +26,7 @@ export default class TextInput extends View {
     }
 
     _template() {
-        const { label, name, value, disabled, readOnly, helperText, invalid, invalidMessage, spacing, type } = this._state;
+        const { label, name, value, disabled, readOnly, required, helperText, invalid, invalidMessage, spacing, type } = this._state;
         const nodeId = this._generateElementId();
         const hidden = type === 'hidden' ? `style="display: none;"` : '';
 
@@ -42,6 +43,7 @@ export default class TextInput extends View {
                         placeholder=""
                         ${disabled ? 'disabled' : ''}
                         ${readOnly ? 'readOnly' : ''}
+                        ${required ? 'required' : ''}
                     >
                     <fieldset class="no-form-control-label">
                         <legend class="no-form-control-text">${label}</legend>

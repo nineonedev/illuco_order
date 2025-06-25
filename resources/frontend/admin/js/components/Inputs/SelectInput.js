@@ -51,7 +51,7 @@ export default class SelectInput extends View {
             .map((opt) => {
                 const value = typeof opt === "string" ? opt : opt.value;
                 const label = typeof opt === "string" ? opt : opt.label;
-                const selected = selectedValue === value ? 'selected' : '';
+                const selected = selectedValue == value ? 'selected' : '';
 
                 return `<option value="${value}" ${selected}>${label}</option>`;
             })

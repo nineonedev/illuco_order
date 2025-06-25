@@ -11,9 +11,9 @@ return new class implements Migration
         Schema::create('product_categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('code')->unique();
+            $table->string('slug')->unique();
+            $table->string('label')->unique();
+            $table->boolean('is_locked')->default(false);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
         });

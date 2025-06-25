@@ -10,7 +10,6 @@ use App\Domains\Product\Entities\ProductTemplate;
 <?php section('title', '제품 템플릿 생성') ?>
 
 <?php section('content') ?>
-
 <div class="no-form-container">
 
     <div class="no-page-row">
@@ -77,14 +76,8 @@ use App\Domains\Product\Entities\ProductTemplate;
                         <span class="no-form-control-space"></span>
                     </div>
 
-                    <div 
-                        class="no-form-control --md" 
-                        data-component-type="select" 
-                        data-component-props='{
-                            "label": "카테고리", 
-                            "name": "category_id"
-                        }'
-                    ></div>
+                    
+                    <div id="category_id"></div>
 
                     <div data-component-type="file" data-component-props='{"file_key": "main_image", "label": "대표 이미지"}'></div>
 

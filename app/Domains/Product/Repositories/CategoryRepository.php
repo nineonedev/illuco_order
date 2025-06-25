@@ -9,7 +9,7 @@ class CategoryRepository extends Repository
 {
     public static function table(): string
     {
-        return 'categories';
+        return 'product_categories';
     }
 
     public static function entityClass(): string

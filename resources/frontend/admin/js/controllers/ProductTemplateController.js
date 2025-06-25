@@ -6,6 +6,7 @@ import AttributeList from "../components/Product/AttributeList";
 import AttributeManager from "../components/Product/AttributeManager";
 import AttributeModal from "../components/Product/AttributeModal";
 import Select from '../components/Select';
+import SelectInput from "../components/Inputs/SelectInput";
 
 export default class ProductTemplateController extends Controller {
     form;
@@ -17,7 +18,7 @@ export default class ProductTemplateController extends Controller {
 
     }
 
-    _prepare() {
+    async _prepare() {
         this.form = document.getElementById('frm');
         this.cancelBtn = document.querySelector('[data-action="cancel"]');
 
@@ -28,14 +29,32 @@ export default class ProductTemplateController extends Controller {
         document.querySelectorAll('[data-component-type=select]').forEach(el => {
             Select.make(el).render();
         })
+
+        const categoryInput = SelectInput.make('category_id', {
+            label: '카테고리',
+            name: "category_id"
+        }).render();
+
+        const categories = await this._fetchCategories();
+        categoryInput.setState({options: categories.map(c => ({value: c.id, label: c.label}))});
     }
 
     show(){
         this._logger.info("show");
     }
 
+    async _fetchCategories()
+    {
+        const result = await new Ajax(true).get('/admin/product-categories'); 
+        if (result.success){
+            return result.data.categories; 
+        }
 
-    create() {
+        return [];
+    }
+
+
+    async create() {
         this._logger.info("create");
         this._prepare();
 
@@ -95,19 +114,19 @@ export default class ProductTemplateController extends Controller {
         // manager 
         // ============================================================
 
-        this.attrManager = AttributeManager.make('attr-hook').render();
-        this.attrModal = AttributeModal.make('modal-hook').render();
+        // this.attrManager = AttributeManager.make('attr-hook').render();
+        // this.attrModal = AttributeModal.make('modal-hook').render();
 
-        this._listen('attr.store', this._storeAttribute.bind(this));
-        this._listen('attr.open', this._openAttribute.bind(this));
-        this._listen('attr.update', this._updateAttribute.bind(this));
-        this._listen('attr.destroy', this._destroyAttribute.bind(this));
+        // this._listen('attr.store', this._storeAttribute.bind(this));
+        // this._listen('attr.open', this._openAttribute.bind(this));
+        // this._listen('attr.update', this._updateAttribute.bind(this));
+        // this._listen('attr.destroy', this._destroyAttribute.bind(this));
 
-        this._listen('option.store', this._storeOption.bind(this));
-        this._listen('option.update', this._updateOption.bind(this));
-        this._listen('option.destroy', this._destroyOption.bind(this));
+        // this._listen('option.store', this._storeOption.bind(this));
+        // this._listen('option.update', this._updateOption.bind(this));
+        // this._listen('option.destroy', this._destroyOption.bind(this));
 
-        await this._allAttributes();
+        // await this._allAttributes();
     }
 
     // ============================================================

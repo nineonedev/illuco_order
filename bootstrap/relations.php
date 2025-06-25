@@ -9,6 +9,7 @@ use App\Domains\Order\Entities\Cart;
 use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Entities\OrderItem;
+use App\Domains\Product\Entities\Category;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductAttribute;
 use App\Domains\Product\Entities\ProductOption;
@@ -76,7 +77,11 @@ Rel::setConfig([
     // ===================================================================
     // Product
     // ===================================================================
+    Category::class => [
+        Rel::hasMany('template', ProductTemplate::class, 'category_id')
+    ],
     ProductTemplate::class => [
+        Rel::belongsTo('category', Category::class, 'category_id'),
         Rel::morphMany(FileAttachment::class),
         Rel::belongsToMany('attributes', ProductAttribute::class, 'product_attribute_template', 'template_id', 'attribute_id'),
     ],

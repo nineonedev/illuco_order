@@ -174,35 +174,28 @@ export default class TemplateForm extends View {
     }
 
     _renderAttributes(){
-        const {template} = this._state;
+        const {category} = this._state.template;
 
-        
-        if (Helper.isEmptyObject(template)) return; 
-        const {attributes} = template; 
-        
-        if (attributes && attributes.length > 0) {
-            
-            for (const attr of attributes) {
-                const value = this._state.values.find(v => +v.attribute_id === +attr.id);
 
-                const hiddenInput = InputFactory.make('text')
-                    .make(this._attrHookId, {
-                        type: 'hidden',
-                        name: `attributes[${attr.id}][type]`,
-                        value: attr.type
-                    }).render();
-                    
-                const input = InputFactory
-                    .make(attr.type)
-                    .make(this._attrHookId, {
-                        ...attr, 
-                        name: `attributes[${attr.id}][value]`,
-                        value: value ? value.value : '',
-                    }).render();
-
-                this._inputs.push(input, hiddenInput);
-            }
+        switch(category.slug) {
+            case 'loupe' :
+                this._renderLoupe();
+                break;
         }
+    }
+
+    async _renderLoupe(){
+        this._logger.success('loupe');
+
+        const info = await this._fetchLoupeInfo()
+
+        // const hook = document.getElementById(this._attrHookId);
+        
+    }
+
+    async _fetchLoupeInfo()
+    {
+        const model = this._state.template.model;
     }
 
     _renderAggregate(){

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Product;
 
 use App\Domains\Product\Entities\ProductAttribute;
 use App\Domains\Product\Entities\ProductTemplate;
+use App\Domains\Product\Repositories\CategoryRepository;
 use App\Domains\Product\Repositories\ProductTemplateRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
@@ -26,7 +27,7 @@ class ProductTemplateController extends Controller
 
     public function index(Request $request)
     {
-        $query = $this->repo()->with([FileAttachment::class, 'attributes.options'])->query();
+        $query = $this->repo()->with([FileAttachment::class, 'category'])->query();
 
         if ($name = $request->input('name')) {
             $query->where('name', 'like', "%{$name}%");
@@ -42,7 +43,7 @@ class ProductTemplateController extends Controller
 
     public function show(string $id, Request $request) 
     {
-        $template = $this->repo()->with([FileAttachment::class, 'attributes.options'])->findOrFail($id);
+        $template = $this->repo()->with([FileAttachment::class, 'category'])->findOrFail($id);
 
         $template = $request->expectsJson() ? $template->toArray() : $template;
         
@@ -51,17 +52,24 @@ class ProductTemplateController extends Controller
 
     public function create()
     {
-        return $this->render('admin.pages.products.templates.create');
+        $categories = CategoryRepository::make()->query()->orderByAsc('sort_order')->get();
+
+        return $this->render('admin.pages.products.templates.create', [
+            'categories' => array_map(fn($c) => $c->toArray(), $categories)
+        ]);
     }
 
     public function edit(string $id)
     {
-        $template = $this->repo()->with([FileAttachment::class, 'attributes.options'])->findOrFail($id);
+        $template = $this->repo()->with([FileAttachment::class, 'category'])->findOrFail($id);
         $attachments = is_array($template->fileattachment) ? $template->fileattachment : [$template->fileattachment];
         $template->setRelation(FileAttachment::alias(), FileAttachmentList::make($attachments));
 
+        $categories = CategoryRepository::make()->query()->orderByAsc('sort_order')->get();
+
         return $this->render('admin.pages.products.templates.edit', [
-            'template' => $template
+            'template' => $template,
+            'categories' => $categories,
         ]);
     }
 

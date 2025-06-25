@@ -19,9 +19,8 @@ class Http
     public function isSecure(): bool
     {
         return (
-            !empty($this->server['HTTPS'])
-            && $this->server['HTTPS'] !== 'off'
-        ) || $this->server['SERVER_PORT'] === 443;
+            !empty($this->server['HTTPS']) && $this->server['HTTPS'] !== 'off'
+        ) || (isset($this->server['SERVER_PORT']) && $this->server['SERVER_PORT'] == 443);
     }
 
     public function schema(): string

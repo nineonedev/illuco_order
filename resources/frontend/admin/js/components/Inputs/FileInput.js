@@ -44,6 +44,8 @@ export default class FileInput extends View {
         const deleteCheckboxId = `delete_file_${id}`;
         const fileInputId = `file_input_${id ?? this._generateElementId()}`;
 
+
+        
         return `
             <div class="no-form-control no-form-file">
                 <label for="${fileInputId}" class="no-form-control-inner no-form-file-inner">

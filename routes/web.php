@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DealerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Communication\ClaimController;
 use App\Http\Controllers\Communication\NoticeController;
@@ -148,6 +149,15 @@ Route::middleware(['web'])->group(function(){
                     Route::post('/', [ProductTemplateController::class, 'store'])->name('store');
                     Route::put('{id}', [ProductTemplateController::class, 'update'])->name('update');
                     Route::delete('{id}', [ProductTemplateController::class, 'destroy'])->name('destroy');
+                });
+            
+            Route::prefix('product-categories')
+                ->name('product_categories')
+                ->group(function(){
+                    Route::get('/', [CategoryController::class, 'index'])->name('index');
+                    Route::post('/', [CategoryController::class, 'store'])->name('store');
+                    Route::put('{id}', [CategoryController::class, 'update'])->name('update');
+                    Route::delete('{id}', [CategoryController::class, 'destroy'])->name('destroy');
                 });
 
             Route::prefix('product-attributes')

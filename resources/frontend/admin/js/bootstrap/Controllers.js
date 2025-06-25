@@ -1,5 +1,6 @@
 import AdminController from "../controllers/AdminController";
 import CartController from "../controllers/CartController";
+import CategoryController from "../controllers/CategoryController";
 import CustomerController from "../controllers/CustomerController";
 import DealerController from "../controllers/DealerController";
 import EmployeeController from "../controllers/EmployeeController";
@@ -17,5 +18,6 @@ export default {
     product_template: ProductTemplateController,
     role: RoleController,
     cart: CartController,
-    order: OrderController
+    order: OrderController,
+    category: CategoryController
 };

@@ -10,7 +10,9 @@ use App\Domains\Product\Entities\ProductTemplate;
 <?php section('title', '제품 템플릿 수정') ?>
 
 <?php section('content') ?>
-<div class="no-page-flex">
+<!-- <div class="no-page-flex"> -->
+<div class="no-form-container">
+
 
     <div class="no-page-row">
         <div class="no-page-head">
@@ -86,17 +88,8 @@ use App\Domains\Product\Entities\ProductTemplate;
                         <span class="no-form-control-space"></span>
                     </div>
 
-
                     <!-- 카테고리 ID -->
-                    <div 
-                        class="no-form-control --md" 
-                        data-component-type="select" 
-                        data-component-props='{
-                            "label": "카테고리", 
-                            "name": "category_id", 
-                            "value": "<?=$template->category_id?>"
-                        }'
-                    ></div>
+                    <div id="category_id" data-view-props='{"value": "<?=$template->category->id ?? '' ?>"}'></div>
 
                     <!-- 대표 이미지 -->
                     <?php $mainImage = $template->fileattachment->props('main_image', ['label' => '메인 이미지']) ?? '{}'; ?>
@@ -143,18 +136,6 @@ use App\Domains\Product\Entities\ProductTemplate;
         </form>
     </div>
 
-    <div class="no-page-row">
-        <div class="no-page-head">
-            <h1 class="no-heading-sm">제품 속성 관리</h1>
-        </div>
-
-        <div 
-            id="attr-hook" 
-            data-component-props='{
-            "template_id": <?=route_param('id')?>,
-            "action": "<?=route("admin.product_attributes.store")?>"
-        }'></div>
-    </div>
 </div>
 
 

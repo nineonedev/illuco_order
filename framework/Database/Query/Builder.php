@@ -508,6 +508,10 @@ class Builder
     
     public function whereIn(string $column, array $values): self
     {
+        if (empty($values)) {
+            return $this->whereRaw('0 = 1');
+        }
+
         $this->wheres[] = [
             'type' => 'in',
             'column' => $column,

@@ -111,8 +111,8 @@
 
                     <!-- 카테고리 메뉴 -->
                     <?php if (can('category.read')): ?>
-                        <li class="no-drawer-gnb-item <?= '' // route_is('admin.products.category') ? '--active' : '' ?>">
-                            <a href="<?= '#'//route('admin.products.category') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                        <li class="no-drawer-gnb-item <?= route_is('admin.product_categories.index') ? '--active' : '' ?>">
+                            <a href="<?= route('admin.product_categories.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                 <div class="no-drawer-gnb-link__icon">
                                     <i class="fa-light fa-layer-group"></i>
                                 </div>
