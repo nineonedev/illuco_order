@@ -12,9 +12,12 @@ return new class implements Migration
             $table->id();
             $table->foreignId('template_id')->nullable()->constrained('product_templates')->onDeleteSetNull();
             $table->string('name');
+            $table->string('type', 50);
             $table->string('code')->unique();
             $table->string('model')->nullable();
             $table->decimal('price', 10, 2)->default(0);
+            $table->text('description')->nullable();
+            $table->string('engraving_text')->nullable()->comment('주문 시 입력된 각인 내용');
             $table->softDeletes();
             $table->timestamps();
         });

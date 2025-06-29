@@ -11,9 +11,10 @@ return new class implements Migration
         Schema::create('order_documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDeleteCascade();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteSetNull();
-            $table->foreignId('template_id')->constrained('order_document_templates')->onDeleteCascade();
-            $table->string('status')->default('draft');
+            $table->foreignId('user_id')->constrained('users')->onDeleteCascade();
+            $table->string('document_no', 50)->unique();
+            $table->string('type', 50);
+            $table->string('status', 50);
             $table->timestamps();
         });
     }

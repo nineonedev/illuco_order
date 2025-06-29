@@ -1,6 +1,6 @@
 <?php
 
-use App\Domains\Communication\Entities\Notice;
+use App\Domains\Communication\Enums\NoticeStatus;
 use Framework\Database\Contracts\Migration;
 use Framework\Database\Schema\Blueprint;
 use Framework\Support\Facades\Schema;
@@ -18,7 +18,7 @@ return new class implements Migration
             $table->dateTime('visible_from')->nullable();
             $table->dateTime('visible_to')->nullable();
             $table->boolean('is_pinned')->default(false);
-            $table->string('status')->default(Notice::STATUS_DRAFT);
+            $table->string('status')->default(NoticeStatus::DRAFT);
 
             $table->timestamps();
         });

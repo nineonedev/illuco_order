@@ -17,5 +17,4 @@ class DealerRepository extends Repository
     {
         return Dealer::class;
     }
-
 }

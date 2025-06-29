@@ -17,6 +17,8 @@ abstract class AbstractColumnDefinition
 
     protected ?string $onUpdate = null;
     protected ?string $onDelete = null;
+
+    protected ?string $comment = null;
     
     // --- 외래키 및 추가 옵션 ---
     protected ?string $foreignOn = null;
@@ -37,6 +39,12 @@ abstract class AbstractColumnDefinition
     public function primary(): self { $this->indexes[] = 'PRIMARY'; return $this; }
     public function unique(): self { $this->indexes[] = 'UNIQUE'; return $this; }
     public function index(): self { $this->indexes[] = 'INDEX'; return $this; }
+    
+    public function comment(string $text): self
+    {
+        $this->comment = $text;
+        return $this;
+    }
 
     // --- 외래키 Fluent API ---
     public function constrained(string $table = null, string $column = 'id'): self

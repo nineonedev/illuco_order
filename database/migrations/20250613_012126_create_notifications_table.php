@@ -10,10 +10,14 @@ return new class implements Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id(); 
-            $table->morphs('notifiable'); // notifiable_type, notifiable_id
-            $table->string('type'); // 알림 종류
+            
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onDeleteCascade();
+
+            $table->string('type', 100); // 알림 종류
             $table->text('data'); // JSON 형식 내용
-            $table->timestamp('read_at')->nullable();
+            // $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }

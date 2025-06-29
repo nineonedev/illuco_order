@@ -12,11 +12,14 @@ return new class implements Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteSetNull();
             $table->foreignId('dealer_id')->nullable()->constrained('dealers')->onDeleteSetNull();
+
             $table->string('name');
             $table->string('country')->nullable();
-            $table->string('phone_number')->nullable();
+            $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->text('description')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

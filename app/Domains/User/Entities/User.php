@@ -2,12 +2,13 @@
 
 namespace App\Domains\User\Entities;
 
+use App\Domains\User\Enums\UserTypes;
 use App\Domains\User\Repositories\UserRepository;
-use Framework\Database\ORM\Entities\MorphEntity;
+use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Traits\SoftDeletes;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
 
-class User extends MorphEntity implements  AuthenticatableInterface
+class User extends Entity implements AuthenticatableInterface
 {
     use SoftDeletes;
 
@@ -16,12 +17,11 @@ class User extends MorphEntity implements  AuthenticatableInterface
         'username',
         'email',
         'password',
+        'user_type',
+        'phone_number',
+        'gender',
+        'birth',
     ];
-
-    public static function morphType(): string
-    {
-        return 'userable';
-    }
     
     public static function table(): string
     {
@@ -35,7 +35,7 @@ class User extends MorphEntity implements  AuthenticatableInterface
 
     public function getAuthIdentifier()
     {
-        return $this->id; 
+        return $this->id;
     }
 
     public function getAuthPassword(): string
@@ -45,16 +45,16 @@ class User extends MorphEntity implements  AuthenticatableInterface
 
     public function isDealer(): bool
     {
-        return $this->userable && $this->userable instanceof Dealer;
+        return $this->user_type === UserTypes::DEALER; 
     }
 
     public function isAdmin(): bool
     {
-        return $this->userable && $this->userable instanceof Admin;
+        return $this->user_type === UserTypes::ADMIN;
     }
 
     public function isEmployee(): bool
     {
-        return $this->userable && $this->userable instanceof Employee;
+        return $this->user_type === UserTypes::EMPLOYEE;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\Communication\Enums\ClaimStatus;
 use Framework\Database\Contracts\Migration;
 use Framework\Database\Schema\Blueprint;
 use Framework\Support\Facades\Schema;
@@ -15,26 +16,21 @@ return new class implements Migration
             $table->string('product_name');
             $table->string('product_code');
             $table->string('product_model');
+            $table->string('product_serial_number');
+            $table->text('product_description')->nullable();
 
             // 관계
-            $table->unsignedBigInteger('template_id')->nullable(); // 견본 기준
-            $table->unsignedBigInteger('user_id')->nullable();     // 작성자
-
-            $table->string('claimer_type'); // 고객/대리점/직원 등
-            $table->unsignedBigInteger('claimer_id');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteCascade();
+            $table->foreignId('delaer_id')->nullable()->constrained('dealers')->onDeleteSetNull();
 
             // 고객 입력 정보 (스냅샷)
             $table->string('customer_name');
             $table->string('customer_email');
             $table->string('customer_phone');
 
-            // 제품 정보
-            $table->string('serial_number');
-            $table->text('description')->nullable();
-
             // 상태
-            $table->string('status')->default('pending');
-
+            $table->string('status')->default(ClaimStatus::RECEIVED);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

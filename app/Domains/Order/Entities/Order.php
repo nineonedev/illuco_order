@@ -2,45 +2,17 @@
 
 namespace App\Domains\Order\Entities;
 
+use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Order\Repositories\OrderRepository;
 use Framework\Database\ORM\Entities\Entity;
 
 class Order extends Entity
 {
-    /**
-     * 주문 접수됨
-     * 대리점에서 구매 확정 시
-     */
-    const STATUS_RECEIVED = 'received';
-
-    /**
-     * 주문 확인됨
-     * 일루코에서 내용 확인부터 생산의뢰서 작성 전까지
-     */
-    const STATUS_CONFIRMED = 'confirmed';
-     
-    /**
-     * 상품 준비 중 => 대리점에서 수정불가
-     * 생산의뢰서 작성 시 (상품 준비 중)
-     */
-    const STATUS_PREPARING = 'preparing';
-
-    /**
-     * 출고 완료
-     * 운송장 업로드 시 
-     */
-    const STATUS_SHIPPED = 'shipped';
-
-    /**
-     * 주문 취소
-     * 오더 비움
-     */
-    const STATUS_CANCELED = 'canceled';
-
 
     protected array $fillable = [
         'user_id',
         'customer_id',
+        'dealer_id',
         'orderer_name',
         'orderer_email',
         'orderer_phone',
@@ -53,6 +25,7 @@ class Order extends Entity
     protected array $casts = [
         'user_id'        => 'int',
         'customer_id'    => 'int',
+        'dealer_id'    => 'int',
         'orderer_name'   => 'string',
         'orderer_email'  => 'string',
         'orderer_phone'  => 'string',
@@ -71,7 +44,7 @@ class Order extends Entity
      */
     public function isFinalized(): bool
     {
-        return in_array($this->order_status, [Order::STATUS_PREPARING, Order::STATUS_SHIPPED]);
+        return in_array($this->order_status, [OrderStatus::PREPARING, OrderStatus::SHIPPED]);
     }
 
     /**
@@ -79,7 +52,7 @@ class Order extends Entity
      */
     public function isCanceled(): bool
     {
-        return $this->order_status === Order::STATUS_CANCELED;
+        return $this->order_status === OrderStatus::CANCELED;
     }
 
     /**
@@ -87,6 +60,6 @@ class Order extends Entity
      */
     public function isStatusChangeable(): bool
     {
-        return in_array($this->order_status, [Order::STATUS_RECEIVED, Order::STATUS_CONFIRMED]);
+        return in_array($this->order_status, [OrderStatus::RECEIVED, OrderStatus::CONFIRMED]);
     }
 }

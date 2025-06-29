@@ -10,13 +10,17 @@ return new class implements Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->morphs('userable');
             $table->string('name');
-            $table->string('username')->nullable();
+            $table->string('type', 50)->comment('admin', 'employee', 'dealer');
+
             $table->string('email')->unique();
+            $table->string('phone');
             $table->string('password');
+            $table->char('gender', 1)->default('U'); // M, F, U
+            $table->timestamp('email_verified_at')->nullable();
+            $table->date('birth')->nullable();
+
             $table->softDeletes();
-            
             $table->timestamps();
         });
     }

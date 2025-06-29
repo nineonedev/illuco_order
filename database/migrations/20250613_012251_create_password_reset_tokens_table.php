@@ -8,19 +8,18 @@ return new class implements Migration
 {
     public function up(): void
     {
-        Schema::create('user_settings', function (Blueprint $table) {
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->id(); 
             $table->foreignId('user_id')->constrained('users')->onDeleteCascade();
-            $table->string('key');
-            $table->text('value')->nullable();
+            $table->string('token');
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('used_at')->nullable();
             $table->timestamps();
-
-            $table->unique(['user_id', 'key']);
         });
     }
 
     public function down(): void
     {
-        Schema::drop('user_settings'); 
+        Schema::drop('password_reset_tokens'); 
     }
 };

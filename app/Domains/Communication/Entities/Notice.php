@@ -2,15 +2,12 @@
 
 namespace App\Domains\Communication\Entities;
 
+use App\Domains\Communication\Enums\NoticeStatus;
 use App\Domains\Communication\Repositories\NoticeRepository;
 use Framework\Database\ORM\Entities\Entity;
 
 class Notice extends Entity
 {
-    const STATUS_DRAFT = 'draft'; 
-    const STATUS_PUBLISHED = 'published'; 
-    const STATUS_ARCHIVED = 'archived'; 
-    const STATUS_SCHEDULED = 'scheduled'; 
 
     protected array $fillable = [
         'user_id',
@@ -37,22 +34,22 @@ class Notice extends Entity
     // --- 상태 판별 메서드 ---
     public function isDraft(): bool
     {
-        return $this->status === static::STATUS_DRAFT;
+        return $this->status === NoticeStatus::DRAFT;
     }
 
     public function isPublished(): bool
     {
-        return $this->status === static::STATUS_PUBLISHED;
+        return $this->status === NoticeStatus::PUBLISHED;
     }
 
     public function isArchived(): bool
     {
-        return $this->status === static::STATUS_ARCHIVED;
+        return $this->status === NoticeStatus::ARCHIVED;
     }
 
     public function isScheduled(): bool
     {
-        return $this->status === static::STATUS_SCHEDULED;
+        return $this->status === NoticeStatus::SCHEDULED;
     }
 
     // --- 현재 시간 기준 노출 가능 여부 판단 ---

@@ -39,22 +39,12 @@ Rel::setConfig([
     // ===================================================================
     User::class => [
         Rel::belongsToMany('roles', Role::class, 'role_users', 'user_id', 'role_id'),
-        Rel::morphTo([
-            Admin::class, Employee::class, Dealer::class
-        ]),
         Rel::hasMany('notices', Notice::class, 'user_id'),
         Rel::hasMany('claims',  Claim::class, 'user_id'),
-    ],
-
-    Admin::class => [
-        Rel::morphOne(User::class),
-    ],
-    Employee::class => [
-        Rel::morphOne(User::class),
+        Rel::hasMany('customers', Customer::class, 'user_id'),
     ],
     Dealer::class => [
-        Rel::morphOne(User::class),
-        Rel::hasMany('customers', Customer::class, 'dealer_id'),
+        Rel::belongsTo('user', User::class, 'user_id'),
     ],
 
     // ===================================================================
@@ -78,32 +68,18 @@ Rel::setConfig([
     // Product
     // ===================================================================
     Category::class => [
-        Rel::hasMany('template', ProductTemplate::class, 'category_id')
+        Rel::hasMany('templates', ProductTemplate::class, 'category_id')
     ],
     ProductTemplate::class => [
         Rel::belongsTo('category', Category::class, 'category_id'),
         Rel::morphMany(FileAttachment::class),
-        Rel::belongsToMany('attributes', ProductAttribute::class, 'product_attribute_template', 'template_id', 'attribute_id'),
-    ],
-    ProductAttribute::class => [
-        Rel::belongsToMany('templates', ProductTemplate::class, 'product_attribute_template', 'attribute_id', 'template_id'),
-        Rel::hasMany('options', ProductOption::class, 'attribute_id'),
-        Rel::hasMany('values', ProductValue::class, 'attribute_id'),
-    ],
-    ProductOption::class => [
-        Rel::belongsTo('attribute', ProductAttribute::class, 'attribute_id'),
-    ],
-    ProductValue::class => [
-        Rel::belongsTo('attribute', ProductAttribute::class, 'attribute_id'),
-        Rel::belongsTo('product', Product::class, 'product_id'),
     ],
     Product::class => [
         Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
-        Rel::hasMany('values', ProductValue::class, 'product_id'),
     ],
     Customer::class => [
         Rel::hasOne('cart', Cart::class, 'customer_id'),
-        Rel::belongsTo('dealer', Dealer::class, 'dealer_id'),
+        Rel::belongsTo('user', User::class, 'user_id'),
     ],
     Cart::class => [
         Rel::belongsTo('customer', Customer::class, 'customer_id'),
@@ -121,7 +97,6 @@ Rel::setConfig([
         Rel::belongsTo('customer', Customer::class, 'customer_id'),
         Rel::hasMany('items', OrderItem::class, 'order_id'),
     ],
-
     OrderItem::class => [
         Rel::belongsTo('order', Order::class, 'order_id'),
         Rel::belongsTo('product', Product::class, 'product_id'),

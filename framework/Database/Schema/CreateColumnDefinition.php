@@ -28,6 +28,10 @@ class CreateColumnDefinition extends AbstractColumnDefinition
             $parts[] = 'ON UPDATE ' . $this->formatDefault($this->onUpdate);
         }
 
+        if ($this->comment !== null) {
+            $parts[] = "COMMENT '{$this->comment}'";
+        }
+
         return implode(' ', $parts);
     }
 }

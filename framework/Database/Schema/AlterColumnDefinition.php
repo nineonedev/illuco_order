@@ -79,6 +79,9 @@ class AlterColumnDefinition extends AbstractColumnDefinition
         if ($this->autoIncrement) {
             $parts[] = 'AUTO_INCREMENT';
         }
+        if ($this->comment !== null) {
+            $parts[] = "COMMENT '{$this->comment}'";
+        }
         return implode(' ', $parts);
     }
 }

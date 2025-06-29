@@ -10,10 +10,11 @@ return new class implements Migration
     {
         Schema::create('product_categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreignId('parent_id')->nullable()->constrained('product_categories')->onDeleteCascade();
             $table->string('slug')->unique();
             $table->string('label')->unique();
-            $table->boolean('is_locked')->default(false);
+            $table->text('description');
+            $table->boolean('is_visible')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
         });

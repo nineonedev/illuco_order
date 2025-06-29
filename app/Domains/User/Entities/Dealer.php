@@ -10,7 +10,6 @@ class Dealer extends Entity
     protected array $fillable = [
         'country',
         'code',
-        'phone_number',
         'address',
         'description'
     ];
