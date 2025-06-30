@@ -8,13 +8,18 @@ use Framework\Database\ORM\Entities\Entity;
 class Customer extends Entity
 {
     protected array $fillable = [
-        'user_id',
         'country',
+        'user_id',
         'dealer_id',
         'name',
-        'phone_number',
+        'phone',
         'email',
         'description',
+    ];
+
+    protected array $casts = [
+        'user_id' => 'int',
+        'dealer_id' => 'int',
     ];
 
     public static function repositoryClass(): string

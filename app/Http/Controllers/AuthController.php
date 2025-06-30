@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\Auth\Entities\Role;
+use App\Domains\Auth\Repositories\RoleRepository;
 use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
-use App\Domains\User\Repositories\AdminRepository;
+use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\UserRepository;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Services\Auth\SaveRoleService;
 use App\Services\User\RegisterUserService;
 use App\Services\User\UpdateUserService;
-use Framework\Http\Request;
 use Framework\Routing\Controller;
 use Framework\Support\Exceptions\Http\UnauthenticatedException;
+use RuntimeException;
 
 class AuthController extends Controller
 {
@@ -41,12 +44,47 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $admin = new Admin();
+        return $this->runInTransaction(function() use ($request) {
 
-        $result = (new RegisterUserService($admin))
-            ->runInTransaction($request->safe());
+            $user = new User($request->safe());
+            $user = UserRepository::make()->with(['roles'])->save($user);
 
-        return $result->toResponse();
+            if (!$user) {
+                throw new RuntimeException("가입에 실패하였습니다.");
+            }
+
+            $adminRole = RoleRepository::make()
+                ->query()
+                ->where('name', 'admin')
+                ->first();
+
+            if ($adminRole) {
+                $user->roles()->attach($adminRole);
+                
+            } else {
+                $adminRole = [
+                    'name' => 'admin',
+                    'description' => '최고 관리자',
+                ];
+
+                $service = new SaveRoleService();
+                $result = $service->run([
+                    'role' => $adminRole,
+                    'permissions' => context()->get('permissions', []),
+                ]);
+
+                
+                $role = $result->getData()['role'] ?? null;
+
+                if (!$role) {
+                    throw new RuntimeException('권한 생성에 실패했습니다.');
+                }
+
+                $user->roles()->attach($role);
+            }
+
+            return $this->render(null, ['user' => $user], '성공적으로 가입되었습니다.');
+        });
     }
 
     public function login(LoginRequest $request)
@@ -78,7 +116,7 @@ class AuthController extends Controller
 
     public function update(string $id, UpdateUserRequest $request)
     {
-        $admin = AdminRepository::make()->findOrFail($id);
+        $admin = UserRepository::make()->findOrFail($id);
         $admin->fill($request->safe());
         $data = $request->safe();
 
@@ -95,7 +133,7 @@ class AuthController extends Controller
     public function edit()
     {
         $user = UserRepository::make()
-            ->with([User::morphType()])
+            ->with(['dealer'])
             ->query()
             ->find(auth()->id());
 
@@ -103,21 +141,17 @@ class AuthController extends Controller
             throw new UnauthenticatedException();
         }
 
-        $userable = $user->userable;
-        $userable->setRelation(User::alias(), $user); 
+        switch ($user->type) {
+            case UserType::ADMIN:
+                return $this->render('home.pages.auth.me', ['user' => $user]);
 
-        switch (true) {
-            case $userable instanceof Admin:
-                return $this->render('home.pages.auth.me', [$userable::alias() => $userable]);
+            case UserType::DEALER:
+                return $this->render('admin.pages.dealers.edit', ['user' => $user]);
 
-            case $userable instanceof Dealer:
-                return $this->render('admin.pages.dealers.edit', [$userable::alias() => $userable]);
-
-            case $userable instanceof Employee:
-                return $this->render('admin.pages.employees.edit', [$userable::alias() => $userable]);
-
+            case UserType::EMPLOYEE:
+                return $this->render('admin.pages.employees.edit', ['user' => $user]);
             default:
-                throw new \RuntimeException('Unknown user type.');
+                throw new RuntimeException('Unknown user type.');
         }
     }
 

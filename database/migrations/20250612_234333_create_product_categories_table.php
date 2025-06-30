@@ -13,7 +13,7 @@ return new class implements Migration
             $table->foreignId('parent_id')->nullable()->constrained('product_categories')->onDeleteCascade();
             $table->string('slug')->unique();
             $table->string('label')->unique();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->boolean('is_visible')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();

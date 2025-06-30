@@ -2,15 +2,15 @@
 
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Entities\Order;
+use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
 use App\Domains\User\Entities\Dealer;
-use App\Domains\User\Entities\Employee;
 
 return [
-    Employee::alias() => 'Employee',
+    'employee' => 'Employee',
     Notice::alias() => 'Notice',
     Dealer::alias() => 'Dealer',
     Claim::alias() => 'Claim',
@@ -27,11 +27,11 @@ return [
 
     'order' => [
         'status' => [
-            Order::STATUS_CANCELED   => 'Order Canceled',
-            Order::STATUS_RECEIVED   => 'Order Received',
-            Order::STATUS_CONFIRMED  => 'Order Confirmed',
-            Order::STATUS_PREPARING  => 'Product Preparing',
-            Order::STATUS_SHIPPED   => 'Shipped',
+            OrderStatus::CANCELED   => 'Order Canceled',
+            OrderStatus::NEW        => 'Order Received',
+            OrderStatus::CONFIRMED  => 'Order Confirmed',
+            OrderStatus::PREPARING  => 'Product Preparing',
+            OrderStatus::SHIPPED    => 'Shipped',
         ]
     ],
     'countries' => [
@@ -86,5 +86,12 @@ return [
         'HR' => 'Croatia',
         'SI' => 'Slovenia',
         'RS' => 'Serbia',
-    ]
+        'TW' => 'Taiwan',
+        'AE' => 'United Arab Emirates',
+        'PK' => 'Pakistan',
+        'MA' => 'Morocco',
+        'HK' => 'Hong Kong',
+        'IQ' => 'Iraq',
+        'AM' => 'Armenia',
+    ],
 ];

@@ -13,16 +13,10 @@ class UserEntityProvider implements UserProviderInterface
         if (isset($credentials['email'])) {
             $user = UserRepository::make()
                 ->query()
-                ->with([User::morphType(), 'roles.permissions'])
+                ->with(['roles.permissions'])
                 ->where('email', $credentials['email'])
                 ->first();
                 
-        } elseif (isset($credentials['username'])) {
-            $user = UserRepository::make()
-                ->query()
-                ->with([User::morphType(), 'roles.permissions'])
-                ->where('username', $credentials['username'])
-                ->first();
         } else {
             return null;
         }
@@ -38,12 +32,13 @@ class UserEntityProvider implements UserProviderInterface
     {
         $user = UserRepository::make()
             ->query()
-            ->with([User::morphType(), 'roles.permissions'])
+            ->with(['roles.permissions'])
             ->find($identifier);
         
         if ($user instanceof AuthenticatableInterface) {
             return $user;
         }
+        
         return null;
     }
 }

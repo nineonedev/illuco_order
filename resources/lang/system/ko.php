@@ -1,16 +1,15 @@
 <?php
 
 use App\Domains\Order\Entities\Customer;
-use App\Domains\Order\Entities\Order;
+use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Entities\Notice;
 use App\Domains\User\Entities\Dealer;
-use App\Domains\User\Entities\Employee;
 
 return [
-    Employee::alias() => '직원',
+    'employee' => '직원',
     Notice::alias() => '공지',
     Dealer::alias() => '대리점',
     Claim::alias() => '클레임',
@@ -27,11 +26,11 @@ return [
 
     'order' => [
         'status' => [
-            Order::STATUS_CANCELED   => '주문 취소',
-            Order::STATUS_RECEIVED   => '주문 접수됨',
-            Order::STATUS_CONFIRMED  => '주문 확인됨',
-            Order::STATUS_PREPARING  => '상품 준비 중',
-            Order::STATUS_SHIPPED    => '출고 완료',
+            OrderStatus::CANCELED   => '주문 취소',
+            OrderStatus::NEW   => '주문 접수됨',
+            OrderStatus::CONFIRMED  => '주문 확인됨',
+            OrderStatus::PREPARING  => '상품 준비 중',
+            OrderStatus::SHIPPED    => '출고 완료',
         ]
     ],
 
@@ -87,5 +86,12 @@ return [
         'HR' => '크로아티아',
         'SI' => '슬로베니아',
         'RS' => '세르비아',
-    ]
+        'TW' => '대만',
+        'AE' => '아랍에미리트',
+        'PK' => '파키스탄',
+        'MA' => '모로코',
+        'HK' => '홍콩',
+        'IQ' => '이라크',
+        'AM' => '아르메니아',
+    ],
 ];

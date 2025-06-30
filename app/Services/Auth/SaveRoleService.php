@@ -29,7 +29,7 @@ class SaveRoleService extends Service
         $permissionIds = $this->resolvePermissionIds($permissions);
         $role->permissions()->sync($permissionIds);
 
-        return ['role' => $role->toArray()];
+        return ['role' => $role];
     }
 
     protected function parsePermissionInputs(array $permissionInputs): array

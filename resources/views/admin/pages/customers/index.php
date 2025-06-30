@@ -49,8 +49,8 @@
                             <th>대리점</th>
                             <?php endif; ?>
                             <th>국가</th>
+                            <th>이메일</th>
                             <th>전화번호</th>
-                            <th>주소</th>
                             <th>등록일</th>
                             <th>작업</th>
                         </tr>
@@ -71,8 +71,8 @@
                             </td>
                             <?php endif; ?>
                             <td><?= lang('system.countries.'.e($customer->country)) ?></td>
-                            <td><?= e($customer->phone_number) ?></td>
-                            <td><?= e($customer->address) ?></td>
+                            <td><?= e($customer->email) ?></td>
+                            <td><?= e($customer->phone) ?></td>
                             <td><?= date('Y-m-d', strtotime($customer->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">

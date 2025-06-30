@@ -37,6 +37,7 @@ use Framework\Validation\Rules\NotEqual;
 use Framework\Validation\Rules\Rule;
 use Framework\Validation\Rules\StringRule;
 use Framework\Validation\Rules\Video;
+use Framework\Validation\Rules\In;
 
 class RuleFactory
 {
@@ -52,6 +53,8 @@ class RuleFactory
     {
         // Map the rule string to the appropriate rule class
         switch ($rule) {
+            case 'in': 
+                return new In(...$parameters);
             case 'boolean': 
                 return new Boolean();
             case 'float': 

@@ -35,7 +35,7 @@ export default class CustomerSelection extends View {
         `;
     }
 
-    _renderItem({id, name, country, email, phone_number} = {}) {
+    _renderItem({id, name, country, email, phone} = {}) {
         return `
             <tr>
                 <td>
@@ -48,7 +48,7 @@ export default class CustomerSelection extends View {
                     <span>${email}</span>
                 </td>
                 <td>
-                    <span>${phone_number}</span>
+                    <span>${phone ?? '-'}</span>
                 </td>
                 <td>
                     <div class="no-prod-attr-list__action">

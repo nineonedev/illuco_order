@@ -9,12 +9,12 @@
             <h1 class="no-heading-sm">관리자 수정</h1>
         </div>
         
-        <form action="<?= route('auth.update', ['id' => $admin->id]) ?> " method="post" enctype="multipart/form-data" id="frm">
+        <form action="<?= route('auth.update', ['id' => $user->id]) ?> " method="post" enctype="multipart/form-data" id="frm">
             <?= csrf_field() ?>
             <div class="no-form-group">
                 <div class="no-form-control">
                     <label for="name" class="no-form-control-inner">
-                        <input type="text" name="name" id="name"  class="no-form-control-input" value="<?= $admin->user ? $admin->user->name : '' ?>">
+                        <input type="text" name="name" id="name"  class="no-form-control-input" value="<?= $user->name ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이름</legend>
                         </fieldset>
@@ -24,7 +24,7 @@
 
                 <div class="no-form-control">
                     <label for="email" class="no-form-control-inner">
-                        <input type="text" name="email" id="email"  class="no-form-control-input" value="<?= $admin->user ? $admin->user->email : '' ?>">
+                        <input type="text" name="email" id="email"  class="no-form-control-input" value="<?= $user->email ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이메일</legend>
                         </fieldset>
@@ -43,17 +43,6 @@
                     <span class="no-form-control-helper-text">비밀번호는 변경 시 입력해주세요.</span>
                     <span class="no-form-control-space"></span>
                 </div>
-
-                <div class="no-form-control">
-                    <label for="admin_key" class="no-form-control-inner">
-                        <input type="text" name="admin_key" id="admin_key" placeholder="" class="no-form-control-input" value="<?= $admin->admin_key ?? '' ?>">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">고유키</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-                
 
                 <div class="no-form-action">
                     <button type="submit" class="no-btn-primary">저장</button>

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'in' => 'The value must be one of the following: {0}.',
     'string' => 'Please enter a valid string.',
     'required' => 'This field is required.',
     'boolean' => 'The field must be true or false.',

@@ -12,13 +12,17 @@ export default class CartController extends Controller {
     modal;
     cart;
 
-    index() {
+    static attributes = {};
+
+    async index() {
         this._logger.info("index");
     
         this.modal = Modal.make('portal').render();
         this.loader = Loader.make('portal').render();
         this.cart = Cart.make('cart-hook').render();
         this.form = Template.make('template-hook').render();
+
+        await this._fetchProductAttributes(); 
 
         this._listen('fetch.customers', this._fetchAllCustomers.bind(this));
         this._listen('fetch.templates', this._fetchAllTemplates.bind(this));
@@ -33,6 +37,20 @@ export default class CartController extends Controller {
         this._listen('delete.cartitems', this._deleteManyCartItems.bind(this));
 
         this._listen('order.create', this._createOrder.bind(this));
+    }
+    
+    async _fetchProductAttributes(){
+        this.loader.show();
+
+        try {
+            const result = await new Ajax(true).get('/admin/product-attributes');
+            CartController.attributes = result.data; 
+            
+        } catch (err) {
+            alert(err.message); 
+        } finally {
+            this.loader.hide();
+        }
     }
 
     async _createOrder({ids, totalAmount, memo, button}){

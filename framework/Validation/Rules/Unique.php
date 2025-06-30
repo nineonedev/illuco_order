@@ -29,6 +29,8 @@ class Unique extends Rule
 
     public function message(): string
     {
-        return lang('validation.unique') ?? "{$this->field} 값이 이미 존재합니다.";
+        return transfer('rule.unique', 'system.' . $this->field)
+            ?? lang('rule.unique', [$this->field]) 
+            ?? "{$this->field} 값이 이미 존재합니다.";
     }
 }

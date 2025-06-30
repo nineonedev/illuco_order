@@ -2,7 +2,7 @@
 
 namespace App\Domains\User\Entities;
 
-use App\Domains\User\Enums\UserTypes;
+use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\UserRepository;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\ORM\Traits\SoftDeletes;
@@ -14,12 +14,12 @@ class User extends Entity implements AuthenticatableInterface
 
     protected array $fillable = [
         'name',
-        'username',
+        'type',
         'email',
         'password',
-        'user_type',
-        'phone_number',
+        'phone',
         'gender',
+        'email_verified_at',
         'birth',
     ];
     
@@ -45,16 +45,16 @@ class User extends Entity implements AuthenticatableInterface
 
     public function isDealer(): bool
     {
-        return $this->user_type === UserTypes::DEALER; 
+        return $this->user_type === UserType::DEALER; 
     }
 
     public function isAdmin(): bool
     {
-        return $this->user_type === UserTypes::ADMIN;
+        return $this->user_type === UserType::ADMIN;
     }
 
     public function isEmployee(): bool
     {
-        return $this->user_type === UserTypes::EMPLOYEE;
+        return $this->user_type === UserType::EMPLOYEE;
     }
 }

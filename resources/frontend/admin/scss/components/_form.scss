@@ -37,6 +37,38 @@
     }
 }
 
+.no-form-table-inner {
+    overflow-y: auto;
+    min-width: 76.8rem;
+
+    .no-form-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--clr-input-border);
+
+        thead {
+            th {
+                background: var(--clr-primary-100);
+            }
+        }
+
+        th{
+            border: 1px solid var(--clr-input-border);
+            padding: 0.8rem 1.6rem;
+            font-weight: 700;
+        }
+        
+        td {
+            border: 1px solid var(--clr-input-border);
+        }
+
+        .no-form-control-input {
+            box-shadow: none;
+            border-radius: 0;
+        }
+    }
+}
+
 .no-form-flex {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -145,7 +177,7 @@
 
 .no-form-empty-fallback {
     text-align: center;
-    background-color: var(--clr-slate-200);
+    background-color: var(--clr-slate-50);
     color: var(--clr-primary-main);
     font-weight: 500;
     padding: 2.4rem;

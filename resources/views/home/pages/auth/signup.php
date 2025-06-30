@@ -1,3 +1,9 @@
+<?php
+
+use App\Domains\User\Enums\UserType;
+
+?>
+
 <?php extend('layouts.auth'); ?>
 <?php section('controller', 'admin') ?>
 <?php section('action', 'signUp') ?>
@@ -21,6 +27,7 @@
             <div>
                 <form method="post" action="<?= route('auth.register') ?>" id="frm">
                     <?= csrf_field() ?>
+                    <input type="hidden" name="type" value="<?= UserType::ADMIN ?>">
                     <div class="no-form-control">
                         <label for="name" class="no-form-control-inner">
                             <input 

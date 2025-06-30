@@ -26,8 +26,9 @@ return new class implements Migration
                 ->onDelete('set null');
 
             $table->foreignId('created_by')
+                ->nullable()
                 ->constrained('users')
-                ->onDelete('set null');
+                ->onDeleteSetNull();
 
             $table->text('memo');
 

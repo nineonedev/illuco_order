@@ -15,11 +15,11 @@ use Framework\Support\Exceptions\ValidationException;
 
 class RegisterUserService extends Service
 {
-    protected Entity $userable;
+    protected Entity $user;
 
-    public function __construct(Entity $userable)
+    public function __construct(Entity $user)
     {
-        $this->userable = $userable;
+        $this->user = $user;
     }
 
     protected function handle(array $payload): array

@@ -9,7 +9,7 @@ return new class implements Migration
     public function up(): void
     {
         Schema::create('product_headlights', function (Blueprint $table) {
-            $table->unsignedInteger('id')->primary();
+            $table->unsignedBigInteger('id')->primary();
             $table->string('wireless_color')->nullable();
 
             $table->foreign('id')

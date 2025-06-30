@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Domains\Product\Entities;
 
@@ -8,17 +8,12 @@ use Framework\Database\ORM\Entities\Entity;
 class Category extends Entity
 {
     protected array $fillable = [
+        'parent_id',
         'slug',
         'label',
+        'description',
+        'is_visible',
         'sort_order',
-        'parent_id',
-        'is_locked',
-    ];
-
-    protected array $casts = [
-        'sort_order' => 'int',
-        'parent_id' => 'int',
-        'is_locked' => 'bool',
     ];
 
     public static function repositoryClass(): string

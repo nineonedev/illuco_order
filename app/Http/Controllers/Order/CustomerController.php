@@ -19,12 +19,8 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $query = $this->repo()->with([
-            'dealer.user',
-            'cart.cartitems.product.values',
-            'cart.cartitems.product.template' => [
-                'attributes.options',
-                'fileattachment'
-            ],
+            'user.dealer',
+            'cart.cartitems.product.template.fileattachment',
         ])->query();
 
         if (user()->userable instanceof Dealer) {
@@ -81,8 +77,9 @@ class CustomerController extends Controller
         return $this->runInTransaction(function () use ($request) {
             $customer = new Customer($request->all());
             $customer->user_id = auth()->id();
-            if (user()->userable instanceof Dealer) {
-                $customer->dealer_id = user()->userable->id;
+
+            if (user()->isDealer()) {
+                $customer->dealer_id = user()->dealer->id;
             }
 
             $this->save($customer);

@@ -42,9 +42,6 @@ use App\Domains\User\Entities\Dealer;
                 >
                 </div> -->
                 <!-- FormControl -->
-                <?php if (user()->userable instanceof Dealer) : ?>
-                <input type="hidden" name="dealer_id" value="<?=user()->userable->id?>">
-                <?php endif; ?>
 
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">
@@ -58,8 +55,8 @@ use App\Domains\User\Entities\Dealer;
                 <!-- FormControl -->
 
                 <div class="no-form-control --md">
-                    <label for="phone_number" class="no-form-control-inner">
-                        <input type="tel" name="phone_number" id="phone_number" class="no-form-control-input" placeholder="" >
+                    <label for="phone" class="no-form-control-inner">
+                        <input type="tel" name="phone" id="phone" class="no-form-control-input" placeholder="" >
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">연락처</legend>
                         </fieldset>

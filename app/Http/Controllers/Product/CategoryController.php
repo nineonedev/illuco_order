@@ -78,56 +78,56 @@ class CategoryController extends Controller
     
     public function update(int $id, Request $request)
     {
-        return $this->runInTransaction(function () use ($id, $request) {
-            $request->validateOrFail([
-                'label' => 'required',
-                'slug' => 'required|minLength:4|unique:product_categories,slug,' . $id, // 현재 ID 제외
-                'sort_order' => 'nullable|integer',
-            ]);
+        // return $this->runInTransaction(function () use ($id, $request) {
+        //     $request->validateOrFail([
+        //         'label' => 'required',
+        //         'slug' => 'required|minLength:4|unique:product_categories,slug,' . $id, // 현재 ID 제외
+        //         'sort_order' => 'nullable|integer',
+        //     ]);
 
-            $data = $request->safe(['label', 'slug', 'sort_order']);
+        //     $data = $request->safe(['label', 'slug', 'sort_order']);
 
-            $repo = CategoryRepository::make();
-            $category = $repo->findOrFail($id);
+        //     $repo = CategoryRepository::make();
+        //     $category = $repo->findOrFail($id);
 
-            $oldOrder = $category->sort_order;
-            $newOrder = $data['sort_order'] ?? $oldOrder;
+        //     $oldOrder = $category->sort_order;
+        //     $newOrder = $data['sort_order'] ?? $oldOrder;
 
 
-            // 업데이트 할 경우 순서 재조정
-            if ($newOrder !== $oldOrder) {
-                $categories = $repo->query()
-                    ->orderByAsc('sort_order')
-                    ->get();
+        //     // 업데이트 할 경우 순서 재조정
+        //     if ($newOrder !== $oldOrder) {
+        //         $categories = $repo->query()
+        //             ->orderByAsc('sort_order')
+        //             ->get();
 
-                foreach ($categories as $cat) {
-                    if ($cat->id === $category->id) continue;
+        //         foreach ($categories as $cat) {
+        //             if ($cat->id === $category->id) continue;
 
-                    // 위로 올림 → 사이에 있는 항목들 +1
-                    if ($cat->sort_order >= $newOrder && $cat->sort_order < $oldOrder) {
-                        $cat->sort_order += 1;
-                        $repo->save($cat);
-                    } else if ($cat->sort_order <= $newOrder && $cat->sort_order > $oldOrder) {
-                            $cat->sort_order -= 1;
-                            $repo->save($cat);
-                    }
-                }
+        //             // 위로 올림 → 사이에 있는 항목들 +1
+        //             if ($cat->sort_order >= $newOrder && $cat->sort_order < $oldOrder) {
+        //                 $cat->sort_order += 1;
+        //                 $repo->save($cat);
+        //             } else if ($cat->sort_order <= $newOrder && $cat->sort_order > $oldOrder) {
+        //                     $cat->sort_order -= 1;
+        //                     $repo->save($cat);
+        //             }
+        //         }
 
-                // 본인 정렬 순서 마지막에 반영
-                $category->sort_order = $newOrder;
-            }
+        //         // 본인 정렬 순서 마지막에 반영
+        //         $category->sort_order = $newOrder;
+        //     }
 
-            $category->fill([
-                'label' => $data['label'],
-                'slug' => $data['slug'],
-            ]);
+        //     $category->fill([
+        //         'label' => $data['label'],
+        //         'slug' => $data['slug'],
+        //     ]);
 
-            $repo->save($category);
+        //     $repo->save($category);
 
-            return $this->render(null, [
-                'category' => $category->toArray(),
-            ], '카테고리 수정에 성공하였습니다.');
-        });
+        //     return $this->render(null, [
+        //         'category' => $category->toArray(),
+        //     ], '카테고리 수정에 성공하였습니다.');
+        // });
     }
 
 }

@@ -1,6 +1,5 @@
 import Controller from "../core/Controller";
-import Select from "../components/Select";
-import CountrySelect from '../components/CountrySelect';
+import CountrySelectInput from '../components/Inputs/CountrySelectInput';
 
 export default class CustomerController extends Controller {
     form;
@@ -11,7 +10,7 @@ export default class CustomerController extends Controller {
     }
 
     _prepare() {
-        CountrySelect.make('country-hook').render();
+        CountrySelectInput.make('country-hook').render();
         // Select.make("dealer-hook").render();
     }
 

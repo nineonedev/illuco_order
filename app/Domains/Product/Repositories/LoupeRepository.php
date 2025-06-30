@@ -2,18 +2,18 @@
 
 namespace App\Domains\Product\Repositories;
 
-use App\Domains\Product\Entities\ProductOption;
+use App\Domains\Product\Entities\Loupe;
 use Framework\Database\ORM\Repositories\Repository;
 
-class ProductOptionRepository extends Repository
+class LoupeRepository extends Repository
 {
     public static function table(): string
     {
-        return 'product_options';
+        return 'product_loupes';
     }
 
     public static function entityClass(): string
     {
-        return ProductOption::class;
+        return Loupe::class;
     }
 }

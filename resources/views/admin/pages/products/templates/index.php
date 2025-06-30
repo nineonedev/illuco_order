@@ -57,10 +57,10 @@
                                 </div>
                             </th>
                             <th>이미지</th>
+                            <th>카테고리</th>
                             <th>이름</th>
                             <th>코드</th>
                             <th>모델</th>
-                            <th>카테고리</th>
                             <th>정렬순서</th>
                             <th>작업</th>
                         </tr>
@@ -89,10 +89,10 @@
                                 <?php endif; ?>
                                 
                             </td>
+                            <td><?= e($template->category->label ?? '-') ?></td>
                             <td><?= e($template->name) ?></td>
                             <td><?= e($template->code) ?></td>
                             <td><?= e($template->model) ?></td>
-                            <td><?= e($template->category_name ?? '-') ?></td>
                             <td><?= e($template->sort_order) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">

@@ -24,6 +24,8 @@ abstract class FormRequest extends Request
 
         $this->prepareForValidation(); // ✅ 전처리
 
+        $this->beforeValidation();
+
         $this->ensureValidator($this->rules());
 
 
@@ -45,6 +47,11 @@ abstract class FormRequest extends Request
      */
     abstract protected function rules(): array;
 
+    protected function beforeValidation(): void
+    {
+
+    }
+    
     /**
      * 커스텀 에러 메시지 정의
      */

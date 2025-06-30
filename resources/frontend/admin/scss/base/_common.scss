@@ -89,3 +89,61 @@
     }
   }
 }
+
+
+%feedback{
+    display: flex;
+    font-size: 1.3rem;
+    color: var(--clr-form-helper-text);
+    line-height: 1.618;
+    margin-top: .8rem;
+    margin-right: 1.4rem;
+    padding: 0.8rem 1.6rem;
+    border-radius: 0.4rem;
+    align-items: center;
+    gap: 1.6rem;
+    width: 100%;
+    font-weight: 500;
+
+    i {
+      color: inherit;
+      font-size: 1.5rem;
+    }
+
+    span {
+      color: inherit
+    }
+}
+
+.no-feedback {
+  &-info {
+    @extend %feedback;
+    background-color: var(--clr-blue-50);
+    color: var(--clr-blue-600);
+  }
+
+  &-error {
+    @extend %feedback;
+    background-color: var(--clr-red-50);
+    color: var(--clr-red-600);
+  }
+
+  &-warning {
+    @extend %feedback;
+    background-color: var(--clr-amber-50);
+    color: var(--clr-amber-600);
+  }
+
+  &-premium {
+    @extend %feedback;
+    background-color: var(--clr-violet-50);
+    color: var(--clr-violet-600);
+  }
+ 
+  &-success {
+    @extend %feedback;
+    background-color: var(--clr-teal-50);
+    color: var(--clr-teal-600);
+  }
+
+}

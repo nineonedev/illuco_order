@@ -2,7 +2,7 @@
 
 namespace App\Domains\User\Enums; 
 
-class UserTypes 
+class UserType 
 {
     const ADMIN = 'admin'; 
     const DEALER = 'dealer'; 

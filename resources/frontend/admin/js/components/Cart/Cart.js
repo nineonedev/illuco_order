@@ -131,14 +131,14 @@ export default class Cart extends View {
             `;
         }
         
-        const {name, phone_number, country, email} = this._state.customer;
+        const {name, phone, country, email} = this._state.customer;
 
         return `
             <div>
                 <h2>선택된 고객: ${name}</h2>
                 <div>
                     <p>국가: ${country}</p>
-                    <p>연락처: ${phone_number}</p>
+                    <p>연락처: ${phone ?? '-'}</p>
                     <p>이메일: ${email}</p>
                 </div>
             </div>

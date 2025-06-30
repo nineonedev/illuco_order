@@ -177,6 +177,11 @@ class Validator
         return $parsedRules;
     }
 
+    public function addError(string $field, string $message): void
+    {
+        $this->errors[$field][] = $message;
+    }
+
     /**
      * Static method to make a new Validator instance.
      *

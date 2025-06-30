@@ -10,10 +10,10 @@ return new class implements Migration
     {
         Schema::create('product_loupes', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
-            $table->string('type', 50)->comment('ready-made or custom-made');
+            $table->enum('type', ['ready-made', 'custom-made'])->comment('제품 타입');
 
             // 기타
-            $table->string('flip_up_color')->nullable();
+            $table->string('frame_type')->nullable();
             $table->string('working_distance')->nullable();
 
             // 시력 정보 (OD / OS)
@@ -33,6 +33,9 @@ return new class implements Migration
             $table->decimal('pd_right', 4, 1)->nullable();
             $table->decimal('pd_left', 4, 1)->nullable();
             $table->decimal('pd_total', 4, 1)->nullable();
+
+            $table->decimal('vertex_distance', 4, 1)->nullable()->comment('버텍스 거리 (VD, 단위: mm)');
+            $table->enum('add_option', ['ignore', 'include', 'zero_diopter'])->nullable()->comment('ADD 옵션');
 
 
             $table->foreign('id')

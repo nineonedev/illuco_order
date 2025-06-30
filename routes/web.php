@@ -138,6 +138,8 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [EmployeeController::class, 'destroy'])->name('destroy');
                 });
 
+            Route::get('product-attributes', [ProductAttributeController::class, 'index'])->name('product_attributes.index');
+    
             Route::prefix('product-templates')
                 ->name('product_templates')
                 ->group(function(){

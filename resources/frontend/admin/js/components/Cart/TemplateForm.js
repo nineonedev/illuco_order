@@ -2,6 +2,7 @@ import View from "../../core/View";
 import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
 import InputFactory from "../Inputs/InputFactroy";
+import LoupeForm from "./LoupeForm";
 
 export default class TemplateForm extends View {
     _boot(){
@@ -43,7 +44,11 @@ export default class TemplateForm extends View {
         const {template, quantity} = this._state;
         const {id, price} = template
         const formattedPrice = Helper.formatCurrency(price);
-        const totalPrice = Helper.formatCurrency(price * (quantity ?? 1)); 
+        const totalPrice = price * (quantity ?? 1)
+        const formattedTotalPrice = Helper.formatCurrency(totalPrice);
+
+        const orderItemPrice = totalPrice;
+        const totalOrderItemPrice = Helper.formatCurrency(orderItemPrice);
 
         return `
             <div>
@@ -67,21 +72,31 @@ export default class TemplateForm extends View {
 
                     <fieldset class="no-form-section">
                         <legend class="no-form-section__title">집계 정보</legend>
-                        <div class="no-cart-aggregation">
-                            <dl>
-                                <dt>단가</dt>
-                                <dd><span data-ref="price">${formattedPrice}</span></dd>
-                            </dl>
-                            <dl>
-                                <dt>수량</dt>
-                                <dd><span data-ref="quantity">${quantity ?? 1}</span></dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <span>총 제품 가격</span>
-                                </dt>
-                                <dd><b data-ref="total">${totalPrice}</b></dd>
-                            </dl>
+                        <div class="no-summary-table-inner">
+                            <table class="no-summary-table">
+                                <thead>
+                                    <tr>
+                                        <th>품목</th>
+                                        <th>단가</th>
+                                        <th>수량</th>
+                                        <th>소계</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>${template.name}</td>
+                                        <td>${formattedPrice}</td>
+                                        <td>${quantity ?? 1}</td>
+                                        <td>${formattedTotalPrice}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="3">총 제품 가격</th>
+                                        <td class="no-price-total">${totalOrderItemPrice}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
 
                     </fieldset>
@@ -98,6 +113,7 @@ export default class TemplateForm extends View {
         if (!this.hasTemplate()) return; 
 
         this._submitBtn = null;
+        this._productForm = null;
         
         this._renderTemplate();
         this._renderAttributes();
@@ -174,23 +190,25 @@ export default class TemplateForm extends View {
     }
 
     _renderAttributes(){
-        const {category} = this._state.template;
+        // const {category} = this._state.template;
 
 
-        switch(category.slug) {
-            case 'loupe' :
-                this._renderLoupe();
-                break;
-        }
+        // switch(category.slug) {
+        //     case 'loupe' :
+        //         this._renderLoupe();
+        //         break;
+        // }
+        this._productForm = this._renderLoupe();
     }
 
-    async _renderLoupe(){
+    _renderLoupe(){
         this._logger.success('loupe');
 
-        const info = await this._fetchLoupeInfo()
+        LoupeForm.make(this._attrHookId, {
+            type: 'ready-made',
+        }).render();
 
         // const hook = document.getElementById(this._attrHookId);
-        
     }
 
     async _fetchLoupeInfo()
@@ -219,6 +237,15 @@ export default class TemplateForm extends View {
             e.preventDefault(); 
 
             const fd = new FormData(e.target); 
+            
+
+            if (this._productForm && !this._productForm.isValid()) {
+                console.log('fail to validation...');
+                return; 
+            } else {
+                console.log('success to validation...');
+                return; 
+            }
 
             this._dispatch('add.cart', {
                 data: fd, 
