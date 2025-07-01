@@ -16,12 +16,12 @@ return new class implements Migration
             $table->boolean('is_main_item')->default(false)->comment('세트 내 메인 제품 여부');
 
             $table->foreignId('order_id')
-                  ->constrained('orders')
-                  ->onDeleteCascade();
+                    ->constrained('orders')
+                    ->onDeleteCascade();
 
             $table->foreignId('product_id')
-                  ->constrained('products')
-                  ->onDeleteCascade();
+                    ->constrained('products')
+                    ->onDeleteCascade();
 
             $table->unsignedInteger('quantity')->default(1);
             $table->decimal('unit_price', 10, 2)->default(0);

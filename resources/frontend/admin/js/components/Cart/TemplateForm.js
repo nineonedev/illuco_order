@@ -7,7 +7,7 @@ import LoupeForm from "./LoupeForm";
 import SummaryTable from "./SummaryTable";
 
 export default class TemplateForm extends View {
-    _boot(){
+    _boot() {
         this._inputs = [];
         this._tempHookId = this._generateHookId();
         this._attrHookId = this._generateHookId();
@@ -17,9 +17,9 @@ export default class TemplateForm extends View {
         this._customForm = null;
         this._summaryTable = null;
         this._counterInput = null;
-        
-        super._boot();
+        this._typeInput = null;
 
+        super._boot();
     }
 
     _defineProps() {
@@ -29,14 +29,16 @@ export default class TemplateForm extends View {
         };
     }
 
-    _defineState(){
+    _defineState() {
         return {
-            ...this._props
-        }
+            ...this._props,
+        };
     }
 
-    hasTemplate(){
-        return this._state.template && !Helper.isEmptyObject(this._state.template);
+    hasTemplate() {
+        return (
+            this._state.template && !Helper.isEmptyObject(this._state.template)
+        );
     }
 
     _template() {
@@ -48,10 +50,10 @@ export default class TemplateForm extends View {
             `;
         }
 
-        const {template, quantity} = this._state;
-        const {id, price} = template
+        const { template, quantity } = this._state;
+        const { id, price } = template;
         const formattedPrice = Helper.formatCurrency(price);
-        const totalPrice = price * (quantity ?? 1)
+        const totalPrice = price * (quantity ?? 1);
         const formattedTotalPrice = Helper.formatCurrency(totalPrice);
 
         const orderItemPrice = totalPrice;
@@ -88,114 +90,129 @@ export default class TemplateForm extends View {
         `;
     }
 
-    _render(){
-
+    _render() {
         super._render();
-        
-        if (!this.hasTemplate()) return; 
+
+        if (!this.hasTemplate()) return;
 
         this._submitBtn = null;
         this._customForm = null;
         this._summaryTable = null;
         this._counterInput = null;
-        
+        this._typeInput = null;
+
         this._renderTemplate();
-        this._renderAttributes();
+        this._renderSubProduct();
         this._renderAggregate();
     }
 
-    _renderTemplate(){
+    _renderTemplate() {
         this._inputs = [];
-        const {template, quantity} = this._state;
+        const { template, quantity } = this._state;
 
-        if (Helper.isEmptyObject(template)) return; 
+        if (Helper.isEmptyObject(template)) return;
 
-        const { 
-            code, 
-            description,
-            fileattachment,
-            price,
-            model,
-            name
-        } = template;
+        const { code, description, fileattachment, price, model, name } =
+            template;
 
-        const nameInput = InputFactory.make('text').make(this._tempHookId,{
-            label: '이름',
-            name: 'product[name]',
-            value: name,
-            readOnly: true,
-        }).render();
+        const nameInput = InputFactory.make("text")
+            .make(this._tempHookId, {
+                label: "이름",
+                name: "product[name]",
+                value: name,
+                readOnly: true,
+            })
+            .render();
 
-        const textInput = InputFactory.make('text').make(this._tempHookId,{
-            label: '코드',
-            name: 'product[code]',
-            value: code,
-            readOnly: true,
-        }).render();
+        const textInput = InputFactory.make("text")
+            .make(this._tempHookId, {
+                label: "코드",
+                name: "product[code]",
+                value: code,
+                readOnly: true,
+            })
+            .render();
 
-        const modelInput = InputFactory.make('text').make(this._tempHookId,{
-            label: '모델명',
-            name: 'product[model]',
-            value: model,
-            readOnly: true,
-        }).render();
-        
-        const priceInput = InputFactory.make('number').make(this._tempHookId,{
-            label: '단가(USD)',
-            name: 'product[price]',
-            value: price,
-            readOnly: true,
-        }).render();
+        const modelInput = InputFactory.make("text")
+            .make(this._tempHookId, {
+                label: "모델명",
+                name: "product[model]",
+                value: model,
+                readOnly: true,
+            })
+            .render();
 
-        const descriptionInput = InputFactory.make('longText').make(this._tempHookId,{
-            label: '설명',
-            name: 'product[description]',
-            rows: '4',
-            value: description,
-            readOnly: true,
-        }).render();
-        
-        const counterInput = InputFactory.make('counter').make(this._tempHookId, {
-            label: '발주 수량',
-            name: 'quantity',
-            value: quantity ?? 1,
-            onChange: this._handlePrice.bind(this)
-        }).render();
+        const priceInput = InputFactory.make("number")
+            .make(this._tempHookId, {
+                label: "단가(USD)",
+                name: "product[price]",
+                value: price,
+                readOnly: true,
+            })
+            .render();
+
+        const descriptionInput = InputFactory.make("longText")
+            .make(this._tempHookId, {
+                label: "설명",
+                name: "product[description]",
+                rows: "4",
+                value: description,
+                readOnly: true,
+            })
+            .render();
+
+        const counterInput = InputFactory.make("counter")
+            .make(this._tempHookId, {
+                label: "발주 수량",
+                name: "quantity",
+                value: quantity ?? 1,
+                onChange: this._handlePrice.bind(this),
+            })
+            .render();
 
         this._counterInput = counterInput;
 
+        this._typeInput = InputFactory.make("text")
+            .make(this._tempHookId, {
+                type: "hidden",
+                value: "",
+                name: "product[type]",
+            })
+            .render();
+
         this._inputs.push(
-            nameInput, 
-            textInput, 
-            modelInput, 
-            priceInput, 
-            descriptionInput, 
+            nameInput,
+            textInput,
+            modelInput,
+            priceInput,
+            descriptionInput,
             counterInput
         );
-        
     }
 
-    _renderAttributes(){
-        this._renderLoupe();
-    }
-
-    _renderLoupe(){
-        this._logger.success('loupe');
-
+    _renderSubProduct() {
         const { loupe } = CartController.attributes;
-        const specs = loupe[this._state.template.model];
+        const loupeSpecs = loupe[this._state.template.model];
 
-        if (!specs) return; 
+        if (loupeSpecs) {
+            this._renderLoupe(loupeSpecs);
+            this._typeInput.setState({ value: "loupe" });
+        }
+    }
+
+    _renderLoupe(specs = null) {
+        this._logger.success("loupe");
+
+        if (!specs) return;
 
         this._customForm = LoupeForm.make(this._attrHookId, {
             ...this._state.template,
-            type: 'ready-made',
+            type: "ready-made",
             onUpdateSets: this.updateSets.bind(this),
-
         }).render();
     }
 
-    _renderAggregate(){
+    _renderAggregate() {
         const { template, quantity } = this._state;
 
         const items = [
@@ -204,7 +221,8 @@ export default class TemplateForm extends View {
                 price: template.price,
                 quantity: quantity ?? 1,
                 subTotal: template.price * (quantity ?? 1),
-            }, ...this._state.sets // 데이터매핑 필요
+            },
+            ...this._state.sets, // 데이터매핑 필요
         ];
 
         this._summaryTable = SummaryTable.make(this._summaryHookId, {
@@ -213,25 +231,26 @@ export default class TemplateForm extends View {
         }).render();
 
         this._submitBtn = Button.make(this._submitHookId, {
-            className: 'no-btn-primary --sm',
-            label: '장바구니에 추가',
+            className: "no-btn-primary --sm",
+            label: "장바구니에 추가",
         }).render();
     }
 
-    updateSets(sets = []){
+    updateSets(sets = []) {
         const item = {
             name: this._state.template.name,
             price: this._state.template.price,
             quantity: this._counterInput.getValue(),
-            subTotal: this._state.template.price * this._counterInput.getValue(),
-        }
+            subTotal:
+                this._state.template.price * this._counterInput.getValue(),
+        };
 
-        this._summaryTable.setState({items: [item, ...sets]});
+        this._summaryTable.setState({ items: [item, ...sets] });
     }
 
-    _handlePrice({value, view}, e){
+    _handlePrice({ value, view }, e) {
         const qty = Number.parseInt(value);
-        
+
         const item = {
             name: this._state.template.name,
             price: this._state.template.price,
@@ -246,29 +265,29 @@ export default class TemplateForm extends View {
         });
     }
 
-    _bindEvents(){
+    _bindEvents() {
         if (!this.hasTemplate()) return;
 
-       this.on(this.refs.form, 'submit', (view, e) => {
-            e.preventDefault(); 
+        this.on(this.refs.form, "submit", (view, e) => {
+            e.preventDefault();
 
             const fd = new FormData(e.target);
 
             if (this._customForm) {
-                this._customForm.validateAllFields(); 
+                this._customForm.validateAllFields();
 
-                if (this._customForm.hasErrors()){ 
-                    console.log('fail to validation...');
-                    return; 
+                if (this._customForm.hasErrors()) {
+                    console.log("fail to validation...");
+                    return;
                 }
             }
 
-            console.log('success to validation...');
+            console.log("success to validation...");
 
-            this._dispatch('add.cart', {
-                data: fd, 
-                view: this, 
-                button: this._submitBtn
+            this._dispatch("add.cart", {
+                data: fd,
+                view: this,
+                button: this._submitBtn,
             });
         });
     }

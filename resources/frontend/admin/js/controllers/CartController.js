@@ -4,8 +4,8 @@ import TemplateSelection from "../components/Cart/TemplateSelection";
 import CustomerSelection from "../components/Cart/CustomerSelection";
 import Cart from "../components/Cart/Cart";
 import Template from "../components/Cart/Template";
-import Modal from '../shared/Modal';
-import Loader from '../shared/Loader';
+import Modal from "../shared/Modal";
+import Loader from "../shared/Loader";
 
 export default class CartController extends Controller {
     form;
@@ -16,41 +16,39 @@ export default class CartController extends Controller {
 
     async index() {
         this._logger.info("index");
-    
-        this.modal = Modal.make('portal').render();
-        this.loader = Loader.make('portal').render();
-        this.cart = Cart.make('cart-hook').render();
-        this.form = Template.make('template-hook').render();
 
-        await this._loadAllData(); 
+        this.modal = Modal.make("portal").render();
+        this.loader = Loader.make("portal").render();
+        this.cart = Cart.make("cart-hook").render();
+        this.form = Template.make("template-hook").render();
 
-        this._listen('fetch.customers', this._fetchAllCustomers.bind(this));
-        this._listen('fetch.templates', this._fetchAllTemplates.bind(this));
+        await this._loadAllData();
 
-        this._listen('pick.customer', this._pickCustomer.bind(this));
-        this._listen('pick.template', this._pickTemplate.bind(this));
-        
-        this._listen('add.cart', this._addToCart.bind(this));
-        this._listen('update.cartitem', this._updateCartItem.bind(this));
-        this._listen('edit.cartitem', this._editCartItem.bind(this));
-        this._listen('delete.cartitem', this._deleteCartItem.bind(this));
-        this._listen('delete.cartitems', this._deleteManyCartItems.bind(this));
+        this._listen("fetch.customers", this._fetchAllCustomers.bind(this));
+        this._listen("fetch.templates", this._fetchAllTemplates.bind(this));
 
-        this._listen('order.create', this._createOrder.bind(this));
+        this._listen("pick.customer", this._pickCustomer.bind(this));
+        this._listen("pick.template", this._pickTemplate.bind(this));
+
+        this._listen("add.cart", this._addToCart.bind(this));
+        this._listen("update.cartitem", this._updateCartItem.bind(this));
+        this._listen("edit.cartitem", this._editCartItem.bind(this));
+        this._listen("delete.cartitem", this._deleteCartItem.bind(this));
+        this._listen("delete.cartitems", this._deleteManyCartItems.bind(this));
+
+        this._listen("order.create", this._createOrder.bind(this));
     }
-
 
     async _loadAllData() {
         this.loader.show();
 
         try {
             const [attrResult] = await Promise.all([
-                new Ajax(true).get('/admin/product-attributes'),
+                new Ajax(true).get("/admin/product-attributes"),
             ]);
-            
-            CartController.attributes = attrResult.data;
-            this._logger.success('속성 로드 결과', attrResult.data);
 
+            CartController.attributes = attrResult.data;
+            this._logger.success("속성 로드 결과", attrResult.data);
         } catch (err) {
             alert(err.message);
         } finally {
@@ -58,232 +56,231 @@ export default class CartController extends Controller {
         }
     }
 
-    async _createOrder({ids, totalAmount, memo, button}){
+    async _createOrder({ ids, totalAmount, memo, button }) {
         this._logger.info(ids, button);
 
         const customer = this.cart.getCustomer();
 
         const orderData = new URLSearchParams({
-            ids: ids, 
-            customer_id: customer?.id, 
+            ids: ids,
+            customer_id: customer?.id,
             total_amount: totalAmount,
             memo: memo,
-        })
+        });
 
         try {
-            button.setState({disabled: true}); 
+            button.setState({ disabled: true });
             this.loader.show();
-            const result = await Ajax.make(false).post('/admin/orders', orderData);
+            const result = await Ajax.make(false).post(
+                "/admin/orders",
+                orderData
+            );
             this._logger.success(result);
-            
-            this.cart.setCartItems(result.data.cartitems || []);
 
+            this.cart.setCartItems(result.data.cartitems || []);
         } catch (err) {
             this._logger.error(err);
-            alert('주문 처리 중 문제가 발생하였습니다.');
+            alert("주문 처리 중 문제가 발생하였습니다.");
         } finally {
             this.loader.hide();
-            button.setState({disabled: false}); 
+            button.setState({ disabled: false });
         }
     }
 
     async _deleteManyCartItems({ ids, views, button }) {
-        this._logger.info('ids', ids, views);
+        this._logger.info("ids", ids, views);
 
         try {
-            button.setState({disabled: true}); 
+            button.setState({ disabled: true });
             this.loader.show();
-            const result = await Ajax.make(true).delete('/admin/cartitems', new URLSearchParams({ids}));
+            const result = await Ajax.make(true).delete(
+                "/admin/cartitems",
+                new URLSearchParams({ ids })
+            );
             this._logger.success(result);
 
-            for (const id of ids){
+            for (const id of ids) {
                 this.cart.removeCartItem(id);
             }
-
         } catch (err) {
             this._logger.error(err);
-            alert('삭제 처리 중 문제가 발생하였습니다.');
+            alert("삭제 처리 중 문제가 발생하였습니다.");
         } finally {
             this.loader.hide();
-            button.setState({disabled: false}); 
+            button.setState({ disabled: false });
         }
     }
 
-
-    async _deleteCartItem({id, view, button }){
+    async _deleteCartItem({ id, view, button }) {
         this._logger.info(id);
-        
+
         try {
-            button.setState({disabled: true}); 
+            button.setState({ disabled: true });
             this.loader.show();
-            
-            const result = await Ajax.make(true).delete(`/admin/cartitems/${id}`);
-            this._logger.success('장바구니 삭제', result);
+
+            const result = await Ajax.make(true).delete(
+                `/admin/cartitems/${id}`
+            );
+            this._logger.success("장바구니 삭제", result);
             this.cart.removeCartItem(id);
-            
-        } catch (err){
+        } catch (err) {
             this._logger.error(err);
 
-            alert('삭제 처리 중 문제가 발생하였습니다.');
+            alert("삭제 처리 중 문제가 발생하였습니다.");
         } finally {
             this.loader.hide();
-            button.setState({disabled: false}); 
+            button.setState({ disabled: false });
         }
     }
 
     async _editCartItem({ id, view, button }) {
         this._logger.info(id, view, button);
-        
-        button.setState({disabled: true});
+
+        button.setState({ disabled: true });
         this.loader.show();
-        
+
         try {
             const result = await new Ajax(true).get(`/admin/cartitems/${id}`);
-            this._logger.success(result); 
+            this._logger.success(result);
 
-            const {data} = result;
-            const {template, values} =  data.cartitem.product;
-            
-            this._pickTemplate({template, values});
+            const { data } = result;
+            const { template, values } = data.cartitem.product;
 
+            this._pickTemplate({ template, values });
         } catch (err) {
             // 에러 처리
             this._logger.error(err);
-            alert('제품 정보를 불러오는 중 문제가 발생했습니다.');
+            alert("제품 정보를 불러오는 중 문제가 발생했습니다.");
         } finally {
             // 로딩 스피너 숨기기
             this.loader.hide();
-            button.setState({disabled: false});
+            button.setState({ disabled: false });
         }
     }
 
-
-    async _updateCartItem({id, data, view, button}){
+    async _updateCartItem({ id, data, view, button }) {
         this._logger.info(id, data);
 
         try {
-            button.setState({disabled: true});
+            button.setState({ disabled: true });
             this.loader.show();
-            const result = await new Ajax(true).put(`/admin/cartitems/${id}`, data);
-            this._logger.success('장바구니 변경', result);
-            
-            const cartitem = result.data.cartitem;
-            this.cart.updateCartItem(cartitem.id, {...view.state, ...cartitem});
+            const result = await new Ajax(true).put(
+                `/admin/cartitems/${id}`,
+                data
+            );
+            this._logger.success("장바구니 변경", result);
 
-        } catch(err) {
-            alert('아이템 변경에 실패하였습니다. 잠시 후 다시 시도해주세요.');
+            const cartitem = result.data.cartitem;
+            this.cart.updateCartItem(cartitem.id, {
+                ...view.state,
+                ...cartitem,
+            });
+        } catch (err) {
+            alert("아이템 변경에 실패하였습니다. 잠시 후 다시 시도해주세요.");
         } finally {
             this.loader.hide();
-            button.setState({disabled: false});
+            button.setState({ disabled: false });
         }
     }
 
-    async _addToCart({data, button}, evt){
-         
+    async _addToCart({ data, button }, evt) {
         this._logger.info(Object.fromEntries(data), button);
-        return;
 
-        const customer = this.cart.getCustomer(); 
+        const customer = this.cart.getCustomer();
 
         if (!customer) {
-            alert('고객을 선택해주세요.'); 
+            alert("고객을 선택해주세요.");
             return;
         }
 
-        data.append('customer_id', customer.id);
-        
-        try {
-            button.setState({disabled: true});
-            this.loader.show();
-            
-            const result = await new Ajax(true).post('/admin/cart', data);
-            this._logger.success('장바구니 추가', result.data.cartitem);
-            this.cart.addCartItem(result.data.cartitem);
+        data.append("customer_id", customer.id);
 
-        } catch (err){
-            console.error('장바구니 추가 중 오류 발생:', err);
-            alert('장바구니 추가에 실패하였습니다. 다시 시도해주세요.'); 
+        try {
+            button.setState({ disabled: true });
+            this.loader.show();
+
+            const result = await new Ajax(true).post("/admin/cart", data);
+            this._logger.success("장바구니 추가", result.data.cartitem);
+            this.cart.addCartItem(result.data.cartitem);
+        } catch (err) {
+            console.error("장바구니 추가 중 오류 발생:", err);
+            alert("장바구니 추가에 실패하였습니다. 다시 시도해주세요.");
         } finally {
             this.loader.hide();
-            button.setState({disabled: false});
+            button.setState({ disabled: false });
         }
-
     }
 
-    async _pickTemplate({template, values}, evt){
-        this.form.setState({template: template, values: values});
+    async _pickTemplate({ template, values }, evt) {
+        this.form.setState({ template: template, values: values });
         this.modal.setState({
-            open: false, 
-            content: '',
-            header: ''
+            open: false,
+            content: "",
+            header: "",
         });
     }
 
-    async _pickCustomer({customer}, evt){
-        this.cart.setState({customer: customer});
+    async _pickCustomer({ customer }, evt) {
+        this.cart.setState({ customer: customer });
         this.modal.setState({
-            open: false, 
-            content: '',
-            header: ''
+            open: false,
+            content: "",
+            header: "",
         });
     }
 
-     async _fetchAllCustomers({button}, evt){
-        
+    async _fetchAllCustomers({ button }, evt) {
         try {
-            button.setState({disabled: true});
+            button.setState({ disabled: true });
             const result = await new Ajax(true).get(`/admin/customers`);
 
             if (!result.success) {
                 return;
             }
 
-            const {customers} = result.data;
+            const { customers } = result.data;
 
             this.modal.setState({
                 header: button.props.label,
-                content: CustomerSelection.make(null, {paginator: customers}, false),
+                content: CustomerSelection.make(
+                    null,
+                    { paginator: customers },
+                    false
+                ),
                 open: true,
-            })
-            
+            });
         } finally {
-            button.setState({disabled: false});
+            button.setState({ disabled: false });
         }
+    }
 
-    }   
-
-    async _fetchAllTemplates({button}, evt){
+    async _fetchAllTemplates({ button }, evt) {
         try {
-            button.setState({disabled: true});
+            button.setState({ disabled: true });
             const result = await new Ajax(true).get(`/admin/product-templates`);
-            const {success, data} = result;
+            const { success, data } = result;
 
             if (!success) return;
 
-            const {templates} = data; 
-            
+            const { templates } = data;
+
             this.modal.setState({
                 header: button.props.label,
-                content: TemplateSelection.make(null, {paginator: templates}, false),
+                content: TemplateSelection.make(
+                    null,
+                    { paginator: templates },
+                    false
+                ),
                 open: true,
             });
-
         } finally {
-            button.setState({disabled: false});
+            button.setState({ disabled: false });
         }
-
     }
 
+    async _store(e) {}
 
-    async _store(e) {
+    async _update(e) {}
 
-    }
-
-    async _update(e) {
-
-    }
-
-    async _destroy(action, data) {
-
-    }
+    async _destroy(action, data) {}
 }

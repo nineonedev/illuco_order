@@ -1,10 +1,10 @@
 @use "../abstracts" as *;
 
-.no-form-label{
+.no-form-label {
     margin-bottom: 0.8rem;
     display: block;
 }
- 
+
 .no-form-control-space {
     width: 100%;
     height: 2rem;
@@ -39,12 +39,12 @@
 
 .no-form-table-inner {
     overflow-y: auto;
-    min-width: 76.8rem;
 
     .no-form-table {
         width: 100%;
         border-collapse: collapse;
         border: 1px solid var(--clr-input-border);
+        min-width: 76.8rem;
 
         thead {
             th {
@@ -52,12 +52,12 @@
             }
         }
 
-        th{
+        th {
             border: 1px solid var(--clr-input-border);
             padding: 0.8rem 1.6rem;
             font-weight: 700;
         }
-        
+
         td {
             border: 1px solid var(--clr-input-border);
         }
@@ -166,23 +166,23 @@
     }
 }
 
-.no-form-section{
+.no-form-section {
     padding: 2.4rem 0;
 
-    &__title{
+    &__title {
         margin-bottom: 0.8rem;
         font-weight: 600;
     }
 }
 
-.no-form-table-error{
+.no-form-table-error {
     display: block;
     color: var(--clr-error-main);
     margin-top: 0.8rem;
     font-size: 1.2rem;
 }
 
-.no-form-error-msg{
+.no-form-error-msg {
     display: block;
     color: var(--clr-error-main);
     margin-top: 0.8rem;
@@ -198,16 +198,14 @@
     border-radius: var(--button-radius);
 }
 
-
-.no-form-search-btn{
+.no-form-search-btn {
     @extend %form-input;
     @extend %form-control;
-    
+
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-
 
 .choices[data-type*="select-one"] .choices__input {
     border-bottom: 1px solid var(--clr-input-border);
@@ -229,16 +227,15 @@
     color: var(--clr-input-text);
 }
 
-.choices{
-      overflow: visible;
+.choices {
+    overflow: visible;
 }
-.choices[data-type*=select-one] .choices__inner {
+.choices[data-type*="select-one"] .choices__inner {
     padding-bottom: 0;
 }
 .choices__inner {
-   @extend %form-input;  
+    @extend %form-input;
 }
-
 
 .iti {
     @extend %form-control;

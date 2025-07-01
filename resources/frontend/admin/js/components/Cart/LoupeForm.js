@@ -15,7 +15,7 @@ export default class LoupeForm extends View {
     _defineProps() {
         return {
             sets: [],
-            onUpdateSets: (sets) => {}
+            onUpdateSets: (sets) => {},
         };
     }
 
@@ -41,12 +41,12 @@ export default class LoupeForm extends View {
         const { type, model } = this._state;
 
         RadioInput.make(this._attrHookId, {
-            label: '형태',
-            name: 'loupe[type]',
+            label: "형태",
+            name: "loupe[type]",
             value: type,
             options: [
-                { label: 'Ready-made', value: 'ready-made' },
-                { label: 'Custom-made', value: 'custom-made' },
+                { label: "Ready-made", value: "ready-made" },
+                { label: "Custom-made", value: "custom-made" },
             ],
             onChange: this._handleTypeChange.bind(this),
         }).render();
@@ -62,9 +62,9 @@ export default class LoupeForm extends View {
 
         if (frame_types) {
             RadioInput.make(this._attrHookId, {
-                label: '테정보',
-                name: 'loupe[frame_type]',
-                value: this._state.loupe?.frame_type ?? '',
+                label: "테정보",
+                name: "loupe[frame_type]",
+                value: this._state.loupe?.frame_type ?? "",
                 options: specs.frame_types,
                 onChange: this._handleFrameTypeChange.bind(this),
             }).render();
@@ -72,9 +72,9 @@ export default class LoupeForm extends View {
 
         if (working_distance) {
             NumberInput.make(this._attrHookId, {
-                label: 'WD (단위:Cm)',
-                name: 'loupe[working_distance]',
-                value: this._state.loupe?.working_distance ?? '',
+                label: "WD (단위:Cm)",
+                name: "loupe[working_distance]",
+                value: this._state.loupe?.working_distance ?? "",
                 min: working_distance.min,
                 max: working_distance.max,
                 step: 0.1,
@@ -82,7 +82,7 @@ export default class LoupeForm extends View {
             }).render();
         }
 
-        if (type === 'custom-made') {
+        if (type === "custom-made") {
             this._renderAttributes();
             this._bindCustomValidation();
         }
@@ -94,46 +94,67 @@ export default class LoupeForm extends View {
 
     _handleTypeChange({ value: type }) {
         this.setState({ type });
-        if (type !== 'custom-made') {
+        if (type !== "custom-made") {
             this._state.sets = [];
         }
         this._props.onUpdateSets(this._state.sets);
     }
 
     _handleFrameTypeChange({ value }) {
-        const allowed = CartController.attributes.loupe[this._state.model]?.frame_types?.map(x => x.value) || [];
+        const allowed =
+            CartController.attributes.loupe[
+                this._state.model
+            ]?.frame_types?.map((x) => x.value) || [];
         if (!value) {
-            this._setFieldError('loupe[frame_type]', '테정보는 필수 입력 항목입니다.');
+            this._setFieldError(
+                "loupe[frame_type]",
+                "테정보는 필수 입력 항목입니다."
+            );
         } else if (!allowed.includes(value)) {
-            this._setFieldError('loupe[frame_type]', '유효하지 않은 테정보입니다.');
+            this._setFieldError(
+                "loupe[frame_type]",
+                "유효하지 않은 테정보입니다."
+            );
         } else {
-            this._clearFieldError('loupe[frame_type]');
+            this._clearFieldError("loupe[frame_type]");
         }
     }
 
     _handleWorkingDistanceChange({ value }) {
-        const spec = this._getSpecForField('loupe[working_distance]');
+        const spec = this._getSpecForField("loupe[working_distance]");
         const num = parseFloat(value);
         if (!value) {
-            this._setFieldError('loupe[working_distance]', 'WD 값은 필수입니다.');
+            this._setFieldError(
+                "loupe[working_distance]",
+                "WD 값은 필수입니다."
+            );
         } else if (num < spec.min || num > spec.max) {
-            this._setFieldError('loupe[working_distance]', `WD 값은 ${spec.min} ~ ${spec.max} cm 범위여야 합니다.`);
+            this._setFieldError(
+                "loupe[working_distance]",
+                `WD 값은 ${spec.min} ~ ${spec.max} cm 범위여야 합니다.`
+            );
         } else {
-            this._clearFieldError('loupe[working_distance]');
+            this._clearFieldError("loupe[working_distance]");
         }
     }
 
     _handleAddOptionChange() {
         const el = document.querySelector(`[name="loupe[add_option]"]:checked`);
         const val = el?.value ?? "";
-        const allowed = ['ignore', 'include', 'zero_diopter'];
+        const allowed = ["ignore", "include", "zero_diopter"];
 
         if (!val) {
-            this._setFieldError('loupe[add_option]', 'ADD 옵션 선택은 필수입니다.');
+            this._setFieldError(
+                "loupe[add_option]",
+                "ADD 옵션 선택은 필수입니다."
+            );
         } else if (!allowed.includes(val)) {
-            this._setFieldError('loupe[add_option]', '선택하신 ADD 옵션이 유효하지 않습니다.');
+            this._setFieldError(
+                "loupe[add_option]",
+                "선택하신 ADD 옵션이 유효하지 않습니다."
+            );
         } else {
-            this._clearFieldError('loupe[add_option]');
+            this._clearFieldError("loupe[add_option]");
         }
     }
 
@@ -143,28 +164,32 @@ export default class LoupeForm extends View {
 
     validateAllFields() {
         this._handleFrameTypeChange({
-            value: document.querySelector(`[name="loupe[frame_type]"]:checked`)?.value || ''
+            value:
+                document.querySelector(`[name="loupe[frame_type]"]:checked`)
+                    ?.value || "",
         });
 
         this._handleWorkingDistanceChange({
-            value: document.querySelector(`[name="loupe[working_distance]"]`)?.value || ''
+            value:
+                document.querySelector(`[name="loupe[working_distance]"]`)
+                    ?.value || "",
         });
 
-        if (this._state.type === 'custom-made') {
+        if (this._state.type === "custom-made") {
             this._handleAddOptionChange();
 
             const customFields = [
-                'loupe[vd]',
-                'loupe[pd_right]',
-                'loupe[pd_left]',
-                'loupe[od_sph]',
-                'loupe[os_sph]',
-                'loupe[od_cyl]',
-                'loupe[os_cyl]',
-                'loupe[od_axis]',
-                'loupe[os_axis]',
-                'loupe[od_add]',
-                'loupe[os_add]',
+                "loupe[vd]",
+                "loupe[pd_right]",
+                "loupe[pd_left]",
+                "loupe[od_sph]",
+                "loupe[os_sph]",
+                "loupe[od_cyl]",
+                "loupe[os_cyl]",
+                "loupe[od_axis]",
+                "loupe[os_axis]",
+                "loupe[od_add]",
+                "loupe[os_add]",
             ];
 
             for (const name of customFields) {
@@ -177,11 +202,16 @@ export default class LoupeForm extends View {
                 if (spec) {
                     const num = parseFloat(value);
                     if (value === "") {
-                        this._setFieldError(name, `${el.dataset.label || name} 값은 필수입니다.`);
+                        this._setFieldError(
+                            name,
+                            `${el.dataset.label || name} 값은 필수입니다.`
+                        );
                     } else if (num < spec.min || num > spec.max) {
                         this._setFieldError(
                             name,
-                            `${el.dataset.label || name} 값은 ${spec.min} ~ ${spec.max} 범위여야 합니다.`
+                            `${el.dataset.label || name} 값은 ${spec.min} ~ ${
+                                spec.max
+                            } 범위여야 합니다.`
                         );
                     } else {
                         this._clearFieldError(name);
@@ -199,21 +229,26 @@ export default class LoupeForm extends View {
 
     _getSpecForField(name = null) {
         const map = {
-            'loupe[vd]': { min: 10, max: 25 },
-            'loupe[pd_right]': { min: 27, max: 40 },
-            'loupe[pd_left]': { min: 27, max: 40 },
-            'loupe[od_sph]': { min: -20, max: 20, step: 0.25 },
-            'loupe[os_sph]': { min: -20, max: 20, step: 0.25 },
-            'loupe[od_cyl]': { min: -10, max: 10, step: 0.25 },
-            'loupe[os_cyl]': { min: -10, max: 10, step: 0.25 },
-            'loupe[od_axis]': { min: 0, max: 180 },
-            'loupe[os_axis]': { min: 0, max: 180 },
-            'loupe[od_add]': { min: 0, max: 4, step: 0.25 },
-            'loupe[os_add]': { min: 0, max: 4, step: 0.25 },
-            'loupe[frame_type]': {
-                allowedValues: CartController.attributes.loupe[this._state.model]?.frame_types.map(x => x.value) || []
+            "loupe[vd]": { min: 10, max: 25 },
+            "loupe[pd_right]": { min: 27, max: 40 },
+            "loupe[pd_left]": { min: 27, max: 40 },
+            "loupe[od_sph]": { min: -20, max: 20, step: 0.25 },
+            "loupe[os_sph]": { min: -20, max: 20, step: 0.25 },
+            "loupe[od_cyl]": { min: -10, max: 10, step: 0.25 },
+            "loupe[os_cyl]": { min: -10, max: 10, step: 0.25 },
+            "loupe[od_axis]": { min: 0, max: 180 },
+            "loupe[os_axis]": { min: 0, max: 180 },
+            "loupe[od_add]": { min: 0, max: 4, step: 0.25 },
+            "loupe[os_add]": { min: 0, max: 4, step: 0.25 },
+            "loupe[frame_type]": {
+                allowedValues:
+                    CartController.attributes.loupe[
+                        this._state.model
+                    ]?.frame_types.map((x) => x.value) || [],
             },
-            'loupe[working_distance]': CartController.attributes.loupe[this._state.model]?.working_distance || null,
+            "loupe[working_distance]":
+                CartController.attributes.loupe[this._state.model]
+                    ?.working_distance || null,
         };
         return name ? map[name] : map;
     }
@@ -240,27 +275,32 @@ export default class LoupeForm extends View {
      */
     _renderErrors() {
         // 먼저 모든 에러 노드를 싹 지운다
-        const allErrors = document.querySelectorAll('.no-form-error-msg');
-        allErrors.forEach($el => $el.remove());
+        const allErrors = document.querySelectorAll(".no-form-error-msg");
+        allErrors.forEach(($el) => $el.remove());
 
         let odOsErrors = [];
 
         for (const [name, msg] of Object.entries(this._state.errors)) {
             let el;
 
-            if (name === 'loupe[add_option]') {
-                el = document.querySelector(`[data-error-for="loupe[add_option]"]`);
-            } else if (name === 'loupe[frame_type]') {
-                el = document.querySelector(`[data-error-for="loupe[frame_type]"]`);
+            if (name === "loupe[add_option]") {
+                el = document.querySelector(
+                    `[data-error-for="loupe[add_option]"]`
+                );
+            } else if (name === "loupe[frame_type]") {
+                el = document.querySelector(
+                    `[data-error-for="loupe[frame_type]"]`
+                );
             } else {
                 el = document.querySelector(`[name="${name}"]`);
             }
 
             if (el) {
-                let $error = el.parentElement.querySelector('.no-form-error-msg');
+                let $error =
+                    el.parentElement.querySelector(".no-form-error-msg");
                 if (!$error) {
-                    $error = document.createElement('div');
-                    $error.className = 'no-form-error-msg';
+                    $error = document.createElement("div");
+                    $error.className = "no-form-error-msg";
                     el.parentElement.appendChild($error);
                 }
                 $error.innerHTML = msg;
@@ -268,50 +308,53 @@ export default class LoupeForm extends View {
         }
 
         // OD/OS 표 밑에 출력
-        const tableWrapper = document.querySelector('.no-form-table-inner');
+        const tableWrapper = document.querySelector(".no-form-table-inner");
         if (tableWrapper) {
-            let tableErrorEl = tableWrapper.querySelector('.no-form-table-error');
+            let tableErrorEl = tableWrapper.querySelector(
+                ".no-form-table-error"
+            );
             if (!tableErrorEl) {
-                tableErrorEl = document.createElement('div');
-                tableErrorEl.className = 'no-form-table-error';
+                tableErrorEl = document.createElement("div");
+                tableErrorEl.className = "no-form-table-error";
                 tableWrapper.appendChild(tableErrorEl);
             }
-            tableErrorEl.innerHTML = odOsErrors.join('<br>');
+            tableErrorEl.innerHTML = odOsErrors.join("<br>");
         }
     }
 
-
     _bindCustomValidation() {
-        if (this._state.type !== 'custom-made') return;
+        if (this._state.type !== "custom-made") return;
 
         const inputHandlers = {
-            'loupe[frame_type]': this._handleFrameTypeChange.bind(this),
-            'loupe[working_distance]': this._handleWorkingDistanceChange.bind(this),
+            "loupe[frame_type]": this._handleFrameTypeChange.bind(this),
+            "loupe[working_distance]":
+                this._handleWorkingDistanceChange.bind(this),
 
-            'loupe[pd_right]': this._handleFieldValidation.bind(this),
-            'loupe[pd_left]': this._handleFieldValidation.bind(this),
+            "loupe[pd_right]": this._handleFieldValidation.bind(this),
+            "loupe[pd_left]": this._handleFieldValidation.bind(this),
 
-            'loupe[vd]': this._handleFieldValidation.bind(this),
+            "loupe[vd]": this._handleFieldValidation.bind(this),
 
-            'loupe[od_sph]': this._handleFieldValidation.bind(this),
-            'loupe[od_cyl]': this._handleFieldValidation.bind(this),
-            'loupe[od_axis]': this._handleFieldValidation.bind(this),
-            'loupe[od_add]': this._handleFieldValidation.bind(this),
+            "loupe[od_sph]": this._handleFieldValidation.bind(this),
+            "loupe[od_cyl]": this._handleFieldValidation.bind(this),
+            "loupe[od_axis]": this._handleFieldValidation.bind(this),
+            "loupe[od_add]": this._handleFieldValidation.bind(this),
 
-            'loupe[os_sph]': this._handleFieldValidation.bind(this),
-            'loupe[os_cyl]': this._handleFieldValidation.bind(this),
-            'loupe[os_axis]': this._handleFieldValidation.bind(this),
-            'loupe[os_add]': this._handleFieldValidation.bind(this),
+            "loupe[os_sph]": this._handleFieldValidation.bind(this),
+            "loupe[os_cyl]": this._handleFieldValidation.bind(this),
+            "loupe[os_axis]": this._handleFieldValidation.bind(this),
+            "loupe[os_add]": this._handleFieldValidation.bind(this),
         };
 
-
-        const allInputs = document.querySelectorAll(`#${this._attrHookId} input`);
+        const allInputs = document.querySelectorAll(
+            `#${this._attrHookId} input`
+        );
         allInputs.forEach((el) => {
-            const name = el.getAttribute('name');
+            const name = el.getAttribute("name");
             const handler = inputHandlers[name];
             if (handler) {
                 el.addEventListener(
-                    'input',
+                    "input",
                     Helper.debounce((e) => {
                         handler({ name, value: e.target.value });
                         this._checkSphCylAddRules();
@@ -320,9 +363,11 @@ export default class LoupeForm extends View {
             }
         });
 
-        const addOptionEls = document.querySelectorAll('[name="loupe[add_option]"]');
-        addOptionEls.forEach(el => {
-            el.addEventListener('change', () => {
+        const addOptionEls = document.querySelectorAll(
+            '[name="loupe[add_option]"]'
+        );
+        addOptionEls.forEach((el) => {
+            el.addEventListener("change", () => {
                 this._handleAddOptionChange();
             });
         });
@@ -340,28 +385,40 @@ export default class LoupeForm extends View {
                 pdTotalEl.value = total ? total.toFixed(1) : "";
 
                 if (Math.abs(right - left) > 2) {
-                    this._setFieldError('loupe[pd_total]', "좌우 PD 차이가 ±2mm를 초과합니다.");
+                    this._setFieldError(
+                        "loupe[pd_total]",
+                        "좌우 PD 차이가 ±2mm를 초과합니다."
+                    );
                 } else {
-                    this._clearFieldError('loupe[pd_total]');
+                    this._clearFieldError("loupe[pd_total]");
                 }
             };
 
-            pdRightEl.addEventListener('input', Helper.debounce(checkPdDiff, 300));
-            pdLeftEl.addEventListener('input', Helper.debounce(checkPdDiff, 300));
+            pdRightEl.addEventListener(
+                "input",
+                Helper.debounce(checkPdDiff, 300)
+            );
+            pdLeftEl.addEventListener(
+                "input",
+                Helper.debounce(checkPdDiff, 300)
+            );
         }
     }
 
     _checkSphCylAddRules() {
-        const getVal = (name) => parseFloat(document.querySelector(`[name="${name}"]`)?.value || "0");
-        const odSph = getVal('loupe[od_sph]');
-        const odCyl = getVal('loupe[od_cyl]');
-        const odAxis = getVal('loupe[od_axis]');
-        const odAdd = getVal('loupe[od_add]');
+        const getVal = (name) =>
+            parseFloat(
+                document.querySelector(`[name="${name}"]`)?.value || "0"
+            );
+        const odSph = getVal("loupe[od_sph]");
+        const odCyl = getVal("loupe[od_cyl]");
+        const odAxis = getVal("loupe[od_axis]");
+        const odAdd = getVal("loupe[od_add]");
 
-        const osSph = getVal('loupe[os_sph]');
-        const osCyl = getVal('loupe[os_cyl]');
-        const osAxis = getVal('loupe[os_axis]');
-        const osAdd = getVal('loupe[os_add]');
+        const osSph = getVal("loupe[os_sph]");
+        const osCyl = getVal("loupe[os_cyl]");
+        const osAxis = getVal("loupe[os_axis]");
+        const osAdd = getVal("loupe[os_add]");
 
         const odSum = odSph + odCyl;
         const osSum = osSph + osCyl;
@@ -369,10 +426,18 @@ export default class LoupeForm extends View {
         const errors = [];
 
         if (odSum < -10 || odSum > 6) {
-            errors.push(`OD (오른쪽 눈) SPH + CYL 합이 -10 ~ +6 범위를 벗어났습니다. 현재 ${odSum.toFixed(2)}`);
+            errors.push(
+                `OD (오른쪽 눈) SPH + CYL 합이 -10 ~ +6 범위를 벗어났습니다. 현재 ${odSum.toFixed(
+                    2
+                )}`
+            );
         }
         if (osSum < -10 || osSum > 6) {
-            errors.push(`OS (왼쪽 눈) SPH + CYL 합이 -10 ~ +6 범위를 벗어났습니다. 현재 ${osSum.toFixed(2)}`);
+            errors.push(
+                `OS (왼쪽 눈) SPH + CYL 합이 -10 ~ +6 범위를 벗어났습니다. 현재 ${osSum.toFixed(
+                    2
+                )}`
+            );
         }
         if (odAxis < 0 || odAxis > 180) {
             errors.push(`OD axis 값은 0~180 사이여야 합니다.`);
@@ -385,9 +450,9 @@ export default class LoupeForm extends View {
         }
 
         if (errors.length > 0) {
-            this._setFieldError('loupe[sph_cyl_rule]', errors.join("<br>"));
+            this._setFieldError("loupe[sph_cyl_rule]", errors.join("<br>"));
         } else {
-            this._clearFieldError('loupe[sph_cyl_rule]');
+            this._clearFieldError("loupe[sph_cyl_rule]");
         }
 
         let count = 0;
@@ -405,11 +470,20 @@ export default class LoupeForm extends View {
 
         const num = parseFloat(value);
         if (value === "") {
-            this._setFieldError(name, `${document.querySelector(`[name="${name}"]`)?.dataset.label || name} 값은 필수입니다.`);
+            this._setFieldError(
+                name,
+                `${
+                    document.querySelector(`[name="${name}"]`)?.dataset.label ||
+                    name
+                } 값은 필수입니다.`
+            );
         } else if (num < spec.min || num > spec.max) {
             this._setFieldError(
                 name,
-                `${document.querySelector(`[name="${name}"]`)?.dataset.label || name} 값은 ${spec.min} ~ ${spec.max} 범위여야 합니다.`
+                `${
+                    document.querySelector(`[name="${name}"]`)?.dataset.label ||
+                    name
+                } 값은 ${spec.min} ~ ${spec.max} 범위여야 합니다.`
             );
         } else {
             this._clearFieldError(name);
@@ -421,7 +495,7 @@ export default class LoupeForm extends View {
         this._state.sets = [];
 
         if (!lens || this._lensCount === 0) {
-            document.getElementById(this._optionHookId).innerHTML = '';
+            document.getElementById(this._optionHookId).innerHTML = "";
             return;
         }
 
@@ -436,7 +510,11 @@ export default class LoupeForm extends View {
             subTotal: subTotal,
         });
 
-        const image = lens.fileattachment?.[0]?.upload_path || '/static/app/img/meta/thumb.jpg';
+        const image =
+            lens.fileattachment?.[0]?.upload_path ||
+            "/static/app/img/meta/thumb.jpg";
+
+        const index = 0;
 
         const html = `
             <hr class="no-hr --xl">
@@ -444,9 +522,10 @@ export default class LoupeForm extends View {
                 <legend class="no-form-section__title">추가 제품</legend>
                 <ul>
                     <li class="no-cartitem-set">
-                        <input type="hidden" name="sets[${lens.id}][quantity]" value="${quantity}" />
-                        <input type="hidden" name="sets[${lens.id}][unit_price]" value="${lens.price}" />
-                        <input type="hidden" name="sets[${lens.id}][total_price]" value="${subTotal}" />
+                        <input type="hidden" name="sets[${index}][product][template_id]" value="${lens.id}" />
+                        <input type="hidden" name="sets[${index}][product][code]" value="${lens.code}" />
+                        <input type="hidden" name="sets[${index}][product][model]" value="${lens.model}" />
+                        <input type="hidden" name="sets[${index}][product][name]" value="${lens.name}" />
 
                         <div class="no-cartitem-set__present">
                             <div class="no-cartitem-set__present-block">
@@ -467,7 +546,7 @@ export default class LoupeForm extends View {
                             <div class="no-cartitem-set__action">
                                 <div class="no-cartitem-set__quantity-control">
                                     <button type="button" class="no-btn --minus" disabled>-</button>
-                                    <input type="text" readonly value="${this._lensCount}">
+                                    <input type="text" name="sets[${index}][quantity]" readonly value="${quantity}">
                                     <button type="button" class="no-btn --plus" disabled>+</button>
                                 </div>
                             </div>
@@ -480,7 +559,7 @@ export default class LoupeForm extends View {
     }
 
     _renderAttributes() {
-        const template = document.createElement('template');
+        const template = document.createElement("template");
         template.innerHTML = this._attributesHtml().trim();
         const element = template.content.firstElementChild;
         document.getElementById(this._attrHookId).append(element);

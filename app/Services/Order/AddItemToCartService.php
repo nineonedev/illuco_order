@@ -5,12 +5,15 @@ namespace App\Services\Order;
 use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Repositories\CartItemRepository;
 use App\Domains\Order\Repositories\CartRepository;
+use App\Domains\Product\Entities\Headlight;
+use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductValue;
 use App\Domains\Product\Repositories\ProductRepository;
 use App\Domains\Product\Repositories\ProductValueRepository;
 use App\Supports\Services\Service;
 use Exception;
+use Framework\Support\Str;
 use RuntimeException;
 
 class AddItemToCartService extends Service
@@ -20,36 +23,20 @@ class AddItemToCartService extends Service
         // 기본 변수 추출
         $customer_id = $payload['customer_id'];
         $productData = $payload['product'] ?? [];
-        $attributes  = $payload['attributes'] ?? [];
         $quantity    = $payload['quantity'] ?? 1;
+        $sets = $payload['sets'] ?? [];
 
-        // 1. 속성 배열 정규화: ['id' => ['value' => [], 'type' => 'type']] 형태로
-        $normalized = [];
-        foreach ($attributes as $id => $attribute) {
-            // type이 없으면 'text' 기본값 설정
-            $type = $attribute['type'] ?: 'text'; 
-            // value가 없으면 continue로 해당 속성 건너뛰기
-            $value = $attribute['value'] ?? null;
-
-            if (!$value) continue; // value가 없으면 건너뜁니다.
-
-            // value가 배열로 들어오는 경우를 처리
-            $normalized[$id] = [
-                'value' => is_array($value) ? array_values($value) : [$value],
-                'type'  => $type,
-            ];
-        }
-        
-        // 2. 장바구니 조회 or 생성
+        // 카트 가져오기
         $cart = CartRepository::make()
             ->query()
             ->firstOrCreate(['customer_id' => $customer_id]);
 
-        // 3. 제품 생성 (속성 포함)
+        // 제품 생성
+        $type = $productData['type'] ?? null; 
         $product = new Product(array_merge($productData, [
-            // attribute_json 필드를 제외하고 필요한 기본 데이터만 포함
             'template_id' => $productData['template_id'],
             'name' => $productData['name'],
+            'type' => $productData['type'],
             'code' => $productData['code'],
             'model' => $productData['model'],
             'price' => $productData['price']
@@ -57,77 +44,101 @@ class AddItemToCartService extends Service
         
         $product = ProductRepository::make()->save($product);
 
-        // 5. ProductValue 저장 (속성 타입 포함)
-        foreach ($normalized as $attribute_id => $data) {
-            $type = $data['type']; // 속성 타입 (ex: text, multi-select)
+        if (!$product) {
+            throw new RuntimeException("제품 생성에 실패하였습니다."); 
+        }
 
-            // 기존 ProductValue 삭제
-            ProductValueRepository::make()->query()
-                ->where('product_id', $product->id)
-                ->where('attribute_id', $attribute_id)
-                ->where('attribute_type', $type)
-                ->delete();
-
-            // 새로운 ProductValue 저장
-            foreach ($data['value'] as $value) {
-
-                // 중복된 ProductValue가 존재하는지 확인
-                $existingProductValue = ProductValueRepository::make()->query()
-                    ->where('product_id', $product->id)
-                    ->where('attribute_id', $attribute_id)
-                    ->where('attribute_type', $type)
-                    ->where('value', $value)
-                    ->first();
-
-                // 중복이 없으면 새로 저장
-                if (!$existingProductValue) {
-                    $productValue = ProductValue::make([
-                        'product_id'     => $product->id,
-                        'attribute_id'   => $attribute_id,
-                        'attribute_type' => $type,  // 타입 저장
-                        'value'          => $value,
-                    ]);
-
-                    // ProductValue 저장
-                    $savedProductValue = ProductValueRepository::make()->save($productValue);
-
-                    if (!$savedProductValue) {
-                        logger()->error("ProductValue 저장 실패", [
-                            'product_id'     => $product->id,
-                            'attribute_id'   => $attribute_id,
-                            'attribute_type' => $type,
-                            'value'          => $value,
-                        ]);
-                        throw new RuntimeException("아이템 생성에 실패하였습니다.");
-                    }
-                }
+        // 서브 제품 생성
+        /** @var Entity|null $subProductClass */
+        $subProductClass = null;
+        if ($type) {
+            switch ($type) {
+                case Loupe::alias():
+                    $subProductClass = Loupe::class; 
+                    break; 
+                case Headlight::alias():
+                    $subProductClass = Headlight::class;
+                    break; 
             }
         }
 
-        // 6. 장바구니 아이템 생성
-        $cartItem = new CartItem([
+        if ($subProductClass) {
+            $subProductData = $payload[$subProductClass::alias()]; 
+            $subProductData = array_merge($subProductData, ['id' => $product->id]);
+            $subProduct = new $subProductClass($subProductData);
+            
+            /** @var Repository $repo */
+            $repo = $subProductClass::resolveRepository();
+            $subProduct = $repo->save($subProduct);
+
+            if (!$subProduct) {
+                throw new RuntimeException("제품 확장에 실패하였습니다.");
+            }
+        }
+
+        $setGroupId = $sets ? Str::uuid() : null; 
+        $isMainItem = (bool) $sets;
+
+        // 카트 아이템 생성
+        $cartItemData = array_merge([
             'cart_id'        => $cart->id,
             'product_id'     => $product->id,
             'quantity'       => $quantity,
+        ], [
+            'set_group_id' => $setGroupId,
+            'is_main_item' => $isMainItem,
         ]);
-
+        
+        $cartItem = new CartItem($cartItemData);
         $cartItem = CartItemRepository::make()->save($cartItem);
-
+        
         if (!$cartItem) {
             logger()->error("장바구니 추가 실패", [
                 'cart_id'     => $cart->id,
                 'product_id'  => $product->id,
-                'attributes'  => $normalized,
                 'quantity'    => $quantity,
             ]);
+
             throw new RuntimeException("장바구니 추가에 실패하였습니다.");
         }
 
-        // 7. 관련 정보 로딩
+        dump($sets);
+        // 카트아이템 세트 생성
+        if ($sets) { 
+            $setGroupProducts = []; 
+
+            foreach ($sets as $index => $data) {
+                $setGroupProduct = new Product($data['product'] ?? []); 
+                $setGroupProduct = ProductRepository::make()->save($setGroupProduct);
+
+                if (!$setGroupProduct) {
+                    throw new RuntimeException("세트 생성에 실패하였습니다.");
+                }
+
+                $subCartItemData = [
+                    'cart_id' => $cart->id,
+                    'product_id' => $setGroupProduct->id,
+                    'quantity' => $data['quantity'] ?? 1,
+                    'is_main_item' => false, 
+                    'set_group_id' => $setGroupId, 
+                    'set_group_sort' => $index,
+                ];
+                $subCartItem = new CartItem($subCartItemData);
+                $subCartItem = CartItemRepository::make()->save($subCartItem);
+
+                if (!$subCartItem) {
+                    throw new RuntimeException("장바구니 세트 추가에 실패하였습니다.");
+                }
+
+                $subCartItem->setRelation('product', $setGroupProduct);
+                $setGroupProducts[] = $subCartItem;
+            }
+
+            $cartItem->setRelation('sets', $setGroupProducts);
+        }
+
         $cartItem->load([
-            'product.values',
             'product.template' => [
-                'attributes.options',
                 'fileattachment',
             ],
         ]);
