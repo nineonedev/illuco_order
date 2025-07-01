@@ -175,6 +175,20 @@
     }
 }
 
+.no-form-table-error{
+    display: block;
+    color: var(--clr-error-main);
+    margin-top: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.no-form-error-msg{
+    display: block;
+    color: var(--clr-error-main);
+    margin-top: 0.8rem;
+    font-size: 1.2rem;
+}
+
 .no-form-empty-fallback {
     text-align: center;
     background-color: var(--clr-slate-50);

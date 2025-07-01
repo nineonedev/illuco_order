@@ -32,6 +32,13 @@ class Loupe extends Entity
         'add_option'
     ];
 
+    public static array $additionalOptions = [
+        'prescription_lens' => [
+            'name' => '처방렌즈',
+            'price' => 30.00,
+        ],
+    ];
+
     public static array $modelSpecs = [
         'ITL-1025G' => [
             'frame_types' => [

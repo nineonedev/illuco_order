@@ -17,7 +17,6 @@ return new class implements Migration
             $table->string('model')->nullable();
             $table->decimal('price', 10, 2)->default(0);
             $table->text('description')->nullable();
-            $table->string('engraving_text')->nullable()->comment('주문 시 입력된 각인 내용');
             $table->softDeletes();
             $table->timestamps();
         });

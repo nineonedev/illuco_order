@@ -145,6 +145,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [ProductTemplateController::class, 'index'])->name('index');
                     Route::get('/create', [ProductTemplateController::class, 'create'])->name('create');
+                    Route::get('/options', [ProductTemplateController::class, 'options'])->name('options');
                     Route::get('{id}/edit', [ProductTemplateController::class, 'edit'])->name('edit');
                     Route::get('{id}', [ProductTemplateController::class, 'show'])->name('show');
                     

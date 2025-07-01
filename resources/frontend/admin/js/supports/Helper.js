@@ -11,6 +11,16 @@ export default class Helper {
             currency,
         });
     }
+
+    static debounce(fn, delay) {
+        let timer = null;
+        return function(...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                fn.apply(this, args);
+            }, delay);
+        };
+    }
     
     /**
      * 객체가 비어 있는지 확인

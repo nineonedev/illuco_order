@@ -26,8 +26,10 @@ export default class RadioInput extends View {
         return `
             <fieldset class="no-form-group">
                 <legend class="no-form-base-label">${label}</legend>
-                <div class="no-form-listing" data-ref="container">
-                    ${this._renderOptions(options, name)}
+                <div>
+                    <div class="no-form-listing" data-ref="container" data-error-for="${name}">
+                        ${this._renderOptions(options, name)}
+                    </div>
                 </div>
                 ${spacing ? `<span class="no-form-control-space"></span>` : ``}
             </fieldset>

@@ -306,3 +306,15 @@
   }
 }
 
+
+
+.no-error-hook {
+  margin-top: 1.6rem;
+  color: var(--clr-error-main);
+  line-height: 1.4;
+  
+  p {
+    margin: 0.8rem 0;
+    word-break: break-all;
+  }
+}

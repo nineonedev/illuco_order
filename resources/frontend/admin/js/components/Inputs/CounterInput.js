@@ -50,6 +50,10 @@ export default class CounterInput extends View {
         `;
     }
 
+    getValue(){
+        return this._state.value;
+    }
+
     _bindEvents() {
         this.on(this.refs.decrease, 'click', this._decrease.bind(this));
         this.on(this.refs.increase, 'click', this._increase.bind(this));

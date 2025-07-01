@@ -34,6 +34,7 @@ export default class TextInput extends View {
             <div class="no-form-control" ${hidden}>
                 <label for="${nodeId}" class="no-form-control-inner">
                     <input 
+                        data-label="${label}"
                         data-ref="input"
                         type="${type}" 
                         name="${name}" 

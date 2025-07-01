@@ -11,6 +11,7 @@ return new class implements Migration
         Schema::create('product_loupes', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
             $table->enum('type', ['ready-made', 'custom-made'])->comment('제품 타입');
+            $table->string('engraving_text')->nullable();
 
             // 기타
             $table->string('frame_type')->nullable();

@@ -22,7 +22,7 @@ export default class CartController extends Controller {
         this.cart = Cart.make('cart-hook').render();
         this.form = Template.make('template-hook').render();
 
-        await this._fetchProductAttributes(); 
+        await this._loadAllData(); 
 
         this._listen('fetch.customers', this._fetchAllCustomers.bind(this));
         this._listen('fetch.templates', this._fetchAllTemplates.bind(this));
@@ -38,16 +38,21 @@ export default class CartController extends Controller {
 
         this._listen('order.create', this._createOrder.bind(this));
     }
-    
-    async _fetchProductAttributes(){
+
+
+    async _loadAllData() {
         this.loader.show();
 
         try {
-            const result = await new Ajax(true).get('/admin/product-attributes');
-            CartController.attributes = result.data; 
+            const [attrResult] = await Promise.all([
+                new Ajax(true).get('/admin/product-attributes'),
+            ]);
             
+            CartController.attributes = attrResult.data;
+            this._logger.success('속성 로드 결과', attrResult.data);
+
         } catch (err) {
-            alert(err.message); 
+            alert(err.message);
         } finally {
             this.loader.hide();
         }
@@ -174,6 +179,9 @@ export default class CartController extends Controller {
     }
 
     async _addToCart({data, button}, evt){
+         
+        this._logger.info(Object.fromEntries(data), button);
+        return;
 
         const customer = this.cart.getCustomer(); 
 
@@ -183,8 +191,6 @@ export default class CartController extends Controller {
         }
 
         data.append('customer_id', customer.id);
-         
-        this._logger.info(data, button);
         
         try {
             button.setState({disabled: true});

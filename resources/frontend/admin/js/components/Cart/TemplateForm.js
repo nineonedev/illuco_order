@@ -1,8 +1,10 @@
+import CartController from "../../controllers/CartController";
 import View from "../../core/View";
 import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
 import InputFactory from "../Inputs/InputFactroy";
 import LoupeForm from "./LoupeForm";
+import SummaryTable from "./SummaryTable";
 
 export default class TemplateForm extends View {
     _boot(){
@@ -11,6 +13,11 @@ export default class TemplateForm extends View {
         this._attrHookId = this._generateHookId();
         this._aggtHookId = this._generateHookId();
         this._submitHookId = this._generateHookId();
+        this._summaryHookId = this._generateHookId();
+        this._customForm = null;
+        this._summaryTable = null;
+        this._counterInput = null;
+        
         super._boot();
 
     }
@@ -18,7 +25,7 @@ export default class TemplateForm extends View {
     _defineProps() {
         return {
             template: {},
-            values: [],
+            sets: [],
         };
     }
 
@@ -72,33 +79,7 @@ export default class TemplateForm extends View {
 
                     <fieldset class="no-form-section">
                         <legend class="no-form-section__title">집계 정보</legend>
-                        <div class="no-summary-table-inner">
-                            <table class="no-summary-table">
-                                <thead>
-                                    <tr>
-                                        <th>품목</th>
-                                        <th>단가</th>
-                                        <th>수량</th>
-                                        <th>소계</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>${template.name}</td>
-                                        <td>${formattedPrice}</td>
-                                        <td>${quantity ?? 1}</td>
-                                        <td>${formattedTotalPrice}</td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="3">총 제품 가격</th>
-                                        <td class="no-price-total">${totalOrderItemPrice}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-
+                        <div id="${this._summaryHookId}"></div>
                     </fieldset>
                     
                     <div class="no-form-action" id="${this._submitHookId}"></div>
@@ -108,12 +89,15 @@ export default class TemplateForm extends View {
     }
 
     _render(){
+
         super._render();
         
         if (!this.hasTemplate()) return; 
 
         this._submitBtn = null;
-        this._productForm = null;
+        this._customForm = null;
+        this._summaryTable = null;
+        this._counterInput = null;
         
         this._renderTemplate();
         this._renderAttributes();
@@ -178,6 +162,8 @@ export default class TemplateForm extends View {
             onChange: this._handlePrice.bind(this)
         }).render();
 
+        this._counterInput = counterInput;
+
         this._inputs.push(
             nameInput, 
             textInput, 
@@ -190,44 +176,74 @@ export default class TemplateForm extends View {
     }
 
     _renderAttributes(){
-        // const {category} = this._state.template;
-
-
-        // switch(category.slug) {
-        //     case 'loupe' :
-        //         this._renderLoupe();
-        //         break;
-        // }
-        this._productForm = this._renderLoupe();
+        this._renderLoupe();
     }
 
     _renderLoupe(){
         this._logger.success('loupe');
 
-        LoupeForm.make(this._attrHookId, {
+        const { loupe } = CartController.attributes;
+        const specs = loupe[this._state.template.model];
+
+        if (!specs) return; 
+
+        this._customForm = LoupeForm.make(this._attrHookId, {
+            ...this._state.template,
             type: 'ready-made',
+            onUpdateSets: this.updateSets.bind(this),
+
         }).render();
-
-        // const hook = document.getElementById(this._attrHookId);
-    }
-
-    async _fetchLoupeInfo()
-    {
-        const model = this._state.template.model;
     }
 
     _renderAggregate(){
-       
+        const { template, quantity } = this._state;
+
+        const items = [
+            {
+                name: template.name,
+                price: template.price,
+                quantity: quantity ?? 1,
+                subTotal: template.price * (quantity ?? 1),
+            }, ...this._state.sets // 데이터매핑 필요
+        ];
+
+        this._summaryTable = SummaryTable.make(this._summaryHookId, {
+            labels: ["품목", "단가", "수량", "소계"],
+            items,
+        }).render();
+
         this._submitBtn = Button.make(this._submitHookId, {
             className: 'no-btn-primary --sm',
             label: '장바구니에 추가',
         }).render();
     }
 
+    updateSets(sets = []){
+        const item = {
+            name: this._state.template.name,
+            price: this._state.template.price,
+            quantity: this._counterInput.getValue(),
+            subTotal: this._state.template.price * this._counterInput.getValue(),
+        }
+
+        this._summaryTable.setState({items: [item, ...sets]});
+    }
+
     _handlePrice({value, view}, e){
-        const total = this._state.template.price * value;
-        this.refs.quantity.textContent = Number.parseInt(value);
-        this.refs.total.textContent = Helper.formatCurrency(total);
+        const qty = Number.parseInt(value);
+        
+        const item = {
+            name: this._state.template.name,
+            price: this._state.template.price,
+            quantity: qty,
+            subTotal: this._state.template.price * qty,
+        };
+
+        const sets = this._customForm ? this._customForm.state.sets : [];
+
+        this._summaryTable.setState({
+            items: [item, ...sets],
+        });
     }
 
     _bindEvents(){
@@ -236,16 +252,18 @@ export default class TemplateForm extends View {
        this.on(this.refs.form, 'submit', (view, e) => {
             e.preventDefault(); 
 
-            const fd = new FormData(e.target); 
-            
+            const fd = new FormData(e.target);
 
-            if (this._productForm && !this._productForm.isValid()) {
-                console.log('fail to validation...');
-                return; 
-            } else {
-                console.log('success to validation...');
-                return; 
+            if (this._customForm) {
+                this._customForm.validateAllFields(); 
+
+                if (this._customForm.hasErrors()){ 
+                    console.log('fail to validation...');
+                    return; 
+                }
             }
+
+            console.log('success to validation...');
 
             this._dispatch('add.cart', {
                 data: fd, 
