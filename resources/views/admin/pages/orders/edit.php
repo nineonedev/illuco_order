@@ -1,6 +1,7 @@
 <?php
 
 use App\Domains\Order\Entities\Order;
+use App\Domains\Order\Enums\OrderStatus;
 
 ?>
 
@@ -48,7 +49,7 @@ use App\Domains\Order\Entities\Order;
 
             <!-- 3. 상품 복원 카드 -->
             <section class="no-order-restore">
-                <h2 class="no-order-restore__title">다시 장바구니에 담기</h2>
+                <h2 class="no-order-restore__title">주문 제품 목록</h2>
 
                 <div class="no-page-index-table-outer">
                     <table class="no-page-index-table">
@@ -64,8 +65,11 @@ use App\Domains\Order\Entities\Order;
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($order->items as $item): ?>
-                            <?php $product = $item->product; ?>
+                            <?php foreach ($order->items as $item): 
+                                $product = $item->product;
+                                $type = $item->product->type;
+                                $sub = $type ? $item->product->{$type} : null;
+                            ?>
                             <tr>
                                 <td style="width: 10rem">
                                     <?php if ($img = $product->template->fileattachment[0] ?? null): ?>
@@ -79,14 +83,16 @@ use App\Domains\Order\Entities\Order;
                                 <td><?= e($product->code) ?></td>
                                 <td>
                                     <div class="no-order-option-tags">
-                                        <?php foreach ($product->values as $value): ?>
-                                            <?php if ($attribute = $value->attribute ?? null): ?>
+                                        <?php if ($sub) : ?>
+                                            <?php foreach ($sub->getAttributes() as $field => $value) : 
+                                                if (in_array($field, ['id'])) continue;    
+                                            ?>
                                                 <div class="no-order-option-tag">
-                                                    <span class="label"><?= e($attribute->label) ?></span>
-                                                    <span class="value"><?= e($value->value) ?></span>
+                                                    <span class="label"><?= lang('system.' . $type . '.' . $field) ?></span>
+                                                    <span class="value"><?= e($value) ?></span>
                                                 </div>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td><?= $item->quantity ?></td>
@@ -101,6 +107,43 @@ use App\Domains\Order\Entities\Order;
                                     </form>
                                 </td>
                             </tr>
+                            <?php if (!empty($item->sets)) : ?>
+                                <?php foreach ($item->sets as $setItem): 
+                                    $setProduct = $setItem->product;
+                                    $setType = $setProduct->type;
+                                    $setSub = $setType ? $setProduct->{$setType} : null;
+                                ?>
+                                <tr class="no-order-subitem">
+                                    <td style="padding-left: 2rem">
+                                        <?php if ($img = $setProduct->template->fileattachment[0] ?? null): ?>
+                                            <img src="<?= e($img->upload_path) ?>" alt="제품 이미지" style="width: 100%; min-width: 8rem; border-radius: .4rem;">
+                                        <?php else: ?>
+                                            <div class="no-order-restore__placeholder">No Image</div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= e($setProduct->name) ?></td>
+                                    <td><?= e($setProduct->model) ?></td>
+                                    <td><?= e($setProduct->code) ?></td>
+                                    <td>
+                                        <div class="no-order-option-tags">
+                                            <?php if ($setSub) : ?>
+                                                <?php foreach ($setSub->getAttributes() as $field => $value) :
+                                                    if (in_array($field, ['id'])) continue;
+                                                ?>
+                                                    <div class="no-order-option-tag">
+                                                        <span class="label"><?= __('loupe.' . $field) ?></span>
+                                                        <span class="value"><?= e($value) ?></span>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                    <td><?= $setItem->quantity ?></td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -127,10 +170,10 @@ use App\Domains\Order\Entities\Order;
                             "name": "order_status",
                             "value": "<?= $order->order_status ?>",
                             "options": [
-                                { "value": "<?= Order::STATUS_RECEIVED ?>", "label": "<?= __('system.order.status.received') ?>" },
-                                { "value": "<?= Order::STATUS_CONFIRMED ?>", "label": "<?= __('system.order.status.confirmed') ?>" },
-                                { "value": "<?= Order::STATUS_PREPARING ?>", "label": "<?= __('system.order.status.preparing') ?>" },
-                                { "value": "<?= Order::STATUS_SHIPPED ?>", "label": "<?= __('system.order.status.shipped') ?>" }
+                                { "value": "<?= OrderStatus::NEW ?>", "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>" },
+                                { "value": "<?= OrderStatus::CONFIRMED ?>", "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" },
+                                { "value": "<?= OrderStatus::PREPARING ?>", "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" },
+                                { "value": "<?= OrderStatus::SHIPPED ?>", "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" }
                             ]
                         }'></div>
                     <div class="no-form-action">

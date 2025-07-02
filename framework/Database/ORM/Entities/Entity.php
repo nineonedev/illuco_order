@@ -106,6 +106,14 @@ abstract class Entity
         return $this->meta[$key] ?? $default;
     }
 
+    public function replaceRelation(string $relation, $value): self
+    {
+        unset($this->relations[$relation]);
+        $this->relations[$relation] = $value;
+
+        return $this;
+    }
+
     public function setRelation(string $relation, $value): self
     {
         if (isset($this->relations[$relation])) {

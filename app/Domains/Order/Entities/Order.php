@@ -8,11 +8,11 @@ use Framework\Database\ORM\Entities\Entity;
 
 class Order extends Entity
 {
-
     protected array $fillable = [
         'user_id',
         'customer_id',
         'dealer_id',
+        'order_no',
         'orderer_name',
         'orderer_email',
         'orderer_phone',
@@ -24,8 +24,8 @@ class Order extends Entity
 
     protected array $casts = [
         'user_id'        => 'int',
-        'customer_id'    => 'int',
-        'dealer_id'    => 'int',
+        'customer_id'    => '?int',
+        'dealer_id'      => '?int',
         'orderer_name'   => 'string',
         'orderer_email'  => 'string',
         'orderer_phone'  => 'string',
@@ -60,6 +60,39 @@ class Order extends Entity
      */
     public function isStatusChangeable(): bool
     {
-        return in_array($this->order_status, [OrderStatus::RECEIVED, OrderStatus::CONFIRMED]);
+        return in_array($this->order_status, [OrderStatus::NEW, OrderStatus::CONFIRMED]);
     }
+
+    /**
+     * 주문번호 생성 (예: OR-DA001-20250702-00001)
+     *
+     * @param string|null $dealerCode
+     * @return string
+     */
+    public static function generateOrderNumber(?string $dealerCode = null): string
+    {
+        $dealerCode = $dealerCode ?: 'CST';
+        $dateStr = now()->format('Ymd');
+        $prefix = "OR-{$dealerCode}-{$dateStr}";
+
+        $row = static::repositoryClass()::make()
+            ->query()
+            ->where('order_no', 'like', "{$prefix}-%")
+            ->orderByDesc('order_no')
+            ->first();
+
+        $latestOrderNo = $row ? $row->order_no : null;
+
+        if ($latestOrderNo) {
+            $lastSeq = (int) substr($latestOrderNo, strrpos($latestOrderNo, '-') + 1);
+            $nextSeq = $lastSeq + 1;
+        } else {
+            $nextSeq = 1;
+        }
+
+        $sequenceStr = str_pad((string) $nextSeq, 5, '0', STR_PAD_LEFT);
+
+        return "{$prefix}-{$sequenceStr}";
+    }
+
 }

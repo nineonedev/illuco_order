@@ -29,7 +29,23 @@ export default class CartItemList extends View {
 
     _defineComputed(){
         return {
-            total: () => this._children.reduce((acc,cur) => acc + (cur.state.product.price * cur.state.quantity), 0),
+            total: () => this._computed.mainTotal() + this._computed.setTotal(),
+            mainTotal: () => this._children
+                .filter(c => c.state.is_main_item)
+                .reduce((acc, cur) => acc + (cur.state.product.price * cur.state.quantity), 0),
+
+            setTotal: () => this._children
+                .filter(c => c.state.is_main_item)
+                .reduce((acc, cur) => {
+                    if (!cur.state.sets) {
+                        return acc; 
+                    }
+
+                    const qty = cur.state.quantity; 
+                    return acc + (cur.state.sets.reduce((accSet, curSet) => {
+                        return accSet + (curSet.product.price * curSet.quantity);
+                    }, 0) * qty);
+                }, 0),
         }
     }
 
@@ -67,17 +83,20 @@ export default class CartItemList extends View {
                     <legend class="no-form-section__title">집계 정보</legend>
                     <div class="no-cart-aggregation">
                         <dl>
-                            <dt>총 주문 금액</dt>
-                            <dd><span data-ref="price">$0</span></dd>
+                            <dt>메인 제품 합계</dt>
+                            <dd><span data-ref="mainTotal">$0</span></dd>
                         </dl>
                         <dl>
-                            <dt>
-                                <span>총 주문 예상 금액</span>
-                            </dt>
+                            <dt>세트 제품 합계</dt>
+                            <dd><span data-ref="setTotal">$0</span></dd>
+                        </dl>
+                        <dl class="--total">
+                            <dt>총 주문 예상 금액</dt>
                             <dd><b data-ref="total">$0</b></dd>
                         </dl>
                     </div>
                 </fieldset>
+
 
                 <hr class="no-hr --xl">
                 
@@ -128,12 +147,21 @@ export default class CartItemList extends View {
 
     // 선택된 항목의 ID 목록 반환
     getCheckedIds() {
-        return this._children.filter(child => child.state.itemChecked).map(child => child.state.id);
+        return this._children.filter(child => child.state.selected).map(child => child.state.id);
     }
 
     // 전체 선택/해제
     _checkAllItems({ value }) {
-        this._children.forEach(child => child.check(value));
+        const fd = new FormData();
+
+        this._children.forEach((child, index) => {
+            const data = {...child.getData(), selected: value};
+            for (const [key, val] of Object.entries(data)) {
+                fd.append(`items[${index}][${key}]`, val);
+            }
+        });
+
+        this._dispatch('update.cartitems', { data: fd, view: this});
         this._updateOrderStatus();
     }
 
@@ -152,14 +180,17 @@ export default class CartItemList extends View {
     // 개별 삭제
     _handleUpdate({ id, data, view, button}) {
         this._dispatch('update.cartitem', { id, data, view, button });
+        this.updateOrderStatus();
     }
 
     _handleDelete({ id, view, button }) {
         this._dispatch('delete.cartitem', { id, view, button });
+        this.updateOrderStatus();
     }
 
     _handleEdit({id, view, button}){
         this._dispatch('edit.cartitem', { id, view, button });
+        this.updateOrderStatus();
     }
 
     addCartItem(cartitem) {
@@ -239,7 +270,7 @@ export default class CartItemList extends View {
     }
 
     _updateCheckedItemIds() {
-        this._checkedCartItemIds = this._children.filter(child => child.state.itemChecked).map(child => child.state.id);
+        this._checkedCartItemIds = this._children.filter(child => child.state.selected).map(child => child.state.id);
         this._checkbox.setState({ checked: this._checkedCartItemIds.length === this._children.length });
     }
 
@@ -251,12 +282,15 @@ export default class CartItemList extends View {
     }
 
     _updateAggregation(){
-        const totalPrice = this._computed.total();
-        const formattedTotalPrice = Helper.formatCurrency(totalPrice);
+        const mainTotal = this._computed.mainTotal();
+        const setTotal = this._computed.setTotal();
+        const total = this._computed.total();
 
-        this.setState({total: totalPrice}, false);
-        this.refs.price.textContent = formattedTotalPrice;
-        this.refs.total.textContent = formattedTotalPrice;
+        this.setState({ total }, false);
+
+        this.refs.mainTotal.textContent = Helper.formatCurrency(mainTotal);
+        this.refs.setTotal.textContent = Helper.formatCurrency(setTotal);
+        this.refs.total.textContent = Helper.formatCurrency(total);
     }
 
     updateOrderStatus() {
@@ -266,6 +300,7 @@ export default class CartItemList extends View {
     // 주문 버튼 업데이트
     _updateOrderButton() {
         const checkedCount = this.getCheckedIds().length;
+        
         const label = checkedCount > 0
             ? `총 ${checkedCount}개 제품 주문하기`
             : `제품을 선택해주세요.`;

@@ -179,7 +179,7 @@ export default class LoupeForm extends View {
             this._handleAddOptionChange();
 
             const customFields = [
-                "loupe[vd]",
+                "loupe[vertex_distance]",
                 "loupe[pd_right]",
                 "loupe[pd_left]",
                 "loupe[od_sph]",
@@ -229,7 +229,7 @@ export default class LoupeForm extends View {
 
     _getSpecForField(name = null) {
         const map = {
-            "loupe[vd]": { min: 10, max: 25 },
+            "loupe[vertex_distance]": { min: 10, max: 25 },
             "loupe[pd_right]": { min: 27, max: 40 },
             "loupe[pd_left]": { min: 27, max: 40 },
             "loupe[od_sph]": { min: -20, max: 20, step: 0.25 },
@@ -333,7 +333,7 @@ export default class LoupeForm extends View {
             "loupe[pd_right]": this._handleFieldValidation.bind(this),
             "loupe[pd_left]": this._handleFieldValidation.bind(this),
 
-            "loupe[vd]": this._handleFieldValidation.bind(this),
+            "loupe[vertex_distance]": this._handleFieldValidation.bind(this),
 
             "loupe[od_sph]": this._handleFieldValidation.bind(this),
             "loupe[od_cyl]": this._handleFieldValidation.bind(this),
@@ -525,7 +525,9 @@ export default class LoupeForm extends View {
                         <input type="hidden" name="sets[${index}][product][template_id]" value="${lens.id}" />
                         <input type="hidden" name="sets[${index}][product][code]" value="${lens.code}" />
                         <input type="hidden" name="sets[${index}][product][model]" value="${lens.model}" />
+                        <input type="hidden" name="sets[${index}][product][price]" value="${lens.price}" />
                         <input type="hidden" name="sets[${index}][product][name]" value="${lens.name}" />
+                        <input type="hidden" name="sets[${index}][product][description]" value="${lens.name}" />
 
                         <div class="no-cartitem-set__present">
                             <div class="no-cartitem-set__present-block">
@@ -614,7 +616,7 @@ export default class LoupeForm extends View {
                     <!-- VD -->
                     <div class="no-form-control">
                         <label for="vd" class="no-form-control-inner">
-                            <input type="number" name="loupe[vd]" id="vd" class="no-form-control-input" placeholder=""
+                            <input type="number" name="loupe[vertex_distance]" id="vd" class="no-form-control-input" placeholder=""
                                 min="10" max="25" data-label="VD (단위: mm)" >
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">VD (단위: mm)</legend>

@@ -20,7 +20,7 @@ class Product extends Entity
 
     protected array $casts = [
         'template_id' => 'int',
-        'price' => 'decimal'
+        'price' => 'decimal',
     ];
 
     public static function repositoryClass(): string

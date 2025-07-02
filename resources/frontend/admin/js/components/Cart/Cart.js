@@ -81,7 +81,7 @@ export default class Cart extends View {
     }
 
     _getCartItemsFromCustomer(){
-        return this._state.customer?.cart?.cartitems || [];
+        return this._state.customer?.cart?.cartitems_grouped || [];
     }
 
     _handleFresh(){

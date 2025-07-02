@@ -32,7 +32,9 @@ export default class CartController extends Controller {
 
         this._listen("add.cart", this._addToCart.bind(this));
         this._listen("update.cartitem", this._updateCartItem.bind(this));
+        this._listen("update.cartitems", this._updateManyCartItems.bind(this));
         this._listen("edit.cartitem", this._editCartItem.bind(this));
+
         this._listen("delete.cartitem", this._deleteCartItem.bind(this));
         this._listen("delete.cartitems", this._deleteManyCartItems.bind(this));
 
@@ -158,11 +160,40 @@ export default class CartController extends Controller {
         }
     }
 
+    async _updateManyCartItems({ data, view }) {
+        this._logger.info(Object.fromEntries(data));
+
+        try {
+            this.loader.show();
+            const result = await new Ajax(true).put(
+                `/admin/cartitems`,
+                data
+            );
+            this._logger.success("장바구니 변경", result);
+
+            const cartitems = result.data.cartitems;
+
+            console.log(cartitems);
+            
+            
+            cartitems.forEach(item => {
+                this.cart.updateCartItem(item.id, {
+                    ...item,
+                });
+            });
+            
+        } finally {
+            this.loader.hide();
+        }
+    } 
+
     async _updateCartItem({ id, data, view, button }) {
         this._logger.info(id, data);
 
         try {
-            button.setState({ disabled: true });
+            if (button) {
+                button.setState({ disabled: true });
+            }
             this.loader.show();
             const result = await new Ajax(true).put(
                 `/admin/cartitems/${id}`,
@@ -175,11 +206,12 @@ export default class CartController extends Controller {
                 ...view.state,
                 ...cartitem,
             });
-        } catch (err) {
-            alert("아이템 변경에 실패하였습니다. 잠시 후 다시 시도해주세요.");
         } finally {
             this.loader.hide();
-            button.setState({ disabled: false });
+
+            if (button) {
+                button.setState({ disabled: false });
+            }
         }
     }
 
@@ -199,12 +231,10 @@ export default class CartController extends Controller {
             button.setState({ disabled: true });
             this.loader.show();
 
-            const result = await new Ajax(true).post("/admin/cart", data);
+            const result = await new Ajax(false).post("/admin/cart", data);
             this._logger.success("장바구니 추가", result.data.cartitem);
             this.cart.addCartItem(result.data.cartitem);
-        } catch (err) {
-            console.error("장바구니 추가 중 오류 발생:", err);
-            alert("장바구니 추가에 실패하였습니다. 다시 시도해주세요.");
+            
         } finally {
             this.loader.hide();
             button.setState({ disabled: false });

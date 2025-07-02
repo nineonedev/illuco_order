@@ -10,6 +10,7 @@ use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Entities\OrderItem;
 use App\Domains\Product\Entities\Category;
+use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductAttribute;
 use App\Domains\Product\Entities\ProductOption;
@@ -76,6 +77,10 @@ Rel::setConfig([
     ],
     Product::class => [
         Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
+        Rel::hasOne('loupe', Loupe::class, 'id'),
+    ],
+    Loupe::class => [
+        Rel::belongsTo('product', Product::class, 'id'),
     ],
     Customer::class => [
         Rel::hasOne('cart', Cart::class, 'customer_id'),

@@ -2,12 +2,14 @@ import View from "../../core/View";
 import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
 import InputFactory from "../Inputs/InputFactroy";
+import CartItemSet from "./CartItemSet";
 
 export default class CartItem extends View {
     _boot() {
         this._aggtHookId = this._generateHookId();
         this._checkHookId = this._generateHookId();
         this._deleteBtnHookId = this._generateHookId();
+        this._setGroupHookId = this._generateHookId();
 
         this._checkbox = null;
         this._counter = null;
@@ -28,7 +30,7 @@ export default class CartItem extends View {
             onDelete: () => {},
             onUpdate: () => {},
             onEdit: () => {},
-            itemChecked: false,
+            selected: false,
         };
     }
 
@@ -84,6 +86,8 @@ export default class CartItem extends View {
                         this._aggtHookId
                     }" class="no-cart-item-action"></div>
                 </div>
+
+                <ol class="no-cart-sublist" id="${this._setGroupHookId}"></ol>
             </li>
         `;
     }
@@ -93,7 +97,10 @@ export default class CartItem extends View {
 
         const { product, quantity } = this._state;
 
-        console.log(this);
+        const optionText = '';
+
+        console.log(this._state);
+        
 
         // Checkbox
         this._checkbox = InputFactory.make("checkbox")
@@ -104,7 +111,7 @@ export default class CartItem extends View {
                 helperText: optionText, // 옵션 텍스트를 헬퍼로 표시
                 spacing: false,
                 value: this._state.id,
-                checked: this._state.itemChecked,
+                checked: this._state.selected,
                 onChange: this._handleChange.bind(this),
             })
             .render();
@@ -134,6 +141,14 @@ export default class CartItem extends View {
                 onChange: this._handlePrice.bind(this),
             })
             .render();
+
+        if (this._state.sets) {
+            this._state.sets.forEach((set) => {
+                CartItemSet.make(this._setGroupHookId, {...set, cartitem: this.getData()}).render();
+            })
+        } else {
+            document.getElementById(this._setGroupHookId).innerHTML = '';
+        }
     }
 
     _handleEdit() {
@@ -153,27 +168,39 @@ export default class CartItem extends View {
     }
 
     _handlePrice({ value, view }, evt) {
-        const id = this._state.id;
-
-        const fd = new URLSearchParams({
-            quantity: value,
-            id: id,
-        });
+        this.setState({quantity: value});
+        this._handleUpdate();
+    }
+    
+    _handleUpdate(){
+        const data = this.getData();
+        const fd = new URLSearchParams(data);
 
         this._props.onUpdate({
-            id: id,
+            id: data.id,
             data: fd,
             view: this,
-            button: this._counter,
         });
+    }
+
+    getData(){
+        const {id, quantity, set_group_id, set_group_sort, selected} = this._state;
+        return {
+            id,
+            quantity,
+            set_group_id,
+            set_group_sort,
+            selected,
+        }
     }
 
     _handleChange({ value, view }) {
-        this.check(value, false);
-        this._props.onCheck({ value, view: this });
+        // this._props.onCheck({ value, view: this });
+        this.check(value);
+        this._handleUpdate();
     }
 
     check(checked = true, shouldRender = true) {
-        this.setState({ itemChecked: checked }, shouldRender);
+        this.setState({ selected: checked }, shouldRender);
     }
 }

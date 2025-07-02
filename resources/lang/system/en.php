@@ -94,4 +94,27 @@ return [
         'IQ' => 'Iraq',
         'AM' => 'Armenia',
     ],
+    'loupe' => [
+        'type'              => 'Type',
+        'frame_type'        => 'Frame Type',
+        'working_distance'  => 'Working Distance (mm)',
+
+        'od_sph'            => 'OD SPH',
+        'os_sph'            => 'OS SPH',
+
+        'od_cyl'            => 'OD CYL',
+        'os_cyl'            => 'OS CYL',
+
+        'od_axis'           => 'OD Axis',
+        'os_axis'           => 'OS Axis',
+
+        'od_add'            => 'OD Add',
+        'os_add'            => 'OS Add',
+
+        'pd_right'          => 'PD Right',
+        'pd_left'           => 'PD Left',
+        'pd_total'          => 'PD Total',
+        'vertex_distance'   => 'Vertex Distance (mm)',
+        'add_option'        => 'Additional Option',
+    ],
 ];

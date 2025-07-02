@@ -94,4 +94,28 @@ return [
         'IQ' => '이라크',
         'AM' => '아르메니아',
     ],
+
+    'loupe' => [
+        'type'              => '루페 종류',
+        'frame_type'        => '프레임 종류',
+        'working_distance'  => '작업 거리 (mm)',
+
+        'od_sph'            => '우안 구면도수 (OD SPH)',
+        'os_sph'            => '좌안 구면도수 (OS SPH)',
+
+        'od_cyl'            => '우안 난시도수 (OD CYL)',
+        'os_cyl'            => '좌안 난시도수 (OS CYL)',
+
+        'od_axis'           => '우안 축 (OD Axis)',
+        'os_axis'           => '좌안 축 (OS Axis)',
+
+        'od_add'            => '우안 추가도수 (OD Add)',
+        'os_add'            => '좌안 추가도수 (OS Add)',
+
+        'pd_right'          => '우안 동공거리 (PD Right)',
+        'pd_left'           => '좌안 동공거리 (PD Left)',
+        'pd_total'          => '총 동공거리 (PD Total)',
+        'vertex_distance'   => '정점거리 (mm)',
+        'add_option'        => '추가 옵션',
+    ]
 ];

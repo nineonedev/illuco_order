@@ -28,15 +28,29 @@ class Loupe extends Entity
         'pd_right',
         'pd_left',
         'pd_total',
-        'vertext_distance',
+        'vertex_distance',
         'add_option'
     ];
 
-    public static array $additionalOptions = [
-        'prescription_lens' => [
-            'name' => '처방렌즈',
-            'price' => 30.00,
-        ],
+    protected array $casts = [
+        'id' => 'int',
+        'working_distance' => 'decimal',
+        'od_sph' => 'decimal',
+        'os_sph' => 'decimal',
+
+        'od_cyl' => 'decimal',
+        'os_cyl' => 'decimal',
+
+        'od_axis' => 'int',
+        'os_axis' => 'int',
+
+        'od_add' => 'decimal',
+        'os_add' => 'decimal',
+
+        'pd_right' => 'decimal',
+        'pd_left' => 'decimal',
+        'pd_total' => 'decimal',
+        'vertex_distance' => 'decimal',
     ];
 
     public static array $modelSpecs = [

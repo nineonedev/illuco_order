@@ -318,3 +318,100 @@
     word-break: break-all;
   }
 }
+
+
+.no-cart-sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+  padding-left: 1.6rem;
+  border-left: 2px solid var(--clr-gray-200);
+
+  .no-cart-subitem {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed var(--clr-gray-200);
+    position: relative;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &-img {
+      width: 6.5rem;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 0.4rem;
+      }
+    }
+
+    &-info {
+        display: flex;
+        flex-direction: column;
+
+        p {
+            em {
+                font-weight: 700;
+            }
+        }
+
+        .no-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 1.6rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            background-color: var(--clr-primary-50);
+            border: 1px solid var(--clr-primary-200);
+            color: var(--clr-primary-700);
+            transition: background-color 0.2s;
+
+            i,
+            svg,
+            .chip-icon {
+            font-size: 1.2rem;
+            color: var(--clr-primary-500);
+            }
+
+            em {
+            color: var(--clr-primary-600);
+            font-weight: 600;
+            font-style: normal;
+            }
+
+            &:hover {
+            background-color: var(--clr-primary-100);
+            }
+        }
+    }
+
+    &-action {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+
+      button {
+        padding: 0.2rem 0.6rem;
+        font-size: 1.2rem;
+        background-color: var(--clr-gray-50);
+        border: 1px solid var(--clr-gray-200);
+        border-radius: 0.3rem;
+        cursor: pointer;
+        color: var(--clr-gray-700);
+
+        &:hover {
+          background-color: var(--clr-gray-100);
+        }
+      }
+    }
+  }
+}

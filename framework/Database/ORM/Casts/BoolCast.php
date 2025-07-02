@@ -4,25 +4,35 @@ namespace Framework\Database\ORM\Casts;
 
 class BoolCast implements CastInterface
 {
-    /**
-     * Convert value to boolean for DB storage
-     *
-     * @param mixed $value
-     * @return int
-     */
     public function set($value)
     {
-        return $value ? 1 : 0;
+        return $this->convertToBool($value) ? 1 : 0;
     }
 
-    /**
-     * Convert value from DB to PHP boolean
-     *
-     * @param mixed $value
-     * @return bool
-     */
     public function get($value)
     {
+        return $this->convertToBool($value);
+    }
+
+    protected function convertToBool($value): bool
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        if (is_null($value)) {
+            return false;
+        }
+
+        if (is_int($value)) {
+            return $value !== 0;
+        }
+
+        if (is_string($value)) {
+            $value = strtolower(trim($value));
+            return in_array($value, ['1', 'true', 'on'], true);
+        }
+
         return (bool) $value;
     }
 }

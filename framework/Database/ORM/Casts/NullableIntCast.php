@@ -6,11 +6,19 @@ class NullableIntCast implements CastInterface
 {
     public function set($value)
     {
-        return $value === null ? null : (int) $value;
+        if ($value === null || $value === 'null') {
+            return null;
+        }
+
+        return (int) $value;
     }
 
     public function get($value)
     {
-        return $value === null ? null : (int) $value;
+        if ($value === null || $value === 'null') {
+            return null;
+        }
+
+        return (int) $value;
     }
 }

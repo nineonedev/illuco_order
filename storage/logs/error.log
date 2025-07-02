@@ -32655,3 +32655,2173 @@ Stack trace:
     "meta": []
 }
 --------------------------------------------------------------------------------
+[2025-07-01 22:46:03] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 22:48:34] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 22:48:36] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:22:33] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:25:09] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:25:09] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:33:02] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:53:18] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:53:18] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:53:42] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:53:42] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:57:32] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:57:32] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:58:34] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-01 23:58:34] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:00:21] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:00:21] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:20:36] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:20:36] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:53:51] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/app/Services/Order/AddItemToCartService.php:85)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/app\/Services\/Order\/AddItemToCartService.php:85)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:53:51] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/app/Services/Order/AddItemToCartService.php:85) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/app\/Services\/Order\/AddItemToCartService.php:85) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:54:26] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:54:26] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:55:06] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/app/Services/Order/AddItemToCartService.php:84)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/app\/Services\/Order\/AddItemToCartService.php:84)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:55:06] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/app/Services/Order/AddItemToCartService.php:84) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/app\/Services\/Order\/AddItemToCartService.php:84) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:56:55] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 00:56:55] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:05:02] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:05:02] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:06:54] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:06:54] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:07:09] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:07:09] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:07:53] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:07:53] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:08:19] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:08:19] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:12:40] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:12:40] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:14:30] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:14:30] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:17:40] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:17:40] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:18:26] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:18:26] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:18:34] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:18:34] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:18:40] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:18:53] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:18:53] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:19:03] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:19:12] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:19:12] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:22:28] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:22:28] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:23:31] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:23:31] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:24:19] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:24:19] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:44:29] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 01:59:40] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:08:56] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:17:31] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:17:49] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:18:15] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:18:45] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:19:02] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:24:26] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:24:46] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:25:25] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:25:25] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:28:29] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:28:29] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:29:15] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:29:20] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:29:20] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:29:42] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:30:09] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:30:43] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:31:16] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:31:55] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:33:07] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:33:07] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:34:23] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:34:23] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 02:34:44] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:04:05] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:04:20] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:05:49] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:05:58] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:08:28] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:24:36] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:26:00] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:28:00] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:28:01] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:28:14] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:29:15] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:30:20] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:34:27] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:37:23] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:38:14] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:38:34] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:48:57] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:49:29] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:50:08] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:50:43] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:51:57] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:52:24] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:53:59] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:56:26] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:58:55] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:59:47] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 04:59:59] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:01:21] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:02:48] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:03:54] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:06:19] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:13:17] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:18:38] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:18:38] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:19:29] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:19:29] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:20:13] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:20:13] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:20:49] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:20:49] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:23:02] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:23:02] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:43:46] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:45:32] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:46:29] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:47:22] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:47:43] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:54:42] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:55:04] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 05:55:36] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 06:32:01] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 06:34:35] ERROR: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121)
+{
+    "code": 500,
+    "message": "Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121)",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 06:34:35] ERROR: Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at /var/www/html/framework/Support/Helpers/utils.php:121) in /var/www/html/framework/Http/Responses/AbstractResponse.php:159
+Stack trace:
+#0 [internal function]: Framework\Boostrap\HandleExceptions->Framework\Boostrap\{closure}(2, 'Cannot modify h...', '/var/www/html/f...', 159, Array)
+#1 /var/www/html/framework/Http/Responses/AbstractResponse.php(159): header('Content-Type: a...')
+#2 /var/www/html/framework/Http/Responses/JsonResponse.php(43): Framework\Http\Responses\AbstractResponse->sendHeaders()
+#3 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(225): Framework\Http\Responses\JsonResponse->send()
+#4 /var/www/html/framework/Support/Exceptions/ExceptionHandler.php(101): Framework\Support\Exceptions\ExceptionHandler->handleJson(Object(ErrorException), 500)
+#5 [internal function]: Framework\Support\Exceptions\ExceptionHandler->handle(Object(ErrorException))
+#6 {main}
+  thrown
+{
+    "code": 500,
+    "message": "Uncaught ErrorException: Cannot modify header information - headers already sent by (output started at \/var\/www\/html\/framework\/Support\/Helpers\/utils.php:121) in \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php:159\nStack trace:\n#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Cannot modify h...', '\/var\/www\/html\/f...', 159, Array)\n#1 \/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php(159): header('Content-Type: a...')\n#2 \/var\/www\/html\/framework\/Http\/Responses\/JsonResponse.php(43): Framework\\Http\\Responses\\AbstractResponse->sendHeaders()\n#3 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(225): Framework\\Http\\Responses\\JsonResponse->send()\n#4 \/var\/www\/html\/framework\/Support\/Exceptions\/ExceptionHandler.php(101): Framework\\Support\\Exceptions\\ExceptionHandler->handleJson(Object(ErrorException), 500)\n#5 [internal function]: Framework\\Support\\Exceptions\\ExceptionHandler->handle(Object(ErrorException))\n#6 {main}\n  thrown",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/framework\/Http\/Responses\/AbstractResponse.php",
+    "line": 159,
+    "trace": "#0 [internal function]: Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}()\n#1 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 06:47:31] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:07:30] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:07:33] ERROR: Invalid argument supplied for foreach()
+{
+    "code": 500,
+    "message": "Invalid argument supplied for foreach()",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/edit.php",
+    "line": 82,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/edit.php(82): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Invalid argumen...', '\/var\/www\/html\/r...', 82, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:07:35] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:07:35] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:11:26] ERROR: Invalid argument supplied for foreach()
+{
+    "code": 500,
+    "message": "Invalid argument supplied for foreach()",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/edit.php",
+    "line": 82,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/edit.php(82): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(2, 'Invalid argumen...', '\/var\/www\/html\/r...', 82, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:11:28] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:14:03] ERROR: Undefined variable: attribute
+{
+    "code": 500,
+    "message": "Undefined variable: attribute",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/edit.php",
+    "line": 84,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/edit.php(84): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Undefined varia...', '\/var\/www\/html\/r...', 84, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:14:05] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:14:16] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:15:04] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:25:02] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:25:15] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:25:33] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:28:31] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:31:14] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:39:01] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:41:05] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:41:17] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:41:50] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:43:07] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:43:51] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:44:25] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 07:46:11] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 08:02:23] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 08:02:27] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 08:02:33] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-07-02 08:05:12] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------

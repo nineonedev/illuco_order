@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Order;
 
+use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Repositories\CustomerRepository;
 use App\Domains\User\Entities\Dealer;
@@ -34,6 +35,16 @@ class CustomerController extends Controller
         });
 
         $customers = $query->paginate($request->query('perpage', 15), $request->query('page', 1));
+
+        $customers->items()->transform(function ($customer) {
+            if ($customer->cart && $customer->cart->cartitems) {
+                $groupedItems = CartItem::groupBySet(
+                    $customer->cart->cartitems
+                );
+                $customer->cart->setRelation('cartitems_grouped', $groupedItems);
+            }
+            return $customer;
+        });
 
         return $this->render('admin.pages.customers.index', [
             'customers' => $request->expectsJson() ? $customers->toArray() : $customers,

@@ -15,7 +15,7 @@ return new class implements Migration
 
             // 기타
             $table->string('frame_type')->nullable();
-            $table->string('working_distance')->nullable();
+            $table->decimal ('working_distance', 5, 1)->nullable()->comment('작업거리(WD), 단위 cm');
 
             // 시력 정보 (OD / OS)
             $table->decimal('od_sph', 4, 2)->nullable();

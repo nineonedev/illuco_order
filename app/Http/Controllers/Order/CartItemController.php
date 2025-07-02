@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Order;
 
+use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Repositories\CartItemRepository;
 use App\Domains\Product\Repositories\ProductRepository;
+use Exception;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -15,40 +17,99 @@ class CartItemController extends Controller
         return CartItemRepository::make();
     }
 
-   public function show(string $id, Request $request)
+    public function show(string $id, Request $request)
     {
         return $this->runInTransaction(function () use ($id) {
-            // CartItem 조회
             $cartitem = $this->repo()->with([
                 'product' => [
                     'values',
                     'template' => [
                         'attributes.options',
                         'fileattachment',
-                    ]
+                    ],
                 ],
             ])->find($id);
-
 
             if (!$cartitem) {
                 throw new RuntimeException("아이템을 찾을 수 없습니다.");
             }
 
-            // 필요한 데이터 반환
             return $this->render(null, [
                 'cartitem' => $cartitem->toArray(),
             ]);
         });
     }
+    
+    public function updateMany(Request $request)
+    {
+        $items = $request->body('items', []);
+
+        if (empty($items)) {
+            return $this->render(null, [], "수정할 항목이 없습니다.");
+        }
+
+        return $this->runInTransaction(function () use ($items) {
+            $updatedCount = 0;
+            $allUpdatedItems = [];
+
+            foreach ($items as $itemData) {
+                if (!isset($itemData['id'])) {
+                    continue;
+                }
+
+                $id = $itemData['id'];
+                $cartItem = $this->repo()->find($id);
+
+                if (!$cartItem) {
+                    logger()->warning("updateMany: CartItem not found", [
+                        'id' => $id,
+                    ]);
+                    continue;
+                }
+
+                $relations = ['product.template.fileattachment'];
+                $cartItem->fill($itemData);
+                $cartItem = $this->repo()->save($cartItem);
+                $cartItem->load($relations);
+
+                if (!$cartItem) {
+                    logger()->error("updateMany: Failed to update CartItem", [
+                        'id' => $id,
+                    ]);
+                    continue;
+                }
+
+                $updatedCount++;
+
+                if ($cartItem->set_group_id) {
+                    $subItems = $this->repo()->query()
+                        ->with($relations)
+                        ->where('set_group_id', $cartItem->set_group_id)
+                        ->where('is_main_item', false)
+                        ->get();
+                
+                    $groupedItems = CartItem::groupBySet(
+                        array_merge([$cartItem], $subItems)
+                    );
+
+                    foreach ($groupedItems as $grouped) {
+                        $allUpdatedItems[] = $grouped->toArray();
+                    }
+                } else {
+                    $allUpdatedItems[] = $cartItem->toArray();
+                }
+            }
+
+            return $this->render(null, [
+                'cartitems' => $allUpdatedItems,
+            ], "선택된 아이템들이 수정되었습니다. (수정된 수: {$updatedCount})");
+        });
+    }
+
 
     public function update(string $id, Request $request)
     {
         return $this->runInTransaction(function () use ($id, $request) {
-
-            $request->validateOrFail([
-                'quantity' => 'integer',
-            ]);
-
             $cartitem = $this->repo()->find($id);
 
             if (!$cartitem) {
@@ -68,41 +129,14 @@ class CartItemController extends Controller
 
     public function destroy(string $id, Request $request)
     {
-        return $this->runInTransaction(function () use ($id, $request) {
-            // 1. CartItem 조회
-            $cartitem = $this->repo()->find($id);
+        return $this->runInTransaction(function () use ($id) {
+            $deletedCount = $this->deleteCartItemAndRelated($id);
 
-            if (!$cartitem) {
+            if ($deletedCount === 0) {
                 throw new RuntimeException("아이템을 찾을 수 없습니다.");
             }
 
-            // 2. CartItem 삭제 (먼저 삭제)
-            $cartitemDeleted = $this->repo()->delete($cartitem);
-            if (!$cartitemDeleted) {
-                throw new RuntimeException("장바구니 아이템 삭제 중 문제가 발생하였습니다.");
-            }
-
-            // 3. CartItem에 연결된 Product 삭제
-            $prodRepo = ProductRepository::make();
-            $product = $prodRepo->find($cartitem->product_id);
-            
-            if (!$product) {
-                throw new RuntimeException("아이템과 연관된 제품을 찾을 수 없습니다.");
-            }
-
-            logger()->info("Deleting product with ID: {$product->id}");
-
-            // Product 삭제
-            $productDeleted = $prodRepo->delete($product); 
-
-            if (!$productDeleted) {
-                logger()->error("제품 삭제 실패", [
-                    'product_id' => $product->id,
-                ]);
-                throw new RuntimeException("제품 삭제에 실패하였습니다.");
-            }
-
-            return $this->render(null, [], "정상적으로 삭제되었습니다.");
+            return $this->render(null, [], "정상적으로 삭제되었습니다. (삭제된 수: {$deletedCount})");
         });
     }
 
@@ -118,27 +152,68 @@ class CartItemController extends Controller
         }
 
         return $this->runInTransaction(function () use ($ids) {
-            $deletedCount = 0;
+            $totalDeleted = 0;
 
-            // 각 CartItem 삭제 및 연관된 Product 삭제
             foreach ($ids as $id) {
-                $cartItem = $this->repo()->find($id);
-
-                if ($cartItem) {
-                    // 연관된 Product 찾기
-                    $product = ProductRepository::make()->find($cartItem->product_id);
-
-                    if ($product) {
-                        ProductRepository::make()->delete($product);
-                    }
-
-                    // CartItem 삭제
-                    $this->repo()->delete($cartItem);
-                    $deletedCount++;
-                }
+                $totalDeleted += $this->deleteCartItemAndRelated($id);
             }
 
-            return $this->render(null, [], "선택된 아이템들이 삭제되었습니다. (삭제된 수: {$deletedCount})");
+            return $this->render(null, [], "선택된 아이템들이 삭제되었습니다. (삭제된 수: {$totalDeleted})");
         });
+    }
+
+    /**
+     * 공통 삭제 로직
+     *
+     * @param string $id
+     * @return int 삭제된 CartItem 수
+     */
+    protected function deleteCartItemAndRelated(string $id): int
+    {
+        $deletedCount = 0;
+
+        $repo = $this->repo();
+
+        /** @var CartItem|null $cartItem */
+        $cartItem = $repo->with(['product'])->find($id);
+
+        if (!$cartItem) {
+            return 0;
+        }
+
+        $setGroupId = $cartItem->set_group_id;
+
+        $itemsToDelete = [];
+
+        if ($setGroupId) {
+            // 그룹 전체 조회
+            // $query = $repo->query()
+            //     ->with(['product'])
+            //     ->where('set_group_id', $setGroupId);
+
+            // [$sql, $bindings] = $query->getGrammar()->compileSelect($query);
+            // dump($sql, $bindings);
+
+            // 기존 리포지토리의 builder에 id 가 매핑되어있음! 위에서 id로 find해서 그런거같음. 따라서 새로운 리포지토리 인스턴스 필요!
+
+            $itemsToDelete = CartItemRepository::make()
+                ->query()
+                ->with(['product'])
+                ->where('set_group_id', $setGroupId)
+                ->get();
+        } else {
+            $itemsToDelete[] = $cartItem;
+        }
+
+        foreach ($itemsToDelete as $item) {
+            $product = $item->product;
+
+            if ($product) {
+                ProductRepository::make()->forceDelete($product);
+                $deletedCount++;
+            }
+        }
+
+        return $deletedCount;
     }
 }

@@ -98,24 +98,50 @@ abstract class Repository
     {
         $this->observer->fire(RepositoryEvent::BEFORE_SAVE, $entity);
 
-        return $entity->getPrimaryKey()
-            ? $this->updateEntity($entity)
-            : $this->insertEntity($entity);
+        if ($entity->getPrimaryKey()) {
+            $existing = $this->find($entity->getPrimaryKey());
+            if ($existing) {
+                return $this->updateEntity($entity);
+            }
+        }
+
+        return $this->insertEntity($entity);
     }
 
     protected function insertEntity(Entity $entity): ?Entity
     {
         $this->observer->fire(RepositoryEvent::BEFORE_CREATE, $entity);
-        $id = $this->builder->insert($entity->getAttributes());
 
-        if (!$id) return null;
+        $attributes = $entity->getAttributes();
 
-        $entity->set($entity->getPrimaryKeyName(), $id);
-        $this->observer->fire(RepositoryEvent::AFTER_CREATE, $entity);
-        $this->observer->fire(RepositoryEvent::AFTER_SAVE, $entity);
+        $affected = $this->builder->insert($attributes);
 
-        return $entity;
+        if ($affected === 0) {
+            return null;
+        }
+
+        // FK PK 엔티티 → id 이미 존재하니까 set 안 해도 됨
+        if (!$entity->getPrimaryKey()) {
+            // auto_increment 엔티티 → lastInsertId() 필요
+            $lastId = $this->builder->getConnection()->lastInsertId();
+            if (!$lastId) {
+                return null;
+            }
+            $entity->set($entity->getPrimaryKeyName(), $lastId);
+        }
+
+        $freshEntity = $this->find($entity->getPrimaryKey());
+
+        if (!$freshEntity) {
+            return null;
+        }
+
+        $this->observer->fire(RepositoryEvent::AFTER_CREATE, $freshEntity);
+        $this->observer->fire(RepositoryEvent::AFTER_SAVE, $freshEntity);
+
+        return $freshEntity;
     }
+
 
     protected function updateEntity(Entity $entity): ?Entity
     {

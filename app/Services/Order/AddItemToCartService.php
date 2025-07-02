@@ -9,10 +9,13 @@ use App\Domains\Product\Entities\Headlight;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductValue;
+use App\Domains\Product\Repositories\LoupeRepository;
 use App\Domains\Product\Repositories\ProductRepository;
 use App\Domains\Product\Repositories\ProductValueRepository;
 use App\Supports\Services\Service;
 use Exception;
+use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Repositories\Repository;
 use Framework\Support\Str;
 use RuntimeException;
 
@@ -39,7 +42,8 @@ class AddItemToCartService extends Service
             'type' => $productData['type'],
             'code' => $productData['code'],
             'model' => $productData['model'],
-            'price' => $productData['price']
+            'price' => $productData['price'],
+            'description' => $productData['description'] ?? null,
         ]));
         
         $product = ProductRepository::make()->save($product);
@@ -63,13 +67,19 @@ class AddItemToCartService extends Service
         }
 
         if ($subProductClass) {
-            $subProductData = $payload[$subProductClass::alias()]; 
+            $alias = $subProductClass::alias();
+            
+            if (!isset($payload[$alias])) {
+                throw new RuntimeException("Payload에 alias key '{$alias}' 가 없습니다.");
+            }
+            $subProductData = $payload[$alias]; 
             $subProductData = array_merge($subProductData, ['id' => $product->id]);
-            $subProduct = new $subProductClass($subProductData);
+            $subProductEntity = new $subProductClass($subProductData);
             
             /** @var Repository $repo */
-            $repo = $subProductClass::resolveRepository();
-            $subProduct = $repo->save($subProduct);
+            $repo = $subProductClass::repositoryClass()::make();
+
+            $subProduct = $repo->save($subProductEntity);
 
             if (!$subProduct) {
                 throw new RuntimeException("제품 확장에 실패하였습니다.");
@@ -77,7 +87,6 @@ class AddItemToCartService extends Service
         }
 
         $setGroupId = $sets ? Str::uuid() : null; 
-        $isMainItem = (bool) $sets;
 
         // 카트 아이템 생성
         $cartItemData = array_merge([
@@ -86,7 +95,7 @@ class AddItemToCartService extends Service
             'quantity'       => $quantity,
         ], [
             'set_group_id' => $setGroupId,
-            'is_main_item' => $isMainItem,
+            'is_main_item' => true,
         ]);
         
         $cartItem = new CartItem($cartItemData);
@@ -102,7 +111,6 @@ class AddItemToCartService extends Service
             throw new RuntimeException("장바구니 추가에 실패하였습니다.");
         }
 
-        dump($sets);
         // 카트아이템 세트 생성
         if ($sets) { 
             $setGroupProducts = []; 
@@ -110,6 +118,8 @@ class AddItemToCartService extends Service
             foreach ($sets as $index => $data) {
                 $setGroupProduct = new Product($data['product'] ?? []); 
                 $setGroupProduct = ProductRepository::make()->save($setGroupProduct);
+                $quantity = $data['quantity'] ?? 1;
+                $setGroupProduct->load(['product.template.fileattachment']);
 
                 if (!$setGroupProduct) {
                     throw new RuntimeException("세트 생성에 실패하였습니다.");
@@ -118,11 +128,12 @@ class AddItemToCartService extends Service
                 $subCartItemData = [
                     'cart_id' => $cart->id,
                     'product_id' => $setGroupProduct->id,
-                    'quantity' => $data['quantity'] ?? 1,
+                    'quantity' => $quantity,
                     'is_main_item' => false, 
                     'set_group_id' => $setGroupId, 
                     'set_group_sort' => $index,
                 ];
+                
                 $subCartItem = new CartItem($subCartItemData);
                 $subCartItem = CartItemRepository::make()->save($subCartItem);
 
@@ -133,6 +144,10 @@ class AddItemToCartService extends Service
                 $subCartItem->setRelation('product', $setGroupProduct);
                 $setGroupProducts[] = $subCartItem;
             }
+
+            usort($setGroupProducts, function ($a, $b) {
+                return ($a->set_group_sort ?? 0) <=> ($b->set_group_sort ?? 0);
+            });
 
             $cartItem->setRelation('sets', $setGroupProducts);
         }

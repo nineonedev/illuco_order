@@ -193,6 +193,7 @@ Route::middleware(['web'])->group(function(){
             ->name('cartitems')
             ->group(function(){
                 Route::get('{id}', [CartItemController::class, 'show'])->name('show');
+                Route::put('/', [CartItemController::class, 'updateMany'])->name('updateMany');
                 Route::put('{id}', [CartItemController::class, 'update'])->name('update');
                 
                 Route::delete('/', [CartItemController::class, 'destroyMany'])->name('destroyMany');
