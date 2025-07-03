@@ -80,24 +80,27 @@ class MysqlConnection implements ConnectionInterface {
         return $stmt->fetchAll();
     }
 
-    public function insert(string $query, array $bindings = []): int
+    public function insert(string $query, array $bindings = []): ?int
     {
-        // $stmt = $this->pdo->prepare($query);
-        // $ok = $stmt->execute($bindings);
-        // if ($ok) {
-        //     $id = $this->pdo->lastInsertId();
-        //     return $id ? (int)$id : null;
-        // }
-        // return null;
-
         $stmt = $this->pdo->prepare($query);
         $ok = $stmt->execute($bindings);
 
         if (!$ok) {
-            return 0;
+            return null;
         }
 
-        return $stmt->rowCount();
+        $id = $this->pdo->lastInsertId();
+        return $id ? (int) $id : null;
+
+        // 아래 코드는 id가 있는 요소 insert할때 문제되는 부분이라서 적용하였음 
+        // $stmt = $this->pdo->prepare($query);
+        // $ok = $stmt->execute($bindings);
+
+        // if (!$ok) {
+        //     return 0;
+        // }
+
+        // return $stmt->rowCount();
     }
 
     public function update(string $query, array $bindings = []): int

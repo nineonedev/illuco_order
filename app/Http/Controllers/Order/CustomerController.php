@@ -38,9 +38,19 @@ class CustomerController extends Controller
 
         $customers->items()->transform(function ($customer) {
             if ($customer->cart && $customer->cart->cartitems) {
+                foreach ($customer->cart->cartitems as $item) {
+                    $subType = $item->product->type;
+
+                    if ($subType) {
+                        $item->product->load([$subType]);
+                    }
+                }
+
+
                 $groupedItems = CartItem::groupBySet(
                     $customer->cart->cartitems
                 );
+
                 $customer->cart->setRelation('cartitems_grouped', $groupedItems);
             }
             return $customer;

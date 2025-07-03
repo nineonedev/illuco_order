@@ -12,6 +12,7 @@ return new class implements Migration
             $table->id();
             $table->foreignId('template_id')->nullable()->constrained('product_templates')->onDeleteSetNull();
             $table->string('name');
+            $table->string('serial_number')->nullable()->unique();
             $table->string('type', 50)->nullable();
             $table->string('code')->unique();
             $table->string('model')->nullable();

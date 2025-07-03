@@ -34,6 +34,7 @@ class AddItemToCartService extends Service
             ->query()
             ->firstOrCreate(['customer_id' => $customer_id]);
 
+
         // 제품 생성
         $type = $productData['type'] ?? null; 
         $product = new Product(array_merge($productData, [
@@ -53,36 +54,58 @@ class AddItemToCartService extends Service
         }
 
         // 서브 제품 생성
-        /** @var Entity|null $subProductClass */
-        $subProductClass = null;
+        
         if ($type) {
+            /** @var Entity|null $subProductClass */
+            $subProductClass = null;
+            $subProductData = $payload[$type];
+
             switch ($type) {
                 case Loupe::alias():
                     $subProductClass = Loupe::class; 
+
+                    $useEngraving = $subProductData['use_engraving'] ?? false;
+                    
+                    if (!$useEngraving) {
+                        $subProductData['engraving_text'] = null;
+                    } else {
+                        $quantity = 1; 
+                    }
+
                     break; 
                 case Headlight::alias():
                     $subProductClass = Headlight::class;
+
+                    $useEngraving = $subProductData['use_engraving'] ?? false;
+                    
+                    if (!$useEngraving) {
+                        $subProductData['engraving_text'] = null;
+                    } else {
+                        $quantity = 1; 
+                    }
+
                     break; 
             }
-        }
 
-        if ($subProductClass) {
-            $alias = $subProductClass::alias();
-            
-            if (!isset($payload[$alias])) {
-                throw new RuntimeException("Payload에 alias key '{$alias}' 가 없습니다.");
-            }
-            $subProductData = $payload[$alias]; 
-            $subProductData = array_merge($subProductData, ['id' => $product->id]);
-            $subProductEntity = new $subProductClass($subProductData);
-            
-            /** @var Repository $repo */
-            $repo = $subProductClass::repositoryClass()::make();
+            if ($subProductClass) {
+                
+                if (!isset($payload[$type])) {
+                    throw new RuntimeException("Payload에 alias key '{$type}' 가 없습니다.");
+                }
+                
+                $subProductData = array_merge($subProductData, ['id' => $product->id]);
+                $subProductEntity = new $subProductClass($subProductData);
+                
+                /** @var Repository $repo */
+                $repo = $subProductClass::repositoryClass()::make();
 
-            $subProduct = $repo->save($subProductEntity);
+                $subProduct = $repo->save($subProductEntity);
 
-            if (!$subProduct) {
-                throw new RuntimeException("제품 확장에 실패하였습니다.");
+                if (!$subProduct) {
+                    throw new RuntimeException("제품 확장에 실패하였습니다.");
+                }
+
+                $product->setRelation($type, $subProduct);
             }
         }
 
@@ -119,7 +142,7 @@ class AddItemToCartService extends Service
                 $setGroupProduct = new Product($data['product'] ?? []); 
                 $setGroupProduct = ProductRepository::make()->save($setGroupProduct);
                 $quantity = $data['quantity'] ?? 1;
-                $setGroupProduct->load(['product.template.fileattachment']);
+                $setGroupProduct->load(['template.fileattachment']);
 
                 if (!$setGroupProduct) {
                     throw new RuntimeException("세트 생성에 실패하였습니다.");

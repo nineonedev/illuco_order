@@ -69,7 +69,7 @@ class Order extends Entity
      * @param string|null $dealerCode
      * @return string
      */
-    public static function generateOrderNumber(?string $dealerCode = null): string
+    public function generateOrderNumber(?string $dealerCode = null): string
     {
         $dealerCode = $dealerCode ?: 'CST';
         $dateStr = now()->format('Ymd');
@@ -92,7 +92,10 @@ class Order extends Entity
 
         $sequenceStr = str_pad((string) $nextSeq, 5, '0', STR_PAD_LEFT);
 
-        return "{$prefix}-{$sequenceStr}";
+        $orderNo = "{$prefix}-{$sequenceStr}";
+        $this->order_no = $orderNo; 
+
+        return $orderNo; 
     }
 
 }

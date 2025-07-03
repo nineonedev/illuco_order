@@ -29,7 +29,9 @@ class Loupe extends Entity
         'pd_left',
         'pd_total',
         'vertex_distance',
-        'add_option'
+        'add_option',
+
+        'engraving_text',
     ];
 
     protected array $casts = [
@@ -53,87 +55,119 @@ class Loupe extends Entity
         'vertex_distance' => 'decimal',
     ];
 
-    public static array $modelSpecs = [
+    const WORKING_DISTANCES = [
+        'WD_35_55' => [
+            'label' => '35~55cm',
+            'min' => 35,
+            'max' => 55,
+        ],
+        'WD_45_65' => [
+            'label' => '45~65cm',
+            'min' => 45,
+            'max' => 65,
+        ],
+    ];
+
+    const FRAMES = [
+        'FRAME_1' => [
+            'label' => 'Frame 1',
+            'value' => 'frame1',
+        ],
+        'FRAME_2' => [
+            'label' => 'Frame 2',
+            'value' => 'frame2',
+        ],
+        'SPORTS' => [
+            'label' => 'Sports',
+            'value' => 'sports',
+        ],
+        'FRAME_4' => [
+            'label' => 'Frame 4',
+            'value' => 'frame4',
+        ],
+    ];
+
+    const MODEL_SPECS = [
         'ITL-1025G' => [
             'frame_types' => [
-                ['value' => 'frame1', 'label' => 'Frame 1'],
-                ['value' => 'frame2', 'label' => 'Frame 2'],
-                ['value' => 'sports', 'label' => 'Sports'],
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_1'],
+                self::FRAMES['FRAME_2'],
+                self::FRAMES['SPORTS'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 35, 'max' => 55],
+            'working_distance' => self::WORKING_DISTANCES['WD_35_55'],
         ],
         'ITL-1040P' => [
             'frame_types' => [
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 45, 'max' => 65],
+            'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'ITL-1030G' => [
             'frame_types' => [
-                ['value' => 'frame1', 'label' => 'Frame 1'],
-                ['value' => 'frame2', 'label' => 'Frame 2'],
-                ['value' => 'sports', 'label' => 'Sports'],
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_1'],
+                self::FRAMES['FRAME_2'],
+                self::FRAMES['SPORTS'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 35, 'max' => 55],
+            'working_distance' => self::WORKING_DISTANCES['WD_35_55'],
         ],
         'ITL-1035G' => [
             'frame_types' => [
-                ['value' => 'frame1', 'label' => 'Frame 1'],
-                ['value' => 'frame2', 'label' => 'Frame 2'],
-                ['value' => 'sports', 'label' => 'Sports'],
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_1'],
+                self::FRAMES['FRAME_2'],
+                self::FRAMES['SPORTS'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 35, 'max' => 55],
+            'working_distance' => self::WORKING_DISTANCES['WD_35_55'],
         ],
         'ITL-1045P' => [
             'frame_types' => [
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 45, 'max' => 65],
+            'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'ITL-1055P' => [
             'frame_types' => [
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 45, 'max' => 65],
+            'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'ITL-1065P' => [
             'frame_types' => [
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 45, 'max' => 65],
+            'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IAL-1030' => [
             'frame_types' => [
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 45, 'max' => 65],
+            'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IAL-1040' => [
             'frame_types' => [
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 45, 'max' => 65],
+            'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IAL-1055' => [
             'frame_types' => [
-                ['value' => 'frame4', 'label' => 'Frame 4'],
+                self::FRAMES['FRAME_4'],
             ],
-            'working_distance' => ['min' => 45, 'max' => 65],
+            'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IFL-1030G' => [
             'frame_types' => [
-                ['value' => 'frame1', 'label' => 'Frame 1'],
+                self::FRAMES['FRAME_1'],
             ],
-            'working_distance' => ['min' => 35, 'max' => 55],
+            'working_distance' => self::WORKING_DISTANCES['WD_35_55'],
         ],
     ];
 
     public static function getSpecsForModel(string $model): array
     {
-        return self::$modelSpecs[$model] ?? [];
+        return self::MODEL_SPECS[$model] ?? [];
     }
 
     public static function repositoryClass(): string

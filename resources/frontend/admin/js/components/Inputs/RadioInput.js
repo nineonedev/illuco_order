@@ -79,6 +79,9 @@ export default class RadioInput extends View {
             input.addEventListener("change", (e) => {
                 const value = e.target.value; 
                 this._state.value = value;
+
+                inputs.forEach(inp => inp.checked = false); 
+                e.target.checked = true; 
                 
                 if (typeof this._props.onChange === "function") {
                     this._props.onChange({ value: value, view: this }, e);

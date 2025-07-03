@@ -20,18 +20,33 @@ class CartItemController extends Controller
     public function show(string $id, Request $request)
     {
         return $this->runInTransaction(function () use ($id) {
-            $cartitem = $this->repo()->with([
-                'product' => [
-                    'values',
-                    'template' => [
-                        'attributes.options',
-                        'fileattachment',
-                    ],
-                ],
-            ])->find($id);
+            $relations = [
+                'product.template.fileattachment'
+            ];
+
+            /** @var CartItem|null $cartitem */
+            $cartitem = $this->repo()->with($relations)->find($id);
 
             if (!$cartitem) {
                 throw new RuntimeException("아이템을 찾을 수 없습니다.");
+            }
+
+            if ($cartitem->product->type) {
+                $cartitem->load(['product.' . $cartitem->product->type]);
+            }
+
+            if ($cartitem->set_group_id) {
+                $subItems = CartItemRepository::make()
+                    ->query()
+                    ->with($relations)
+                    ->where('set_group_id', $cartitem->set_group_id)
+                    ->where('is_main_item', false)
+                    ->orderByAsc('set_group_sort')
+                    ->get();
+
+                $cartitem->setRelation('sets', $subItems);
+            } else {
+                $cartitem->setRelation('sets', []);
             }
 
             return $this->render(null, [
@@ -39,6 +54,7 @@ class CartItemController extends Controller
             ]);
         });
     }
+
     
     public function updateMany(Request $request)
     {

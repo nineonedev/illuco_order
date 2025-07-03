@@ -145,10 +145,11 @@ export default class CartController extends Controller {
             const result = await new Ajax(true).get(`/admin/cartitems/${id}`);
             this._logger.success(result);
 
-            const { data } = result;
-            const { template, values } = data.cartitem.product;
+            const cartitem = result.data.cartitem;
+            console.log(cartitem);
+            
+            this._pickTemplate({ template: cartitem.product.template, cartitem: cartitem});
 
-            this._pickTemplate({ template, values });
         } catch (err) {
             // 에러 처리
             this._logger.error(err);
@@ -241,8 +242,8 @@ export default class CartController extends Controller {
         }
     }
 
-    async _pickTemplate({ template, values }, evt) {
-        this.form.setState({ template: template, values: values });
+    async _pickTemplate({ template, cartitem = {} }, evt) {
+        this.form.setState({ template, cartitem});
         this.modal.setState({
             open: false,
             content: "",

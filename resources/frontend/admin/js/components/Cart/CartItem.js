@@ -97,10 +97,15 @@ export default class CartItem extends View {
 
         const { product, quantity } = this._state;
 
-        const optionText = '';
-
-        console.log(this._state);
         
+        const subProduct = product[product.type]; 
+        let engraving = false; 
+
+        if (subProduct) {
+            engraving = !(subProduct.engraving_text === null || subProduct.engraving_text.trim() === '');
+        }
+
+        const optionText = '';
 
         // Checkbox
         this._checkbox = InputFactory.make("checkbox")
@@ -125,19 +130,22 @@ export default class CartItem extends View {
             onClick: this._handleDelete.bind(this),
         }).render();
 
-        this._editBtn = Button.make(this._aggtHookId, {
-            className: "no-btn-primary-outline --sm",
-            ariaLabel: "아이템 수정",
-            label: "수정",
-            type: "button",
-            onClick: this._handleEdit.bind(this),
-        }).render();
+        if (this._state.product.type) {
+            this._editBtn = Button.make(this._aggtHookId, {
+                className: "no-btn-primary-outline --sm",
+                ariaLabel: "아이템 수정",
+                label: "수정",
+                type: "button",
+                onClick: this._handleEdit.bind(this),
+            }).render();
+        }
 
         // 수량 카운터
         this._counter = InputFactory.make("counter")
             .make(this._aggtHookId, {
                 name: "quantity",
                 value: quantity,
+                disabled: engraving,
                 onChange: this._handlePrice.bind(this),
             })
             .render();

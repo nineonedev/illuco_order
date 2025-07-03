@@ -20,7 +20,7 @@ class ProductAttributeController extends Controller
             'options' => [
                 'precison_lens' => $precisonLens ? $precisonLens->toArray() : null,
             ],
-            'loupe' => Loupe::$modelSpecs,
+            'loupe' => Loupe::MODEL_SPECS,
             
         ], '성공적으로 로드되었습니다.');
     }

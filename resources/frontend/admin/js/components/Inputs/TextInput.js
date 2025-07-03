@@ -14,7 +14,8 @@ export default class TextInput extends View {
             invalidMessage: '',
             helperText: '',
             spacing: true,
-            required: true,
+            required: false,
+            display: true,
             onChange: (e) => {},
         };
     }
@@ -28,7 +29,9 @@ export default class TextInput extends View {
     _template() {
         const { label, name, value, disabled, readOnly, required, helperText, invalid, invalidMessage, spacing, type } = this._state;
         const nodeId = this._generateElementId();
-        const hidden = type === 'hidden' ? `style="display: none;"` : '';
+        const hidden = (!this._state.display || type === 'hidden') 
+            ? `style="display: none;"` 
+            : '';
 
         return `
             <div class="no-form-control" ${hidden}>

@@ -143,7 +143,6 @@ class OrderController extends Controller
             }
 
             $orderData = [
-                'order_no'       => Order::generateOrderNumber($dealer ? $dealer->code : null),
                 'customer_id'    => $customer->id,
                 'dealer_id'      => $dealer ? $dealer->id : null,
                 'user_id'        => $user->id,
@@ -155,6 +154,7 @@ class OrderController extends Controller
             ];
 
             $order = new Order($orderData);
+            $order->generateOrderNumber($dealer ? $dealer->code : null);
             $order = OrderRepository::make()->save($order);
 
             if (!$order) {
@@ -344,6 +344,7 @@ class OrderController extends Controller
         // === 2) 확장 제품 생성 (TPT 방식) ===
         $type = $orderedProduct->type;
         if ($type) {
+            $orderedProduct->load([$type]);
             $subEntity = $orderedProduct->{$type};
             if ($subEntity) {
                 $subProductClass = get_class($subEntity);

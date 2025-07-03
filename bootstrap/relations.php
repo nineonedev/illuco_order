@@ -10,6 +10,7 @@ use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Entities\OrderItem;
 use App\Domains\Product\Entities\Category;
+use App\Domains\Product\Entities\Headlight;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Entities\ProductAttribute;
@@ -78,8 +79,12 @@ Rel::setConfig([
     Product::class => [
         Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
         Rel::hasOne('loupe', Loupe::class, 'id'),
+        Rel::hasOne('headlight', Headlight::class, 'id'),
     ],
     Loupe::class => [
+        Rel::belongsTo('product', Product::class, 'id'),
+    ],
+    Headlight::class => [
         Rel::belongsTo('product', Product::class, 'id'),
     ],
     Customer::class => [

@@ -14,7 +14,7 @@ export default class TemplateForm extends View {
         this._aggtHookId = this._generateHookId();
         this._submitHookId = this._generateHookId();
         this._summaryHookId = this._generateHookId();
-        this._customForm = null;
+        this._productForm = null;
         this._summaryTable = null;
         this._counterInput = null;
         this._typeInput = null;
@@ -22,10 +22,11 @@ export default class TemplateForm extends View {
         super._boot();
     }
 
+
     _defineProps() {
         return {
             template: {},
-            sets: [],
+            cartitem: {},
         };
     }
 
@@ -52,12 +53,6 @@ export default class TemplateForm extends View {
 
         const { template, quantity } = this._state;
         const { id, price } = template;
-        const formattedPrice = Helper.formatCurrency(price);
-        const totalPrice = price * (quantity ?? 1);
-        const formattedTotalPrice = Helper.formatCurrency(totalPrice);
-
-        const orderItemPrice = totalPrice;
-        const totalOrderItemPrice = Helper.formatCurrency(orderItemPrice);
 
         return `
             <div>
@@ -96,14 +91,14 @@ export default class TemplateForm extends View {
         if (!this.hasTemplate()) return;
 
         this._submitBtn = null;
-        this._customForm = null;
+        this._productForm = null;
         this._summaryTable = null;
         this._counterInput = null;
         this._typeInput = null;
 
         this._renderTemplate();
-        this._renderSubProduct();
         this._renderAggregate();
+        this._renderSubProduct();
     }
 
     _renderTemplate() {
@@ -191,29 +186,59 @@ export default class TemplateForm extends View {
     }
 
     _renderSubProduct() {
+        const cartItem = this._state.cartitem;
+
         const { loupe } = CartController.attributes;
         const loupeSpecs = loupe[this._state.template.model];
+
+
+        if (!Helper.isEmptyObject(cartItem)) {
+            const productData = cartItem.product[cartItem.product.type];
+
+            switch (cartItem.product.type){
+                case 'loupe': 
+                    this._renderLoupe(loupeSpecs, productData, cartItem.sets);
+                    break; 
+            }
+            
+            this._typeInput.setState({ value: cartItem.product.type });
+            return; 
+        }
 
         if (loupeSpecs) {
             this._renderLoupe(loupeSpecs);
             this._typeInput.setState({ value: "loupe" });
+            return; 
         }
+        
     }
 
-    _renderLoupe(specs = null) {
+    _renderLoupe(specs = null, product = {}, sets = []) {
         this._logger.success("loupe");
 
         if (!specs) return;
 
-        this._customForm = LoupeForm.make(this._attrHookId, {
-            ...this._state.template,
-            type: "ready-made",
+        const data = {
+            template: this._state.template,
+            sets: sets,
             onUpdateSets: this.updateSets.bind(this),
-        }).render();
+            onChangeQuantity: this._handleQuantity.bind(this),
+        };
+
+        if (!Helper.isEmptyObject(product)) {
+            Object.assign(data, {product});
+        }
+
+        this._productForm = LoupeForm.make(this._attrHookId, data).render();
+    }
+
+    _handleQuantity(count, disabled = false) {
+        this._counterInput.setState({value: count, disabled});
+        this._handlePrice({value: count});
     }
 
     _renderAggregate() {
-        const { template, quantity } = this._state;
+        const { template, quantity, cartitem } = this._state;
 
         const items = [
             {
@@ -222,12 +247,17 @@ export default class TemplateForm extends View {
                 quantity: quantity ?? 1,
                 subTotal: template.price * (quantity ?? 1),
             },
-            ...this._state.sets, // 데이터매핑 필요
         ];
+
+        if (!Helper.isEmptyObject(cartitem)) {
+            cartitem.sets.forEach(set => {
+                items.push(set);
+            });
+        }
 
         this._summaryTable = SummaryTable.make(this._summaryHookId, {
             labels: ["품목", "단가", "수량", "소계"],
-            items,
+            items: items,
         }).render();
 
         this._submitBtn = Button.make(this._submitHookId, {
@@ -247,7 +277,7 @@ export default class TemplateForm extends View {
 
         this._summaryTable.setState({ items: [item, ...sets] });
     }
-
+    
     _handlePrice({ value, view }, e) {
         const qty = Number.parseInt(value);
 
@@ -258,7 +288,7 @@ export default class TemplateForm extends View {
             subTotal: this._state.template.price * qty,
         };
 
-        const sets = this._customForm ? this._customForm.state.sets : [];
+        const sets = this._productForm ? this._productForm.state.sets : [];
 
         this._summaryTable.setState({
             items: [item, ...sets],
@@ -273,10 +303,10 @@ export default class TemplateForm extends View {
 
             const fd = new FormData(e.target);
 
-            if (this._customForm) {
-                this._customForm.validateAllFields();
+            if (this._productForm) {
+                this._productForm.validateAllFields();
 
-                if (this._customForm.hasErrors()) {
+                if (this._productForm.hasErrors()) {
                     console.log("fail to validation...");
                     return;
                 }

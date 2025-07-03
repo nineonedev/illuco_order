@@ -48,9 +48,12 @@ export default class View {
         this._register();
         this._configureHookAndHost(this._hookId);
         this._hydrateIfNeeded();
-
         this._booted = true; 
+        
+        this._afterBoot();
     }
+
+    _afterBoot(){}
 
     _setup(){
         this._computed = {...this._computed, ...this._defineComputed()};

@@ -1,8 +1,10 @@
 import CartController from "../../controllers/CartController";
 import View from "../../core/View";
 import Helper from "../../supports/Helper";
+import CheckboxInput from "../Inputs/CheckboxInput";
 import NumberInput from "../Inputs/NumberInput";
 import RadioInput from "../Inputs/RadioInput";
+import TextInput from "../Inputs/TextInput";
 
 export default class LoupeForm extends View {
     _boot() {
@@ -15,6 +17,27 @@ export default class LoupeForm extends View {
     _defineProps() {
         return {
             sets: [],
+            template: {},
+            product: {
+                type: 'ready-made',
+                frame_type: '',
+                working_distance: '',
+                engraving_text: '',
+                add_option: '',
+                vertex_distance: '',
+                pd_right: '',
+                pd_left: '',
+                pd_total: '',
+                od_sph: '0.00',
+                os_sph: '0.00',
+                od_cyl: '0.00',
+                os_cyl: '0.00',
+                od_axis: '0',
+                os_axis: '0',
+                od_add: '0.00',
+                os_add: '0.00',
+            },
+            onChangeQuantity: (count) => {},
             onUpdateSets: (sets) => {},
         };
     }
@@ -37,19 +60,48 @@ export default class LoupeForm extends View {
 
     async _render() {
         super._render();
-
-        const { type, model } = this._state;
+        const { type, model } = this._state.template;
+        
+        const {
+            type: loupeType,
+            engraving_text,
+            working_distance, 
+            frame_type,
+        } = this._state.product; 
+        
 
         RadioInput.make(this._attrHookId, {
             label: "형태",
             name: "loupe[type]",
-            value: type,
+            value: loupeType,
             options: [
                 { label: "Ready-made", value: "ready-made" },
                 { label: "Custom-made", value: "custom-made" },
             ],
             onChange: this._handleTypeChange.bind(this),
         }).render();
+
+        const hasEngraving = !(engraving_text === null || engraving_text.trim() === '');
+        
+        CheckboxInput.make(this._attrHookId, {
+            label: "각인 여부",
+            name: "loupe[use_engraving]",
+            checked: hasEngraving, 
+            onChange: this._handleEngraving.bind(this),
+            helperText: '체크하시면 발주 수량이 1개로 제한됩니다.',
+        }).render();
+
+        this.engravingInput = TextInput.make(this._attrHookId, {
+            label: '각인 입력',
+            name: 'loupe[engraving_text]',
+            value: engraving_text,
+            required: hasEngraving,
+            display: hasEngraving, 
+        }).render();
+
+        if (hasEngraving) {
+            this._props.onChangeQuantity(1, true);
+        }
 
         const { loupe } = CartController.attributes;
         const specs = loupe[model];
@@ -58,33 +110,37 @@ export default class LoupeForm extends View {
 
         if (!specs) return;
 
-        const { frame_types, working_distance } = specs;
+        const { frame_types, working_distance:wd } = specs;
 
         if (frame_types) {
             RadioInput.make(this._attrHookId, {
                 label: "테정보",
                 name: "loupe[frame_type]",
-                value: this._state.loupe?.frame_type ?? "",
+                value: frame_type,
                 options: specs.frame_types,
                 onChange: this._handleFrameTypeChange.bind(this),
             }).render();
         }
 
-        if (working_distance) {
+        if (wd) {
             NumberInput.make(this._attrHookId, {
                 label: "WD (단위:Cm)",
                 name: "loupe[working_distance]",
-                value: this._state.loupe?.working_distance ?? "",
-                min: working_distance.min,
-                max: working_distance.max,
+                value: working_distance,
+                min: wd.min,
+                max: wd.max,
                 step: 0.1,
                 onChange: this._handleWorkingDistanceChange.bind(this),
             }).render();
         }
 
-        if (type === "custom-made") {
+        if (loupeType === "custom-made") {
             this._renderAttributes();
             this._bindCustomValidation();
+
+            if (this._state.sets && this._state.sets.length > 0) {
+                this._checkSphCylAddRules();
+            }
         }
     }
 
@@ -92,19 +148,34 @@ export default class LoupeForm extends View {
     // Individual Handlers
     // --------------------------
 
-    _handleTypeChange({ value: type }) {
-        this.setState({ type });
-        if (type !== "custom-made") {
+    _handleEngraving({value}) {
+        this.engravingInput.setState({display: value, required: value});
+
+        if (value) {
+            this._props.onChangeQuantity(1, true);
+        } else {
+            this._props.onChangeQuantity(1, false);
+        }
+    }
+
+    _handleTypeChange({ value }) {
+        this.setState({ product: {...this._state.product, type: value} });
+
+        if (value !== "custom-made") {
             this._state.sets = [];
         }
+
         this._props.onUpdateSets(this._state.sets);
+        this._props.onChangeQuantity(1, false);
     }
 
     _handleFrameTypeChange({ value }) {
+        
         const allowed =
             CartController.attributes.loupe[
-                this._state.model
+                this._state.template.model
             ]?.frame_types?.map((x) => x.value) || [];
+            
         if (!value) {
             this._setFieldError(
                 "loupe[frame_type]",
@@ -143,6 +214,8 @@ export default class LoupeForm extends View {
         const val = el?.value ?? "";
         const allowed = ["ignore", "include", "zero_diopter"];
 
+        
+
         if (!val) {
             this._setFieldError(
                 "loupe[add_option]",
@@ -175,7 +248,7 @@ export default class LoupeForm extends View {
                     ?.value || "",
         });
 
-        if (this._state.type === "custom-made") {
+        if (this._state.product.type === "custom-made") {
             this._handleAddOptionChange();
 
             const customFields = [
@@ -243,11 +316,11 @@ export default class LoupeForm extends View {
             "loupe[frame_type]": {
                 allowedValues:
                     CartController.attributes.loupe[
-                        this._state.model
+                        this._state.template.model
                     ]?.frame_types.map((x) => x.value) || [],
             },
             "loupe[working_distance]":
-                CartController.attributes.loupe[this._state.model]
+                CartController.attributes.loupe[this._state.template.model]
                     ?.working_distance || null,
         };
         return name ? map[name] : map;
@@ -323,7 +396,7 @@ export default class LoupeForm extends View {
     }
 
     _bindCustomValidation() {
-        if (this._state.type !== "custom-made") return;
+        if (this._state.product.type !== "custom-made") return;
 
         const inputHandlers = {
             "loupe[frame_type]": this._handleFrameTypeChange.bind(this),
@@ -366,6 +439,7 @@ export default class LoupeForm extends View {
         const addOptionEls = document.querySelectorAll(
             '[name="loupe[add_option]"]'
         );
+        
         addOptionEls.forEach((el) => {
             el.addEventListener("change", () => {
                 this._handleAddOptionChange();
@@ -375,13 +449,14 @@ export default class LoupeForm extends View {
         const pdRightEl = document.querySelector('[name="loupe[pd_right]"]');
         const pdLeftEl = document.querySelector('[name="loupe[pd_left]"]');
         const pdTotalEl = document.querySelector('[name="loupe[pd_total]"]');
+        
 
         if (pdRightEl && pdLeftEl && pdTotalEl) {
             const checkPdDiff = () => {
                 const right = parseFloat(pdRightEl.value || "0");
                 const left = parseFloat(pdLeftEl.value || "0");
                 const total = right + left;
-
+                
                 pdTotalEl.value = total ? total.toFixed(1) : "";
 
                 if (Math.abs(right - left) > 2) {
@@ -568,6 +643,23 @@ export default class LoupeForm extends View {
     }
 
     _attributesHtml() {
+        const {
+            pd_right,
+            pd_left,
+            pd_total,
+            od_sph,
+            os_sph,
+            od_cyl,
+            os_cyl,
+            od_axis,
+            os_axis,
+            od_add,
+            os_add,
+            vertex_distance,
+            add_option,
+        } = this._state.product; 
+        
+
         return `
             <div>
                 <div>
@@ -575,8 +667,17 @@ export default class LoupeForm extends View {
                     <!-- far PD, RIGHT -->
                     <div class="no-form-control">
                         <label for="pd_right" class="no-form-control-inner">
-                            <input type="number" name="loupe[pd_right]" id="pd_right" class="no-form-control-input" placeholder=""
-                                min="27" max="40" data-label="far PD, RIGHT (단위: mm)">
+                            <input 
+                                type="number" 
+                                name="loupe[pd_right]" 
+                                id="pd_right" 
+                                class="no-form-control-input" 
+                                placeholder=""
+                                min="27" 
+                                max="40" 
+                                data-label="far PD, RIGHT (단위: mm)"
+                                value="${pd_right}"
+                            >
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">far PD, RIGHT (단위: mm)</legend>
                             </fieldset>
@@ -589,8 +690,17 @@ export default class LoupeForm extends View {
                     <!-- far PD, LEFT -->
                     <div class="no-form-control">
                         <label for="pd_left" class="no-form-control-inner">
-                            <input type="number" name="loupe[pd_left]" id="pd_left" class="no-form-control-input" placeholder=""
-                                min="27" max="40" data-label="far PD, LEFT (단위: mm)" >
+                            <input 
+                                type="number" 
+                                name="loupe[pd_left]" 
+                                id="pd_left" 
+                                class="no-form-control-input" 
+                                placeholder=""
+                                min="27" 
+                                max="40" 
+                                data-label="far PD, LEFT (단위: mm)" 
+                                value="${pd_left}"
+                            >
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">far PD, LEFT (단위: mm)</legend>
                             </fieldset>
@@ -603,7 +713,15 @@ export default class LoupeForm extends View {
                     <!-- TOTAL PD -->
                     <div class="no-form-control">
                         <label for="pd_total" class="no-form-control-inner">
-                            <input type="number" name="loupe[pd_total]" id="pd_total" class="no-form-control-input" placeholder="" readonly>
+                            <input 
+                                type="number" 
+                                name="loupe[pd_total]" 
+                                id="pd_total" 
+                                class="no-form-control-input" 
+                                placeholder="" 
+                                readonly
+                                value="${pd_total}"
+                            >
                             <fieldset class="no-form-control-label" data-label="TOTAL PD (단위: mm)">
                                 <legend class="no-form-control-text">TOTAL PD (단위: mm)</legend>
                             </fieldset>
@@ -616,8 +734,17 @@ export default class LoupeForm extends View {
                     <!-- VD -->
                     <div class="no-form-control">
                         <label for="vd" class="no-form-control-inner">
-                            <input type="number" name="loupe[vertex_distance]" id="vd" class="no-form-control-input" placeholder=""
-                                min="10" max="25" data-label="VD (단위: mm)" >
+                            <input 
+                                type="number" 
+                                name="loupe[vertex_distance]" 
+                                id="vd" 
+                                class="no-form-control-input" 
+                                placeholder=""
+                                min="10" 
+                                max="25" 
+                                data-label="VD (단위: mm)" 
+                                value="${vertex_distance}"
+                            >
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">VD (단위: mm)</legend>
                             </fieldset>
@@ -660,8 +787,9 @@ export default class LoupeForm extends View {
                                                     class="no-form-control-input" 
                                                     placeholder=""
                                                     step="0.25" 
-                                                    value="0.00"
-                                                    min="-20" max="20">
+                                                    value="${od_sph}"
+                                                    min="-20" max="20"
+                                                />
                                             </label>
                                         </div>
                                     </td>
@@ -675,7 +803,7 @@ export default class LoupeForm extends View {
                                                     class="no-form-control-input" 
                                                     placeholder=""
                                                     step="0.25" 
-                                                    value="0.00"
+                                                    value="${od_cyl}"
                                                     min="-10" max="10">
                                             </label>
                                         </div>
@@ -689,7 +817,7 @@ export default class LoupeForm extends View {
                                                     id="od_axis" 
                                                     class="no-form-control-input" 
                                                     placeholder=""
-                                                    value="0"
+                                                    value="${od_axis}"
                                                     min="0" max="180">
                                             </label>
                                         </div>
@@ -704,7 +832,7 @@ export default class LoupeForm extends View {
                                                     class="no-form-control-input" 
                                                     placeholder=""
                                                     step="0.25"
-                                                    value="0.00"
+                                                    value="${od_add}"
                                                     min="0" max="4">
                                             </label>
                                         </div>
@@ -724,7 +852,7 @@ export default class LoupeForm extends View {
                                                     class="no-form-control-input" 
                                                     placeholder=""
                                                     step="0.25" 
-                                                    value="0.00"
+                                                    value="${os_sph}"
                                                     min="-20" max="20">
                                             </label>
                                         </div>
@@ -739,7 +867,7 @@ export default class LoupeForm extends View {
                                                     class="no-form-control-input" 
                                                     placeholder=""
                                                     step="0.25" 
-                                                    value="0.00"
+                                                    value="${os_cyl}"
                                                     min="-10" max="10">
                                             </label>
                                         </div>
@@ -753,7 +881,7 @@ export default class LoupeForm extends View {
                                                     id="os_axis" 
                                                     class="no-form-control-input" 
                                                     placeholder=""
-                                                    value="0"
+                                                    value="${os_axis}"
                                                     min="0" max="180">
                                             </label>
                                         </div>
@@ -768,7 +896,7 @@ export default class LoupeForm extends View {
                                                     class="no-form-control-input" 
                                                     placeholder=""
                                                     step="0.25"
-                                                    value="0.00"
+                                                    value="${os_add}"
                                                     min="0" max="4">
                                             </label>
                                         </div>
@@ -791,7 +919,15 @@ export default class LoupeForm extends View {
                         <!-- 옵션 사항 1 -->
                         <div class="no-form-radio --sm">
                             <label class="no-form-radio-pointer" for="add_option_1">
-                                <input class="no-form-radio-input" type="radio" name="loupe[add_option]" id="add_option_1" value="ignore" data-label="모렌즈 ADD 값 선택">
+                                <input 
+                                    class="no-form-radio-input" 
+                                    type="radio" 
+                                    name="loupe[add_option]" 
+                                    id="add_option_1" 
+                                    value="ignore" 
+                                    data-label="모렌즈 ADD 값 선택"
+                                    ${add_option === 'ignore' ? 'checked' : ''}
+                                />
                                 <div class="no-form-radio-ripple">
                                     <div class="no-form-radio-box">
                                         <span class="no-form-radio-icon"></span>
@@ -807,7 +943,15 @@ export default class LoupeForm extends View {
                         <!-- 옵션 사항 2 -->
                         <div class="no-form-radio --sm">
                             <label class="no-form-radio-pointer" for="add_option_2">
-                                <input class="no-form-radio-input" type="radio" name="loupe[add_option]" id="add_option_2" value="include" data-label="모렌즈 ADD 값 선택">
+                                <input 
+                                    class="no-form-radio-input" 
+                                    type="radio" 
+                                    name="loupe[add_option]" 
+                                    id="add_option_2" 
+                                    value="include" 
+                                    data-label="모렌즈 ADD 값 선택"
+                                    ${add_option === 'include' ? 'checked' : ''}
+                                />
                                 <div class="no-form-radio-ripple">
                                     <div class="no-form-radio-box">
                                         <span class="no-form-radio-icon"></span>
@@ -823,7 +967,15 @@ export default class LoupeForm extends View {
                         <!-- 옵션 사항 3 -->
                         <div class="no-form-radio --sm">
                             <label class="no-form-radio-pointer" for="add_option_3">
-                                <input class="no-form-radio-input" type="radio" name="loupe[add_option]" id="add_option_3" value="zero_diopter" data-label="모렌즈 ADD 값 선택">
+                                <input 
+                                    class="no-form-radio-input" 
+                                    type="radio" 
+                                    name="loupe[add_option]" 
+                                    id="add_option_3" 
+                                    value="zero_diopter" 
+                                    data-label="모렌즈 ADD 값 선택"
+                                    ${add_option === 'zero_diopter' ? 'checked' : ''}
+                                />
                                 <div class="no-form-radio-ripple">
                                     <div class="no-form-radio-box">
                                         <span class="no-form-radio-icon"></span>

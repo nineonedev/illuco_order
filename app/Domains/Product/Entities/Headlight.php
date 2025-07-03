@@ -10,6 +10,7 @@ class Headlight extends Entity
     protected array $fillable = [
         'id',
         'wireless_color',
+        'engraving_text',
     ];
 
     public static function repositoryClass(): string
