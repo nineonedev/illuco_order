@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Auth\Entities\Role;
 use App\Domains\Auth\Repositories\RoleRepository;
-use App\Domains\User\Entities\Admin;
-use App\Domains\User\Entities\Dealer;
-use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\UserRepository;
@@ -14,7 +10,6 @@ use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\Auth\SaveRoleService;
-use App\Services\User\RegisterUserService;
 use App\Services\User\UpdateUserService;
 use Framework\Routing\Controller;
 use Framework\Support\Exceptions\Http\UnauthenticatedException;

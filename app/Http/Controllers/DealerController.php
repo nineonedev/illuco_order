@@ -7,9 +7,12 @@ use App\Domains\Auth\Repositories\RoleRepository;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\User;
+use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\DealerRepository;
+use App\Domains\User\Repositories\UserRepository;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Services\Auth\SaveRoleService;
 use App\Services\User\DeleteUserService;
 use App\Services\User\RegisterUserService;
 use App\Services\User\UpdateUserService;
@@ -17,6 +20,7 @@ use Exception;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
+use Framework\Validation\Validator;
 use RuntimeException;
 
 class DealerController extends Controller
@@ -28,11 +32,11 @@ class DealerController extends Controller
 
     public function index(Request $request)
     {
-        $query = $this->repo()->with([User::alias()])->query();
+        $query = $this->repo()->with(['user'])->query();
 
         $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
             $q->where('code', 'like', "%{$keyword}%")
-              ->orWhere('phone_number', 'like', "%{$keyword}%");
+                ->orWhere('phone', 'like', "%{$keyword}%");
         });
 
         $perpage = $request->query('perpage', 15);
@@ -52,7 +56,7 @@ class DealerController extends Controller
 
     public function edit(string $id)
     {
-        $dealer = $this->repo()->with([User::alias()])->find($id);
+        $dealer = $this->repo()->with(['user'])->find($id);
 
         if (!$dealer) {
             throw new RuntimeException("대리점 정보를 찾을 수 없습니다.");
@@ -65,27 +69,45 @@ class DealerController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        // 1. Dealer 엔티티 생성
-        $dealer = new Dealer($request->all());
+        return $this->runInTransaction(function() use ($request) {
+            $user = new User($request->safe());
+            $user->type = UserType::DEALER; 
+            $user = UserRepository::make()->save($user);
 
-        // 2. 사용자 등록 서비스 호출
-        $result = (new RegisterUserService($dealer))
-            ->runInTransaction($request->safe());
+            if (!$user) {
+                throw new RuntimeException("사용자 생성에 실패하였습니다.");
+            }
 
-        // 3. 'dealer' 역할을 가져옴
-        $dealerRole = RoleRepository::make()
-            ->with(['users']) // 'users' 관계를 가져옴
-            ->query()
-            ->where('name', 'dealer')
-            ->first();
+            $dealerRole = RoleRepository::make()
+                ->query()
+                ->where('name', 'admin')
+                ->first();
+            
+            if (!$dealerRole) {
+                throw new RuntimeException("대리점 전용 권한을 찾을 수 없습니다.");
+            }
 
-        // 4. Role이 존재하면 사용자 연결
-        if ($dealerRole) {
-            $dealerRole->users()->attach($dealer->user);
-        }
+            $user->roles()->attach($dealerRole);
 
-        // 5. 결과 반환
-        return $result->toResponse();
+            $validator = Validator::make($request->all(), [
+                'country' => 'required',
+                'code' => 'required|unique:dealers',
+                'address' => 'nullable',
+                'description' => 'nullable',
+            ]);
+
+            $validator->validateOrFail();
+            $dealer = $validator->validated();
+            $dealer = new Dealer($dealer); 
+            $dealer->id = $user->id; 
+            $dealer = DealerRepository::make()->save($dealer); 
+
+            if (!$dealer) { 
+                throw new RuntimeException("대리점 생성에 실패하였습니다.");
+            }
+
+            return $this->render(null, ['dealer' => $dealer->toArray()], '성공적으로 생성되었습니다.');
+        });
     }
 
     public function update(string $id, UpdateUserRequest $request)

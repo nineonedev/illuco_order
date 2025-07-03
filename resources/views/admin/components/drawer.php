@@ -226,18 +226,16 @@
 
                 <ul class="no-drawer-gnb">
                     <!-- 권한 생성 메뉴 -->
-                    <?php if (false): ?>
-                        <li class="no-drawer-gnb-item <?= route_is('admin.roles') ? '--active' : '' ?>">
-                            <a href="<?= route('admin.roles.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
-                                <div class="no-drawer-gnb-link__icon">
-                                    <i class="fa-light fa-shield-check"></i>
-                                </div>
-                                <div class="no-drawer-gnb-link__text">
-                                    <span>권한 관리</span>
-                                </div>
-                            </a>
-                        </li>
-                    <?php endif; ?>
+                    <li class="no-drawer-gnb-item <?= route_is('admin.roles') ? '--active' : '' ?>">
+                        <a href="<?= route('admin.roles.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                            <div class="no-drawer-gnb-link__icon">
+                                <i class="fa-light fa-shield-check"></i>
+                            </div>
+                            <div class="no-drawer-gnb-link__text">
+                                <span>권한 관리</span>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
 
             </nav>

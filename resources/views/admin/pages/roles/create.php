@@ -55,18 +55,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($permissions as $entityClass => $grants): ?>
+                        <?php foreach ($permissions as $roleName => $grants): ?>
                             <tr class="no-table-hover">
-                                <td><?= lang('system.'.$entityClass::alias()) ?? class_basename($entityClass) ?></td>
+                                <td><?= lang('system.'.$roleName) ?? class_basename($roleName) ?></td>
                                 <?php foreach ($actions as $action): ?>
                                     <td>
                                         <div class="no-form-checkbox --xs">
-                                            <label for="<?= md5($entityClass . $action) ?>" class="no-form-checkbox-pointer">
+                                            <label for="<?= md5($roleName . $action) ?>" class="no-form-checkbox-pointer">
                                                 <input 
                                                     type="checkbox" 
-                                                    name="permissions[<?= $entityClass::alias() ?>][]" 
+                                                    name="permissions[<?= $roleName ?>][]" 
                                                     value="<?= $action ?>"
-                                                    id="<?= md5($entityClass . $action) ?>"
+                                                    id="<?= md5($roleName . $action) ?>"
                                                     class="no-form-checkbox-input"
                                                     checked
                                                 >

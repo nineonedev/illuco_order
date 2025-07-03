@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Domains\Auth\Entities\Permission;
 use App\Domains\Auth\Entities\Role;
 use App\Domains\Auth\Repositories\PermissionRepository;
 use App\Domains\Auth\Repositories\RoleRepository;
@@ -24,7 +25,6 @@ class SaveRoleService extends Service
             throw new RuntimeException('역할 저장 실패');
         }
 
-        
         $permissions = $this->parsePermissionInputs($permissionInputs);
         $permissionIds = $this->resolvePermissionIds($permissions);
         $role->permissions()->sync($permissionIds);
@@ -69,6 +69,18 @@ class SaveRoleService extends Service
 
             if ($found) {
                 $ids[$found->id] = $found;
+            } else {
+                $perm = new Permission([
+                    'resource' => $permission['resource'],
+                    'action' => $permission['action'],
+                ]);
+
+                $perm = PermissionRepository::make()->save($perm);
+                if (!$perm) {
+                    throw new RuntimeException("퍼미션 생성에 실패하였습니다."); 
+                }
+
+                $ids[$perm->id] = $perm;
             }
         }
 

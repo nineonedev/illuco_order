@@ -80,8 +80,8 @@
 
                 <!-- 전화번호 -->
                 <div class="no-form-control --md">
-                    <label for="phone_number" class="no-form-control-inner">
-                        <input type="tel" name="phone_number" id="phone_number" class="no-form-control-input" placeholder="">
+                    <label for="phone" class="no-form-control-inner">
+                        <input type="tel" name="phone" id="phone" class="no-form-control-input" placeholder="">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">전화번호</legend>
                         </fieldset>

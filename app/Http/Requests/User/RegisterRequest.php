@@ -13,6 +13,9 @@ class RegisterRequest extends FormRequest
             'name'     => 'required|string|maxLength:50',
             'email'    => 'required|email|maxLength:100|unique:users',
             'password' => 'required|string|minLength:8|maxLength:100',
+            'gender' => 'nullable|string',
+            'birth' => 'nullable|date',
+            'phone' => 'nullable|string',
         ];
     }
 

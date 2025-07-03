@@ -52,11 +52,11 @@
                     <tbody>
                         <?php foreach ($dealers->items() as $dealer): ?>
                         <tr class="no-table-hover">
-                            <td><?= e($dealer->user ? $dealer->user->name : '-') ?></td>
+                            <td><?= e($dealer->user->name ?? '-') ?></td>
                             <td><?= lang('system.countries.'.e($dealer->country)) ?></td>
                             <td><?= e($dealer->code ?? '-') ?></td>
-                            <td><?= e($dealer->phone_number ?? '-') ?></td>
-                            <td><?= e($dealer->user ? $dealer->user->email : '-') ?></td>
+                            <td><?= e($dealer->user->phone ?? '-') ?></td>
+                            <td><?= e($dealer->user->email ?? '-') ?></td>
                             <td><?= date('Y-m-d', strtotime($dealer->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">

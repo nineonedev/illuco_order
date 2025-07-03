@@ -44,9 +44,10 @@ Rel::setConfig([
         Rel::hasMany('notices', Notice::class, 'user_id'),
         Rel::hasMany('claims',  Claim::class, 'user_id'),
         Rel::hasMany('customers', Customer::class, 'user_id'),
+        Rel::hasOne('dealer', Dealer::class, 'id'),
     ],
     Dealer::class => [
-        Rel::belongsTo('user', User::class, 'user_id'),
+        Rel::belongsTo('user', User::class, 'id'),
     ],
 
     // ===================================================================
