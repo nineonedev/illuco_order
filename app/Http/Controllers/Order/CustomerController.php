@@ -21,7 +21,10 @@ class CustomerController extends Controller
     {
         $query = $this->repo()->with([
             'user.dealer',
-            'cart.cartitems.product.template.fileattachment',
+            'cart.cartitems.product.template' => [
+                'fileattachment',
+                'category',
+            ],
         ])->query();
 
         if (user()->userable instanceof Dealer) {

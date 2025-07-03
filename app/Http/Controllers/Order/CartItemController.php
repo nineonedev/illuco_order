@@ -21,7 +21,10 @@ class CartItemController extends Controller
     {
         return $this->runInTransaction(function () use ($id) {
             $relations = [
-                'product.template.fileattachment'
+                'product.template' => [
+                    'fileattachment',
+                    'category',
+                ]
             ];
 
             /** @var CartItem|null $cartitem */
@@ -83,7 +86,10 @@ class CartItemController extends Controller
                     continue;
                 }
 
-                $relations = ['product.template.fileattachment'];
+                $relations = ['product.template' => [
+                    'fileattachment',
+                    'category',
+                ]];
                 $cartItem->fill($itemData);
                 $cartItem = $this->repo()->save($cartItem);
                 $cartItem->load($relations);

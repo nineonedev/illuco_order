@@ -88,7 +88,7 @@ export default class LoupeForm extends View {
             name: "loupe[use_engraving]",
             checked: hasEngraving, 
             onChange: this._handleEngraving.bind(this),
-            helperText: '체크하시면 발주 수량이 1개로 제한됩니다.',
+            helperText: '각인을 선택하시면 문구 입력이 가능하며, 발주 수량은 1개로 제한됩니다.',
         }).render();
 
         this.engravingInput = TextInput.make(this._attrHookId, {

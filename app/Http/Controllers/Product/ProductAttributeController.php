@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Product;
 
+use App\Domains\Product\Entities\Headlight;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Repositories\ProductTemplateRepository;
 use Framework\Routing\Controller;
@@ -16,12 +17,14 @@ class ProductAttributeController extends Controller
             ->where('model', 'PR-LENS-30')
             ->first();
 
-        return $this->render(null, [
+        $data = [
             'options' => [
                 'precison_lens' => $precisonLens ? $precisonLens->toArray() : null,
             ],
             'loupe' => Loupe::MODEL_SPECS,
-            
-        ], '성공적으로 로드되었습니다.');
+            'headlight' => Headlight::MODEL_SPECS,
+        ];
+        
+        return $this->render(null, $data, '성공적으로 로드되었습니다.');
     }
 }

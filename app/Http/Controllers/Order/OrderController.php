@@ -250,7 +250,7 @@ class OrderController extends Controller
             $orderItem = OrderItemRepository::make()
                 ->query()
                 ->with([
-                    'product.template',
+                    'product.template.category',
                     'order.customer.cart'
                 ])
                 ->find($orderItemId);
@@ -385,7 +385,7 @@ class OrderController extends Controller
             // 세트 OrderItem 조회
             $sets = OrderItemRepository::make()
                 ->query()
-                ->with(['product.template'])
+                ->with(['product.template.category'])
                 ->where('set_group_id', $setGroupId)
                 ->where('is_main_item', false)
                 ->get();

@@ -191,7 +191,6 @@ export default class TemplateForm extends View {
         const { loupe } = CartController.attributes;
         const loupeSpecs = loupe[this._state.template.model];
 
-
         if (!Helper.isEmptyObject(cartItem)) {
             const productData = cartItem.product[cartItem.product.type];
 

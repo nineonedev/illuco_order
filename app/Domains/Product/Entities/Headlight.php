@@ -17,4 +17,13 @@ class Headlight extends Entity
     {
         return HeadlightRepository::class;
     }
+
+    const MODEL_SPECS = [
+        'wireless_color' => [
+            'pink',
+            'gray',
+            'gold',
+            'silver'
+        ]
+    ];
 }
