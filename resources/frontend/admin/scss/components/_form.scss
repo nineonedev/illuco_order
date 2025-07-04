@@ -741,6 +741,11 @@
             line-height: 1.5;
             font-weight: 400;
             margin-left: calc(var(--ripple-size) / 2);
+
+            &.--title{
+                font-size: 1.6rem;
+                font-weight: 500;
+            }
         }
     }
 

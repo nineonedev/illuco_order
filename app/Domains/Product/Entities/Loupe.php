@@ -89,9 +89,49 @@ class Loupe extends Entity
         ],
     ];
 
+    const LABELS = [
+        'type' => '형태',
+        'type_ready-made' => 'Ready-made',
+        'type_custom-made' => 'Custom-made',
+
+        // frame values
+        'frame_type' => '안경테',
+        'frame_type_frame1' => 'Frame 1',
+        'frame_type_frame2' => 'Frame 2',
+        'frame_type_sports' => 'Sports',
+        'frame_type_frame4' => 'Frame 4',
+
+        'working_distance' => 'WD (단위: Cm)',
+
+        'od_sph' => 'OD SPH',
+        'os_sph' => 'OS SPH',
+
+        'od_cyl' => 'OD CYL',
+        'os_cyl' => 'OS CYL',
+
+        'od_axis' => 'OD Axis',
+        'os_axis' => 'OS Axis',
+
+        'od_add' => 'OD Add',
+        'os_add' => 'OS Add',
+
+        'pd_right' => 'Far PD, RIGHT (단위: mm)',
+        'pd_left' => 'Far PD, LEFT (단위: mm)',
+        'pd_total' => 'Total PD (단위: mm)',
+        'vertex_distance' => 'VD (단위: mm)',
+        
+
+        'add_option' => '모렌즈 ADD 값 선택',
+        'add_option_include' => '모렌즈에 ADD값 포함 요청 - 근거리용',
+        'add_option_ignore' => '모렌즈에 ADD값 무시 요청 - 원용',
+        'add_option_zero_diopter' => '모렌즈 0 디옵터 적용 - 안경 미착용자',
+
+        'engraving_text' => '각인 내용',
+    ];
+
     const MODEL_SPECS = [
         'ITL-1025G' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_1'],
                 self::FRAMES['FRAME_2'],
                 self::FRAMES['SPORTS'],
@@ -100,13 +140,13 @@ class Loupe extends Entity
             'working_distance' => self::WORKING_DISTANCES['WD_35_55'],
         ],
         'ITL-1040P' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_4'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'ITL-1030G' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_1'],
                 self::FRAMES['FRAME_2'],
                 self::FRAMES['SPORTS'],
@@ -115,7 +155,7 @@ class Loupe extends Entity
             'working_distance' => self::WORKING_DISTANCES['WD_35_55'],
         ],
         'ITL-1035G' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_1'],
                 self::FRAMES['FRAME_2'],
                 self::FRAMES['SPORTS'],
@@ -124,43 +164,43 @@ class Loupe extends Entity
             'working_distance' => self::WORKING_DISTANCES['WD_35_55'],
         ],
         'ITL-1045P' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_4'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'ITL-1055P' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_4'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'ITL-1065P' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_4'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IAL-1030' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_4'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IAL-1040' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_4'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IAL-1055' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_4'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_45_65'],
         ],
         'IFL-1030G' => [
-            'frame_types' => [
+            'frame_type' => [
                 self::FRAMES['FRAME_1'],
             ],
             'working_distance' => self::WORKING_DISTANCES['WD_35_55'],

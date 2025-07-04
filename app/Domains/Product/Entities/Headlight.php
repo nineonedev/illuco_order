@@ -18,6 +18,17 @@ class Headlight extends Entity
         return HeadlightRepository::class;
     }
 
+    const LABELS = [
+        'wireless_color' => '무선 컬러',
+        'wireless_color_pink'   => '핑크',
+        'wireless_color_gray'   => '그레이',
+        'wireless_color_gold'   => '골드',
+        'wireless_color_silver' => '실버',
+
+        
+        'engraving_text' => '각인 내용',
+    ];
+
     const MODEL_SPECS = [
         'IHL-2000' => [
             'wireless_colors' => [
@@ -37,7 +48,6 @@ class Headlight extends Entity
                     'value' => 'silver',
                     'label' => '실버',
                 ],
-
             ]
         ],
         'IHL-1000' => [

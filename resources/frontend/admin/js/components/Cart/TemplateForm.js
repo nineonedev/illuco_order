@@ -188,7 +188,7 @@ export default class TemplateForm extends View {
 
     _renderSubProduct() {
         const cartItem = this._state.cartitem;
-        const info = CartController.findAttributesByModel(this._state.template.model);
+        const info = CartController.findSubProductByModel(this._state.template.model);
 
         this._logger.success(info);
         if (!info) return;

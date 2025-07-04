@@ -24,6 +24,17 @@
     
 }
 
+.no-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  
+  @include mq(md){
+    flex-direction: column;
+  }
+}
+
 .no-card {
     --padding: 2.4rem;
     border: 1px solid var(--clr-card-border);

@@ -9,6 +9,7 @@ use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Order\Repositories\CartItemRepository;
 use App\Domains\Order\Repositories\CartRepository;
 use App\Domains\Order\Repositories\CustomerRepository;
+use App\Domains\Order\Repositories\OrderDocumentRepository;
 use App\Domains\Order\Repositories\OrderItemRepository;
 use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\Product\Entities\Product;
@@ -49,7 +50,7 @@ class OrderController extends Controller
     }
 
 
-    public function show(Request $request, int $id)
+    public function show(Request $request, string $orderNo)
     {
         $order = OrderRepository::make()
             ->with([
@@ -57,7 +58,9 @@ class OrderController extends Controller
                 'user',
                 'items.product.template.fileattachment',
             ])
-            ->findOrFail($id);
+            ->query()
+            ->where($orderNo)
+            ->firstOrFail();
 
         return $this->render('admin.pages.orders.show', [
             'order' => $order,
@@ -212,6 +215,9 @@ class OrderController extends Controller
 
             // 장바구니 아이템 삭제
             CartItemRepository::make()->query()->bulkDelete($ids);
+            
+            $documents = OrderDocumentRepository::make()->createDocuments($order);
+            $order->setRelation('documents', $documents);
 
             return $this->render(null, [
                 'order' => $order->toArray(),
@@ -220,15 +226,18 @@ class OrderController extends Controller
     }
 
 
-    public function edit(Request $request, int $id)
+    public function edit(Request $request, string $orderNo)
     {
         $order = OrderRepository::make()
             ->with([
+                'documents',
                 'customer',
                 'user',
                 'items.product.template.fileattachment',
             ])
-            ->findOrFail($id);
+            ->query()
+            ->where('order_no', $orderNo)
+            ->firstOrFail();
 
         foreach ($order->items as $item) {
             $type = $item->product->type;
@@ -236,8 +245,22 @@ class OrderController extends Controller
                 $item->product->load([$type]);
             }
         };
+
         $groupedItems = OrderItem::groupBySet($order->items);
         $order->replaceRelation('items', $groupedItems);
+
+        foreach ($order->documents as $document) {
+            $subType = $document->type;
+            $document->load([$subType]); 
+            $subDocument = $document->{$subType};
+
+            if ($subDocument) {
+                $subDocument->setRelation('document', $document);
+                $order->setRelation($subType, $subDocument);
+            }
+        }
+
+        $order->forgetRelation('documents');
         
         return $this->render('admin.pages.orders.edit', [
             'order' => $order,
@@ -476,10 +499,14 @@ class OrderController extends Controller
         return $this->runInTransaction(function () use ($request, $id) {
             $order = OrderRepository::make()->findOrFail($id);
 
-            $order->fill([
-                'order_status' => $request->body('order_status', $order->order_status),
+            $request->validateOrFail([
+                'order_status' => 'required|string',
+                'payment_date' => 'nullable|date',
+                'delivery_date' => 'nullable|date',
+                'shipping_date' => 'nullable|date',
             ]);
 
+            $order->fill($request->safe());
             $order = OrderRepository::make()->save($order);
 
             return $this->render(null, [

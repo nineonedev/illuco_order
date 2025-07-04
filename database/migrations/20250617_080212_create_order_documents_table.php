@@ -14,7 +14,7 @@ return new class implements Migration
             $table->foreignId('user_id')->constrained('users')->onDeleteCascade();
             $table->string('document_no', 50)->unique();
             $table->string('type', 50);
-            $table->string('status', 50);
+            $table->string('status', 50)->nullable();
             $table->timestamps();
         });
     }

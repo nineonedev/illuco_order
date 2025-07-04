@@ -111,7 +111,7 @@ export default class LoupeForm extends View {
         
         this._logger.success(model, attributes);
 
-        const { frame_types, working_distance:wd } = attributes;
+        const { frame_type: frame_types, working_distance:wd } = attributes;
 
         if (frame_types) {
             RadioInput.make(this._attrHookId, {
@@ -178,7 +178,7 @@ export default class LoupeForm extends View {
     }
 
     _handleFrameTypeChange({ value }) {
-        const allowed = this._state.attributes?.frame_types?.map((x) => x.value) || [];
+        const allowed = this._state.attributes?.frame_type?.map((x) => x.value) || [];
             
         if (!value) {
             this._setFieldError(

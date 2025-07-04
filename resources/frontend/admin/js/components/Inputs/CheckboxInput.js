@@ -10,6 +10,7 @@ export default class CheckboxInput extends View {
             helperText: "",
             spacing: true,
             checked: false,
+            useTitle: false, 
             size: 'sm',
             onChange: () => {},
         };
@@ -22,7 +23,7 @@ export default class CheckboxInput extends View {
     }
 
     _template() {
-        const { name, label, value, disabled, helperText, spacing, checked, size } = this._state;
+        const { name, label, value, disabled, helperText, spacing, checked, size, useTitle } = this._state;
         const isChecked = checked ? "checked" : "";
         const disabledAttr = disabled ? "disabled" : "";
 
@@ -45,7 +46,7 @@ export default class CheckboxInput extends View {
                                 </div>
                             </span>
                         </div>
-                        <span class="no-form-checkbox-text">${label}</span>
+                        <span class="no-form-checkbox-text ${useTitle ? '--title' : ''}">${label}</span>
                     </label>
                     ${helperText ? `<p class="no-form-checkbox-helper-text">${helperText}</p>` : ""}
                 </div>

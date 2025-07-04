@@ -42,6 +42,38 @@ class Builder
         );
     }
 
+    public function whereOrFail(): array
+    {
+        $records = $this->get();
+
+        if (empty($records)) {
+            throw new \RuntimeException("정보를 찾을 수 없습니다.");
+        }
+
+        return $records;
+    }
+
+    public function findManyOrFail(array $ids, string $primaryKey = 'id'): array
+    {
+        $records = $this->findMany($ids, $primaryKey);
+
+        if (empty($records)) {
+            throw new \RuntimeException("정보를 찾을 수 없습니다.");
+        }
+
+        return $records;
+    }
+
+    public function firstOrFail(): object
+    {
+        $record = $this->first();
+
+        if (!$record) {
+            throw new \RuntimeException("정보를 찾을 수 없습니다.");
+        }
+
+        return $record;
+    }
 
     public function findOrFail($id, string $primaryKey = 'id'): object
     {

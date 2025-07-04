@@ -64,11 +64,15 @@ use Framework\Support\ValueObjects\Money;
                             <?php if (!user()->isDealer()) : ?>
                             <th>대리점</th>
                             <?php endif; ?>
+                            <th>주문일</th>
+                            <th>발주일</th>
+                            <th>납기일</th>
+                            <th>출하일</th>
+
                             <th>연락처</th>
                             <th>이메일</th>
                             <th>총 금액</th>
                             <th>상태</th>
-                            <th>주문일</th>
                             <th>작업</th>
                         </tr>
                     </thead>
@@ -93,7 +97,7 @@ use Framework\Support\ValueObjects\Money;
                             <?php if (!user()->isDealer()) : ?>
                             <td>
                                 <?php if($order->user->isDealer()) : ?>
-                                <a href="<?= route('admin.dealers.edit', ['id' => $order->user->userable->id]) ?>">
+                                <a href="<?= route('admin.dealers.edit', ['id' => $order->user->id]) ?>">
                                     <span><?= $order->user->name ?></span>
                                 </a>
                                 <?php else: ?>
@@ -101,20 +105,23 @@ use Framework\Support\ValueObjects\Money;
                                 <?php endif; ?>
                             </td>
                             <?php endif; ?>
+                            <td><?= e($order->created_at) ?></td>
+                            <td><?= e($order->payment_date ?? '-') ?></td>
+                            <td><?= e($order->delivery_date ?? '-') ?></td>
+                            <td><?= e($order->shipping_date ?? '-') ?></td>
                             <td><?= e($order->orderer_phone ?? '-') ?></td>
                             <td><?= e($order->orderer_email ?? '-') ?></td>
                             <td><?= Money::fromFloat($order->total_amount ?? 0) ?></td>
                             <td><?= __('system.order.status.' . $order->order_status) ?></td>
-                            <td><?= date('Y-m-d', strtotime($order->created_at)) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
-                                    <a href="<?= route('admin.orders.show', ['id' => $order->id]) ?>" class="no-btn-action" data-tooltip>
+                                    <a href="<?= route('admin.orders.show', ['orderNo' => $order->order_no]) ?>" class="no-btn-action" data-tooltip>
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-eye"></i>
                                             <span data-tooltip-text><span>보기</span><span data-tooltip-arrow></span></span>
                                         </div>
                                     </a>
-                                    <a href="<?= route('admin.orders.edit', ['id' => $order->id]) ?>" class="no-btn-action" data-tooltip>
+                                    <a href="<?= route('admin.orders.edit', ['orderNo' => $order->order_no]) ?>" class="no-btn-action" data-tooltip>
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-pen-to-square"></i>
                                             <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>

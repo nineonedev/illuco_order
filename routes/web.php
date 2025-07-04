@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DealerController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\Order\OrderDocumentController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Communication\ClaimController;
@@ -145,6 +146,7 @@ Route::middleware(['web'])->group(function(){
                     Route::get('/create', [ProductTemplateController::class, 'create'])->name('create');
                     Route::get('/options', [ProductTemplateController::class, 'options'])->name('options');
                     Route::get('/attributes', [ProductTemplateController::class, 'attributes'])->name('attributes');
+                    Route::get('/labels', [ProductTemplateController::class, 'labels'])->name('labels');
                     Route::get('/set-group-items', [ProductTemplateController::class, 'setGroupItems'])->name('setGroupItems');
 
                     Route::get('{id}/edit', [ProductTemplateController::class, 'edit'])->name('edit');
@@ -196,8 +198,8 @@ Route::middleware(['web'])->group(function(){
                 ->name('orders')
                 ->group(function(){
                     Route::get('/', [OrderController::class, 'index'])->name('index');
-                    Route::get('edit/{id}', [OrderController::class, 'edit'])->name('edit');
-                    Route::get('{id}', [OrderController::class, 'show'])->name('show');
+                    Route::get('edit/{orderNo}', [OrderController::class, 'edit'])->name('edit');
+                    Route::get('{orderNo}', [OrderController::class, 'show'])->name('show');
 
 
                     Route::post('/', [OrderController::class, 'store'])->name('store');
@@ -213,11 +215,20 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [OrderItemController::class, 'destroy'])->name('destroy');
                 });
 
+            Route::prefix('order-documents')
+                ->name('order_documents')
+                ->group(function(){
+                    Route::get('edit/{documentNo}', [OrderDocumentController::class, 'edit'])->name('edit');
+                    Route::get('download/{documentNo}', [OrderDocumentController::class, 'download'])->name('download');
+                    Route::get('{documentNo}', [OrderDocumentController::class, 'show'])->name('show');
+                    Route::put('{id}', [OrderDocumentController::class, 'update'])->name('update'); 
+                });
+
             // order-document-histories
             Route::prefix('order-histories')
                 ->name('order_histories')
                 ->group(function(){
-                    Route::get('{order_id}', [OrderHistoryController::class, 'index'])->name('index');
+                    Route::get('{orderId}', [OrderHistoryController::class, 'index'])->name('index');
                     Route::post('/', [OrderHistoryController::class, 'store'])->name('store');
                 });
 

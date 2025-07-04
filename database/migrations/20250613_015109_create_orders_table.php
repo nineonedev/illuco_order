@@ -20,6 +20,10 @@ return new class implements Migration
             $table->string('orderer_name');
             $table->string('orderer_email')->nullable();
             $table->string('orderer_phone')->nullable();
+
+            $table->date('payment_date')->nullable()->comment('발주일');
+            $table->date('delivery_date')->nullable()->comment('납기일');
+            $table->date('shipping_date')->nullable()->comment('출하일');
             
             $table->string('order_no', 50)->unique();
             $table->string('order_status')->default(OrderStatus::NEW);

@@ -23,6 +23,7 @@ return new class implements Migration
             $table->text('remarks')->nullable();
 
             $table->foreign('id')->references('id')->on('order_documents')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

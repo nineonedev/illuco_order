@@ -14,6 +14,7 @@ export default class CartController extends Controller {
 
     static attributes = {};
     static setGroupItems = {};
+    static labels = {};
 
     async index() {
         this._logger.info("index");
@@ -42,7 +43,7 @@ export default class CartController extends Controller {
         this._listen("order.create", this._createOrder.bind(this));
     }
 
-    static findAttributesByModel(model){
+    static findSubProductByModel(model){
         
         for (const category in this.attributes) {
             const specs = this.attributes[category];
@@ -61,6 +62,10 @@ export default class CartController extends Controller {
         return null;
     }
 
+    static findLabelsByType(type) {
+        return this.labels[type] ?? null;
+    }
+
     static findSetGroupItemByModel (model) {
         for (const modelName in this.setGroupItems) {
             if (modelName === model) {
@@ -75,13 +80,19 @@ export default class CartController extends Controller {
         this.loader.show();
 
         try {
-            const [attrResult, setGroupItemsResult] = await Promise.all([
+            const [
+                attrResult,
+                setGroupItemsResult,
+                labelResult,
+            ] = await Promise.all([
                 new Ajax(true).get("/admin/product-templates/attributes"),
-                new Ajax(true).get('/admin/product-templates/set-group-items')
+                new Ajax(true).get('/admin/product-templates/set-group-items'),
+                new Ajax(true).get('/admin/product-templates/labels')
             ]);
 
             CartController.attributes = attrResult.data;
             CartController.setGroupItems = setGroupItemsResult.data; 
+            CartController.labels = labelResult.data; 
 
             this._logger.success("속성 로드 결과", CartController.attributes);
             this._logger.success("세트 로드 결과", CartController.setGroupItems);

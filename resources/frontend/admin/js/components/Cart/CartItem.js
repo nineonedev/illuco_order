@@ -3,6 +3,7 @@ import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
 import InputFactory from "../Inputs/InputFactroy";
 import CartItemSet from "./CartItemSet";
+import CartController from '../../controllers/CartController';
 
 export default class CartItem extends View {
     _boot() {
@@ -95,7 +96,7 @@ export default class CartItem extends View {
     _render() {
         super._render();
 
-        const { product, quantity } = this._state;
+        const { product, quantity, template } = this._state;
 
         
         const subProduct = product[product.type]; 
@@ -105,7 +106,33 @@ export default class CartItem extends View {
             engraving = !(subProduct.engraving_text === null || subProduct.engraving_text.trim() === '');
         }
 
-        const optionText = '';
+        const spec = CartController.findSubProductByModel(product.model);
+        const labels = CartController.findLabelsByType(product.type) ?? {};
+        
+        let optionHtml = '';
+
+        if (subProduct && spec && spec.attributes) {
+            const options = [];
+
+            Object.entries(subProduct).forEach(([key, value]) => {
+                if (key === 'id') return;
+
+                const label = labels[key] ?? key; 
+                const optValue = labels[`${key}_${value}`] ?? value; 
+                options.push({label, value: optValue});
+            })
+            
+            if (options.length > 0) {
+                optionHtml = `<div class="no-cart-item-chip-group">` +
+                    options.map(opt => `
+                        <span class="no-cart-item-chip">
+                            ${opt.label}: ${opt.value}
+                        </span>
+                    `).join('') +
+                    `</div>`;
+            }
+        }
+        
 
         // Checkbox
         this._checkbox = InputFactory.make("checkbox")
@@ -113,10 +140,11 @@ export default class CartItem extends View {
                 name: "id",
                 label: product.name,
                 size: "md",
-                helperText: optionText, // 옵션 텍스트를 헬퍼로 표시
+                helperText: optionHtml, // 옵션 텍스트를 헬퍼로 표시
                 spacing: false,
                 value: this._state.id,
                 checked: this._state.selected,
+                useTitle: true,
                 onChange: this._handleChange.bind(this),
             })
             .render();

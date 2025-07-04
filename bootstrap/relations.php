@@ -7,7 +7,12 @@ use App\Domains\Communication\Entities\Notice;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Entities\Cart;
 use App\Domains\Order\Entities\CartItem;
+use App\Domains\Order\Entities\Documents\CommercialInvoice;
+use App\Domains\Order\Entities\Documents\PackingList;
+use App\Domains\Order\Entities\Documents\ProductRequest;
+use App\Domains\Order\Entities\Documents\ProformaInvoice;
 use App\Domains\Order\Entities\Order;
+use App\Domains\Order\Entities\OrderDocument;
 use App\Domains\Order\Entities\OrderItem;
 use App\Domains\Product\Entities\Category;
 use App\Domains\Product\Entities\Headlight;
@@ -107,9 +112,29 @@ Rel::setConfig([
         Rel::belongsTo('user', User::class, 'user_id'),
         Rel::belongsTo('customer', Customer::class, 'customer_id'),
         Rel::hasMany('items', OrderItem::class, 'order_id'),
+        Rel::hasMany('documents', OrderDocument::class, 'order_id'),
     ],
     OrderItem::class => [
         Rel::belongsTo('order', Order::class, 'order_id'),
         Rel::belongsTo('product', Product::class, 'product_id'),
+    ],
+    OrderDocument::class => [
+        Rel::belongsTo('order', Order::class, 'order_id'),
+        Rel::hasOne('proforma_invoice', ProformaInvoice::class, 'id'),
+        Rel::hasOne('product_request', ProductRequest::class, 'id'),
+        Rel::hasOne('packing_list', PackingList::class, 'id'),
+        Rel::hasOne('commercial_invoice', CommercialInvoice::class, 'id'),
+    ],
+    ProformaInvoice::class => [
+        Rel::belongsTo('document', OrderDocument::class, 'id')
+    ],
+    ProductRequest::class => [
+        Rel::belongsTo('document', OrderDocument::class, 'id')
+    ],
+    PackingList::class => [
+        Rel::belongsTo('document', OrderDocument::class, 'id')
+    ],
+    CommercialInvoice::class => [
+        Rel::belongsTo('document', OrderDocument::class, 'id')
     ],
 ]);

@@ -1,0 +1,122 @@
+@use '../abstracts' as *;
+
+.proforma-invoice {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: var(--clr-text-primary);
+
+  .invoice-between {
+    gap: 2.4rem;
+    display: flex;
+    padding-top: 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .ref-table {
+    border: none;
+
+    td {
+      font-size: 11px;
+      color: var(--clr-text-primary);
+    }
+  }
+
+  .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .logo img {
+      width: 120px;
+      height: auto;
+    }
+
+    .invoice-title {
+      h1 {
+        font-size: 28px;
+        color: var(--clr-primary-main);
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .buyer-section {
+    p {
+      margin: 2px 0;
+      color: var(--clr-text-primary);
+    }
+  }
+
+  .table-section {
+    margin-top: 20px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      color: var(--clr-text-primary);
+
+      th,
+      td {
+        border: 1px solid var(--clr-table-border);
+        padding: 4px 6px;
+      }
+
+      th {
+        background: var(--clr-primary-50);
+        font-weight: bold;
+        text-align: center;
+        color: var(--clr-text-primary);
+      }
+
+      td.right {
+        text-align: right;
+      }
+
+      td.bold {
+        font-weight: bold;
+      }
+
+      td.empty {
+        border: none !important;
+      }
+    }
+  }
+
+  .bank-details {
+    margin-top: 20px;
+
+    p {
+      margin: 2px 0;
+      color: var(--clr-text-primary);
+    }
+  }
+
+  .sign-zone{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 30rem;
+    width: 100%;
+    margin-left: auto;
+
+    .sign-text{ 
+        text-align: right;
+    }
+      
+    .sign-img{
+        max-width: 24rem;
+        position: absolute;
+        right: 4.4rem;
+        top: -2.7rem;
+    }
+  }
+
+  .footer {
+    margin-top: 12.8rem;
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--clr-gray-500);
+  }
+}

@@ -37,6 +37,16 @@ class ProductTemplateController extends Controller
         return $this->render(null, $data, '성공적으로 로드되었습니다.');
     }
 
+    public function labels()
+    {
+        $data = [
+            'loupe' => Loupe::LABELS,
+            'headlight' => Headlight::LABELS
+        ];
+
+        return $this->render(null, $data, '성공적으로 로드되었습니다.');
+    }
+
     public function setGroupItems()
     {
         $data = [];

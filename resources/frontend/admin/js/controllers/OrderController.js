@@ -2,6 +2,7 @@ import Controller from "../core/Controller";
 import Modal from '../shared/Modal';
 import Loader from '../shared/Loader';
 import SelectInput from "../components/Inputs/SelectInput";
+import DateInput from "../components/Inputs/DateInput";
 import Ajax from "../core/Ajax";
 
 export default class OrderController extends Controller {
@@ -33,10 +34,16 @@ export default class OrderController extends Controller {
         if(form){
             const deleteBtn = form.querySelector('[data-action=delete]');
 
-            SelectInput.make('order_status', {
-                // onChange: this._handleChange.bind(this)
-            }).render();
-                
+            document.querySelectorAll('[data-view-type="select"]').forEach(el => {
+                const props = el.dataset.viewProps || '{}';
+                SelectInput.make(el, JSON.parse(props)).render();
+            })
+            
+            document.querySelectorAll('[data-view-type="date"]').forEach(el => {
+                const props = el.dataset.viewProps || '{}';
+                DateInput.make(el, JSON.parse(props)).render();
+            })
+            
             const restoreForm = document.getElementById('restore-form')
             if (restoreForm){
                 restoreForm.addEventListener('submit', this._restoreAll.bind(this));
@@ -49,9 +56,6 @@ export default class OrderController extends Controller {
         }
 
     }
-
-    
-
     async _restoreAll(e){
         e.preventDefault();
         const button = e.submitter;

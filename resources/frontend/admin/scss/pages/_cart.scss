@@ -319,6 +319,23 @@
   }
 }
 
+.no-cart-item-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin-top: 0.5rem;
+
+  .no-cart-item-chip {
+    font-size: 1.1rem;
+    line-height: 1.2;
+    padding: 0.2rem 0.4rem;
+    border: 1px solid var(--clr-primary-300);
+    border-radius: 0.25rem;
+    color: var(--clr-primary-700);
+    background: var(--clr-primary-50);
+    font-weight: 500;
+  }
+}
 
 .no-cart-sublist {
   display: flex;
@@ -413,5 +430,20 @@
         }
       }
     }
+  }
+}
+
+
+.buyer-shipping-box{
+  display: flex;
+
+  .buyer-box{
+    border: 1px solid var(--clr-gray-50);
+    padding: 1.6rem;
+  }
+
+  .ship-box{
+    border: 1px solid var(--clr-gray-50);
+    padding: 1.6rem;
   }
 }

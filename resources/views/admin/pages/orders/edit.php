@@ -19,8 +19,116 @@ use App\Domains\Order\Enums\OrderStatus;
         </div>
 
         <!-- START CONTENT -->
-        <div class="no-order-layout">
+        <div class="no-page-flex">
+            <!-- 4. 주문 상태 수정 -->
+            <section>
+                <h2 class="no-order-update__title">주문 수정</h2>
+                <form method="post" id="frm" action="<?= route('admin.orders.update', ['id' => $order->id]) ?>">
+                    <?= csrf_field() ?>
+                    <?= put_field() ?>
+                    <input type="hidden" name="id" value="<?=$order->id?>">
 
+                    <div class="no-form-group">
+                        <div 
+                            class="no-form-control --md"
+                            data-view-type="select"
+                            data-view-props='{
+                                "label": "주문 상태",
+                                "name": "order_status",
+                                "value": "<?= $order->order_status ?>",
+                                "options": [
+                                    { "value": "<?= OrderStatus::NEW ?>", "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>" },
+                                    { "value": "<?= OrderStatus::CONFIRMED ?>", "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" },
+                                    { "value": "<?= OrderStatus::PREPARING ?>", "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" },
+                                    { "value": "<?= OrderStatus::SHIPPED ?>", "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" }
+                                ]
+                            }'
+                        ></div>
+
+                        <div 
+                            data-view-type="date"
+                            data-view-props='{
+                                "label": "발주일",
+                                "name": "payment_date",
+                                "value": "<?= $order->payment_date ?? ''?>"
+                            }'
+                        ></div>
+                        <div 
+                            data-view-type="date"
+                            data-view-props='{
+                                "label": "납기일",
+                                "name": "delivery_date",
+                                "value": "<?= $order->delivery_date ?? ''?>"
+                            }'
+                        ></div>
+                        <div 
+                            data-view-type="date"
+                            data-view-props='{
+                                "label": "출하일",
+                                "name": "shipping_date",
+                                "value": "<?= $order->shipping_date ?? ''?>"
+                            }'
+                        ></div>
+                    </div>
+
+                    <div class="no-form-action">
+                        <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm">목록</a>
+                        <button type="button" class="no-btn-error --sm" data-action="delete">주문 삭제</button>
+                        <button type="submit" class="no-btn-primary --sm">상태 저장</button>
+                    </div>
+                </form>
+            </section>
+            <section>
+                <h2 class="no-order-update__title">주문 문서</h2>
+                <div>
+                    <ul>
+                        <li>
+                            <div>
+                                <span>PI</span>
+                                <h3>Proforma Inovice</h3>
+                            </div>
+                            <div>
+                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->proforma_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
+                                <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->proforma_invoice->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <span>PR</span>
+                                <h3>생산의뢰서</h3>
+                            </div>
+                            <div>
+                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->product_request->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
+                                <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->product_request->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <span>PL</span>
+                                <h3>Packing List</h3>
+                            </div>
+                            <div>
+                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->packing_list->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
+                                <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->packing_list->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <span>CI</span>
+                                <h3>Commercial Inovice</h3>
+                            </div>
+                            <div>
+                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->commercial_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
+                                <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->commercial_invoice->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+            
+        <div>
             <!-- 1. 주문 정보 -->
             <section class="no-order-summary">
                 <h2 class="no-order-summary__title">주문 정보</h2>
@@ -46,10 +154,21 @@ use App\Domains\Order\Enums\OrderStatus;
                     </div>
                 </div>
             </section>
+        </div>
 
+        <div>
             <!-- 3. 상품 복원 카드 -->
             <section class="no-order-restore">
-                <h2 class="no-order-restore__title">주문 제품 목록</h2>
+                <div class="no-flex-between">
+                    <h2 class="no-order-restore__title">주문 제품 목록</h2>
+                    
+                    <div>
+                        <form method="post" action="<?= route('admin.orders.restore_all', ['orderId' => $order->id]) ?>" id="restore-form">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="no-btn-success">전체 다시 장바구니에 담기</button>
+                        </form>
+                    </div>
+                </div>
 
                 <div class="no-page-index-table-outer">
                     <table class="no-page-index-table">
@@ -149,49 +268,6 @@ use App\Domains\Order\Enums\OrderStatus;
                     </table>
                 </div>
             </section>
-
-
-            <?php if (user()->isDealer()) : ?>
-            <div class="no-form-action">
-                <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm">목록</a>
-            </div>
-            <?php else : ?>
-            <!-- 4. 주문 상태 수정 -->
-            <section class="no-order-update">
-                <h2 class="no-order-update__title">주문 상태 수정</h2>
-                <form method="post" id="frm" action="<?= route('admin.orders.update', ['id' => $order->id]) ?>">
-                    <?= csrf_field() ?>
-                    <?= put_field() ?>
-                    <input type="hidden" name="id" value="<?=$order->id?>">
-                    <div id="order_status"
-                        class="no-form-control --md"
-                        data-view-props='{
-                            "label": "주문 상태",
-                            "name": "order_status",
-                            "value": "<?= $order->order_status ?>",
-                            "options": [
-                                { "value": "<?= OrderStatus::NEW ?>", "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>" },
-                                { "value": "<?= OrderStatus::CONFIRMED ?>", "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" },
-                                { "value": "<?= OrderStatus::PREPARING ?>", "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" },
-                                { "value": "<?= OrderStatus::SHIPPED ?>", "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" }
-                            ]
-                        }'></div>
-                    <div class="no-form-action">
-                        <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm">목록</a>
-                        <button type="button" class="no-btn-error --sm" data-action="delete">주문 삭제</button>
-                        <button type="submit" class="no-btn-primary --sm">상태 저장</button>
-                    </div>
-                </form>
-                <div class="no-form-action" style="margin-top: 2rem;">
-                    <form method="post" action="<?= route('admin.orders.restore_all', ['orderId' => $order->id]) ?>" id="restore-form">
-                        <?= csrf_field() ?>
-                        <button type="submit" class="no-btn-success">전체 다시 장바구니에 담기</button>
-                    </form>
-                </div>
-            </section>
-            <?php endif; ?>
-
-
         </div>
 
         <!-- END CONTENT -->

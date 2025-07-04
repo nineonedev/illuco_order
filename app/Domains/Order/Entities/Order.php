@@ -19,6 +19,9 @@ class Order extends Entity
         'memo',
         'order_status',
         'total_amount',
+        'payment_date',
+        'delivery_date',
+        'shipping_date',
         'created_at',
     ];
 
@@ -32,6 +35,10 @@ class Order extends Entity
         'memo'           => 'string',
         'order_status'   => 'string',
         'total_amount'   => 'decimal',
+        'payment_date'   => 'date',
+        'delivery_date'  => 'date',
+        'shipping_date'  => 'date',
+        'created_at'  => 'date',
     ];
 
     public static function repositoryClass(): string
