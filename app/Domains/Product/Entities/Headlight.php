@@ -20,14 +20,28 @@ class Headlight extends Entity
 
     const MODEL_SPECS = [
         'IHL-2000' => [
-            'colors' => [
-                'pink',
-                'gray',
-                'gold',
-                'silver'
+            'wireless_colors' => [
+                [
+                    'value' => 'pink',
+                    'label' => '핑크',
+                ],
+                [
+                    'value' => 'gray',
+                    'label' => '그레이',
+                ],
+                [
+                    'value' => 'gold',
+                    'label' => '골드',
+                ],
+                [
+                    'value' => 'silver',
+                    'label' => '실버',
+                ],
+
             ]
         ],
         'IHL-1000' => [
+            'wireless_colors' => null,
         ],
     ];
 }

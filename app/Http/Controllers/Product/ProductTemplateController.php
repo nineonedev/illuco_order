@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Domains\Product\Entities\ProductAttribute;
+use App\Domains\Product\Entities\Headlight;
+use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\Product\Repositories\CategoryRepository;
 use App\Domains\Product\Repositories\ProductTemplateRepository;
@@ -23,6 +24,34 @@ class ProductTemplateController extends Controller
     public function fileRepo(): FileAttachmentRepository
     {
         return FileAttachmentRepository::make();
+    }
+
+    public function attributes()
+    {
+
+        $data = [
+            'loupe' => Loupe::MODEL_SPECS,
+            'headlight' => Headlight::MODEL_SPECS,
+        ];
+        
+        return $this->render(null, $data, '성공적으로 로드되었습니다.');
+    }
+
+    public function setGroupItems()
+    {
+        $data = [];
+
+        $precisonLens = ProductTemplateRepository::make()
+            ->query()
+            ->with(['fileattachment'])
+            ->where('model', Loupe::PRECISON_LENS)
+            ->first();
+
+        if ($precisonLens) {
+            $data[$precisonLens->model] = $precisonLens->toArray();
+        }
+
+        return $this->render(null, $data, '성공적으로 로드되었습니다.');
     }
 
     public function index(Request $request)

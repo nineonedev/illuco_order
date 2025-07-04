@@ -7,6 +7,8 @@ import RadioInput from "../Inputs/RadioInput";
 import TextInput from "../Inputs/TextInput";
 
 export default class LoupeForm extends View {
+    static PRECISON_LENS = 'PR-LENS-30';
+
     _boot() {
         this._attrHookId = this._generateHookId();
         this._optionHookId = this._generateHookId();
@@ -103,22 +105,24 @@ export default class LoupeForm extends View {
             this._props.onChangeQuantity(1, true);
         }
 
-        const { loupe } = CartController.attributes;
-        const specs = loupe[model];
+        
+        const attributes = this._state.attributes; 
+        if (!attributes) return;
+        
+        this._logger.success(model, attributes);
 
-        this._logger.success(model, specs);
-
-        if (!specs) return;
-
-        const { frame_types, working_distance:wd } = specs;
+        const { frame_types, working_distance:wd } = attributes;
 
         if (frame_types) {
             RadioInput.make(this._attrHookId, {
                 label: "테정보",
                 name: "loupe[frame_type]",
                 value: frame_type,
-                options: specs.frame_types,
-                onChange: this._handleFrameTypeChange.bind(this),
+                options: attributes.frame_types,
+                onChange: Helper.debounce(
+                    this._handleFrameTypeChange.bind(this),
+                    300
+                ),
             }).render();
         }
 
@@ -130,9 +134,13 @@ export default class LoupeForm extends View {
                 min: wd.min,
                 max: wd.max,
                 step: 0.1,
-                onChange: this._handleWorkingDistanceChange.bind(this),
+                onChange: Helper.debounce(
+                    this._handleWorkingDistanceChange.bind(this),
+                    300
+                ),
             }).render();
         }
+
 
         if (loupeType === "custom-made") {
             this._renderAttributes();
@@ -170,11 +178,7 @@ export default class LoupeForm extends View {
     }
 
     _handleFrameTypeChange({ value }) {
-        
-        const allowed =
-            CartController.attributes.loupe[
-                this._state.template.model
-            ]?.frame_types?.map((x) => x.value) || [];
+        const allowed = this._state.attributes?.frame_types?.map((x) => x.value) || [];
             
         if (!value) {
             this._setFieldError(
@@ -396,13 +400,7 @@ export default class LoupeForm extends View {
     }
 
     _bindCustomValidation() {
-        if (this._state.product.type !== "custom-made") return;
-
         const inputHandlers = {
-            "loupe[frame_type]": this._handleFrameTypeChange.bind(this),
-            "loupe[working_distance]":
-                this._handleWorkingDistanceChange.bind(this),
-
             "loupe[pd_right]": this._handleFieldValidation.bind(this),
             "loupe[pd_left]": this._handleFieldValidation.bind(this),
 
@@ -566,7 +564,7 @@ export default class LoupeForm extends View {
     }
 
     _renderAdditionalProducts() {
-        const lens = CartController.attributes.options?.precison_lens;
+        const lens = CartController.findSetGroupItemByModel(LoupeForm.PRECISON_LENS);
         this._state.sets = [];
 
         if (!lens || this._lensCount === 0) {

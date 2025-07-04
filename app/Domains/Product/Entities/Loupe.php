@@ -55,6 +55,8 @@ class Loupe extends Entity
         'vertex_distance' => 'decimal',
     ];
 
+    const PRECISON_LENS = 'PR-LENS-30';
+
     const WORKING_DISTANCES = [
         'WD_35_55' => [
             'label' => '35~55cm',

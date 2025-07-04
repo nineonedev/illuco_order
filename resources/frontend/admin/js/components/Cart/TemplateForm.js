@@ -3,6 +3,7 @@ import View from "../../core/View";
 import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
 import InputFactory from "../Inputs/InputFactroy";
+import HeadlightForm from "./HeadlightForm";
 import LoupeForm from "./LoupeForm";
 import SummaryTable from "./SummaryTable";
 
@@ -187,48 +188,41 @@ export default class TemplateForm extends View {
 
     _renderSubProduct() {
         const cartItem = this._state.cartitem;
+        const info = CartController.findAttributesByModel(this._state.template.model);
 
-        const { loupe } = CartController.attributes;
-        const loupeSpecs = loupe[this._state.template.model];
+        this._logger.success(info);
+        if (!info) return;
 
-        if (!Helper.isEmptyObject(cartItem)) {
-            const productData = cartItem.product[cartItem.product.type];
-
-            switch (cartItem.product.type){
-                case 'loupe': 
-                    this._renderLoupe(loupeSpecs, productData, cartItem.sets);
-                    break; 
-            }
-            
-            this._typeInput.setState({ value: cartItem.product.type });
-            return; 
-        }
-
-        if (loupeSpecs) {
-            this._renderLoupe(loupeSpecs);
-            this._typeInput.setState({ value: "loupe" });
-            return; 
-        }
+        const attributes = info.attributes || null; 
+        let productData = null;
+        let sets = [];
         
-    }
-
-    _renderLoupe(specs = null, product = {}, sets = []) {
-        this._logger.success("loupe");
-
-        if (!specs) return;
+        if (!Helper.isEmptyObject(cartItem)) {
+            productData = cartItem.product[cartItem.product.type] || {};
+            sets = cartItem.sets;
+        }
 
         const data = {
             template: this._state.template,
             sets: sets,
             onUpdateSets: this.updateSets.bind(this),
             onChangeQuantity: this._handleQuantity.bind(this),
-        };
-
-        if (!Helper.isEmptyObject(product)) {
-            Object.assign(data, {product});
+            attributes: attributes,
         }
 
-        this._productForm = LoupeForm.make(this._attrHookId, data).render();
+        if (productData) {
+            Object.assign(data, {product: productData});
+        }
+
+        switch (info.category) {
+            case 'loupe': 
+                this._productForm = LoupeForm.make(this._attrHookId, data).render();
+                    break; 
+            case 'headlight':
+                this._productForm = HeadlightForm.make(this._attrHookId, data).render();
+        }
+
+        this._typeInput.setState({value: info.category});
     }
 
     _handleQuantity(count, disabled = false) {

@@ -137,8 +137,6 @@ Route::middleware(['web'])->group(function(){
                     Route::put('{id}', [EmployeeController::class, 'update'])->name('update');
                     Route::delete('{id}', [EmployeeController::class, 'destroy'])->name('destroy');
                 });
-
-            Route::get('product-attributes', [ProductAttributeController::class, 'index'])->name('product_attributes.index');
     
             Route::prefix('product-templates')
                 ->name('product_templates')
@@ -146,6 +144,9 @@ Route::middleware(['web'])->group(function(){
                     Route::get('/', [ProductTemplateController::class, 'index'])->name('index');
                     Route::get('/create', [ProductTemplateController::class, 'create'])->name('create');
                     Route::get('/options', [ProductTemplateController::class, 'options'])->name('options');
+                    Route::get('/attributes', [ProductTemplateController::class, 'attributes'])->name('attributes');
+                    Route::get('/set-group-items', [ProductTemplateController::class, 'setGroupItems'])->name('setGroupItems');
+
                     Route::get('{id}/edit', [ProductTemplateController::class, 'edit'])->name('edit');
                     Route::get('{id}', [ProductTemplateController::class, 'show'])->name('show');
                     
@@ -161,16 +162,6 @@ Route::middleware(['web'])->group(function(){
                     Route::post('/', [CategoryController::class, 'store'])->name('store');
                     Route::put('{id}', [CategoryController::class, 'update'])->name('update');
                     Route::delete('{id}', [CategoryController::class, 'destroy'])->name('destroy');
-                });
-
-            Route::prefix('product-attributes')
-                ->name('product_attributes')
-                ->group(function(){
-                    Route::get('/{id}', [ProductAttributeController::class, 'show'])->name('show');
-
-                    Route::post('/', [ProductAttributeController::class, 'store'])->name('store');
-                    Route::put('{id}', [ProductAttributeController::class, 'update'])->name('update');
-                    Route::delete('{id}', [ProductAttributeController::class, 'destroy'])->name('destroy');
                 });
 
             Route::prefix('product-options')

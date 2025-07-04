@@ -2,6 +2,8 @@ import View from "../../core/View";
 import CheckboxInput from "../Inputs/CheckboxInput";
 import TextInput from "../Inputs/TextInput";
 import RadioInput from "../Inputs/RadioInput";
+import CartController from "../../controllers/CartController";
+import Helper from "../../supports/Helper";
 
 export default class HeadlightForm extends View {
     _boot() {
@@ -11,11 +13,13 @@ export default class HeadlightForm extends View {
 
     _defineProps() {
         return {
-            template: {},
+            template: null,
+            attributes: null,
             product: {
                 engraving_text: "",
                 wireless_color: "",
             },
+            errors: {},
         };
     }
 
@@ -55,28 +59,41 @@ export default class HeadlightForm extends View {
             display: hasEngraving,
         }).render();
 
-        RadioInput.make(this._attrHookId, {
-            label: "무선 컬러 선택",
-            name: "headlight[wireless_color]",
-            value: wireless_color,
-            options: [
-                { value: "black", label: "블랙" },
-                { value: "silver", label: "실버" },
-                { value: "blue", label: "블루" },
-            ],
-            onChange: this._handleColorChange.bind(this),
-        }).render();
+
+        if (hasEngraving) {
+            this._props.onChangeQuantity(1, true);
+        }
+
+        // Attributes
+        const attributes = this._state.attributes; 
+        if (!attributes) return; 
+
+        const {
+            wireless_colors
+        } = attributes;
+
+        if (wireless_colors) {
+            RadioInput.make(this._attrHookId, {
+                label: "무선 컬러 선택",
+                name: "headlight[wireless_color]",
+                value: wireless_color,
+                options: wireless_colors,
+                onChange: Helper.debounce(
+                this._handleColorChange.bind(this),
+                    300
+                ),
+            }).render();
+        }
+        
     }
 
     _handleEngraving({ value }) {
-        this.engravingInput.setState({
-            display: value,
-        });
+        this.engravingInput.setState({display: value, required: value});
 
-        if (!value) {
-            this.engravingInput.setState({
-                value: "",
-            });
+        if (value) {
+            this._props.onChangeQuantity(1, true);
+        } else {
+            this._props.onChangeQuantity(1, false);
         }
     }
 
@@ -86,14 +103,57 @@ export default class HeadlightForm extends View {
                 ...this._state.product,
                 wireless_color: value,
             },
-        });
+        }, false);
     }
 
+
     validateAllFields() {
-        // 벨리데이션 필요 없음
+        const errors = {};
+
+        const wirelessColors = (this._state.attributes?.wireless_colors || []).map(x => x.value);
+        const colorValue = this._state.product.wireless_color;
+
+        if (!colorValue) {
+            errors["headlight[wireless_color]"] = "무선 컬러는 필수 선택 항목입니다.";
+        } else if (!wirelessColors.includes(colorValue)) {
+            errors["headlight[wireless_color]"] = "선택한 무선 컬러가 유효하지 않습니다.";
+        }
+
+        this._state.errors = errors;
+
+        this._renderErrors();
+    }
+
+    _renderErrors() {
+        // 먼저 모든 에러 노드를 싹 지운다
+        const allErrors = document.querySelectorAll(".no-form-error-msg");
+        allErrors.forEach(($el) => $el.remove());
+
+        for (const [name, msg] of Object.entries(this._state.errors)) {
+            let el;
+
+            if (name === "headlight[wireless_color]") {
+                el = document.querySelector(
+                    `[data-error-for="headlight[wireless_color]"]`
+                );
+            } else {
+                el = document.querySelector(`[name="${name}"]`);
+            }
+
+            if (el) {
+                let $error =
+                    el.parentElement.querySelector(".no-form-error-msg");
+                if (!$error) {
+                    $error = document.createElement("div");
+                    $error.className = "no-form-error-msg";
+                    el.parentElement.appendChild($error);
+                }
+                $error.innerHTML = msg;
+            }
+        }
     }
 
     hasErrors() {
-        return false;
+        return Object.keys(this._state.errors).length > 0;
     }
 }

@@ -92,7 +92,7 @@
                 
                 <ul class="no-drawer-gnb">
                     <!-- 제품 메뉴 -->
-                    <?php if (can('producttemplate.read')): ?>
+                    <?php if (can('product.read')): ?>
                         <li class="no-drawer-gnb-item <?= route_is('admin.product_templates') ? '--active' : '' ?>">
                             <a href="<?= route('admin.product_templates.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                 <div class="no-drawer-gnb-link__icon">

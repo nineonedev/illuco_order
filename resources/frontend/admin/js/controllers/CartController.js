@@ -13,6 +13,7 @@ export default class CartController extends Controller {
     cart;
 
     static attributes = {};
+    static setGroupItems = {};
 
     async index() {
         this._logger.info("index");
@@ -41,16 +42,50 @@ export default class CartController extends Controller {
         this._listen("order.create", this._createOrder.bind(this));
     }
 
+    static findAttributesByModel(model){
+        
+        for (const category in this.attributes) {
+            const specs = this.attributes[category];
+
+            for (const modelName in specs) {
+                if (modelName === model) {
+                    return {
+                        model: modelName,
+                        category: category, 
+                        attributes: specs[modelName],
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    static findSetGroupItemByModel (model) {
+        for (const modelName in this.setGroupItems) {
+            if (modelName === model) {
+                return this.setGroupItems[modelName];
+            }
+        }
+
+        return null;
+    }
+
     async _loadAllData() {
         this.loader.show();
 
         try {
-            const [attrResult] = await Promise.all([
-                new Ajax(true).get("/admin/product-attributes"),
+            const [attrResult, setGroupItemsResult] = await Promise.all([
+                new Ajax(true).get("/admin/product-templates/attributes"),
+                new Ajax(true).get('/admin/product-templates/set-group-items')
             ]);
 
             CartController.attributes = attrResult.data;
-            this._logger.success("속성 로드 결과", attrResult.data);
+            CartController.setGroupItems = setGroupItemsResult.data; 
+
+            this._logger.success("속성 로드 결과", CartController.attributes);
+            this._logger.success("세트 로드 결과", CartController.setGroupItems);
+
         } catch (err) {
             alert(err.message);
         } finally {

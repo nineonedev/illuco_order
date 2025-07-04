@@ -52,6 +52,7 @@ class AddItemToCartService extends Service
         if (!$product) {
             throw new RuntimeException("제품 생성에 실패하였습니다."); 
         }
+        $product->load(['template.fileattachment']);
 
         // 서브 제품 생성
         
@@ -88,11 +89,6 @@ class AddItemToCartService extends Service
             }
 
             if ($subProductClass) {
-                
-                if (!isset($payload[$type])) {
-                    throw new RuntimeException("Payload에 alias key '{$type}' 가 없습니다.");
-                }
-                
                 $subProductData = array_merge($subProductData, ['id' => $product->id]);
                 $subProductEntity = new $subProductClass($subProductData);
                 
@@ -109,6 +105,7 @@ class AddItemToCartService extends Service
             }
         }
 
+
         $setGroupId = $sets ? Str::uuid() : null; 
 
         // 카트 아이템 생성
@@ -123,7 +120,8 @@ class AddItemToCartService extends Service
         
         $cartItem = new CartItem($cartItemData);
         $cartItem = CartItemRepository::make()->save($cartItem);
-        
+        $cartItem->setRelation('product', $product);
+
         if (!$cartItem) {
             logger()->error("장바구니 추가 실패", [
                 'cart_id'     => $cart->id,
@@ -173,13 +171,9 @@ class AddItemToCartService extends Service
             });
 
             $cartItem->setRelation('sets', $setGroupProducts);
+        } else {
+            $cartItem->setRelation('sets', []);
         }
-
-        $cartItem->load([
-            'product.template' => [
-                'fileattachment',
-            ],
-        ]);
 
         return [
             'message' => '장바구니에 추가되었습니다.',

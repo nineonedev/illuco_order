@@ -61,7 +61,7 @@ export default class TextInput extends View {
     }
 
     _bindEvents(){
-        this.on(this.refs.input, 'change', (view, e) => {
+        this.on(this.refs.input, 'input', (view, e) => {
             const value = e.target.value; 
             this.setState({value: value}, false);
             this._props.onChange({value: value, view: this}, e);
