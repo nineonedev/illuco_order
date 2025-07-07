@@ -82,6 +82,9 @@ class AlterColumnDefinition extends AbstractColumnDefinition
         if ($this->comment !== null) {
             $parts[] = "COMMENT '{$this->comment}'";
         }
+        if ($this->afterColumn) {
+            $parts[] = "AFTER `{$this->afterColumn}`";
+        }
         return implode(' ', $parts);
     }
 }

@@ -91,6 +91,11 @@ class Request {
         return $this;
     }
 
+    public function is(string $pattern): bool
+    {
+        return $this->path() === trim($pattern, '/');
+    }
+
     public function http(): Http
     {
         return $this->http;

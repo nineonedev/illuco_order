@@ -7,6 +7,12 @@ use Framework\Routing\Controller;
 
 class AdminController extends Controller
 {
+
+    public function home()
+    {
+        return $this->redirectRoute('auth.singin');
+    }
+
     public function guide()
     {
         return $this->render('admin.pages.guide');

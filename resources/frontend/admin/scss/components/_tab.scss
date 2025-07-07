@@ -1,0 +1,66 @@
+@use '../abstracts' as *; 
+
+.no-base-tab-container {
+  border-bottom: 1px solid var(--clr-card-border);
+}
+
+.no-base-tabs {
+  display: flex;
+  gap: 3.2rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.no-base-tab {
+  display: flex;
+  align-items: center;
+
+  .no-base-tab-btn {
+    background: none;
+    border: none;
+    padding: 0.8rem 0;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--clr-text-secondary);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+      color: var(--clr-primary-main);
+    }
+
+    &.is-active {
+      color: var(--clr-primary-main);
+      font-weight: 600;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: var(--clr-primary-main);
+        border-radius: 2px;
+      }
+    }
+  }
+
+  .no-base-tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--clr-primary-main);
+    color: var(--clr-primary-contrast);
+    font-size: 12px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    line-height: 1;
+  }
+}

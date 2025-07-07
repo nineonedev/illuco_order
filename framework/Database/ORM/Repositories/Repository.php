@@ -100,6 +100,7 @@ abstract class Repository
 
         if ($entity->getPrimaryKey()) {
             $existing = $this->find($entity->getPrimaryKey());
+
             if ($existing) {
                 return $this->updateEntity($entity);
             }

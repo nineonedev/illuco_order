@@ -9,6 +9,7 @@ class App {
 
     static run() {
         this.initHeader();
+        this.initTab();
         this.dispatch();
     }
 
@@ -51,6 +52,30 @@ class App {
                 e
             );
         }
+    }
+
+    static initTab(){
+        const tabs = document.querySelectorAll(".no-base-tab-btn");
+        const sections = document.querySelectorAll(".no-base-tab-contents > section, .no-base-tab-contents > div");
+
+        if (!tabs || tabs.length === 0) return; 
+
+        // 초기 상태: 첫 번째 탭 활성화
+        tabs[0].classList.add("is-active");
+        sections.forEach((s, i) => {
+            s.style.display = i === 0 ? "block" : "none";
+        });
+
+        tabs.forEach((tab, idx) => {
+            tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("is-active"));
+            tab.classList.add("is-active");
+
+            sections.forEach((section, i) => {
+                section.style.display = i === idx ? "block" : "none";
+            });
+            });
+        });
     }
 
     static initHeader() {

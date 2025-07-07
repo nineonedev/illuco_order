@@ -1,6 +1,8 @@
 
 @use '../abstracts' as *;
 
+
+
 .no-order-option-tags {
     display: flex;
     flex-wrap: wrap;
@@ -29,6 +31,7 @@
         color: var(--clr-primary-main);
     }
 }
+
 
 
 .no-order-summary {
@@ -117,7 +120,7 @@
 }
 
 .no-order-restore {
-    margin-top: 3rem;
+    margin-top: fluid(64, 128);
 
     &__title {
         font-size: 1.6rem;

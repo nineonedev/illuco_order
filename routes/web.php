@@ -16,7 +16,6 @@ use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Order\OrderHistoryController;
 use App\Http\Controllers\Order\OrderItemController;
 use App\Http\Controllers\Product\ProductValueController;
-use App\Http\Controllers\Product\ProductAttributeController;
 use App\Http\Controllers\Product\ProductOptionController;
 use App\Http\Controllers\Product\ProductTemplateController;
 use Framework\Support\Facades\Route;
@@ -26,7 +25,7 @@ Route::middleware(['web'])->group(function(){
     // ============================================================================================================
     // home 
     // ============================================================================================================
-    Route::get('/', [AuthController::class, 'signin'])->name('home');
+    Route::get('/', [AdminController::class, 'home'])->name('home');
 
     Route::prefix('auth')
     ->name('auth')
@@ -218,6 +217,7 @@ Route::middleware(['web'])->group(function(){
             Route::prefix('order-documents')
                 ->name('order_documents')
                 ->group(function(){
+                    Route::get('preview/{documentNo}', [OrderDocumentController::class, 'preview'])->name('preview');
                     Route::get('edit/{documentNo}', [OrderDocumentController::class, 'edit'])->name('edit');
                     Route::get('download/{documentNo}', [OrderDocumentController::class, 'download'])->name('download');
                     Route::get('{documentNo}', [OrderDocumentController::class, 'show'])->name('show');

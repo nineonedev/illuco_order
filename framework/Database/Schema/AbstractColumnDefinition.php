@@ -7,6 +7,8 @@ abstract class AbstractColumnDefinition
     protected string $name;
     protected string $type;
 
+    protected ?string $afterColumn = null;
+
     protected bool $nullable = false;
     protected $default = null;
     protected bool $autoIncrement = false;
@@ -40,6 +42,12 @@ abstract class AbstractColumnDefinition
     public function unique(): self { $this->indexes[] = 'UNIQUE'; return $this; }
     public function index(): self { $this->indexes[] = 'INDEX'; return $this; }
     
+    public function after(string $column): self
+    {
+        $this->afterColumn = $column;
+        return $this;
+    }
+
     public function comment(string $text): self
     {
         $this->comment = $text;
