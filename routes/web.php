@@ -217,9 +217,9 @@ Route::middleware(['web'])->group(function(){
             Route::prefix('order-documents')
                 ->name('order_documents')
                 ->group(function(){
-                    Route::get('preview/{documentNo}', [OrderDocumentController::class, 'preview'])->name('preview');
+                    Route::get('print/{documentNo}', [OrderDocumentController::class, 'print'])->name('print');
                     Route::get('edit/{documentNo}', [OrderDocumentController::class, 'edit'])->name('edit');
-                    Route::get('download/{documentNo}', [OrderDocumentController::class, 'download'])->name('download');
+                    // Route::get('download/{documentNo}', [OrderDocumentController::class, 'download'])->name('download');
                     Route::get('{documentNo}', [OrderDocumentController::class, 'show'])->name('show');
                     Route::put('{id}', [OrderDocumentController::class, 'update'])->name('update'); 
                 });

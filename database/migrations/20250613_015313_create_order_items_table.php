@@ -24,6 +24,7 @@ return new class implements Migration
                     ->onDeleteCascade();
 
             $table->unsignedInteger('quantity')->default(1);
+            $table->string('box_no')->nullable();
             $table->decimal('unit_price', 10, 2)->default(0);
             $table->decimal('total_price', 12, 2)->default(0);
             

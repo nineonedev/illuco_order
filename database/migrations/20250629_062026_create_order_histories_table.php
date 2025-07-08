@@ -28,7 +28,15 @@ return new class implements Migration
             $table->foreignId('created_by')
                 ->nullable()
                 ->constrained('users')
-                ->onDeleteSetNull();
+                ->onDelete('set null');
+
+            $table->decimal('balance', 15, 2)
+            ->default(0)
+            ->comment('미수금 변동액');
+
+            $table->boolean('settled')
+                ->default(false)
+                ->comment('이 히스토리가 처리 완료되었는지 여부');
 
             $table->text('memo');
 

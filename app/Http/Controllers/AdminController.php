@@ -10,7 +10,7 @@ class AdminController extends Controller
 
     public function home()
     {
-        return $this->redirectRoute('auth.singin');
+        return $this->redirectRoute('auth.signin');
     }
 
     public function guide()

@@ -20,7 +20,7 @@ use App\Domains\Order\Enums\OrderStatus;
 
 
         <div class="no-base-tab-container">
-            <ul class="no-base-tabs">
+            <ul class="no-base-tabs" data-target="order-content">
                 <li class="no-base-tab">
                     <button class="no-base-tab-btn">
                         <span>수정</span>
@@ -50,7 +50,7 @@ use App\Domains\Order\Enums\OrderStatus;
             </ul>
         </div>
 
-        <div class="no-base-tab-contents">
+        <div class="no-base-tab-contents" id="order-content">
             <!-- 수정 -->
             <section class="no-form-container">
                 <!-- <h2 class="no-order-update__title">주문 수정</h2> -->
@@ -121,8 +121,7 @@ use App\Domains\Order\Enums\OrderStatus;
                                 <h3>Proforma Inovice</h3>
                             </div>
                             <div class="no-order-docs-item__action">
-                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->proforma_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
-                                <a href="<?= route('admin.order_documents.preview', ['documentNo' => $order->proforma_invoice->document->document_no]) ?>" class="no-btn-slate-outline --xs">미리보기</a>
+                                <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->proforma_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
                                 <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->proforma_invoice->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
                             </div>
                         </li>
@@ -132,8 +131,7 @@ use App\Domains\Order\Enums\OrderStatus;
                                 <h3>생산의뢰서</h3>
                             </div>
                             <div class="no-order-docs-item__action">
-                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->product_request->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
-                                <a href="<?= route('admin.order_documents.preview', ['documentNo' => $order->product_request->document->document_no]) ?>" class="no-btn-slate-outline --xs">미리보기</a>
+                                <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->product_request->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
                                 <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->product_request->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
                             </div>
                         </li>
@@ -143,8 +141,7 @@ use App\Domains\Order\Enums\OrderStatus;
                                 <h3>Packing List</h3>
                             </div>
                             <div class="no-order-docs-item__action">
-                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->packing_list->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
-                                <a href="<?= route('admin.order_documents.preview', ['documentNo' => $order->packing_list->document->document_no]) ?>" class="no-btn-slate-outline --xs">미리보기</a>
+                                <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->packing_list->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
                                 <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->packing_list->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
                             </div>
                         </li>
@@ -154,8 +151,7 @@ use App\Domains\Order\Enums\OrderStatus;
                                 <h3>Commercial Inovice</h3>
                             </div>
                             <div>
-                                <a href="<?= route('admin.order_documents.download', ['documentNo' => $order->commercial_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
-                                <a href="<?= route('admin.order_documents.preview', ['documentNo' => $order->commercial_invoice->document->document_no]) ?>" class="no-btn-slate-outline --xs">미리보기</a>
+                                <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->commercial_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
                                 <a href="<?= route('admin.order_documents.edit', ['documentNo' => $order->commercial_invoice->document->document_no]) ?>" class="no-btn-premium-outline --xs">편집</a>
                             </div>
                         </li>

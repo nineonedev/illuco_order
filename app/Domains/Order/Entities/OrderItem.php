@@ -16,6 +16,7 @@ class OrderItem extends Entity
         'is_main_item',
         'set_group_id',
         'set_group_sort',
+        'box_no',
     ];
 
     protected array $casts = [
@@ -27,6 +28,7 @@ class OrderItem extends Entity
         'is_main_item'    => 'bool',
         'set_group_id'    => '?string',
         'set_group_sort'  => '?int',
+        'box_no'          => '?string',
     ];
 
     public static function repositoryClass(): string

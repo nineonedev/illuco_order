@@ -35,6 +35,11 @@
   }
 }
 
+.--flex-end{
+  display: flex;
+  justify-content: flex-end;
+}
+
 .no-card {
     --padding: 2.4rem;
     border: 1px solid var(--clr-card-border);

@@ -9,6 +9,33 @@ export default class OrderController extends Controller {
     form;
     cancelBtn;
 
+    print(){
+        const element = document.getElementById('print-area');
+
+        if (!element) {
+            console.error('print-area not found!');
+            return;
+        }
+
+        const printBtn = document.getElementById('print-btn');
+
+        if(!printBtn) {
+            console.error('print-btn not found!');
+            return;
+        }
+
+        printBtn.addEventListener('click', () => {
+            html2pdf(element, {
+                margin:       0,
+                filename:     element.dataset.pdfName || 'order-document',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, dpi: 300},
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: element.dataset.page || 'portrait' }
+            });
+        });
+        
+    }
+
     edit() {
         this._logger.info("index");
         this.modal = Modal.make('portal').render();

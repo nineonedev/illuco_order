@@ -9,16 +9,22 @@ class OrderHistory extends Entity
 {
     protected array $fillable = [
         'order_id',
-        'user_id',
-        'status',
-        'description',
+        'dealer_id',
+        'customer_id',
+        'created_by',
+        'balance',
+        'settled',
+        'memo',
     ];
 
     protected array $casts = [
-        'order_id'    => 'int',
-        'user_id'     => 'int',
-        'status'      => 'string',
-        'description' => 'string',
+        'order_id'     => 'int',
+        'dealer_id'    => 'int',
+        'customer_id'  => 'int',
+        'created_by'   => 'int',
+        'balance'      => 'decimal:2',
+        'settled'      => 'bool',
+        'memo'         => 'string',
     ];
 
     public static function repositoryClass(): string

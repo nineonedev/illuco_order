@@ -9,17 +9,31 @@ return new class implements Migration
     public function up(): void
     {
         Schema::create('order_document_product_requests', function (Blueprint $table) {
-            $table->id(); // PK & FK
-            $table->string('product_code')->nullable();
-            $table->string('product_name')->nullable();
-            $table->string('product_model')->nullable();
-            $table->string('box_size')->nullable();
-            $table->text('memo')->nullable();
-            $table->integer('quantity')->nullable();
-            $table->integer('total_qty')->nullable();
-            $table->text('remarks')->nullable();
+            $table->id(); // PK & FK → order_documents.id
 
-            $table->foreign('id')->references('id')->on('order_documents')->onDelete('cascade');
+            // Header
+            $table->string('country')->nullable();
+            $table->string('customer_name')->nullable();
+            $table->date('created_date')->nullable();
+            $table->date('delivery_date')->nullable();
+            $table->string('manager_name')->nullable();
+            $table->string('document_no')->nullable();
+
+            // 박스 정보 (최대 5개)
+            for ($i = 1; $i <= 5; $i++) {
+                $table->string("box{$i}_no")->nullable();
+                $table->string("box{$i}_weight")->nullable();
+                $table->string("box{$i}_size")->nullable();
+            }
+
+            // 메모
+            $table->text('note')->nullable();
+
+            $table->foreign('id')
+                ->references('id')
+                ->on('order_documents')
+                ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
