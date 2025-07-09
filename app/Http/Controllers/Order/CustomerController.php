@@ -6,6 +6,7 @@ use App\Domains\Order\Entities\CartItem;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Repositories\CustomerRepository;
 use App\Domains\User\Entities\Dealer;
+use App\Domains\User\Enums\UserType;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -27,9 +28,10 @@ class CustomerController extends Controller
             ],
         ])->query();
 
-        if (user()->userable instanceof Dealer) {
-            $dealerId = user()->userable->id;
-            $query->where('dealer_id', $dealerId);
+        $user = user(); 
+
+        if ($user->isDealer()) {
+            $query->where('dealer_id', $user->dealer->id);
         }
 
         $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
@@ -37,7 +39,10 @@ class CustomerController extends Controller
             ->orWhere('email', 'like', "%{$keyword}%");
         });
 
-        $customers = $query->paginate($request->query('perpage', 15), $request->query('page', 1));
+        $perpage = $request->query('perpage', 15);
+        $page = $request->query('page', 1);
+
+        $customers = $query->paginate($perpage, $page);
 
         $customers->items()->transform(function ($customer) {
             if ($customer->cart && $customer->cart->cartitems) {
@@ -99,16 +104,16 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         return $this->runInTransaction(function () use ($request) {
+            $user = user(); 
             $customer = new Customer($request->all());
-            $customer->user_id = auth()->id();
+            $customer->user_id = $user->id;
 
-            if (user()->isDealer()) {
-                $customer->dealer_id = user()->dealer->id;
+            if ($user->isDealer()) {
+                $customer->dealer_id = $user->dealer->id;
             }
 
-            $this->save($customer);
-
-            return $this->render(null, ['customer' => $customer], '성공적으로 저장되었습니다.');
+            $customer = $this->save($customer);
+            return $this->render(null, ['customer' => $customer->toArray()], '성공적으로 저장되었습니다.');
         });
     }
 
@@ -118,9 +123,9 @@ class CustomerController extends Controller
             $customer = $this->repo()->findOrFail($id);
             $customer->fill($request->all());
 
-            $this->save($customer);
+            $customer = $this->save($customer);
 
-            return $this->render(null, ['customer' => $customer], '성공적으로 저장되었습니다.');
+            return $this->render(null, ['customer' => $customer->toArray()], '성공적으로 저장되었습니다.');
         });
     }
 
@@ -137,10 +142,14 @@ class CustomerController extends Controller
         });
     }
 
-    protected function save(Customer $customer): void
+    protected function save(Customer $customer): Customer
     {
-        if (!$this->repo()->save($customer)) {
+        $customer = $this->repo()->save($customer);
+        
+        if (!$customer) {
             throw new RuntimeException("고객 저장에 실패했습니다.");
         }
+
+        return $customer;
     }
 }

@@ -89,7 +89,10 @@ export default class LoupeForm extends View {
             label: "각인 여부",
             name: "loupe[use_engraving]",
             checked: hasEngraving, 
-            onChange: this._handleEngraving.bind(this),
+            onChange: Helper.debounce(
+                this._handleEngraving.bind(this),
+                300
+            ),
             helperText: '각인을 선택하시면 문구 입력이 가능하며, 발주 수량은 1개로 제한됩니다.',
         }).render();
 
@@ -99,6 +102,11 @@ export default class LoupeForm extends View {
             value: engraving_text,
             required: hasEngraving,
             display: hasEngraving, 
+            maxlength: 14, 
+            onChange: Helper.debounce(
+                this._handleEngravingText.bind(this),
+                300
+            ),
         }).render();
 
         if (hasEngraving) {
@@ -113,12 +121,14 @@ export default class LoupeForm extends View {
 
         const { frame_type: frame_types, working_distance:wd } = attributes;
 
+        console.log(frame_types);
+        
         if (frame_types) {
             RadioInput.make(this._attrHookId, {
                 label: "테정보",
                 name: "loupe[frame_type]",
                 value: frame_type,
-                options: attributes.frame_types,
+                options: frame_types,
                 onChange: Helper.debounce(
                     this._handleFrameTypeChange.bind(this),
                     300
@@ -155,6 +165,23 @@ export default class LoupeForm extends View {
     // --------------------------
     // Individual Handlers
     // --------------------------
+    _handleEngravingText({value}) {
+        if (value.length > 14) {
+            this._setFieldError(
+                "loupe[engraving_text]",
+                "각인 입력은 최대 14자까지 가능합니다."
+            );
+        } else {
+            this._clearFieldError("loupe[engraving_text]");
+        }
+
+        this.setState({
+            product: {
+                ...this._state.product,
+                engraving_text: value
+            }
+        });
+    }
 
     _handleEngraving({value}) {
         this.engravingInput.setState({display: value, required: value});
@@ -240,6 +267,27 @@ export default class LoupeForm extends View {
     // --------------------------
 
     validateAllFields() {
+        const useEngravingEl = document.querySelector(
+            `[name="loupe[use_engraving]"]`
+        );
+
+        const isEngravingChecked =
+            useEngravingEl?.checked ?? false;
+
+        if (isEngravingChecked) {
+            const engravingInput = document.querySelector(
+                `[name="loupe[engraving_text]"]`
+            );
+            if (engravingInput) {
+                this._handleEngravingText({
+                    value: engravingInput.value
+                });
+            }
+        } else {
+            // 각인 사용 안 하면 에러 제거
+            this._clearFieldError("loupe[engraving_text]");
+        }
+        
         this._handleFrameTypeChange({
             value:
                 document.querySelector(`[name="loupe[frame_type]"]:checked`)
@@ -319,13 +367,10 @@ export default class LoupeForm extends View {
             "loupe[os_add]": { min: 0, max: 4, step: 0.25 },
             "loupe[frame_type]": {
                 allowedValues:
-                    CartController.attributes.loupe[
-                        this._state.template.model
-                    ]?.frame_types.map((x) => x.value) || [],
+                    this._state.attributes.frame_type.map((x) => x.value) || [],
             },
             "loupe[working_distance]":
-                CartController.attributes.loupe[this._state.template.model]
-                    ?.working_distance || null,
+                this._state.attributes.working_distance || null,
         };
         return name ? map[name] : map;
     }

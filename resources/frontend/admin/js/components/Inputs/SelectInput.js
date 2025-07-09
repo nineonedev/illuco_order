@@ -51,9 +51,10 @@ export default class SelectInput extends View {
             .map((opt) => {
                 const value = typeof opt === "string" ? opt : opt.value;
                 const label = typeof opt === "string" ? opt : opt.label;
+                const disabled = opt.disabled ?? false; 
                 const selected = selectedValue == value ? 'selected' : '';
 
-                return `<option value="${value}" ${selected}>${label}</option>`;
+                return `<option value="${value}" ${selected} ${disabled ? 'disabled' : ''}>${label}</option>`;
             })
             .join("");
     }

@@ -3,39 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Auth\Repositories\RoleRepository;
-use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
-use App\Domains\User\Repositories\EmployeeRepository;
+use App\Domains\User\Enums\UserType;
+use App\Domains\User\Repositories\UserRepository;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Services\User\RegisterUserService;
 use App\Services\User\UpdateUserService;
-use App\Services\User\DeleteUserService;
-use Exception;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
 
 class EmployeeController extends Controller
 {
-    protected function repo(): EmployeeRepository
-    {
-        return EmployeeRepository::make();
-    }
-
     public function index(Request $request)
     {
-        $query = $this->repo()->with([User::alias()])->query();
+        $query = UserRepository::make()
+            ->query()
+            ->where('type', UserType::EMPLOYEE);
 
-        $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
-            $q->whereHas('user', function ($userQuery) use ($keyword) {
-                $userQuery->where('name', 'like', "%{$keyword}%")
-                          ->orWhere('email', 'like', "%{$keyword}%");
-            });
-        });
+        $perpage = $request->query('perpage', 15);
+        $page = $request->query('page', 1); 
+
+        // $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
+        //     $q->whereHas('user', function ($userQuery) use ($keyword) {
+        //         $userQuery->where('name', 'like', "%{$keyword}%")
+        //                   ->orWhere('email', 'like', "%{$keyword}%");
+        //     });
+        // });
 
         return $this->render('admin.pages.employees.index', [
-            'employees' => $query->paginate($request->query('perpage', 15), $request->query('page', 1)),
+            'employees' => $query->paginate($perpage, $page),
             'query'     => $request->query(),
         ]);
     }
@@ -45,13 +42,9 @@ class EmployeeController extends Controller
         return $this->render('admin.pages.employees.create');
     }
 
-    public function edit(string $id)
+    public function edit(int $id)
     {
-        $employee = $this->repo()->with([User::alias()])->find($id);
-
-        if (!$employee) {
-            throw new RuntimeException("직원 정보를 찾을 수 없습니다.");
-        }
+        $employee = UserRepository::make()->findOrFail($id); 
 
         return $this->render('admin.pages.employees.edit', [
             'employee' => $employee,
@@ -60,52 +53,68 @@ class EmployeeController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        $employee = new Employee($request->all());
-        $result = (new RegisterUserService($employee))
-            ->runInTransaction($request->safe());
+        return $this->runInTransaction(function() use ($request) {
+            $user = new User($request->safe());
+            $user->type = UserType::EMPLOYEE;
 
-        // 3. 'dealer' 역할을 가져옴
-        $employeeRole = RoleRepository::make()
-            ->with(['users']) // 'users' 관계를 가져옴
-            ->query()
-            ->where('name', 'employee')
-            ->first();
+            $user = UserRepository::make()->with(['roles'])->save($user);
 
-        // 4. Role이 존재하면 사용자 연결
-        if ($employeeRole) {
-            $employeeRole->users()->attach($employee->user);
-        }
+            if (!$user) {
+                throw new RuntimeException("직원 생성에 실패하였습니다.");
+            }
 
-        return $result->toResponse();
+            $role = RoleRepository::make()
+                ->query()
+                ->where('name', 'employee')
+                ->first();
+
+            if (!$role) {
+                throw new RuntimeException("직원 권한이 없습니다. [employee]");
+            } 
+            
+            $user->roles()->attach($role);
+
+            return $this->render(null, ['employee' => $user->toArray()], '성공적으로 생성되었습니다.');
+        });
     }
 
-    public function update(string $id, UpdateUserRequest $request)
+     public function update(int $id, UpdateUserRequest $request)
     {
-        $employee = $this->repo()->findOrFail($id);
-        $data = $request->safe();
+        return $this->runInTransaction(function() use ($id, $request) {
+            $employee = UserRepository::make()->findOrFail($id);
+            $data = $request->safe();
 
-        if (empty($data['password'])) {
-            unset($data['password']); 
-        }
+            if (empty($data['password'])) {
+                unset($data['password']); 
+            }
 
-        $employee->fill($data);
-        $result = (new UpdateUserService($employee))
-            ->runInTransaction($data);
+            $isActive = $request->body('is_active') ? true : false; 
+            $data['is_active'] = $isActive; 
 
-        return $result->toResponse();
+            $employee->fill($data); 
+            $employee = UserRepository::make()->save($employee); 
+
+            if (!$employee) {
+                throw new RuntimeException("직원 수정에 실패하였습니다.");
+            }
+
+            return $this->render(null, [
+                'employee' => $employee,
+            ], '정상적으로 수정되었습니다.');
+        });
     }
 
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        $employee = $this->repo()->findOrFail($id);
-        $result = (new DeleteUserService($employee))->runInTransaction([]);
-        return $result->toResponse();
-    }
+        return $this->runInTransaction(function() use ($id) {
+            $employee = UserRepository::make()->findOrFail($id);
+            $success = UserRepository::make()->delete($employee); 
 
-    protected function save(Employee $employee): void
-    {
-        if (!$this->repo()->save($employee)) {
-            throw new RuntimeException("직원 저장에 실패했습니다.");
-        }
+            if (!$success) {
+                throw new RuntimeException("직원 삭제에 실패하였습니다.");
+            }
+
+            return $this->render(null, [], '정상적으로 삭제되었습니다.');
+        });
     }
 }

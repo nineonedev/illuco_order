@@ -18,14 +18,9 @@ use App\Domains\Product\Entities\Category;
 use App\Domains\Product\Entities\Headlight;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
-use App\Domains\Product\Entities\ProductAttribute;
-use App\Domains\Product\Entities\ProductOption;
 use App\Domains\Product\Entities\ProductTemplate;
-use App\Domains\Product\Entities\ProductValue;
 use App\Domains\System\Entities\FileAttachment;
-use App\Domains\User\Entities\Admin;
 use App\Domains\User\Entities\Dealer;
-use App\Domains\User\Entities\Employee;
 use App\Domains\User\Entities\User;
 use Framework\Database\ORM\Rel;
 

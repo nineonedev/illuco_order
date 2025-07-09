@@ -41,10 +41,8 @@
                     <thead>
                         <tr>
                             <th>이름</th>
-                            <th>부서</th>
-                            <th>직책</th>
-                            <th>연락처</th>
                             <th>이메일</th>
+                            <th>연락처</th>
                             <th>등록일</th>
                             <th>작업</th>
                         </tr>
@@ -52,11 +50,9 @@
                     <tbody>
                         <?php foreach ($employees->items() as $employee): ?>
                         <tr class="no-table-hover">
-                            <td><?= e($employee->user ? $employee->user->name : '-') ?></td>
-                            <td><?= e($employee->department ?? '-') ?></td>
-                            <td><?= e($employee->position ?? '-') ?></td>
-                            <td><?= e($employee->phone_number ?? '-') ?></td>
-                            <td><?= e($employee->user ? $employee->user->email : '-') ?></td>
+                            <td><?= e($employee->name ?? '-') ?></td>
+                            <td><?= e($employee->email ?? '-') ?></td>
+                            <td><?= e($employee->phone ?? '-') ?></td>
                             <td><?= date('Y-m-d', strtotime($employee->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">

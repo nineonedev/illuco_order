@@ -41,16 +41,15 @@ class PermissionMap
     public static function handle(): void
     {
         if (static::$registered) return;
-
+        
         db()->connection()->beginTransaction();
 
         foreach (static::$map as $class => $actions) {
-            if (!is_subclass_of($class, Entity::class)) {
-                continue;
+            $resource = $class; 
+            
+            if (is_subclass_of($class, Entity::class)) {
+                $resource = $class::alias();
             }
-
-            /** @var Entity $class */
-            $resource = $class::alias();
 
             foreach ($actions as $action) {
                 if (!in_array($action, static::$allowedActions)) {

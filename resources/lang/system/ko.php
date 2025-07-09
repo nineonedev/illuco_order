@@ -31,6 +31,8 @@ return [
             OrderStatus::CONFIRMED  => '주문 확인됨',
             OrderStatus::PREPARING  => '상품 준비 중',
             OrderStatus::SHIPPED    => '출고 완료',
+            OrderStatus::COMPLETED    => '주문 완료',
+            OrderStatus::REJECTED    => '주문 거절됨',
         ]
     ],
 

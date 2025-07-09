@@ -5,20 +5,19 @@
 
 <?php section('content') ?>
 <div class="no-form-container">
-
     <div class="no-page-row">
         <div class="no-page-head">
             <h1 class="no-heading-sm">직원 수정</h1>
         </div>
-        
+
         <form id="frm" method="post" enctype="multipart/form-data" action="<?= route('admin.employees.update', ['id' => $employee->id]) ?>">
             <?= csrf_field() ?>
-            <?= method_field('patch') ?>
 
             <div class="no-form-group">
+                <!-- 이름 -->
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">
-                        <input type="text" name="name" id="name" class="no-form-control-input" value="<?= e($employee->user ? $employee->user->name : '') ?>" required>
+                        <input type="text" name="name" id="name" class="no-form-control-input" required placeholder="" value="<?= $employee->name ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이름</legend>
                         </fieldset>
@@ -26,10 +25,10 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
-
+                <!-- 이메일 -->
                 <div class="no-form-control --md">
                     <label for="email" class="no-form-control-inner">
-                        <input type="email" name="email" id="email" class="no-form-control-input" value="<?= e($employee->user ? $employee->user->email : '') ?>">
+                        <input type="email" name="email" id="email" class="no-form-control-input" required placeholder="" value="<?= $employee->email ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이메일</legend>
                         </fieldset>
@@ -37,42 +36,9 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
-                
                 <div class="no-form-control --md">
-                    <label for="password" class="no-form-control-inner">
-                        <input type="password" name="password" id="password" class="no-form-control-input" placeholder="변경 시 입력">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">비밀번호</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-helper-text">비밀번호는 변경 시 입력해주세요.</span>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <div class="no-form-control --md">
-                    <label for="department" class="no-form-control-inner">
-                        <input type="text" name="department" id="department" class="no-form-control-input" placeholder="" value="<?=e($employee->department ?? '')?>">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">부서</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <div class="no-form-control --md">
-                    <label for="position" class="no-form-control-inner">
-                        <input type="text" name="position" id="position" class="no-form-control-input" placeholder="" value="<?=e($employee->position ?? '')?>">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">직책</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <!-- 연락처 -->
-                <div class="no-form-control --md">
-                    <label for="phone_number" class="no-form-control-inner">
-                        <input type="tel" name="phone_number" id="phone_number" class="no-form-control-input" placeholder="" value="<?=e($employee->phone_number ?? '')?>">
+                    <label for="phone" class="no-form-control-inner">
+                        <input type="tel" name="phone" id="phone" class="no-form-control-input" required placeholder="" value="<?= $employee->phone ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">연락처</legend>
                         </fieldset>
@@ -80,13 +46,40 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
+                <!-- 비밀번호 -->
+                <div class="no-form-control --md">
+                    <label for="password" class="no-form-control-inner">
+                        <input type="password" name="password" id="password" class="no-form-control-input" placeholder="">
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">비밀번호</legend>
+                        </fieldset>
+                    </label>
+                    <span class="no-form-control-space"></span>
+                </div>
+
+                <div class="no-form-block">
+                    <div class="no-form-checkbox --md">
+                        <label for="is_active" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="is_active" id="is_active" class="no-form-checkbox-input" <?= $employee->is_active ? 'checked' : '' ?> >
+                            <div class="no-form-checkbox-ripple">
+                                <span class="no-form-checkbox-box">
+                                    <div class="no-form-checkbox-icon">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                </span>
+                            </div>
+                            <span class="no-form-checkbox-text">활성 여부</span>
+                        </label>
+                        <p class="no-form-radio-helper-text">체크 해제할 경우 해당 계정은 비활성화됩니다.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="no-form-action">
                 <a href="<?= route('admin.employees.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
-                <?php if (can('employee.delete')) : ?>
+                <?php if(can('employee.delete')) : ?>
                 <button type="button" class="no-btn-error-outline --sm" data-action="delete">
                     <span>삭제</span>
                 </button>
@@ -95,7 +88,6 @@
                     <span>저장</span>
                 </button>
             </div>
-
         </form>
     </div>
 </div>

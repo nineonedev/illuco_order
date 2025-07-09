@@ -24,6 +24,7 @@ return new class implements Migration
             $table->date('payment_date')->nullable()->comment('발주일');
             $table->date('delivery_date')->nullable()->comment('납기일');
             $table->date('shipping_date')->nullable()->comment('출하일');
+            $table->datetime('canceled_at')->nullable()->comment('주문 취소일');
             
             $table->string('order_no', 50)->unique();
             $table->string('order_status')->default(OrderStatus::NEW);

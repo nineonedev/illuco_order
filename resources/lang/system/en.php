@@ -32,6 +32,8 @@ return [
             OrderStatus::CONFIRMED  => 'Order Confirmed',
             OrderStatus::PREPARING  => 'Product Preparing',
             OrderStatus::SHIPPED    => 'Shipped',
+            OrderStatus::COMPLETED    => 'Order Completed',
+            OrderStatus::REJECTED    => 'Order Rejected',
         ]
     ],
     'countries' => [

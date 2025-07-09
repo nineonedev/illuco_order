@@ -21,7 +21,22 @@ class User extends Entity implements AuthenticatableInterface
         'gender',
         'email_verified_at',
         'birth',
+        'is_active',
+        'created_at',
     ];
+
+    protected array $casts = [
+        'name'                => 'string',
+        'type'                => 'string',
+        'email'               => 'string',
+        'password'            => 'string',
+        'phone'               => '?string',
+        'gender'              => '?string',
+        'email_verified_at'   => 'datetime',
+        'birth'               => 'date',
+        'is_active'           => 'bool',
+    ];
+
     
     public static function table(): string
     {
@@ -45,16 +60,22 @@ class User extends Entity implements AuthenticatableInterface
 
     public function isDealer(): bool
     {
-        return $this->user_type === UserType::DEALER; 
+        $isDealer = $this->type === UserType::DEALER; 
+       
+        if ($isDealer) {
+            $this->load([UserType::DEALER]);
+        }
+        
+        return $isDealer; 
     }
 
     public function isAdmin(): bool
     {
-        return $this->user_type === UserType::ADMIN;
+        return $this->type === UserType::ADMIN;
     }
 
     public function isEmployee(): bool
     {
-        return $this->user_type === UserType::EMPLOYEE;
+        return $this->type === UserType::EMPLOYEE;
     }
 }

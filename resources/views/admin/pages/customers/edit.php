@@ -42,8 +42,8 @@ use App\Domains\User\Entities\Dealer;?>
                 </div>
 
                 <div class="no-form-control --md">
-                    <label for="phone_number" class="no-form-control-inner">
-                        <input type="tel" name="phone_number" id="phone_number" class="no-form-control-input" value="<?= e($customer->phone_number) ?>">
+                    <label for="phone" class="no-form-control-inner">
+                        <input type="tel" name="phone" id="phone" class="no-form-control-input" value="<?= e($customer->phone) ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">연락처</legend>
                         </fieldset>

@@ -5,6 +5,7 @@ namespace Framework\Database\ORM\Relations;
 use Framework\Database\ORM\Entities\Entity;
 use Framework\Database\Query\Builder;
 use Framework\Database\ORM\Casts\CastFactory;
+use RuntimeException;
 
 class Pivot
 {
@@ -173,7 +174,14 @@ class Pivot
      */
     public function sync(Entity $parent, array $relatedData): void
     {
-        $relatedIds = array_keys($relatedData);
+        // $relatedIds = array_keys($relatedData);
+
+        if (array_values($relatedData) === $relatedData) {
+            $relatedIds = $relatedData;
+            $relatedData = array_fill_keys($relatedIds, []);
+        } else {
+            $relatedIds = array_keys($relatedData);
+        }
 
         $existingIds = (array) $this->query()
             ->where($this->foreignKey, $parent->get($parent->getPrimaryKeyName()))
@@ -186,9 +194,10 @@ class Pivot
             $this->detach($parent, $detachIds);
         }
 
-        // 필요한 항목만 attach or insert
-        foreach ($relatedData as $relatedId => $extra) {
-            $extra = is_array($extra) ? $extra : [];
+        $insertIds = array_diff($relatedIds, $existingIds);
+        
+        foreach ($insertIds as $relatedId) {
+            $extra = $relatedData[$relatedId] ?? [];
 
             $this->query()->insertOrIgnore([
                 array_merge([
@@ -197,6 +206,16 @@ class Pivot
                 ], $extra instanceof Entity ? $extra->toArray() : $extra)
             ]);
         }
+        // foreach ($relatedData as $relatedId => $extra) {
+        //     $extra = is_array($extra) ? $extra : [];
+
+        //     $this->query()->insertOrIgnore([
+        //         array_merge([
+        //             $this->foreignKey => $parent->get($parent->getPrimaryKeyName()),
+        //             $this->relatedKey => $relatedId,
+        //         ], $extra instanceof Entity ? $extra->toArray() : $extra)
+        //     ]);
+        // }
     }
 
     public function toArray(): array

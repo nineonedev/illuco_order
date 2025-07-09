@@ -32,7 +32,6 @@
                     <?php endif; ?>
                 </ul> -->
 
-
                 <ul class="no-drawer-gnb">
                     <!-- 주문 목록 메뉴 -->
                     <?php if (can('order.read')): ?>
@@ -147,6 +146,7 @@
                             </a>
                         </li>
                     <?php endif; ?>
+                    
 
                     <!-- 대리점 메뉴 -->
                     <?php if (can('dealer.read')): ?>
@@ -223,7 +223,8 @@
                         </li>
                     <?php endif; ?>
                 </ul>
-
+                
+                <?php if (can('role.read')) : ?>
                 <ul class="no-drawer-gnb">
                     <!-- 권한 생성 메뉴 -->
                     <li class="no-drawer-gnb-item <?= route_is('admin.roles') ? '--active' : '' ?>">
@@ -237,6 +238,7 @@
                         </a>
                     </li>
                 </ul>
+                <?php endif; ?>
 
             </nav>
         </div>

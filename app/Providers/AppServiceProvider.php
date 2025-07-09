@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
             return;
         }
 
-         // 사용자 역할을 기반으로 권한 정의
+        // 사용자 역할을 기반으로 권한 정의
         foreach (user()->roles as $role) {
             foreach ($role->permissions as $permission) {
                 // Gate 정의: 'resource.action'을 권한으로 설정
@@ -101,7 +101,7 @@ class AppServiceProvider extends ServiceProvider
                 $rolePermissions[] = "{$permission->resource}.{$permission->action}";
             }
         }
-
+        
         // 해당 role에 권한이 있는지 체크
         return in_array("{$resource}.{$action}", $rolePermissions);
     }

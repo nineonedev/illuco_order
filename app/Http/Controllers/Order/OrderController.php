@@ -50,23 +50,35 @@ class OrderController extends Controller
     }
 
 
-    public function show(Request $request, string $orderNo)
+    public function cancel(string $orderNo)
     {
         $order = OrderRepository::make()
-            ->with([
-                'customer',
-                'user',
-                'items.product.template.fileattachment',
-            ])
             ->query()
-            ->where($orderNo)
+            ->where('order_no', $orderNo)
             ->firstOrFail();
+        
+        if ($order->isFinalized()) {
+            throw new RuntimeException(
+                "해당 주문은 '" 
+                . __('system.order.status.' . $order->order_status) 
+                . "' 상태로 진행 중이어서 취소할 수 없습니다. 클레임으로 문의해 주세요."
+            );
+        }
 
-        return $this->render('admin.pages.orders.show', [
-            'order' => $order,
-        ]);
+        $order->order_status = OrderStatus::CANCELED; 
+        $order->canceled_at = now();
+        $order = OrderRepository::make()->save($order);
+
+        // 오더 취소요청 => 메일!
+
+        if (!$order) {
+            throw new RuntimeException("주문 취소에 실패하였습니다. 잠시 후에 다시 시도해주세요.");
+        }
+
+        return $this->render(null, [], '주문이 성공적으로 취소되었습니다.');
     }
 
+    
     public function store(Request $request)
     {
         return $this->runInTransaction(function () use ($request) {
@@ -226,7 +238,18 @@ class OrderController extends Controller
     }
 
 
+    public function show(Request $request, string $orderNo)
+    {
+        return $this->renderDetail($request, $orderNo, 'admin.pages.orders.show');   
+    }
+
+
     public function edit(Request $request, string $orderNo)
+    {
+        return $this->renderDetail($request, $orderNo, 'admin.pages.orders.edit');   
+    }
+
+    public function renderDetail(Request $request,  $orderNo, string $view)
     {
         $order = OrderRepository::make()
             ->with([
@@ -262,7 +285,7 @@ class OrderController extends Controller
 
         $order->forgetRelation('documents');
         
-        return $this->render('admin.pages.orders.edit', [
+        return $this->render($view, [
             'order' => $order,
         ]);
     }

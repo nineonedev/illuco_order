@@ -18,7 +18,7 @@
             <div class="no-form-group">
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">
-                        <input type="text" name="name" id="name" class="no-form-control-input" value="<?= e($dealer->user->name) ?> " required>
+                        <input type="text" name="name" id="name" class="no-form-control-input" value="<?= e($dealer->name ?? '') ?> " required>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이름</legend>
                         </fieldset>
@@ -28,9 +28,20 @@
 
                 <div class="no-form-control --md">
                     <label for="email" class="no-form-control-inner">
-                        <input type="email" name="email" id="email" class="no-form-control-input" value="<?= e($dealer->user->email) ?>">
+                        <input type="email" name="email" id="email" class="no-form-control-input" value="<?= e($dealer->email ?? '') ?>" required>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">이메일</legend>
+                        </fieldset>
+                    </label>
+                    <span class="no-form-control-space"></span>
+                </div>
+
+                
+                <div class="no-form-control --md">
+                    <label for="phone" class="no-form-control-inner">
+                        <input type="tel" name="phone" id="phone" class="no-form-control-input" value="<?= e($dealer->phone ?? '') ?>">
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">연락처</legend>
                         </fieldset>
                     </label>
                     <span class="no-form-control-space"></span>
@@ -46,14 +57,35 @@
                     <span class="no-form-control-helper-text">비밀번호는 변경 시 입력해주세요.</span>
                     <span class="no-form-control-space"></span>
                 </div>
-                
+
+                <?php if (can('dealer.delete')): ?>
+                <div class="no-form-block">
+                    <div class="no-form-checkbox --md">
+                        <label for="is_active" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="is_active" id="is_active" class="no-form-checkbox-input" <?= $dealer->is_active ? 'checked' : '' ?> >
+                            <div class="no-form-checkbox-ripple">
+                                <span class="no-form-checkbox-box">
+                                    <div class="no-form-checkbox-icon">
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                </span>
+                            </div>
+                            <span class="no-form-checkbox-text">활성 여부</span>
+                        </label>
+                        <p class="no-form-radio-helper-text">체크 해제할 경우 해당 계정은 비활성화됩니다.</p>
+                    </div>
+                </div>
+                <?php endif ?>
+
+                <hr class="no-hr--xl">
+
                 <div 
                     id="country-hook" 
-                    data-component-type="country-select" 
-                    data-component-props='{
-                        "name": "country",
+                    data-view-type="country-select" 
+                    data-view-props='{
+                        "name": "dealer[country]",
                         "label": "국가 선택",
-                        "value": "<?=e($dealer->country) ?? 'KR'?>"
+                        "value": "<?=e($dealer->dealer->country) ?? 'KR'?>"
                     }'>
                     <!-- <div class="no-form-control --md">
                         <label for="country" class="no-form-control-inner">
@@ -68,7 +100,7 @@
 
                 <div class="no-form-control --md">
                     <label for="code" class="no-form-control-inner">
-                        <input type="text" name="code" id="code" class="no-form-control-input" value="<?= e($dealer->code) ?>">
+                        <input type="text" name="dealer[code]" id="code" class="no-form-control-input" value="<?= e($dealer->dealer->code) ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">코드</legend>
                         </fieldset>
@@ -77,18 +109,8 @@
                 </div>
 
                 <div class="no-form-control --md">
-                    <label for="phone" class="no-form-control-inner">
-                        <input type="tel" name="phone" id="phone" class="no-form-control-input" value="<?= e($dealer->user->phone ?? '') ?>">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">연락처</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <div class="no-form-control --md">
                     <label for="address" class="no-form-control-inner">
-                        <input type="text" name="address" id="address" class="no-form-control-input" value="<?= e($dealer->address ?? '') ?>">
+                        <input type="text" name="dealer[address]" id="address" class="no-form-control-input" value="<?= e($dealer->dealer->address ?? '') ?>">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">주소</legend>
                         </fieldset>
@@ -98,7 +120,7 @@
 
                 <div class="no-form-control --textarea">
                     <label for="description" class="no-form-control-inner">
-                        <textarea name="description" id="description" class="no-form-control-input" rows="6"><?= e($dealer->description ?? '') ?></textarea>
+                        <textarea name="dealer[description]" id="description" class="no-form-control-input" rows="6"><?= e($dealer->dealer->description ?? '') ?></textarea>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">설명</legend>
                         </fieldset>

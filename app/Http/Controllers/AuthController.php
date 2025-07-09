@@ -128,7 +128,6 @@ class AuthController extends Controller
     public function edit()
     {
         $user = UserRepository::make()
-            ->with(['dealer'])
             ->query()
             ->find(auth()->id());
 
@@ -139,12 +138,12 @@ class AuthController extends Controller
         switch ($user->type) {
             case UserType::ADMIN:
                 return $this->render('home.pages.auth.me', ['user' => $user]);
-
             case UserType::DEALER:
-                return $this->render('admin.pages.dealers.edit', ['user' => $user]);
+                $user->load([UserType::DEALER]);
+                return $this->render('admin.pages.dealers.edit', ['dealer' => $user]);
 
             case UserType::EMPLOYEE:
-                return $this->render('admin.pages.employees.edit', ['user' => $user]);
+                return $this->render('admin.pages.employees.edit', ['employee' => $user]);
             default:
                 throw new RuntimeException('Unknown user type.');
         }

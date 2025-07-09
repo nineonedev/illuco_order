@@ -68,7 +68,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [RoleController::class, 'index'])->name('index');
                     Route::get('/create', [RoleController::class, 'create'])->name('create');
-                    Route::get('{id}/edit', [RoleController::class, 'edit'])->name('edit');
+                    Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
                     
                     Route::post('/', [RoleController::class, 'store'])->name('store');
                     Route::put('{id}', [RoleController::class, 'update'])->name('update');
@@ -204,8 +204,11 @@ Route::middleware(['web'])->group(function(){
                     Route::post('/', [OrderController::class, 'store'])->name('store');
                     Route::post('/restore-all/{orderId}', [OrderController::class, 'restoreAll'])->name('restore_all');
                     Route::post('/restore/{orderItemId}', [OrderController::class, 'restoreItem'])->name('restore_item');
-                    Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy');
+                    
+                    Route::put('/cancel/{orderNo}', [OrderController::class, 'cancel'])->name('cancel');
                     Route::put('{id}', [OrderController::class, 'update'])->name('update');
+                    
+                    Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy');
                 });
 
             Route::prefix('orderitems')

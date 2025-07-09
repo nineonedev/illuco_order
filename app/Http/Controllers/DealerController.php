@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Auth\Entities\Role;
 use App\Domains\Auth\Repositories\RoleRepository;
-use App\Domains\Order\Entities\Customer;
 use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Enums\UserType;
@@ -12,12 +10,6 @@ use App\Domains\User\Repositories\DealerRepository;
 use App\Domains\User\Repositories\UserRepository;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Services\Auth\SaveRoleService;
-use App\Services\User\DeleteUserService;
-use App\Services\User\RegisterUserService;
-use App\Services\User\UpdateUserService;
-use Exception;
-use Framework\Database\ORM\Entities\Entity;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use Framework\Validation\Validator;
@@ -25,14 +17,12 @@ use RuntimeException;
 
 class DealerController extends Controller
 {
-    protected function repo(): DealerRepository
-    {
-        return DealerRepository::make();
-    }
-
     public function index(Request $request)
     {
-        $query = $this->repo()->with(['user'])->query();
+        $query = UserRepository::make()
+            ->with([UserType::DEALER])
+            ->query()
+            ->where('type', UserType::DEALER);
 
         $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
             $q->where('code', 'like', "%{$keyword}%")
@@ -56,7 +46,8 @@ class DealerController extends Controller
 
     public function edit(string $id)
     {
-        $dealer = $this->repo()->with(['user'])->find($id);
+        $dealer = UserRepository::make()->findOrFail($id); 
+        $dealer->load([UserType::DEALER]);
 
         if (!$dealer) {
             throw new RuntimeException("대리점 정보를 찾을 수 없습니다.");
@@ -80,7 +71,7 @@ class DealerController extends Controller
 
             $dealerRole = RoleRepository::make()
                 ->query()
-                ->where('name', 'admin')
+                ->where('name', 'dealer')
                 ->first();
             
             if (!$dealerRole) {
@@ -89,7 +80,7 @@ class DealerController extends Controller
 
             $user->roles()->attach($dealerRole);
 
-            $validator = Validator::make($request->all(), [
+            $validator = Validator::make($request->body($user->type), [
                 'country' => 'required',
                 'code' => 'required|unique:dealers',
                 'address' => 'nullable',
@@ -112,32 +103,54 @@ class DealerController extends Controller
 
     public function update(string $id, UpdateUserRequest $request)
     {
-        $dealer = $this->repo()->findOrFail($id);
-        $dealer->fill($request->safe());
+        return $this->runInTransaction(function () use ($id, $request) {
+            $user = UserRepository::make()->findOrFail($id);
+            $data = $request->safe();
+            $user->load([UserType::DEALER]);
 
-        $data = $request->safe();
+            if (empty($data['password'])) {
+                unset($data['password']); 
+            }
 
-        if (empty($data['password'])) {
-            unset($data['password']); 
-        }
+            $isActive = $request->body('is_active') ? true : false; 
+            $data['is_active'] = $isActive; 
 
-        $result = (new UpdateUserService($dealer))
-            ->runInTransaction($data);
+            $user->fill($data); 
+            $user = UserRepository::make()->save($user); 
 
-        return $result->toResponse();
+            if (!$user) {
+                throw new RuntimeException("대리점 기본정보 수정에 실패하였습니다.");
+            }
+
+            $dealerData = $request->body($user->type);
+            $dealer = $user->{$user->type};
+            $dealer = $dealer->fill($dealerData); 
+
+            $dealer = DealerRepository::make()->save($dealer); 
+
+            if (!$dealer) {
+                throw new RuntimeException("대리점 기본정보 수정에 실패하였습니다.");
+            }
+            
+            $dealer->setRelation('user', $user); 
+            
+            return $this->render(null, [
+                'dealer' => $dealer,
+            ], '정상적으로 수정되었습니다.');
+        });
     }
 
     public function destroy(string $id)
     {
-        $dealer = $this->repo()->findOrFail($id);
-        $result = (new DeleteUserService($dealer))->runInTransaction([]);
-        return $result->toResponse();
-    }
+        return $this->runInTransaction(function() use ($id) {
+            $employee = UserRepository::make()->findOrFail($id);
+            $success = UserRepository::make()->delete($employee); 
 
-    protected function save(Dealer $dealer): void
-    {
-        if (!$this->repo()->save($dealer)) {
-            throw new RuntimeException("대리점 저장에 실패했습니다.");
-        }
+            if (!$success) {
+                throw new RuntimeException("대리점 삭제에 실패하였습니다.");
+            }
+
+            return $this->render(null, [], '정상적으로 삭제되었습니다.');
+        });
     }
 }

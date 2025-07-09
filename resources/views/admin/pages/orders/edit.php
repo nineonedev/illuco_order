@@ -19,12 +19,12 @@ use App\Domains\Order\Enums\OrderStatus;
         </div>
 
 
-        <div class="no-base-tab-container">
-            <ul class="no-base-tabs" data-target="order-content">
+        <!-- <div class="no-base-tab-container">
+            <ul class="no-base-tabs">
                 <li class="no-base-tab">
                     <button class="no-base-tab-btn">
                         <span>수정</span>
-                        <!-- <span class="no-base-tab-badge">0</span> -->
+                        <span class="no-base-tab-badge">0</span>
                     </button>
                 </li>
                 <li class="no-base-tab">
@@ -48,9 +48,9 @@ use App\Domains\Order\Enums\OrderStatus;
                     </button>
                 </li>
             </ul>
-        </div>
+        </div> -->
 
-        <div class="no-base-tab-contents" id="order-content">
+        <div class="no-section-container">
             <!-- 수정 -->
             <section class="no-form-container">
                 <!-- <h2 class="no-order-update__title">주문 수정</h2> -->
@@ -68,10 +68,15 @@ use App\Domains\Order\Enums\OrderStatus;
                                 "name": "order_status",
                                 "value": "<?= $order->order_status ?>",
                                 "options": [
-                                    { "value": "<?= OrderStatus::NEW ?>", "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>" },
+                                    { 
+                                        "value": "<?= OrderStatus::NEW ?>", 
+                                        "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>",
+                                        "disabled": true
+                                    },
                                     { "value": "<?= OrderStatus::CONFIRMED ?>", "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" },
                                     { "value": "<?= OrderStatus::PREPARING ?>", "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" },
-                                    { "value": "<?= OrderStatus::SHIPPED ?>", "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" }
+                                    { "value": "<?= OrderStatus::SHIPPED ?>", "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" },
+                                    { "value": "<?= OrderStatus::COMPLETED ?>", "label": "<?= __('system.order.status.'.OrderStatus::COMPLETED) ?>" }
                                 ]
                             }'
                         ></div>
@@ -112,7 +117,7 @@ use App\Domains\Order\Enums\OrderStatus;
 
             <!-- 문서 -->
             <section>
-                <!-- <h2 class="no-order-update__title">주문 문서</h2> -->
+                <h2 class="no-order-update__title">주문 문서</h2>
                 <div>
                     <ul class="no-order-docs-list">
                         <li class="no-order-docs-item">
@@ -298,16 +303,6 @@ use App\Domains\Order\Enums\OrderStatus;
                         </table>
                     </div>
                 </div>
-            </section>
-
-            <!-- 히스토리 -->
-            <section>
-                <h2>히스토리</h2>
-            </section>
-
-            <!-- 미수금 -->
-            <section>
-                <h2>미수금</h2>
             </section>
         </div>
     </div>

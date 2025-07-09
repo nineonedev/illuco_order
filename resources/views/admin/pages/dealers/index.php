@@ -40,7 +40,7 @@
                 <table class="no-page-index-table">
                     <thead>
                         <tr>
-                            <th>이름</th>
+                            <th>대리점명</th>
                             <th>국가</th>
                             <th>코드</th>
                             <th>연락처</th>
@@ -52,11 +52,11 @@
                     <tbody>
                         <?php foreach ($dealers->items() as $dealer): ?>
                         <tr class="no-table-hover">
-                            <td><?= e($dealer->user->name ?? '-') ?></td>
-                            <td><?= lang('system.countries.'.e($dealer->country)) ?></td>
-                            <td><?= e($dealer->code ?? '-') ?></td>
-                            <td><?= e($dealer->user->phone ?? '-') ?></td>
-                            <td><?= e($dealer->user->email ?? '-') ?></td>
+                            <td><?= e($dealer->name ?? '-') ?></td>
+                            <td><?= lang('system.countries.'.e($dealer->dealer->country)) ?></td>
+                            <td><?= e($dealer->dealer->code ?? '-') ?></td>
+                            <td><?= e($dealer->phone ?? '-') ?></td>
+                            <td><?= e($dealer->email ?? '-') ?></td>
                             <td><?= date('Y-m-d', strtotime($dealer->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">

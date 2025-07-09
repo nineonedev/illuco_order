@@ -106,6 +106,8 @@ export default class CartController extends Controller {
 
     async _createOrder({ ids, totalAmount, memo, button }) {
         this._logger.info(ids, button);
+        
+        if (!confirm("최종 오더를 접수하면 이후 오더 수정이 불가합니다. 진행하시겠습니까?")) return; 
 
         const customer = this.cart.getCustomer();
 

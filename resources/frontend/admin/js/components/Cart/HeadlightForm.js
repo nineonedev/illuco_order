@@ -48,7 +48,10 @@ export default class HeadlightForm extends View {
             label: "각인 여부",
             name: "headlight[use_engraving]",
             checked: hasEngraving,
-            onChange: this._handleEngraving.bind(this),
+            onChange: Helper.debounce(
+                this._handleEngraving.bind(this),
+                300
+            ),
             helperText: "각인을 선택하시면 문구 입력이 가능하며, 발주 수량은 1개로 제한됩니다.",
         }).render();
 
@@ -57,6 +60,11 @@ export default class HeadlightForm extends View {
             name: "headlight[engraving_text]",
             value: engraving_text,
             display: hasEngraving,
+            onChange: Helper.debounce(
+                this._handleEngravingText.bind(this),
+                300
+            ),
+            maxlength: 14
         }).render();
 
 
@@ -87,6 +95,25 @@ export default class HeadlightForm extends View {
         
     }
 
+    _handleEngravingText({value}) {
+        if (value.length > 14) {
+            this._setFieldError(
+                "headlight[engraving_text]",
+                "각인 입력은 최대 14자까지 가능합니다."
+            );
+        } else {
+            this._clearFieldError("headlight[engraving_text]");
+        }
+
+        this.setState({
+            product: {
+                ...this._state.product,
+                engraving_text: value
+            }
+        }, false);
+    }
+
+
     _handleEngraving({ value }) {
         this.engravingInput.setState({display: value, required: value});
 
@@ -110,6 +137,27 @@ export default class HeadlightForm extends View {
     validateAllFields() {
         const errors = {};
 
+        const useEngravingEl = document.querySelector(
+            `[name="headlight[use_engraving]"]`
+        );
+
+        const isEngravingChecked = useEngravingEl?.checked ?? false;
+
+        if (isEngravingChecked) {
+            const engravingInput = document.querySelector(
+                `[name="headlight[engraving_text]"]`
+            );
+            if (engravingInput) {
+                const engravingValue = engravingInput.value || "";
+                if (engravingValue.length > 14) {
+                    errors["headlight[engraving_text]"] =
+                        "각인 입력은 최대 14자까지 가능합니다.";
+                }
+            }
+        } else {
+            this._clearFieldError("headlight[engraving_text]");
+        }
+        
         const wirelessColors = (this._state.attributes?.wireless_colors || []).map(x => x.value);
         const colorValue = this._state.product.wireless_color;
 
@@ -150,6 +198,18 @@ export default class HeadlightForm extends View {
                 }
                 $error.innerHTML = msg;
             }
+        }
+    }
+
+    _setFieldError(name, message) {
+        this._state.errors[name] = message;
+        this._renderErrors();
+    }
+
+    _clearFieldError(name) {
+        if (this._state.errors[name]) {
+            delete this._state.errors[name];
+            this._renderErrors();
         }
     }
 

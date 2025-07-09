@@ -11,15 +11,59 @@ export default class OrderController extends Controller {
     form;
     cancelBtn;
 
-    edit() {
-        this._logger.info("index");
+
+    _prepare(){
         this.modal = Modal.make('portal').render();
         this.loader = Loader.make('portal').render();
+    }
+
+    show(){
+        this._prepare();
+        this._logger.info("show");
+
+        const form = document.getElementById('cancel-frm'); 
+        if (!form) {
+            console.error('No found form with id: "frm"');   
+        }
+        
+        this.form = form;
+        form.addEventListener('submit', this.cancel.bind(this));
+    }
+
+    async cancel(e){
+        e.preventDefault();
+
+        if (!confirm("정말로 이 주문을 취소하시겠습니까?\n취소 이후에는 되돌릴 수 없습니다.")) return;
+
+        const button = e.submitter; 
+        const form = e.target; 
+        this._logger.info(button, form); 
+
+        try {
+            button.disabled = true; 
+            this.loader.show();
+            
+            const result = await new Ajax(false).put(form.action);
+            this._logger.success(result);
+
+            if (result.success) {
+                location.reload(); 
+            }
+
+        } finally {
+
+            this.loader.hide();
+            button.disabled = false; 
+        }
+    }
+
+    edit() {
+        this._prepare();
+        this._logger.info("index");
         
         const form = document.getElementById('frm'); 
         this.form = form;
 
-        
         const items = document.querySelectorAll('[data-view="order-item-form"]');
 
         if(items) {
@@ -98,15 +142,22 @@ export default class OrderController extends Controller {
 
     async _update(e) {
         e.preventDefault();
+
         const button = e.submitter; 
         const form = e.target; 
         this._logger.info(button, form); 
         
+        const fd = new FormData(form);
+
+        if (!fd.get('order_status')) {
+            alert('주문 상태를 선택해주세요.');
+            return;
+        }
+
         try {
             button.disabled = true; 
             this.loader.show();
             
-            const fd = new FormData(form);
             const result = await new Ajax(false).put(form.action, fd);
             this._logger.success(result);
 

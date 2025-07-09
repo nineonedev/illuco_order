@@ -36,6 +36,16 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
+                <div class="no-form-control --md">
+                    <label for="phone" class="no-form-control-inner">
+                        <input type="tel" name="phone" id="phone" class="no-form-control-input" required placeholder="">
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">연락처</legend>
+                        </fieldset>
+                    </label>
+                    <span class="no-form-control-space"></span>
+                </div>
+
                 <!-- 비밀번호 -->
                 <div class="no-form-control --md">
                     <label for="password" class="no-form-control-inner">
@@ -46,37 +56,7 @@
                     </label>
                     <span class="no-form-control-space"></span>
                 </div>
-
-                <div class="no-form-control --md">
-                    <label for="department" class="no-form-control-inner">
-                        <input type="text" name="department" id="department" class="no-form-control-input" placeholder="">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">부서</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <div class="no-form-control --md">
-                    <label for="position" class="no-form-control-inner">
-                        <input type="text" name="position" id="position" class="no-form-control-input" placeholder="">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">직책</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <!-- 연락처 -->
-                <div class="no-form-control --md">
-                    <label for="phone_number" class="no-form-control-inner">
-                        <input type="tel" name="phone_number" id="phone_number" class="no-form-control-input" placeholder="">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">연락처</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
+                
             </div>
 
             <div class="no-form-action">

@@ -1,8 +1,12 @@
 import Controller from "../core/Controller";
+import Modal from "../shared/Modal";
+import Loader from "../shared/Loader";
 
 export default class RoleController extends Controller {
     form;
     cancelBtn;
+    modal;
+    loader;
 
     index() {
         this._logger.info("index");
@@ -11,51 +15,95 @@ export default class RoleController extends Controller {
     _prepare() {
         this.form = document.getElementById("frm");
         this.cancelBtn = document.querySelector('[data-action="cancel"]');
+        this.modal = Modal.make('portal').render();
+        this.loader = Loader.make('portal').render();
     }
 
     create() {
         this._logger.info("create");
         this._prepare();
 
-        this.form.addEventListener("submit", async (e) => {
-            const result = await this._process(e, (data, action) =>
-                this._ajax.post(action, data, true)
-            );
-            if (result?.success && this.cancelBtn) {
-                this.cancelBtn.click();
-            }
-        });
+        this.form.addEventListener("submit", this._store.bind(this));
     }
 
     edit() {
         this._logger.info("edit");
         this._prepare();
 
-        this.form.addEventListener("submit", async (e) => {
-            const result = await this._process(e, (data, action) =>
-                this._ajax.put(action, data, true)
-            );
-            if (result?.success) {
-                location.reload();
-            }
-        });
+        this.form.addEventListener("submit", this._update.bind(this));
 
         const deleteBtn = this.form.querySelector('[data-action="delete"]');
-        deleteBtn?.addEventListener("click", () => {
-            const data = new FormData(this.form);
-            data.set("_method", "delete");
-            this._destroy(this.form.action, data);
-        });
+        deleteBtn?.addEventListener("click", this._destroy.bind(this));
     }
 
-    async _destroy(action, data) {
+    async _store(e) {
+        e.preventDefault();
+
+        const t = e.target;
+        const fd = new FormData(t);
+        const action = t.action;
+        const submitter = e.submitter;
+
+        try {
+            submitter.disabled = true;
+            this.loader.show();
+
+            const result = await this._ajax.post(action, fd, true);
+            const { success, data } = result;
+
+            if (success && data && data.role) {
+                // create 후 edit 페이지로 이동
+                location.href = `${action}/edit/${data.role.id}`;
+            }
+        } finally {
+            this.loader.hide();
+            submitter.disabled = false;
+        }
+    }
+
+    async _update(e) {
+        e.preventDefault();
+
+        const t = e.target;
+        const fd = new FormData(t);
+        const action = t.action;
+        const submitter = e.submitter;
+
+        try {
+            submitter.disabled = true;
+            this.loader.show();
+
+            const result = await this._ajax.put(action, fd, true);
+            const { success } = result;
+
+            if (success) {
+                location.reload();
+            }
+        } finally {
+            this.loader.hide();
+            submitter.disabled = false;
+        }
+    }
+
+    async _destroy(e) {
         if (!confirm("정말로 삭제하시겠습니까?")) return;
 
-        const result = await this._ajax.delete(action, data);
-        this._logger.success(result);
+        const action = this.form.action;
+        const submitter = e.currentTarget;
 
-        if (result.success) {
-            this.cancelBtn?.click();
+        try {
+            submitter.disabled = true;
+            this.loader.show();
+
+            const result = await this._ajax.delete(action);
+            this._logger.success(result);
+
+            if (result.success) {
+                this.cancelBtn?.click();
+            }
+        } finally {
+            this.loader.hide();
+            submitter.disabled = false;
         }
     }
 }

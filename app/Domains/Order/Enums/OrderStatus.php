@@ -34,4 +34,12 @@ class OrderStatus
      */
     const CANCELED = 'canceled';
 
+
+    // 오더 완료
+    const COMPLETED = 'completed'; 
+
+
+    // 일루코에서 취소
+    const REJECTED = 'rejected'; 
+
 }

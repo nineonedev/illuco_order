@@ -16,6 +16,8 @@ export default class TextInput extends View {
             spacing: true,
             required: false,
             display: true,
+            maxlength: null, 
+            minlength: null, 
             onChange: (e) => {},
         };
     }
@@ -27,7 +29,22 @@ export default class TextInput extends View {
     }
 
     _template() {
-        const { label, name, value, disabled, readOnly, required, helperText, invalid, invalidMessage, spacing, type } = this._state;
+        const { 
+            label, 
+            name, 
+            value, 
+            disabled, 
+            readOnly, 
+            required, 
+            helperText, 
+            invalid, 
+            invalidMessage, 
+            spacing, 
+            type,
+            maxlength,
+            minlength,
+        } = this._state;
+
         const nodeId = this._generateElementId();
         const hidden = (!this._state.display || type === 'hidden') 
             ? `style="display: none;"` 
@@ -48,6 +65,8 @@ export default class TextInput extends View {
                         ${disabled ? 'disabled' : ''}
                         ${readOnly ? 'readOnly' : ''}
                         ${required ? 'required' : ''}
+                        ${maxlength ? `maxlength=${maxlength}` : ``}
+                        ${minlength ? `minlength=${minlength}` : ``}
                     >
                     <fieldset class="no-form-control-label">
                         <legend class="no-form-control-text">${label}</legend>

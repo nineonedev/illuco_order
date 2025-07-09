@@ -17,6 +17,7 @@ return new class implements Migration
             $table->string('password');
             $table->char('gender', 1)->default('U'); // M, F, U
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('is_active')->default(true)->comment('계정 사용 여부');
             $table->date('birth')->nullable();
 
             $table->softDeletes();

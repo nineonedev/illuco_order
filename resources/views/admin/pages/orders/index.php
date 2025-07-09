@@ -96,7 +96,7 @@ use Framework\Support\ValueObjects\Money;
                             <td><?= e($order->orderer_name) ?></td>
                             <?php if (!user()->isDealer()) : ?>
                             <td>
-                                <?php if($order->user->isDealer()) : ?>
+                                <?php if($order->user ? $order->user->isDealer() : false) : ?>
                                 <a href="<?= route('admin.dealers.edit', ['id' => $order->user->id]) ?>">
                                     <span><?= $order->user->name ?></span>
                                 </a>
@@ -115,12 +115,14 @@ use Framework\Support\ValueObjects\Money;
                             <td><?= __('system.order.status.' . $order->order_status) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
+                                    <?php if ($order->user->isDealer()) : ?>
                                     <a href="<?= route('admin.orders.show', ['orderNo' => $order->order_no]) ?>" class="no-btn-action" data-tooltip>
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-eye"></i>
                                             <span data-tooltip-text><span>보기</span><span data-tooltip-arrow></span></span>
                                         </div>
                                     </a>
+                                    <?php else: ?>
                                     <a href="<?= route('admin.orders.edit', ['orderNo' => $order->order_no]) ?>" class="no-btn-action" data-tooltip>
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-pen-to-square"></i>
@@ -133,6 +135,7 @@ use Framework\Support\ValueObjects\Money;
                                             <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>
                                         </div>
                                     </a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>

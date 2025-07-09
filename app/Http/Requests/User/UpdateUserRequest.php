@@ -13,6 +13,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name'     => 'required|string|maxLength:50',
             'email'    => 'required|email|maxLength:100',
+            'phone'    => 'nullable|string|maxLength:20',
         ];
     }
 

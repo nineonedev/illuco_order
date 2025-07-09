@@ -4,7 +4,10 @@ namespace App\Domains\Order\Entities;
 
 use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Order\Repositories\OrderRepository;
+use App\Domains\User\Enums\UserType;
+use App\Domains\User\Repositories\UserRepository;
 use Framework\Database\ORM\Entities\Entity;
+use RuntimeException;
 
 class Order extends Entity
 {
@@ -22,6 +25,7 @@ class Order extends Entity
         'payment_date',
         'delivery_date',
         'shipping_date',
+        'canceled_at',
         'created_at',
     ];
 
@@ -38,6 +42,7 @@ class Order extends Entity
         'payment_date'   => 'date',
         'delivery_date'  => 'date',
         'shipping_date'  => 'date',
+        'canceled_at'  => 'datetime',
         'created_at'  => 'date',
     ];
 
@@ -51,7 +56,7 @@ class Order extends Entity
      */
     public function isFinalized(): bool
     {
-        return in_array($this->order_status, [OrderStatus::PREPARING, OrderStatus::SHIPPED]);
+        return !in_array($this->order_status, [OrderStatus::NEW, OrderStatus::CONFIRMED]);
     }
 
     /**
@@ -62,12 +67,21 @@ class Order extends Entity
         return $this->order_status === OrderStatus::CANCELED;
     }
 
-    /**
-     * 주문 상태가 변경 가능한지 확인 (주문 상태가 'received' 또는 'confirmed'일 때만 상태 변경 가능)
-     */
-    public function isStatusChangeable(): bool
+    public function sendEmailToEmployee()
     {
-        return in_array($this->order_status, [OrderStatus::NEW, OrderStatus::CONFIRMED]);
+        $employees = UserRepository::make()
+            ->query()
+            ->with(['roles'])
+            ->where('type', UserType::EMPLOYEE)
+            ->get();
+        
+        if ($employees) {
+            foreach ($employees as $emp) {
+                // 이메일 
+                // $emp->email
+                // content = $this->order_status ...
+            }
+        }
     }
 
     /**

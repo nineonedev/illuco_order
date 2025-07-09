@@ -36,6 +36,17 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
+                 <!-- 전화번호 -->
+                <div class="no-form-control --md">
+                    <label for="phone" class="no-form-control-inner">
+                        <input type="tel" name="phone" id="phone" class="no-form-control-input" placeholder="">
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">전화번호</legend>
+                        </fieldset>
+                    </label>
+                    <span class="no-form-control-space"></span>
+                </div>
+
                 <!-- 비밀번호 -->
                 <div class="no-form-control --md">
                     <label for="password" class="no-form-control-inner">
@@ -50,9 +61,9 @@
                 <!-- 국가 -->
                 <div 
                     id="country-hook" 
-                    data-component-type="country-select" 
-                    data-component-props='{
-                        "name": "country",
+                    data-view-type="country-select" 
+                    data-view-props='{
+                        "name": "dealer[country]",
                         "label": "국가 선택",
                         "value": "KR"
                     }'>
@@ -70,7 +81,7 @@
                 <!-- 코드 -->
                 <div class="no-form-control --md">
                     <label for="code" class="no-form-control-inner">
-                        <input type="text" name="code" id="code" class="no-form-control-input" placeholder="">
+                        <input type="text" name="dealer[code]" id="code" class="no-form-control-input" placeholder="">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">코드</legend>
                         </fieldset>
@@ -78,21 +89,12 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
-                <!-- 전화번호 -->
-                <div class="no-form-control --md">
-                    <label for="phone" class="no-form-control-inner">
-                        <input type="tel" name="phone" id="phone" class="no-form-control-input" placeholder="">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">전화번호</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
+               
 
                 <!-- 주소 -->
                 <div class="no-form-control --md">
                     <label for="address" class="no-form-control-inner">
-                        <input type="text" name="address" id="address" class="no-form-control-input" placeholder="">
+                        <input type="text" name="dealer[address]" id="address" class="no-form-control-input" placeholder="">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">주소</legend>
                         </fieldset>
@@ -103,7 +105,7 @@
                 <!-- 설명 -->
                 <div class="no-form-control --textarea">
                     <label for="description" class="no-form-control-inner">
-                        <textarea name="description" id="description" class="no-form-control-input" rows="5" placeholder=""></textarea>
+                        <textarea name="dealer[description]" id="description" class="no-form-control-input" rows="5" placeholder=""></textarea>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">설명</legend>
                         </fieldset>
