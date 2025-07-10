@@ -27,7 +27,10 @@ class OrderController extends Controller
             'customer', 
             'user', 
             'items.product' => [
-                'template.fileattachment',
+                'template' => [
+                    'fileattachment',
+                    'category'
+                ],
                 'loupe',
                 'headlight',
             ] 

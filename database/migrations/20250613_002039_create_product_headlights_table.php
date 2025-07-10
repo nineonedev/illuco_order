@@ -10,6 +10,7 @@ return new class implements Migration
     {
         Schema::create('product_headlights', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
+            $table->string('type');
             $table->string('wireless_color')->nullable();
             $table->string('engraving_text')->nullable();
 

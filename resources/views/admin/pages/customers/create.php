@@ -77,6 +77,27 @@ use App\Domains\User\Entities\Dealer;
                     <span class="no-form-control-space"></span>
                 </div>
 
+                <div class="no-form-control --md">
+                    <label for="age" class="no-form-control-inner">
+                        <input type="number" step="1" min="1" max="100" name="age" id="age" class="no-form-control-input" placeholder="" >
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">나이</legend>
+                        </fieldset>
+                    </label>
+                    
+                    <span class="no-form-control-space"></span>
+                </div>
+                <div class="no-form-control --md">
+                    <label for="address" class="no-form-control-inner">
+                        <input type="text" name="address" id="address" class="no-form-control-input" placeholder="" >
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">주소</legend>
+                        </fieldset>
+                    </label>
+                    
+                    <span class="no-form-control-space"></span>
+                </div>
+
                 <div class="no-form-control --textarea">
                     <label for="description" class="no-form-control-inner">
                         <textarea type="text" name="description" id="description" class="no-form-control-input" placeholder="" rows="8"></textarea>

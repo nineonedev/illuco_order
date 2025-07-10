@@ -17,6 +17,8 @@ return new class implements Migration
             $table->string('country')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
+            $table->integer('age')->nullable();
+            $table->string('address')->nullable();
             $table->text('description')->nullable();
 
             $table->softDeletes();

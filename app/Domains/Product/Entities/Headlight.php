@@ -9,6 +9,7 @@ class Headlight extends Entity
 {
     protected array $fillable = [
         'id',
+        'type',
         'wireless_color',
         'engraving_text',
     ];
