@@ -1,6 +1,7 @@
 import Controller from "../core/Controller";
 import Modal from '../shared/Modal';
 import Loader from '../shared/Loader';
+import SelectInput from '../components/Inputs/SelectInput';
 export default class EmployeeController extends Controller {
     form;
     cancelBtn;
@@ -24,6 +25,11 @@ export default class EmployeeController extends Controller {
         this._prepare();
 
         this.form.addEventListener('submit', this._update.bind(this));
+
+        const roleId = document.getElementById('role_id');
+        if (roleId) {
+            SelectInput.make(roleId).render(); 
+        }
 
         const deleteBtn = this.form.querySelector('[data-action="delete"]');
         deleteBtn?.addEventListener('click', this._destroy.bind(this));
@@ -57,13 +63,13 @@ export default class EmployeeController extends Controller {
         e.preventDefault(); 
         const t = e.target; 
         const fd = new FormData(t);
-        const action = e.action; 
+        const action = t.action; 
         const submitter = e.submitter;
 
         try {
             submitter.disabled = true; 
             this.loader.show(); 
-            const result = await this._ajax.post(action, fd);
+            const result = await this._ajax.put(action, fd);
 
             const {success} = result; 
             if (success) {

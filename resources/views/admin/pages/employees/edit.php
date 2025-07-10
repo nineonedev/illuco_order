@@ -9,9 +9,34 @@
         <div class="no-page-head">
             <h1 class="no-heading-sm">직원 수정</h1>
         </div>
-
+        
         <form id="frm" method="post" enctype="multipart/form-data" action="<?= route('admin.employees.update', ['id' => $employee->id]) ?>">
             <?= csrf_field() ?>
+
+            <?php if ($roles) : ?>
+                <?php
+                    $roleOptions = [];
+                    foreach ($roles as $role) {
+                        /** @var \App\Domains\Auth\Entities\Role $role */
+                        $roleOptions[] = [
+                            'label' => $role->label,
+                            'value' => $role->id,
+                        ];
+                    }
+                ?>
+                <div 
+                    id="role_id"
+                    class="no-form-control --md"
+                    data-view-type="select"
+                    data-view-props='<?= json_encode([
+                        "label"   => "권한 선택",
+                        "name"    => "role_id",
+                        "value"   => $employee->roles[0]->id, // 현재 선택된 role_id가 있다면 여기에 채워도 됨
+                        "options" => $roleOptions
+                    ], JSON_UNESCAPED_UNICODE) ?>'
+                ></div>
+            <?php endif; ?>
+
 
             <div class="no-form-group">
                 <!-- 이름 -->

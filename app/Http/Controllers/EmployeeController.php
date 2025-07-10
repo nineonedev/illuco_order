@@ -21,6 +21,12 @@ class EmployeeController extends Controller
             ->query()
             ->where('type', UserType::EMPLOYEE);
 
+        if (!user()->isAdmin()) {
+            $query->whereHas('roles', function($roleQuery) {
+                $roleQuery->where('name', 'employee');
+            });
+        }
+
         $perpage = $request->query('perpage', 15);
         $page = $request->query('page', 1); 
 
@@ -46,8 +52,18 @@ class EmployeeController extends Controller
     {
         $employee = UserRepository::make()->findOrFail($id); 
 
+        if (user()->isAdmin()) {
+            $roles = RoleRepository::make()
+                ->query()
+                ->whereIn('name', ['employee', 'sales'])
+                ->get(); 
+        }
+
+        $employee->load(['roles']);
+        
         return $this->render('admin.pages.employees.edit', [
             'employee' => $employee,
+            'roles' => $roles,
         ]);
     }
 
@@ -83,7 +99,6 @@ class EmployeeController extends Controller
         return $this->runInTransaction(function() use ($id, $request) {
             $employee = UserRepository::make()->findOrFail($id);
             $data = $request->safe();
-
             if (empty($data['password'])) {
                 unset($data['password']); 
             }
@@ -93,6 +108,13 @@ class EmployeeController extends Controller
 
             $employee->fill($data); 
             $employee = UserRepository::make()->save($employee); 
+            
+            // role 변동시 저장
+            $roleId = $request->body('role_id');
+
+            if ($roleId) {
+                $employee->roles()->sync([(int) $roleId]);
+            }
 
             if (!$employee) {
                 throw new RuntimeException("직원 수정에 실패하였습니다.");

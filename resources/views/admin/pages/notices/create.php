@@ -1,6 +1,7 @@
 <?php 
 
 use App\Domains\Communication\Entities\Notice;
+use App\Domains\Communication\Enums\NoticeStatus;
 
 ?>
 
@@ -42,32 +43,36 @@ use App\Domains\Communication\Entities\Notice;
                     </div>
                     <!-- FormControl -->
 
-                    <div class="no-form-control --md">
-                        <label for="status" class="no-form-control-inner">
-                            <select name="status" id="status" class="no-form-control-input --select">
-                                <option value="">-- 상태 선택 --</option>
-                                <option value="<?= Notice::STATUS_DRAFT ?>">
-                                    작성중
-                                </option>
-                                <option value="<?= Notice::STATUS_PUBLISHED ?>">
-                                    게시중
-                                </option>
-                                <option value="<?= Notice::STATUS_SCHEDULED ?>">
-                                    예약게시
-                                </option>
-                                <option value="<?= Notice::STATUS_ARCHIVED ?>">
-                                    보관됨
-                                </option>
-                            </select>
-                            <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text">상태</legend>
-                            </fieldset>
-                        </label>
-                        <span class="no-form-control-space"></span>
-                    </div>
-                    
+                    <div 
+                        class="no-form-control --md"
+                        data-view-type="select"
+                        data-view-props='{
+                            "label": "상태",
+                            "name": "status",
+                            "value": "<?= $notice->status ?? '' ?>",
+                            "options": [
+                                {
+                                    "value": "<?= NoticeStatus::DRAFT ?>",
+                                    "label": "작성중"
+                                },
+                                {
+                                    "value": "<?= NoticeStatus::PUBLISHED ?>",
+                                    "label": "게시중"
+                                },
+                                {
+                                    "value": "<?= NoticeStatus::SCHEDULED ?>",
+                                    "label": "예약게시"
+                                },
+                                {
+                                    "value": "<?= NoticeStatus::ARCHIVED ?>",
+                                    "label": "보관됨"
+                                }
+                            ]
+                        }'
+                    ></div>
+
                     <div class="no-form-flex">
-                        <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_from", "label": "노출 시작일"}'>
+                        <div class="no-form-control --md" data-view-type="datetime" data-view-props='{"name": "visible_from", "label": "노출 시작일"}'>
                             <!-- <label for="visible_from" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
@@ -78,7 +83,7 @@ use App\Domains\Communication\Entities\Notice;
                         </div>
                         <!-- FormControl -->
 
-                        <div class="no-form-control --md" data-component-type="datetime" data-component-props='{"name": "visible_to", "label": "노출 종료일"}'>
+                        <div class="no-form-control --md" data-view-type="datetime" data-view-props='{"name": "visible_to", "label": "노출 종료일"}'>
                             <!-- <label for="visible_to" class="no-form-control-inner">
                                 <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" placeholder="" >
                                 <fieldset class="no-form-control-label">
@@ -90,14 +95,7 @@ use App\Domains\Communication\Entities\Notice;
                         <!-- FormControl -->
                     </div>
                     
-                    <div class="no-form-base --md" id="content" data-component-props='{"name": "content"}'>
-                        <label for="content" class="no-form-base-label">
-                            <span>내용</span>
-                        </label>
-                        <textarea name="content" id="content" data-text-editor class="no-form-base-input"></textarea>
-                        <span class="no-form-control-space"></span>
-                    </div>
-                    <!-- FormControl -->
+                    <div class="no-form-base --md" data-view-type="editor" data-view-props='{"name": "content"}'></div>
 
                     <div class="no-form-checkbox --sm">
                         <label for="is_pinned" class="no-form-checkbox-pointer">
@@ -116,11 +114,11 @@ use App\Domains\Communication\Entities\Notice;
                         <span class="no-form-control-space"></span>
                     </div>
 
-                    <div data-component-type="file" data-component-props='{"file_key": "attach_1"}'></div>
-                    <div data-component-type="file" data-component-props='{"file_key": "attach_2"}'></div>
-                    <div data-component-type="file" data-component-props='{"file_key": "attach_3"}'></div>
-                    <div data-component-type="file" data-component-props='{"file_key": "attach_4"}'></div>
-                    <div data-component-type="file" data-component-props='{"file_key": "attach_5"}'></div>
+                    <div data-view-type="file" data-view-props='{"file_key": "attach_1"}'></div>
+                    <div data-view-type="file" data-view-props='{"file_key": "attach_2"}'></div>
+                    <div data-view-type="file" data-view-props='{"file_key": "attach_3"}'></div>
+                    <div data-view-type="file" data-view-props='{"file_key": "attach_4"}'></div>
+                    <div data-view-type="file" data-view-props='{"file_key": "attach_5"}'></div>
                 </div>
                 
                 <div class="no-form-action">

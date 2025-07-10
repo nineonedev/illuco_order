@@ -10,6 +10,7 @@ class SaveRoleRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'label' => 'required|string',
             'permissions' => 'array'
         ];
     }

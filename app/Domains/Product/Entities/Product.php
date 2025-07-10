@@ -39,7 +39,7 @@ class Product extends Entity
         $prefix = $this->code . $specialCode . $year;
 
         // 시퀀스 찾기 (같은 prefix 중 max 시퀀스 찾음)
-        $repo = self::repository();
+        $repo = self::resolveRepository();
 
         $latest = $repo->query()
             ->where('serial_number', 'LIKE', "{$prefix}%")

@@ -39,7 +39,7 @@ class RoleController extends Controller
 
     public function store(SaveRoleRequest $request)
     {
-        $data = $request->only(['name', 'description']);
+        $data = $request->only(['name', 'label', 'description']);
         $permissionInputs = $request->input('permissions', []);
 
         $result = (new SaveRoleService())->runInTransaction([
@@ -59,7 +59,7 @@ class RoleController extends Controller
         }
 
         $request->merge(['id' => $id]);
-        $data = $request->only(['name', 'description']);
+        $data = $request->only(['name', 'label', 'description']);
         $permissionInputs = $request->body('permissions', []);
 
         $result = (new SaveRoleService())->runInTransaction([

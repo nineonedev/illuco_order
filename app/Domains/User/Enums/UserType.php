@@ -8,12 +8,15 @@ class UserType
     const DEALER = 'dealer'; 
     const EMPLOYEE = 'employee'; 
 
+    const SALES = 'sales';
+
     public static function all(): array
     {
         return [
             self::ADMIN,
             self::DEALER,
             self::EMPLOYEE,
+            self::SALES,
         ];
     }
 }

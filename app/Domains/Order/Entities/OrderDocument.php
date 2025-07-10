@@ -31,7 +31,7 @@ class OrderDocument extends Entity
     }
 
     /**
-     * 문서번호 생성 (예: PI-DA001-20250629-00001)
+     * 문서번호 생성 (예: PI-DA001-20250629-00001) => 
      *
      * @param string $documentPrefix
      * @param string|null $dealerCode
@@ -40,8 +40,10 @@ class OrderDocument extends Entity
     public function generateDocumentNumber(string $documentPrefix, ?string $dealerCode = null): string
     {
         $dealerCode = $dealerCode ?: 'CST';
-        $dateStr = now()->format('Ymd');
-        $prefix = "{$documentPrefix}-{$dealerCode}-{$dateStr}";
+        // $dateStr = now()->format('Ymd');
+        // $prefix = "{$documentPrefix}-{$dealerCode}-{$dateStr}";
+        $year = date('Y'); // ex) 2025
+        $prefix = "{$dealerCode}-{$year}";
 
         $row = static::repositoryClass()::make()
             ->query()

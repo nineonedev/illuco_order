@@ -23,7 +23,15 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $query = OrderRepository::make()->with(['customer', 'user'])->query();
+        $query = OrderRepository::make()->with([
+            'customer', 
+            'user', 
+            'items.product' => [
+                'template.fileattachment',
+                'loupe',
+                'headlight',
+            ] 
+        ])->query();
 
         // 대리점인 경우, 대리점에 해당하는 주문만 조회
         if (user()->isDealer()) {
@@ -49,6 +57,72 @@ class OrderController extends Controller
         ]);
     }
 
+    
+    public function update(Request $request, int $id)
+    {
+        return $this->runInTransaction(function () use ($request, $id) {
+            $order = OrderRepository::make()->findOrFail($id);
+
+            $request->validateOrFail([
+                'order_status' => 'required|string',
+                'payment_date' => 'nullable|date',
+                'delivery_date' => 'nullable|date',
+                'shipping_date' => 'nullable|date',
+            ]);
+
+            $data = $request->safe();
+            $order->fill($data);
+            $order = OrderRepository::make()->save($order);
+            $order->setStatus($data['order_status']);
+
+            return $this->render(null, [
+                'order' => $order->toArray(),
+            ], '주문이 수정되었습니다.');
+        });
+    }
+
+    public function destroy(Request $request, int $id)
+    {
+        return $this->runInTransaction(function () use ($id) {
+            $order = OrderRepository::make()
+                ->with(['items.product'])
+                ->findOrFail($id);
+
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    $product = $item->product;
+
+                    switch ($order->order_status) {
+                        case OrderStatus::NEW:
+                        case OrderStatus::CONFIRMED:
+                            ProductRepository::make()->forceDelete($product);
+                            break;
+                        case OrderStatus::PREPARING:
+                        case OrderStatus::SHIPPED:
+                            ProductRepository::make()->softDelete($product);
+                            break;
+                        default:
+                            ProductRepository::make()->softDelete($product);
+                            break;
+                    }
+                }
+
+                OrderItemRepository::make()->delete($item);
+            }
+
+            $deleted = OrderRepository::make()->delete($order);
+
+            if (!$deleted) {
+                throw new RuntimeException("주문 삭제에 실패했습니다.");
+            }
+
+            return $this->responseWith()
+                ->redirectRoute('admin.orders.index')
+                ->message('주문이 삭제되었습니다.')
+                ->withQuery()
+                ->send();
+        });
+    }
 
     public function cancel(string $orderNo)
     {
@@ -65,8 +139,7 @@ class OrderController extends Controller
             );
         }
 
-        $order->order_status = OrderStatus::CANCELED; 
-        $order->canceled_at = now();
+        $order->setStatus(OrderStatus::CANCELED);
         $order = OrderRepository::make()->save($order);
 
         // 오더 취소요청 => 메일!
@@ -147,14 +220,7 @@ class OrderController extends Controller
             $dealer = null;
 
             if ($user->isDealer()) {
-                $dealerId = $user->dealer ? $user->dealer->id : null;
-
-                if ($dealerId) {
-                    $dealer = DealerRepository::make()->find($dealerId);
-                    if (!$dealer) {
-                        throw new RuntimeException("등록되지 않은 대리점 정보입니다.");
-                    }
-                }
+                $dealer = $user->dealer;
             }
 
             $orderData = [
@@ -171,6 +237,7 @@ class OrderController extends Controller
             $order = new Order($orderData);
             $order->generateOrderNumber($dealer ? $dealer->code : null);
             $order = OrderRepository::make()->save($order);
+            // $order->sendEmailToEmployee();
 
             if (!$order) {
                 throw new RuntimeException('주문 생성에 실패하였습니다.');
@@ -517,67 +584,4 @@ class OrderController extends Controller
     }
 
 
-    public function update(Request $request, int $id)
-    {
-        return $this->runInTransaction(function () use ($request, $id) {
-            $order = OrderRepository::make()->findOrFail($id);
-
-            $request->validateOrFail([
-                'order_status' => 'required|string',
-                'payment_date' => 'nullable|date',
-                'delivery_date' => 'nullable|date',
-                'shipping_date' => 'nullable|date',
-            ]);
-
-            $order->fill($request->safe());
-            $order = OrderRepository::make()->save($order);
-
-            return $this->render(null, [
-                'order' => $order->toArray(),
-            ], '주문이 수정되었습니다.');
-        });
-    }
-
-    public function destroy(Request $request, int $id)
-    {
-        return $this->runInTransaction(function () use ($id) {
-            $order = OrderRepository::make()
-                ->with(['items.product'])
-                ->findOrFail($id);
-
-            foreach ($order->items as $item) {
-                if ($item->product) {
-                    $product = $item->product;
-
-                    switch ($order->order_status) {
-                        case OrderStatus::NEW:
-                        case OrderStatus::CONFIRMED:
-                            ProductRepository::make()->forceDelete($product);
-                            break;
-                        case OrderStatus::PREPARING:
-                        case OrderStatus::SHIPPED:
-                            ProductRepository::make()->softDelete($product);
-                            break;
-                        default:
-                            ProductRepository::make()->softDelete($product);
-                            break;
-                    }
-                }
-
-                OrderItemRepository::make()->delete($item);
-            }
-
-            $deleted = OrderRepository::make()->delete($order);
-
-            if (!$deleted) {
-                throw new RuntimeException("주문 삭제에 실패했습니다.");
-            }
-
-            return $this->responseWith()
-                ->redirectRoute('admin.orders.index')
-                ->message('주문이 삭제되었습니다.')
-                ->withQuery()
-                ->send();
-        });
-    }
 }

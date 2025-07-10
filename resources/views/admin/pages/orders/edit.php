@@ -18,7 +18,6 @@ use App\Domains\Order\Enums\OrderStatus;
             <h1 class="no-heading-sm">주문 정보</h1>
         </div>
 
-
         <!-- <div class="no-base-tab-container">
             <ul class="no-base-tabs">
                 <li class="no-base-tab">
@@ -73,10 +72,31 @@ use App\Domains\Order\Enums\OrderStatus;
                                         "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>",
                                         "disabled": true
                                     },
-                                    { "value": "<?= OrderStatus::CONFIRMED ?>", "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" },
-                                    { "value": "<?= OrderStatus::PREPARING ?>", "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" },
-                                    { "value": "<?= OrderStatus::SHIPPED ?>", "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" },
-                                    { "value": "<?= OrderStatus::COMPLETED ?>", "label": "<?= __('system.order.status.'.OrderStatus::COMPLETED) ?>" }
+                                    { 
+                                        "value": "<?= OrderStatus::CONFIRMED ?>", 
+                                        "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" 
+                                    },
+                                    { 
+                                        "value": "<?= OrderStatus::PREPARING ?>", 
+                                        "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" 
+                                    },
+                                    { 
+                                        "value": "<?= OrderStatus::SHIPPED ?>", 
+                                        "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" 
+                                    },
+                                    { 
+                                        "value": "<?= OrderStatus::COMPLETED ?>", 
+                                        "label": "<?= __('system.order.status.'.OrderStatus::COMPLETED) ?>" 
+                                    },
+                                    { 
+                                        "value": "<?= OrderStatus::CANCELED ?>", 
+                                        "label": "<?= __('system.order.status.'.OrderStatus::CANCELED) ?>",
+                                        "disabled": true
+                                    },
+                                    { 
+                                        "value": "<?= OrderStatus::REJECTED ?>", 
+                                        "label": "<?= __('system.order.status.'.OrderStatus::REJECTED) ?>"
+                                    }
                                 ]
                             }'
                         ></div>

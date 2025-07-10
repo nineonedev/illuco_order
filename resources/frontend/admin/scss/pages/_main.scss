@@ -1,9 +1,9 @@
 @use "../abstracts" as *;
 
-html,
-body {
-    overflow-x: hidden;
-}
+// html,
+// body {
+//     overflow-x: hidden;
+// }
 
 .no-root {
     padding-top: var(--header-height);

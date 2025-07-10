@@ -9,6 +9,7 @@ class Role extends Entity
 {
     protected array $fillable = [
         'name',
+        'label',
         'description',
     ];
 

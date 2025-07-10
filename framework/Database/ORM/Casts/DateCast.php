@@ -33,7 +33,7 @@ class DateCast implements CastInterface
      */
     public function get($value)
     {
-        if (is_null($value)) {
+        if (is_null($value) || $value === '') {
             return null;
         }
 

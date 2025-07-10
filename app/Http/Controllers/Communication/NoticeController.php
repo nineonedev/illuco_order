@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Communication;
 
 
 use App\Domains\Communication\Entities\Notice;
+use App\Domains\Communication\Enums\NoticeStatus;
 use App\Domains\Communication\Repositories\NoticeRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
@@ -34,7 +35,7 @@ class NoticeController extends Controller
               ->when(!is_null($p = $request->query('is_pinned')), fn($q) => $q->where('is_pinned', (bool) $p))
               ->when($request->query('visible') === 'now', function ($q) {
                   $now = now();
-                  $q->where('status', Notice::STATUS_PUBLISHED)
+                  $q->where('status', NoticeStatus::PUBLISHED)
                     ->where(fn($q) => $q->whereNull('visible_from')->orWhere('visible_from', '<=', $now))
                     ->where(fn($q) => $q->whereNull('visible_to')->orWhere('visible_to', '>=', $now));
               })
@@ -73,10 +74,15 @@ class NoticeController extends Controller
             $notice = new Notice($request->all());
             $notice->user_id = guard()->id();
 
-            $this->save($notice);
+            $notice = NoticeRepository::make()->save($notice);
+            if (!$notice) {
+                throw new RuntimeException("공지 생성에 실패했습니다.");
+            }
+            
             $this->fileRepo()->handleUpload($notice, $this->uploadConfig());
-
-            return $this->render(null, ['notice' => $notice]);
+            
+            $notice->mailToDealers(); 
+            return $this->render(null, ['notice' => $notice], '정상적으로 생성되었습니다.');
         });
     }
 
@@ -87,11 +93,15 @@ class NoticeController extends Controller
             $notice->fill($request->all());
             $notice->user_id = guard()->id();
 
-            $this->save($notice);
+            $notice = NoticeRepository::make()->save($notice);
+            if (!$notice) {
+                throw new RuntimeException("공지 수정에 실패했습니다.");
+            }
+            
             $this->fileRepo()->handleDelete($notice);
             $this->fileRepo()->handleUpload($notice, $this->uploadConfig());
 
-            return $this->render(null, ['notice' => $notice]);
+            return $this->render(null, ['notice' => $notice], '정상적으로 수정되었습니다.');
         });
     }
 
@@ -107,13 +117,6 @@ class NoticeController extends Controller
 
             return $this->render(null, [], '성공적으로 삭제되었습니다.');
         });
-    }
-
-    protected function save(Notice $notice): void
-    {
-        if (!$this->repo()->save($notice)) {
-            throw new RuntimeException("공지 저장에 실패했습니다.");
-        }
     }
 
     protected function uploadConfig(): array

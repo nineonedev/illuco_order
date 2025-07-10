@@ -4,8 +4,10 @@ namespace App\Domains\Order\Entities;
 
 use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Order\Repositories\OrderRepository;
+use App\Domains\Product\Repositories\ProductRepository;
 use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\UserRepository;
+use App\Supports\Mailer;
 use Framework\Database\ORM\Entities\Entity;
 use RuntimeException;
 
@@ -67,6 +69,38 @@ class Order extends Entity
         return $this->order_status === OrderStatus::CANCELED;
     }
 
+    public function setStatus(string $status)
+    {
+        if (!in_array($status, OrderStatus::all())) {
+            return; 
+        }
+
+        if ($status === OrderStatus::CANCELED) {
+            $this->canceled_at = now();
+        }
+
+        if ($status === OrderStatus::PREPARING) {
+            $this->generateProductSerialNumbers();
+        }
+
+        if (!$this->getRelation('items')) {
+            $this->load([
+                'items.product.template.fileattachment',
+            ]);
+        } 
+
+        if ($this->getRelation('customer')) {
+            $this->load(['customer']);
+        }
+
+        if ($this->getRelation('dealer')) {
+            $this->load(['dealer']);
+        }
+
+        // if (config->useEmail) JSON으로 해도될듯? 아니면 그냥 row로 나눠도 되고 key, value 방식으로 
+        $this->sendEmailToEmployee();
+    }
+
     public function sendEmailToEmployee()
     {
         $employees = UserRepository::make()
@@ -75,11 +109,46 @@ class Order extends Entity
             ->where('type', UserType::EMPLOYEE)
             ->get();
         
-        if ($employees) {
-            foreach ($employees as $emp) {
-                // 이메일 
-                // $emp->email
-                // content = $this->order_status ...
+        if (!$employees || count($employees) === 0) {
+            return;
+        }
+
+        $recipients = [];
+
+        foreach ($employees as $emp) {
+            $recipients[] = [
+                'email' => $emp->email,
+                'name'  => $emp->name,
+            ];
+        }
+
+        $subject = "[일루코] 주문 상태 변경 알림";
+        $body = render('admin.mails.order', ['order' => $this]);
+
+        $mailer = new Mailer();
+        $mailer->sendBulk($recipients, $subject, $body); 
+    }
+
+    public function generateProductSerialNumbers(): void
+    {
+        if (!$this->getRelation('items')) {
+            $this->load(['items.product']);
+        }
+
+        $items = $this->items ?? [];
+
+        foreach ($items as $item) {
+            $product = $item->product; 
+            /** @var \App\Domains\Product\Entities\Product $product */
+            if (!empty($product->serial_number)) {
+                continue;
+            }
+
+            $product->generateSerialNumber();
+            $product = ProductRepository::make()->save($product); 
+            
+            if (!$product) {
+                throw new RuntimeException("제품 시리얼 번호 생성에 실패하였습니다. 잠시 후 다시 시도해주세요.");
             }
         }
     }
@@ -93,8 +162,11 @@ class Order extends Entity
     public function generateOrderNumber(?string $dealerCode = null): string
     {
         $dealerCode = $dealerCode ?: 'CST';
-        $dateStr = now()->format('Ymd');
-        $prefix = "OR-{$dealerCode}-{$dateStr}";
+        // $dateStr = now()->format('Ymd');
+        $dateStr = now()->format('Y');
+        // $prefix = "OR-{$dealerCode}-{$dateStr}";
+        // $prefix = "OR-{$dealerCode}-{$dateStr}";
+        $prefix = "{$dealerCode}-{$dateStr}";
 
         $row = static::repositoryClass()::make()
             ->query()

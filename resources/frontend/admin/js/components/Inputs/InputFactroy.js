@@ -11,9 +11,14 @@ import CheckboxGroupInput from './CheckboxGroupInput';
 import CounterInput from './CounterInput';
 import CountrySelectInput from './CountrySelectInput';
 import CheckboxInput from './CheckboxInput';
+import EditorInput from './EditorInput';
 
 export default class InputFactory {
     static map = {
+        editor: {
+            label: '에디터',
+            instance: EditorInput,
+        },
         text: {
             label: '텍스트',
             instance: TextInput,

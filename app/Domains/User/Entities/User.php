@@ -78,4 +78,24 @@ class User extends Entity implements AuthenticatableInterface
     {
         return $this->type === UserType::EMPLOYEE;
     }
+
+    public function hasRole(string $roleName): bool
+    {
+        if (!$this->getRelation('roles')){
+            $this->load(['roles']); 
+        }
+
+        foreach ($this->roles as $role) {
+            if ($role === $roleName) {
+                return true; 
+            }
+        }
+
+        return false; 
+    }
+
+    public function isSales(): bool
+    {
+        return $this->hasRole('sales');
+    }
 }

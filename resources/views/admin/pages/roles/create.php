@@ -18,11 +18,23 @@
         <form method="post" enctype="multipart/form-data" action="<?= route('admin.roles.store') ?>" class="no-form-container" id="frm">
             <?= csrf_field() ?>
             <div class="no-form-group">
+                
+                <div class="no-form-control --md">
+                    <label for="label" class="no-form-control-inner">
+                        <input type="text" name="label" id="label" class="no-form-control-input" placeholder="" required>
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">이름</legend>
+                        </fieldset>
+                    </label>
+                    <span class="no-form-control-space"></span>
+                </div>
+                <!-- FormControl -->
+
                 <div class="no-form-control --md">
                     <label for="name" class="no-form-control-inner">
                         <input type="text" name="name" id="name" class="no-form-control-input" placeholder="" required>
                         <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">이름</legend>
+                            <legend class="no-form-control-text">식별자</legend>
                         </fieldset>
                     </label>
                     <span class="no-form-control-space"></span>

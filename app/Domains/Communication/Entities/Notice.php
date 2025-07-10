@@ -4,7 +4,11 @@ namespace App\Domains\Communication\Entities;
 
 use App\Domains\Communication\Enums\NoticeStatus;
 use App\Domains\Communication\Repositories\NoticeRepository;
+use App\Domains\User\Enums\UserType;
+use App\Domains\User\Repositories\UserRepository;
+use App\Supports\Mailer;
 use Framework\Database\ORM\Entities\Entity;
+use RuntimeException;
 
 class Notice extends Entity
 {
@@ -17,6 +21,7 @@ class Notice extends Entity
         'visible_to',
         'is_pinned',
         'status',
+        'created_at',
     ]; 
 
     protected array $casts = [
@@ -24,6 +29,7 @@ class Notice extends Entity
         'is_pinned' => 'bool',
         'visible_from' => 'datetime',
         'visible_to' => 'datetime',
+        'created_at' => 'datetime',
     ];
 
     public static function repositoryClass(): string
@@ -68,5 +74,34 @@ class Notice extends Entity
         }
 
         return true;
+    }
+
+    public function mailToDealers(): void
+    {
+        // Dealer 사용자 목록 가져오기
+        $dealers = UserRepository::make()
+            ->query()
+            ->with(['roles'])
+            ->where('type', UserType::DEALER)
+            ->get();
+
+        if (!$dealers || count($dealers) === 0) {
+            return;
+        }
+
+        $recipients = [];
+
+        foreach ($dealers as $dealer) {
+            $recipients[] = [
+                'email' => $dealer->email,
+                'name'  => $dealer->name,
+            ];
+        }
+
+        $subject = "[일루코] 새로운 공지사항이 등록되었습니다.";
+        $body = render('admin.mails.notice', ['notice' => $this]);
+
+        $mailer = new Mailer();
+        $mailer->sendBulk($recipients, $subject, $body);
     }
 }

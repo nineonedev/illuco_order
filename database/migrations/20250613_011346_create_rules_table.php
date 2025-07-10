@@ -11,6 +11,7 @@ return new class implements Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id(); 
             $table->string('name')->unique(); // owner, editor, viewer
+            $table->string('label');
             $table->string('description')->nullable();
             $table->timestamps();
         });

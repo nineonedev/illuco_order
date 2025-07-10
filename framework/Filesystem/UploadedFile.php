@@ -93,6 +93,7 @@ class UploadedFile
             'path'          => $this->storagePath,
             'extension'     => $this->extension(),
             'upload_path'   => $this->getUploadPath(),
+            'upload_url'    => $this->getUploadUrl(),
         ];
     }
 
@@ -138,5 +139,11 @@ class UploadedFile
         }
         
         return upload_path($this->getStoragePath() . DS . $this->getName());
+    }
+
+    public function getUploadUrl(): string
+    {
+        $path = $this->getUploadPath();
+        return request()->http()->origin() . $path;
     }
 }

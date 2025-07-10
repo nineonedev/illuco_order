@@ -41,6 +41,6 @@ class AdminController extends Controller
             return $this->renderError(null, '파일 업로드에 실패했습니다.');
         } 
 
-        return $this->render(null, ['file'=> $file]);
+        return $this->render(null, ['file'=> $file], '정상적으로 업로드되었습니다.');
     }
 }

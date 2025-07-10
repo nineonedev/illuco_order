@@ -79,6 +79,11 @@ class Http
         return $this->schema() . '://' . $this->host() . $uri . ($query ? "?{$query}" : '');
     }
 
+    public function origin(): string
+    {
+        return $this->schema() . '://' . $this->host();
+    }
+
     public function referer(): ?string
     {
         return $this->server['HTTP_REFERER'] ?? null; 

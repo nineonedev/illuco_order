@@ -18,6 +18,7 @@ class FileAttachment extends MorphEntity
         'extension',
         'path',
         'upload_path',
+        'upload_url',
         'sort_order',
         'file_key',
     ];
