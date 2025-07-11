@@ -16,6 +16,11 @@ return new class implements Migration
             $table->text('description')->nullable();
             $table->text('memo')->nullable();
             $table->boolean('use_default_memo')->default(false);
+
+            $table->foreignId('category_id')
+                ->nullable()
+                ->constrained('product_categories')
+                ->onDeleteSetNull();
             
             $table->foreign('id')
                 ->references('id')

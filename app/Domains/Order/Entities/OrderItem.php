@@ -69,6 +69,8 @@ class OrderItem extends Entity
                     $pushedItem->setRelation('sets', $existing);
                     $addedToGroup = true;
                     break;
+                } else {
+                    $pushedItem->setRelation('sets', []);
                 }
             }
 

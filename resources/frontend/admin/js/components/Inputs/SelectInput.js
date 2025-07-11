@@ -28,7 +28,7 @@ export default class SelectInput extends View {
     }
 
     _template() {
-        const { label, name, options, fallback} = this._state;
+        const { label, name, options, fallback, spacing} = this._state;
         const nodeId = this._generateElementId();
         return `
             <div class="no-form-control --md">   
@@ -39,7 +39,7 @@ export default class SelectInput extends View {
                         ${this._renderOptions(options)}
                     </select>
                 </label>
-                <span class="no-form-control-space"></span>
+                ${spacing ? `<span class="no-form-control-space"></span>` : ``}
             </div>
         `;
     }

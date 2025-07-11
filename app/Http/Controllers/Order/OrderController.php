@@ -12,11 +12,23 @@ use App\Domains\Order\Repositories\CustomerRepository;
 use App\Domains\Order\Repositories\OrderDocumentRepository;
 use App\Domains\Order\Repositories\OrderItemRepository;
 use App\Domains\Order\Repositories\OrderRepository;
+use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
+use App\Domains\Product\Repositories\CategoryRepository;
 use App\Domains\Product\Repositories\ProductRepository;
+use App\Domains\User\Entities\User;
+use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\DealerRepository;
+use App\Domains\User\Repositories\UserRepository;
 use Framework\Http\Request;
+use Framework\Http\Response;
 use Framework\Routing\Controller;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use RuntimeException;
 
 class OrderController extends Controller
@@ -44,19 +56,100 @@ class OrderController extends Controller
             });
         }
 
-        $query->when($s = $request->query('status'), fn($q) => $q->where('order_status', $s))
-            ->when($n = $request->query('name'), fn($q) => 
-                $q->where('orderer_name', 'like', "%{$n}%")
-                    ->orWhereHas('customer', fn($cq) => $cq->where('name', 'like', "%{$n}%"))
-            )
-            ->when($d = $request->query('dealer'), fn($q) => 
-                $q->whereHas('customer', fn($cq) => $cq->where('dealer_id', $d))
-            )
-            ->orderByDesc('id');
+        // ✅ 상태
+        if ($status = $request->query('status')) {
+            $query->where('order_status', $status);
+        }
+
+        // ✅ 카테고리
+        if ($categoryId = $request->query('category')) {
+            $query->whereHas('items.product.template', function($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
+            });
+        }
+
+        // ✅ 국가
+        if ($country = $request->query('country')) {
+            $query->where(function($q) use ($country) {
+                $q->whereHas('customer', function($cq) use ($country) {
+                    $cq->where('country', $country);
+                })
+                ->orWhereHas('user.dealer', function($uq) use ($country) {
+                    $uq->where('country', $country);
+                });
+            });
+        }
+
+        // ✅ 주문자 (이름)
+        if ($name = $request->query('name')) {
+            $query->where(function($q) use ($name) {
+                $q->where('orderer_name', 'like', "%{$name}%")
+                ->orWhereHas('customer', function($cq) use ($name) {
+                    $cq->where('name', 'like', "%{$name}%");
+                });
+            });
+        }
+
+        // ✅ 대리점
+        if ($dealerId = $request->query('dealer')) {
+            $query->whereHas('customer', function($cq) use ($dealerId) {
+                $cq->where('dealer_id', $dealerId);
+            });
+        }
+
+        // ✅ 검색어 (query) - 이름, 이메일, 전화번호, 연락처 등
+        if ($keyword = $request->query('query')) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('orderer_name', 'like', "%{$keyword}%")
+                ->orWhere('orderer_email', 'like', "%{$keyword}%")
+                ->orWhere('orderer_phone', 'like', "%{$keyword}%")
+                ->orWhereHas('customer', function($cq) use ($keyword) {
+                    $cq->where('name', 'like', "%{$keyword}%");
+                });
+            });
+        }
+
+        // ✅ 정렬
+        $sort = $request->query('sort');
+
+        switch ($sort) {
+            case 'created_at_desc':
+                $query->orderByDesc('created_at');
+                break;
+            case 'created_at_asc':
+                $query->orderBy('created_at');
+                break;
+            case 'name_asc':
+                $query->orderBy('orderer_name');
+                break;
+            case 'name_desc':
+                $query->orderByDesc('orderer_name');
+                break;
+            default:
+                $query->orderByDesc('id');
+                break;
+        }
+
+        $orders = $query->paginate(
+            $request->query('perpage', 15), 
+            $request->query('page', 1)
+        );
+
+        foreach ($orders->items() as $order) {
+            $updatedItems = OrderItem::groupBySet($order->items);
+            $order->setRelation('set_group_items', $updatedItems);  
+        }
 
         return $this->render('admin.pages.orders.index', [
-            'orders' => $query->paginate($request->query('perpage', 15), $request->query('page', 1)),
+            'orders' => $orders,
             'query'  => $request->query(),
+            'categories' => CategoryRepository::make()->all(),
+            'dealers' => UserRepository::make()
+                ->query()
+                ->with(['dealer'])
+                ->where('type', UserType::DEALER)->get(),
+            'statuses' => OrderStatus::all(),
+            'countries' => __('system.countries'),
         ]);
     }
 
@@ -305,6 +398,280 @@ class OrderController extends Controller
                 'order' => $order->toArray(),
             ], '주문이 생성되었습니다.');
         });
+    }
+
+    public function export(Request $request)
+    {
+        // ===== 데이터 준비 =====
+        $query = OrderRepository::make()->with([
+            'customer',
+            'user',
+            'items.product' => [
+                'template' => [
+                    'fileattachment',
+                    'category'
+                ],
+                'loupe',
+                'headlight',
+            ]
+        ])->query();
+
+        if (user()->isDealer()) {
+            $dealerId = user()->dealer->id;
+            $query->whereHas('customer', function($q) use ($dealerId) {
+                $q->where('dealer_id', $dealerId);
+            });
+        }
+
+        $query->orderByDesc('id');
+
+        $orders = $query->get();
+
+        foreach ($orders as $order) {
+            $updatedItems = OrderItem::groupBySet($order->items);
+            $order->setRelation('set_group_items', $updatedItems);
+        }
+
+        // ===== 스프레드시트 =====
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // ===== 다중행 헤더 작성 =====
+
+        /**
+         * ┌────────────┬──────────────┬─────────┐
+         * │ 오더 기본 정보           │ 헤드라이트 정보 │ 루페 정보 │
+         * └────────────┴──────────────┴─────────┘
+         */
+        $sheet->mergeCells('A1:O1');
+        $sheet->setCellValue('A1', '오더 기본 정보');
+        $sheet->mergeCells('P1:P1');
+        $sheet->setCellValue('P1', '헤드라이트 정보');
+        $sheet->mergeCells('Q1:AH1');
+        $sheet->setCellValue('Q1', '루페 정보');
+
+        $sheet->getStyle('A1:AH1')->applyFromArray([
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'FFFACD'],
+            ],
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        // ==== 2번째 헤더 (영문 헤더) ====
+        $headerRow2 = [
+            'Order Number (LOT)',
+            'Name',
+            'Status',
+            'Age',
+            'Country',
+            'Payment Date',
+            'Delivery',
+            'Shipping Date',
+            'Distributor',
+            'Engraving',
+            'Category',
+            'Serial Number',
+            'Model Number',
+            'Type',
+            'Color for Wireless',
+            'OD S',
+            'OD C',
+            'OD A',
+            'OD ADD',
+            'OS S',
+            'OS C',
+            'OS A',
+            'OS ADD',
+            'ADD Option',
+            'Quantity of prescription lens',
+            'Spectacle',
+            'Flip-up Color',
+            'WD',
+            'PD Right',
+            'PD Left',
+            'Deviation',
+            'PD Total',
+            'VD',
+            'Memo'
+        ];
+
+        $colIndex = 1;
+        foreach ($headerRow2 as $text) {
+            $sheet->setCellValueByColumnAndRow($colIndex++, 2, $text);
+        }
+
+        $sheet->getStyle('A2:AH2')->applyFromArray([
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'D9EAD3'],
+            ],
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        // ==== 3번째 헤더 (한글 헤더) ====
+        $headerRow3 = [
+            '오더번호 (LOT)',
+            '이름',
+            '상태',
+            '나이',
+            '국가',
+            '발주일',
+            '납기일',
+            '출하일',
+            '대리점',
+            '각인',
+            '구분',
+            '시리얼 번호',
+            '모델',
+            '형태',
+            '무선 컬러',
+            'S',
+            'C',
+            'A',
+            'ADD',
+            'S',
+            'C',
+            'A',
+            'ADD',
+            'ADD 옵션',
+            '처방렌즈',
+            '안경테',
+            'Flip-up 색상',
+            'WD',
+            '원거리 PD R',
+            '원거리 PD L',
+            '편차 (Deviation)',
+            '원거리 PD 합계',
+            'VD',
+            '메모'
+        ];
+
+        $colIndex = 1;
+        foreach ($headerRow3 as $text) {
+            $sheet->setCellValueByColumnAndRow($colIndex++, 3, $text);
+        }
+
+        $sheet->getStyle('A3:AH3')->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        // ===== 데이터 =====
+        $rowIndex = 4;
+
+        foreach ($orders as $order) {
+            $country = $order->user && $order->user->isDealer()
+                ? ($order->user->dealer ? $order->user->dealer->country : null)
+                : ($order->customer ? $order->customer->country : null);
+
+            foreach ($order->set_group_items as $item) {
+                $product = $item->product;
+                $category = $product && $product->template && $product->template->category
+                    ? $product->template->category->label
+                    : '-';
+                $model = $product && $product->template
+                    ? $product->template->model
+                    : '-';
+                $isHeadlight = $product && $product->type === 'headlight';
+                $isLoupe = $product && $product->type === 'loupe';
+                $headlight = $isHeadlight ? ($product->headlight ?: null) : null;
+                $loupe = $isLoupe ? ($product->loupe ?: null) : null;
+
+                $type = $headlight ? $headlight->type
+                    : ($loupe ? $loupe->type : '-');
+
+                $pd_right = $loupe ? floatval($loupe->pd_right ?? 0) : 0;
+                $pd_left = $loupe ? floatval($loupe->pd_left ?? 0) : 0;
+                $deviation = ($loupe && ($loupe->pd_right !== null && $loupe->pd_left !== null))
+                    ? abs($pd_right - $pd_left)
+                    : '-';
+
+                $rowData = [
+                    $order->order_no,
+                    $order->orderer_name,
+                    __('system.order.status.' . $order->order_status),
+                    $order->customer ? $order->customer->age : null,
+                    $country,
+                    $order->payment_date,
+                    $order->delivery_date,
+                    $order->shipping_date,
+                    $order->user ? $order->user->name : null,
+                    $headlight ? $headlight->engraving_text : ($loupe ? $loupe->engraving_text : '-'),
+                    $category,
+                    $product ? $product->serial_number : '-',
+                    $model,
+                    $type,
+                    $headlight ? $headlight->wireless_color : '-',
+                    $loupe ? $loupe->od_sph : '-',
+                    $loupe ? $loupe->od_cyl : '-',
+                    $loupe ? $loupe->od_axis : '-',
+                    $loupe ? $loupe->od_add : '-',
+                    $loupe ? $loupe->os_sph : '-',
+                    $loupe ? $loupe->os_cyl : '-',
+                    $loupe ? $loupe->os_axis : '-',
+                    $loupe ? $loupe->os_add : '-',
+                    $loupe ? (Loupe::LABELS["add_option_" . $loupe->add_option] ?? '-') : '-',
+                    $item->sets ? count($item->sets) : 0,
+                    $loupe ? $loupe->frame_type : '-',
+                    '-', // Flip-up Color
+                    $loupe ? $loupe->working_distance : '-',
+                    $pd_right,
+                    $pd_left,
+                    $deviation,
+                    $loupe ? $loupe->pd_total : '-',
+                    $loupe ? $loupe->vertex_distance : '-',
+                    $order->memo
+                ];
+
+                $colIndex = 1;
+                foreach ($rowData as $value) {
+                    $sheet->setCellValueByColumnAndRow($colIndex++, $rowIndex, $value);
+                }
+
+                $rowIndex++;
+            }
+        }
+
+        // ===== 테두리 =====
+        $sheet->getStyle('A1:AH' . ($rowIndex - 1))
+            ->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+
+        // ===== 컬럼 폭 자동 =====
+        $highestColumn = $sheet->getHighestColumn();
+        $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+        for ($col = 1; $col <= $highestColumnIndex; $col++) {
+            $sheet->getColumnDimensionByColumn($col)->setAutoSize(true);
+        }
+
+        // ===== 파일 저장 및 다운로드 =====
+        $tmpFilePath = sys_get_temp_dir() . '/orders.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tmpFilePath);
+
+        $filename = 'orders_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+        return Response::download(
+            $tmpFilePath,
+            $filename
+        );
     }
 
 

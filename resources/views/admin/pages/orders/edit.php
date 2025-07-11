@@ -51,7 +51,7 @@ use App\Domains\Order\Enums\OrderStatus;
 
         <div class="no-section-container">
             <!-- 수정 -->
-            <section class="no-form-container">
+            <section class="no-page-flex">
                 <!-- <h2 class="no-order-update__title">주문 수정</h2> -->
                 <form method="post" id="frm" action="<?= route('admin.orders.update', ['id' => $order->id]) ?>">
                     <?= csrf_field() ?>
@@ -132,6 +132,11 @@ use App\Domains\Order\Enums\OrderStatus;
                         <button type="button" class="no-btn-error --sm" data-action="delete">주문 삭제</button>
                         <button type="submit" class="no-btn-primary --sm">상태 저장</button>
                     </div>
+                </form>
+
+                <form method="post" action="">
+                    <input type="text">
+                    <input type="text">
                 </form>
             </section>
 

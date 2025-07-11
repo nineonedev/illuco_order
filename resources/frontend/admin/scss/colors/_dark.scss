@@ -46,6 +46,10 @@ html[data-theme="dark"] {
         rgba(var(--clr-primary-channel), var(--opacity-action-active)) 100%
     );
 
+    --clr-table-headlight: var(--clr-blue-100);
+    --clr-table-order: var(--clr-amber-100);
+    --clr-table-loupe: var(--clr-green-100);
+
     @include palette(
         (
             key: "primary",

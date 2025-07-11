@@ -38,7 +38,7 @@ class TranslatorManager implements TranslatorInterface
         return $this->translators[$name] ?? null;
     }
 
-    public function get(string $key, array $replace = [], ?string $locale = null): ?string
+    public function get(string $key, array $replace = [], ?string $locale = null)
     {
         [$group, $item] = $this->parseKey($key);
         $translator = $this->getTranslator($group);

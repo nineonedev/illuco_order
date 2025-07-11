@@ -87,16 +87,28 @@
                         "label": "국가 선택",
                         "value": "<?=e($dealer->dealer->country) ?? 'KR'?>"
                     }'>
-                    <!-- <div class="no-form-control --md">
-                        <label for="country" class="no-form-control-inner">
-                            <input type="text" name="country" id="country" class="no-form-control-input">
-                            <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text">국가 선택</legend>
-                            </fieldset>
-                        </label>
-                        <span class="no-form-control-space"></span>
-                    </div> -->
                 </div>
+
+                <?php
+                    $props = [
+                        'label' => '제품군 선택',
+                        'name' => 'dealer[category_id]',
+                        'value' => $dealer->dealer->category_id,
+                        'options' => array_merge([['label' => '전체', 'value' => '']], array_map(
+                            fn($c) => [
+                                'label' => $c->label, 
+                                'value' => $c->id,
+                            ],
+                            $categories
+                        )),
+                    ];
+                ?>
+                <div 
+                    class="no-form-field"
+                    data-view-type="select"
+                    data-view-props='<?= e(json_encode($props)) ?>'
+                ></div>
+
 
                 <div class="no-form-control --md">
                     <label for="code" class="no-form-control-inner">

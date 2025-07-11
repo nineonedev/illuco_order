@@ -27,7 +27,7 @@
     <?= include_view('admin.components.header') ?>
 
     <div class="no-root">
-        <div class="no-root-inner no-container-3xl">
+        <div class="no-root-inner no-pd-container">
             <!-- Drawer -->
             <?= include_view('admin.components.drawer') ?>
 

@@ -31,14 +31,16 @@ return new class implements Migration
                 ->onDelete('set null');
 
             $table->decimal('balance', 15, 2)
-            ->default(0)
-            ->comment('미수금 변동액');
+                ->default(0)
+                ->comment('미수금 변동액');
 
             $table->boolean('settled')
                 ->default(false)
                 ->comment('이 히스토리가 처리 완료되었는지 여부');
 
-            $table->text('memo');
+            $table->text('memo')
+                ->nullable()
+                ->comment('고정 노트 또는 기타 메모');
 
             $table->timestamps();
         });
@@ -46,6 +48,6 @@ return new class implements Migration
 
     public function down(): void
     {
-        Schema::drop('order_histories'); 
+        Schema::drop('order_histories');
     }
 };

@@ -1,5 +1,6 @@
 import Controller from "../core/Controller";
 import CountrySelectInput from '../components/Inputs/CountrySelectInput';
+import SelectInput from "../components/Inputs/SelectInput";
 import Modal from '../shared/Modal';
 import Loader from '../shared/Loader';
 
@@ -112,5 +113,9 @@ export default class DealerController extends Controller {
         this.cancelBtn = document.querySelector('[data-action="cancel"]');
         this.modal = Modal.make('portal').render();
         this.loader = Loader.make('portal').render();
+
+        document.querySelectorAll('[data-view-type="select"]').forEach(el => {
+            SelectInput.make(el).render();
+        });
     }
 }

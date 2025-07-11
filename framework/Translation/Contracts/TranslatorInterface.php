@@ -4,7 +4,10 @@ namespace Framework\Translation\Contracts;
 
 interface TranslatorInterface
 {
-    public function get(string $key, array $replace = [], ?string $locale = null): ?string;
+    /**
+     * @return mixed
+     */
+    public function get(string $key, array $replace = [], ?string $locale = null);
 
     public function has(string $key, ?string $locale = null): bool;
 

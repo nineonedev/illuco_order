@@ -1,5 +1,6 @@
 <?php
 
+use Framework\Support\Optional;
 use Framework\Core\Application;
 
 function output_lines(array $lines, bool $highlight = false): void
@@ -89,6 +90,29 @@ if (!function_exists('upload_path')) {
         return static_path($path);
     }
 }
+
+if (!function_exists('optional')) {
+    /**
+     * 객체나 값이 null일 수 있는 상황에서 안전하게 접근하도록 도와주는 helper.
+     *
+     * 예)
+     *    optional($user)->name
+     *    optional($user, fn($u) => $u->name)
+     *
+     * @param mixed $value
+     * @param callable|null $callback
+     * @return mixed|Optional
+     */
+    function optional($value = null, callable $callback = null)
+    {
+        if ($callback) {
+            return $value !== null ? $callback($value) : null;
+        }
+
+        return new Optional($value);
+    }
+}
+
 
 if (!function_exists('json')) {
     /**

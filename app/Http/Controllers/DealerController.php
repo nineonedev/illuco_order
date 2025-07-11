@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Auth\Repositories\RoleRepository;
+use App\Domains\Product\Repositories\CategoryRepository;
 use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Enums\UserType;
@@ -41,13 +42,17 @@ class DealerController extends Controller
 
     public function create()
     {
-        return $this->render('admin.pages.dealers.create');
+        $categories = CategoryRepository::make()->all();
+        return $this->render('admin.pages.dealers.create', [
+            'categories' => $categories,
+        ]);
     }
 
     public function edit(string $id)
     {
         $dealer = UserRepository::make()->findOrFail($id); 
         $dealer->load([UserType::DEALER]);
+        $categories = CategoryRepository::make()->all();
 
         if (!$dealer) {
             throw new RuntimeException("대리점 정보를 찾을 수 없습니다.");
@@ -55,6 +60,7 @@ class DealerController extends Controller
 
         return $this->render('admin.pages.dealers.edit', [
             'dealer' => $dealer,
+            'categories' => $categories,
         ]);
     }
 
@@ -85,12 +91,14 @@ class DealerController extends Controller
                 'code' => 'required|unique:dealers',
                 'address' => 'nullable',
                 'description' => 'nullable',
+                'category_id' => 'nullable|integer',
             ]);
 
             $validator->validateOrFail();
-            $dealer = $validator->validated();
-            $dealer = new Dealer($dealer); 
+            $dealerData = $validator->validated();
+            $dealer = new Dealer($dealerData); 
             $dealer->id = $user->id; 
+            $dealer->category_id = $dealerData['category_id'] ?: null; 
             $dealer = DealerRepository::make()->save($dealer); 
 
             if (!$dealer) { 
@@ -115,6 +123,7 @@ class DealerController extends Controller
             $isActive = $request->body('is_active') ? true : false; 
             $data['is_active'] = $isActive; 
 
+
             $user->fill($data); 
             $user = UserRepository::make()->save($user); 
 
@@ -124,8 +133,9 @@ class DealerController extends Controller
 
             $dealerData = $request->body($user->type);
             $dealer = $user->{$user->type};
+            
             $dealer = $dealer->fill($dealerData); 
-
+            $dealer->category_id = $dealerData['category_id'] ?: null;
             $dealer = DealerRepository::make()->save($dealer); 
 
             if (!$dealer) {

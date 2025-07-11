@@ -1,14 +1,22 @@
 @use "../abstracts" as *;
 
+%container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 2.4rem;
+  padding-left: 2.4rem;
+}
+
 @each $key, $value in $breakpoints {
     .no-container-#{$key} {
         max-width: #{$value}px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding-right: 2.4rem;
-        padding-left: 2.4rem;
+        @extend %container;
     }
+}
+
+.no-pd-container {
+  @extend %container;
 }
 
 .no-base-flex{

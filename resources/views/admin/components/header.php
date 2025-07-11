@@ -1,5 +1,5 @@
 <header class="no-header">
-    <div class="no-header-inner no-container-3xl">
+    <div class="no-header-inner no-pd-container">
         <button type="button" class="no-header-toggle" id="drawer-open-btn">
             <i class="fa-light fa-bars"></i>
         </button>

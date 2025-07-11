@@ -11,7 +11,12 @@ class Dealer extends Entity
         'country',
         'code',
         'address',
-        'description'
+        'description',
+        'category_id',
+    ];
+
+    protected array $casts = [
+        'category_id' => '?int',
     ];
 
     public static function repositoryClass(): string

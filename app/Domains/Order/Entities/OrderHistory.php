@@ -22,7 +22,7 @@ class OrderHistory extends Entity
         'dealer_id'    => 'int',
         'customer_id'  => 'int',
         'created_by'   => 'int',
-        'balance'      => 'decimal:2',
+        'balance'      => 'decimal',
         'settled'      => 'bool',
         'memo'         => 'string',
     ];

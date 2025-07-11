@@ -4,7 +4,7 @@ use Framework\Database\TransactionManager;
 use Framework\Translation\TranslatorManager;
 
 if (!function_exists('translation')) {
-    function translation(string $key, array $replace = [], ?string $locale = null): ?string
+    function translation(string $key, array $replace = [], ?string $locale = null)
     {
         /** @var TranslatorManager $manager */
         $manager = app()->make(TranslatorManager::class);
@@ -14,14 +14,14 @@ if (!function_exists('translation')) {
 }
 
 if (!function_exists('lang')) {
-    function lang(string $key, array $replace = [], ?string $locale = null): ?string
+    function lang(string $key, array $replace = [], ?string $locale = null)
     {
         return translation($key, $replace, $locale);
     }
 }
 
 if (!function_exists('__')) {
-    function __(string $key, array $replace = [], ?string $locale = null): ?string
+    function __(string $key, array $replace = [], ?string $locale = null)
     {
         return lang($key, $replace, $locale);
     }
@@ -32,7 +32,7 @@ if (!function_exists('transfer')) {
      * @example transfer('rule.between', 'system.age', [10, 20])
      * '{0}은 {1}~{2} 사이여야 합니다.' → "나이는 10~20 사이여야 합니다."
      */
-    function transfer(string $key, string $labelKey, array $replace = [], ?string $locale = null): ?string
+    function transfer(string $key, string $labelKey, array $replace = [], ?string $locale = null)
     {
         // 라벨 값 얻기
         $label = lang($labelKey, [], $locale);
@@ -51,7 +51,7 @@ if (!function_exists('translator')) {
 
 
 if (!function_exists('_')) {
-    function _(string $key, array $replace = [], ?string $locale = null): ?string
+    function _(string $key, array $replace = [], ?string $locale = null)
     {
         return translator()->getDefaultTranslator()->get($key, $replace, $locale);
     }

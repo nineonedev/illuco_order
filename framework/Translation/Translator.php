@@ -19,7 +19,7 @@ class Translator implements TranslatorInterface
         $this->loader = $loader;
     }
 
-    public function get(string $key, array $replace = [], ?string $locale = null): ?string
+    public function get(string $key, array $replace = [], ?string $locale = null)
     {
         $locale = $locale ?: $this->locale;
 
@@ -31,18 +31,14 @@ class Translator implements TranslatorInterface
             $value = Arr::get($fallbackLines, $key);
         }
 
-        // 값이 문자열이 아니라면, 기본값으로 null을 반환
-        if (!is_string($value)) {
-            return null;  // 반환값을 string 또는 null로 제한
-        }
+        if (is_string($value)) {
+            foreach ($replace as $i => $v) {
+                $value = str_replace('{' . $i . '}', $v, $value);
+            }
 
-        // 치환 작업
-        foreach ($replace as $i => $v) {
-            $value = str_replace('{' . $i . '}', $v, $value);   // {0}, {1} 치환
-        }
-
-        foreach ($replace as $k => $v) {
-            $value = str_replace(':' . $k, $v, $value);
+            foreach ($replace as $k => $v) {
+                $value = str_replace(':' . $k, $v, $value);
+            }
         }
 
         return $value;

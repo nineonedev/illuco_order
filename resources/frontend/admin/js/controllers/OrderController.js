@@ -15,6 +15,16 @@ export default class OrderController extends Controller {
     _prepare(){
         this.modal = Modal.make('portal').render();
         this.loader = Loader.make('portal').render();
+
+        
+        document.querySelectorAll('[data-view-type="select"]').forEach(el => {
+            SelectInput.make(el).render();
+        });
+    }
+
+    index(){
+        this._prepare(); 
+        this._logger.info("index");
     }
 
     show(){
