@@ -28,24 +28,79 @@ class NoticeController extends Controller
 
     public function index(Request $request)
     {
-        $query = $this->repo()->with([FileAttachment::class])->query();
+        $query = $this->repo()
+            ->with([FileAttachment::class])
+            ->query();
 
-        $query->when($t = $request->query('title'), fn($q) => $q->where('title', 'like', "%{$t}%"))
-              ->when($s = $request->query('status'), fn($q) => $q->where('status', $s))
-              ->when(!is_null($p = $request->query('is_pinned')), fn($q) => $q->where('is_pinned', (bool) $p))
-              ->when($request->query('visible') === 'now', function ($q) {
-                  $now = now();
-                  $q->where('status', NoticeStatus::PUBLISHED)
-                    ->where(fn($q) => $q->whereNull('visible_from')->orWhere('visible_from', '<=', $now))
-                    ->where(fn($q) => $q->whereNull('visible_to')->orWhere('visible_to', '>=', $now));
-              })
-              ->orderByDesc('is_pinned');
+        $query
+            ->when(
+                $t = $request->query('title'),
+                fn($q) => $q->where('title', 'like', "%{$t}%")
+            )
+            ->when(
+                $s = $request->query('status'),
+                fn($q) => $q->where('status', $s)
+            )
+            ->when(
+                ($p = $request->query('is_pinned')) !== null && $p !== '',
+                fn($q) => $q->where('is_pinned', (bool) $p)
+            )
+            ->when(
+                $request->query('author'),
+                fn($q, $author) => $q->whereHas('user', fn($subQ) => $subQ->where('name', 'like', "%{$author}%"))
+            )
+            ->when(
+                $request->query('visible') === 'now',
+                function ($q) {
+                    $now = now();
+
+                    $q->where('status', NoticeStatus::PUBLISHED)
+                        ->where(fn($q) =>
+                            $q->whereNull('visible_from')
+                                ->orWhere('visible_from', '<=', $now)
+                        )
+                        ->where(fn($q) =>
+                            $q->whereNull('visible_to')
+                                ->orWhere('visible_to', '>=', $now)
+                        );
+                }
+            );
+
+        // ✅ 정렬
+        $sort = $request->query('sort');
+        if ($sort) {
+            switch ($sort) {
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'created_at_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'title_asc':
+                    $query->orderBy('title');
+                    break;
+                case 'title_desc':
+                    $query->orderByDesc('title');
+                    break;
+                default:
+                    $query->orderByDesc('is_pinned');
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('is_pinned');
+            $query->orderByDesc('created_at');
+        }
 
         return $this->render('admin.pages.notices.index', [
-            'notices' => $query->paginate($request->query('perpage', 15), $request->query('page', 1)),
-            'query'   => $request->query(),
+            'notices' => $query->paginate(
+                $request->query('perpage', 15),
+                $request->query('page', 1)
+            ),
+            'query' => $request->query(),
         ]);
     }
+
 
     public function create()
     {

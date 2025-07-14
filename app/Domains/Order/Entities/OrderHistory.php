@@ -15,12 +15,13 @@ class OrderHistory extends Entity
         'balance',
         'settled',
         'memo',
+        'created_at',
     ];
 
     protected array $casts = [
         'order_id'     => 'int',
-        'dealer_id'    => 'int',
-        'customer_id'  => 'int',
+        'dealer_id'    => '?int',
+        'customer_id'  => '?int',
         'created_by'   => 'int',
         'balance'      => 'decimal',
         'settled'      => 'bool',

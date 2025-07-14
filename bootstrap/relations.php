@@ -13,7 +13,9 @@ use App\Domains\Order\Entities\Documents\ProductRequest;
 use App\Domains\Order\Entities\Documents\ProformaInvoice;
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Entities\OrderDocument;
+use App\Domains\Order\Entities\OrderHistory;
 use App\Domains\Order\Entities\OrderItem;
+use App\Domains\Order\Entities\OrderLog;
 use App\Domains\Product\Entities\Category;
 use App\Domains\Product\Entities\Headlight;
 use App\Domains\Product\Entities\Loupe;
@@ -45,9 +47,12 @@ Rel::setConfig([
         Rel::hasMany('claims',  Claim::class, 'user_id'),
         Rel::hasMany('customers', Customer::class, 'user_id'),
         Rel::hasOne('dealer', Dealer::class, 'id'),
+        Rel::hasMany('orderLogs', OrderLog::class, 'user_id'),
+        Rel::hasMany('orderHistories', OrderHistory::class, 'created_by'),
     ],
     Dealer::class => [
         Rel::belongsTo('user', User::class, 'id'),
+        Rel::hasMany('orderHistories', OrderHistory::class, 'dealer_id'),
     ],
 
     // ===================================================================
@@ -91,6 +96,7 @@ Rel::setConfig([
     Customer::class => [
         Rel::hasOne('cart', Cart::class, 'customer_id'),
         Rel::belongsTo('user', User::class, 'user_id'),
+        Rel::hasMany('orderHistories', OrderHistory::class, 'customer_id'),
     ],
     Cart::class => [
         Rel::belongsTo('customer', Customer::class, 'customer_id'),
@@ -108,6 +114,16 @@ Rel::setConfig([
         Rel::belongsTo('customer', Customer::class, 'customer_id'),
         Rel::hasMany('items', OrderItem::class, 'order_id'),
         Rel::hasMany('documents', OrderDocument::class, 'order_id'),
+    ],
+    OrderLog::class => [
+        Rel::belongsTo('order', Order::class, 'order_id'),
+        Rel::belongsTo('user', User::class, 'user_id'),
+    ],
+    OrderHistory::class => [
+        Rel::belongsTo('order', Order::class, 'order_id'),
+        Rel::belongsTo('customer', Order::class, 'customer_id'),
+        Rel::belongsTo('user', User::class, 'created_by'),
+        Rel::belongsTo('dealer', Dealer::class, 'dealer_id'),
     ],
     OrderItem::class => [
         Rel::belongsTo('order', Order::class, 'order_id'),

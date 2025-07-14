@@ -23,7 +23,7 @@ use App\Domains\Product\Entities\Loupe;
             <div class="no-page-index-filter">
                 <div class="no-page-index-filter__form">
                     <!-- 🔎 검색어 -->
-                    <div class="no-form-search --sm">
+                    <div class="no-form-search">
                         <label for="query" class="no-form-label">검색</label>
                         <div class="no-form-search-inner">
                             <div class="no-form-search__icon">
@@ -106,7 +106,7 @@ use App\Domains\Product\Entities\Loupe;
                     ></div>
 
                     <!-- ✅ 주문자 -->
-                    <div class="no-form-search --sm">
+                    <div class="no-form-search">
                         <label for="orderer_query" class="no-form-label">주문자</label>
                         <div class="no-form-search-inner">
                             <div class="no-form-search__icon">
@@ -163,12 +163,13 @@ use App\Domains\Product\Entities\Loupe;
                         data-view-type="select"
                         data-view-props='<?= e(json_encode($props)) ?>'
                     ></div>
+
+                    <div class="no-page-index-link">
+                        <button type="submit" class="no-btn-primary --sm">검색</button>
+                    </div>
                 </div>
 
                 <div class="no-page-index-link">
-                    <!-- ✅ 검색 버튼 -->
-                    <button type="submit" class="no-btn-primary --sm">검색</button>
-
                     <a href="<?= route('admin.orders.export') ?>" class="no-btn-success --sm">
                         <span>Export</span>
                     </a>
@@ -271,10 +272,12 @@ use App\Domains\Product\Entities\Loupe;
                     </thead>
 
                     <tbody>
-                        <?php foreach ($orders->items() as $order): ?>
+                        <?php foreach ($orders->items() as $idx => $order): ?>
                             <?php
                                 $rowspan = count($order->set_group_items);
                                 $first = true;
+                                
+                                $bgClass = $idx % 2 !== 0 ? 'bg' : '';
 
                                 $country = $order->user->isDealer()
                                     ? $order->user->dealer->country
@@ -307,7 +310,7 @@ use App\Domains\Product\Entities\Loupe;
                                         : '-';
 
                                 ?>
-                                <tr>
+                                <tr class="<?=$bgClass?>">
                                     <?php if ($first): ?>
                                         <!-- ✅ 체크박스 -->
                                         <td class="no-table-check sticky --check" rowspan="<?= $rowspan ?>">
@@ -416,7 +419,7 @@ use App\Domains\Product\Entities\Loupe;
                                 <?php $first = false; ?>
                             <?php endforeach; ?>
                         <?php endforeach; ?>
-                        </tbody>
+                    </tbody>
 
                 </table>
             </div>

@@ -7,6 +7,7 @@ import AttributeManager from "../components/Product/AttributeManager";
 import AttributeModal from "../components/Product/AttributeModal";
 import Select from '../components/Select';
 import SelectInput from "../components/Inputs/SelectInput";
+import FileInput from '../components/Inputs/FileInput';
 
 export default class ProductTemplateController extends Controller {
     form;
@@ -15,28 +16,29 @@ export default class ProductTemplateController extends Controller {
     attrModal;
 
     index(){
-
+        this._logger.info("index");
+        this._prepare();
     }
 
     async _prepare() {
         this.form = document.getElementById('frm');
         this.cancelBtn = document.querySelector('[data-action="cancel"]');
 
-        document.querySelectorAll('[data-component-type=file]').forEach(el => {
-            File.make(el).render();
+        document.querySelectorAll('[data-view-type=file]').forEach(el => {
+            FileInput.make(el).render();
         });
 
-        document.querySelectorAll('[data-component-type=select]').forEach(el => {
-            Select.make(el).render();
+        document.querySelectorAll('[data-view-type=select]').forEach(el => {
+            SelectInput.make(el).render();
         })
 
-        const categoryInput = SelectInput.make('category_id', {
-            label: '카테고리',
-            name: "category_id"
-        }).render();
+        // const categoryInput = SelectInput.make('category_id', {
+        //     label: '카테고리',
+        //     name: "category_id"
+        // }).render();
 
-        const categories = await this._fetchCategories();
-        categoryInput.setState({options: categories.map(c => ({value: c.id, label: c.label}))});
+        // const categories = await this._fetchCategories();
+        // categoryInput.setState({options: categories.map(c => ({value: c.id, label: c.label}))});
     }
 
     show(){

@@ -75,7 +75,17 @@ class MysqlGrammar extends Grammar
         }
 
         if ($groups = $builder->getGroups()) {
-            $sql .= ' group by ' . implode(', ', array_map(fn($g) => $this->wrap($g), $groups));
+            $groupParts = [];
+
+            foreach ($groups as $group) {
+                if (is_array($group) && $group['type'] === 'raw') {
+                    $groupParts[] = $group['sql'];
+                } else {
+                    $groupParts[] = $this->wrap($group);
+                }
+            }
+
+            $sql .= ' group by ' . implode(', ', $groupParts);
         }
 
         if ($havings = $builder->getHavings()) {

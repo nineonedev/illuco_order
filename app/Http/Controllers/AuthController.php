@@ -155,7 +155,7 @@ class AuthController extends Controller
         return $this->responseWith()
             ->success(true)
             ->message($message)
-            ->redirectRoute('admin.orders.index')
+            ->redirectRoute('admin.dashboard')
             ->data(['user' => $user])
             ->send();
     }

@@ -10,7 +10,9 @@ use App\Domains\Order\Repositories\CartItemRepository;
 use App\Domains\Order\Repositories\CartRepository;
 use App\Domains\Order\Repositories\CustomerRepository;
 use App\Domains\Order\Repositories\OrderDocumentRepository;
+use App\Domains\Order\Repositories\OrderHistoryRepository;
 use App\Domains\Order\Repositories\OrderItemRepository;
+use App\Domains\Order\Repositories\OrderLogRepository;
 use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
@@ -140,6 +142,9 @@ class OrderController extends Controller
             $order->setRelation('set_group_items', $updatedItems);  
         }
 
+
+        $histories = OrderHistoryRepository::make()->all(); 
+
         return $this->render('admin.pages.orders.index', [
             'orders' => $orders,
             'query'  => $request->query(),
@@ -167,9 +172,13 @@ class OrderController extends Controller
             ]);
 
             $data = $request->safe();
+            $newStatus = $data['order_status'];
+
+            unset($data['order_status']);
+
             $order->fill($data);
             $order = OrderRepository::make()->save($order);
-            $order->setStatus($data['order_status']);
+            $order->setStatus($newStatus);
 
             return $this->render(null, [
                 'order' => $order->toArray(),
@@ -683,11 +692,13 @@ class OrderController extends Controller
 
     public function edit(Request $request, string $orderNo)
     {
+        
         return $this->renderDetail($request, $orderNo, 'admin.pages.orders.edit');   
     }
 
     public function renderDetail(Request $request,  $orderNo, string $view)
     {
+            
         $order = OrderRepository::make()
             ->with([
                 'documents',
@@ -698,6 +709,31 @@ class OrderController extends Controller
             ->query()
             ->where('order_no', $orderNo)
             ->firstOrFail();
+        
+        $orderLogs = OrderLogRepository::make()
+            ->query()
+            ->with(['user'])
+            ->where('order_id', $order->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        if ($order->dealer_id) {
+            $orderHistories = OrderHistoryRepository::make()
+                ->query()
+                ->with(['user', 'order', 'dealer.user'])
+                ->where('dealer_id', $order->dealer_id)
+                ->orderByDesc('created_at')
+                ->get();
+        } elseif ($order->customer_id) {
+            $orderHistories = OrderHistoryRepository::make()
+                ->query()
+                ->with(['user', 'order', 'customer'])
+                ->where('customer_id', $order->customer_id)
+                ->orderByDesc('created_at')
+                ->get();
+        } else {
+            $orderHistories = [];
+        }
 
         foreach ($order->items as $item) {
             $type = $item->product->type;
@@ -724,6 +760,8 @@ class OrderController extends Controller
         
         return $this->render($view, [
             'order' => $order,
+            'orderHistories' => $orderHistories,
+            'orderLogs' => $orderLogs,
         ]);
     }
 

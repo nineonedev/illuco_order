@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Communication;
 
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Repositories\ClaimRepository;
+use App\Domains\User\Repositories\DealerRepository;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -17,23 +18,90 @@ class ClaimController extends Controller
 
     public function index(Request $request)
     {
-        $perpage = $request->query('perpage', 15);
-        $page = $request->query('page', 1);
-        
         $query = $this->repo()->query();
-        
-        // 'title' 쿼리 파라미터가 존재하면 이를 조건에 추가
-        $query->when($title = $request->query('title'), function ($q) use ($title) {
-            $q->where('title', 'like', "%{$title}%");
-        });
 
-        $claims = $query->paginate($perpage, $page);
-        
+        // ✅ 제목 검색
+        $query->when(
+            $title = $request->query('title'),
+            fn($q) => $q->where('title', 'like', "%{$title}%")
+        );
+
+        // ✅ 상태 검색
+        $query->when(
+            $status = $request->query('status'),
+            fn($q) => $q->where('status', $status)
+        );
+
+        // ✅ 제품 시리얼 검색
+        $query->when(
+            $serial = $request->query('product_serial'),
+            fn($q) => $q->whereHas('product', fn($subQ) => 
+                $subQ->where('serial_number', 'like', "%{$serial}%"))
+        );
+
+        // ✅ 작성자 검색
+        $query->when(
+            $author = $request->query('author'),
+            fn($q) => $q->whereHas('user', fn($subQ) => 
+                $subQ->where('name', 'like', "%{$author}%"))
+        );
+
+        // ✅ 대리점 검색
+        $query->when(
+            $dealerId = $request->query('dealer_id'),
+            fn($q) => $q->where('dealer_id', $dealerId)
+        );
+
+        // ✅ 주문자 검색
+        $query->when(
+            $orderer = $request->query('orderer_name'),
+            fn($q) => $q->where('orderer_name', 'like', "%{$orderer}%")
+        );
+
+        // ✅ 정렬
+        $sort = $request->query('sort');
+        if ($sort) {
+            switch ($sort) {
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'created_at_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'title_asc':
+                    $query->orderBy('title');
+                    break;
+                case 'title_desc':
+                    $query->orderByDesc('title');
+                    break;
+                default:
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+        $dealers = DealerRepository::make()
+            ->withoutTrashed()    
+            ->with(['user'])
+            ->all();
+            
+        $dealers = array_filter($dealers, fn($dealer) => $dealer->user);
+
+        $claims = $query->paginate(
+            $request->query('perpage', 15),
+            $request->query('page', 1)
+        );
+
         return $this->render('admin.pages.claims.index', [
             'claims' => $claims,
-            'query'  => $request->query(),
+            'query' => $request->query(),
+            'dealers' => $dealers,
         ]);
     }
+
+
 
     public function show(string $id)
     {

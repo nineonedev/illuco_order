@@ -3,6 +3,7 @@
 namespace App\Domains\Order\Entities;
 
 use App\Domains\Order\Enums\OrderStatus;
+use App\Domains\Order\Repositories\OrderLogRepository;
 use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\Product\Repositories\ProductRepository;
 use App\Domains\User\Enums\UserType;
@@ -95,6 +96,20 @@ class Order extends Entity
 
         if ($this->getRelation('dealer')) {
             $this->load(['dealer']);
+        }
+
+        $orderLogData = [
+            'order_id' => $this->id, 
+            'user_id' => user()->id,
+            'status' => $status,
+            'previous_status' => $this->order_status,
+        ];
+
+        $orderLog = new OrderLog($orderLogData);
+        $orderLog = OrderLogRepository::make()->save($orderLog);
+
+        if (!$orderLog) {
+            throw new RuntimeException("오더 상태 기록에 실패하였습니다.");
         }
 
         // if (config->useEmail) JSON으로 해도될듯? 아니면 그냥 row로 나눠도 되고 key, value 방식으로 

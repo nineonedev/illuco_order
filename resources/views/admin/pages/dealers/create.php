@@ -60,14 +60,15 @@
 
                 <!-- 국가 -->
                 <div 
-                    id="country-hook" 
                     data-view-type="country-select" 
-                    data-view-props='{
-                        "name": "dealer[country]",
-                        "label": "국가 선택",
-                        "value": "KR"
-                    }'>
+                    data-view-props='<?= e(json_encode([
+                        "name" => "dealer[country]",
+                        "label" => "국가 선택",
+                        "value" => '',
+                        "options" => __('system.countries'),
+                    ])) ?>'>
                 </div>
+
                 
                 <?php
                     $props = [

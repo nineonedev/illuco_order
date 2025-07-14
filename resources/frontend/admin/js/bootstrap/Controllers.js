@@ -9,6 +9,7 @@ import OrderController from "../controllers/OrderController";
 import ProductTemplateController from "../controllers/ProductTemplateController";
 import RoleController from "../controllers/RoleController";
 import OrderDocumentController from '../controllers/OrderDocumentController';
+import ClaimController from "../controllers/ClaimController";
 
 export default {
     notice: NoticeController,
@@ -21,5 +22,6 @@ export default {
     cart: CartController,
     order: OrderController,
     category: CategoryController,
-    orderDocument: OrderDocumentController
+    orderDocument: OrderDocumentController,
+    claim: ClaimController,
 };

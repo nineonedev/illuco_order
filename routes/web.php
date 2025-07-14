@@ -50,6 +50,8 @@ Route::middleware(['web'])->group(function(){
         ->group(function(){
             
             Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('dashboard/data', [AdminController::class, 'dashboardData'])->name('dashboard.data');
+            
             Route::get('guide', [AdminController::class, 'guide'])->name('guide');
             Route::get('test', [AdminController::class, 'test'])->name('test');
             Route::get('seting', [AdminController::class, 'setting'])->name('setting'); 

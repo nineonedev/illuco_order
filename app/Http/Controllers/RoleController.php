@@ -13,13 +13,55 @@ class RoleController extends Controller
 {
     public function index(Request $request)
     {
-        $page = $request->query('page') ?? 1;
-        $roles = RoleRepository::queryStatic()->paginate(15, $page);
+        $query = RoleRepository::queryStatic();
+
+        // 권한명 검색
+        $query->when(
+            $name = $request->query('name'),
+            fn($q) => $q->where('name', 'like', "%{$name}%")
+        );
+
+        // 설명 검색
+        $query->when(
+            $description = $request->query('description'),
+            fn($q) => $q->where('description', 'like', "%{$description}%")
+        );
+
+        // 정렬
+        $sort = $request->query('sort');
+        if ($sort) {
+            switch ($sort) {
+                case 'name_asc':
+                    $query->orderBy('name');
+                    break;
+                case 'name_desc':
+                    $query->orderByDesc('name');
+                    break;
+                case 'created_at_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                default:
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+        $perPage = $request->query('perPage', 15);
+        $page = $request->query('page', 1);
+
+        $roles = $query->paginate($perPage, $page);
 
         return $this->render('admin.pages.roles.index', [
             'roles' => $roles,
+            'query' => $request->query(),
         ]);
     }
+
 
     public function create()
     {

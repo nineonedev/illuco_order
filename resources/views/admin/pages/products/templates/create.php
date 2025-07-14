@@ -75,9 +75,27 @@ use App\Domains\Product\Entities\ProductTemplate;
                         </label>
                         <span class="no-form-control-space"></span>
                     </div>
-
                     
-                    <div id="category_id"></div>
+                    <?php
+                        $categoryProps = [
+                            'label' => '카테고리',
+                            'name' => 'category_id',
+                            'value' => '',
+                            'options' => array_merge(
+                                [['label' => '선택', 'value' => '']],
+                                array_map(fn($category) => [
+                                    'label' => $category->label,
+                                    'value' => $category->id,
+                                ], $categories)
+                            ),
+                        ];
+                    ?>
+                    <div
+                        class="no-form-field"
+                        data-view-type="select"
+                        data-view-props='<?= e(json_encode($categoryProps)) ?>'
+                    ></div>
+
 
                     <div data-component-type="file" data-component-props='{"file_key": "main_image", "label": "대표 이미지"}'></div>
 

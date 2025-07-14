@@ -66,19 +66,83 @@ class ProductTemplateController extends Controller
 
     public function index(Request $request)
     {
-        $query = $this->repo()->with([FileAttachment::class, 'category'])->query();
+        $query = $this->repo()
+            ->with([FileAttachment::class, 'category'])
+            ->query();
 
-        if ($name = $request->input('name')) {
-            $query->where('name', 'like', "%{$name}%");
+        // 제품명 검색
+        $query->when(
+            $name = $request->query('name'),
+            fn($q) => $q->where('name', 'like', "%{$name}%")
+        );
+
+        // 코드 검색
+        $query->when(
+            $code = $request->query('code'),
+            fn($q) => $q->where('code', 'like', "%{$code}%")
+        );
+
+        // 모델 검색
+        $query->when(
+            $model = $request->query('model'),
+            fn($q) => $q->where('model', 'like', "%{$model}%")
+        );
+
+        // 카테고리
+        $query->when(
+            $categoryId = $request->query('category_id'),
+            fn($q) => $q->where('category_id', $categoryId)
+        );
+
+        // 정렬
+        $sort = $request->query('sort');
+        if ($sort) {
+            switch ($sort) {
+                case 'name_asc':
+                    $query->orderBy('name');
+                    break;
+                case 'name_desc':
+                    $query->orderByDesc('name');
+                    break;
+                case 'created_at_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'sort_order_asc':
+                    $query->orderBy('sort_order');
+                    break;
+                case 'sort_order_desc':
+                    $query->orderByDesc('sort_order');
+                    break;
+                default:
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('created_at');
         }
 
-        $paginator = $query->paginate($request->query('perpage', 15), $request->query('page', 1));
+        $perPage = $request->query('perpage', 15);
+        $page = $request->query('page', 1);
+
+        $paginator = $query->paginate($perPage, $page);
         $templates = $request->expectsJson() ? $paginator->toArray() : $paginator;
 
+        // 카테고리 목록도 같이 내려줌
+        $categories = CategoryRepository::make()
+            ->query()
+            ->orderByAsc('sort_order')
+            ->get();
+
         return $this->render('admin.pages.products.templates.index', [
-            'templates' => $templates
+            'templates'   => $templates,
+            'query'       => $request->query(),
+            'categories'  => $categories,
         ]);
     }
+
 
     public function show(string $id, Request $request) 
     {
@@ -94,7 +158,7 @@ class ProductTemplateController extends Controller
         $categories = CategoryRepository::make()->query()->orderByAsc('sort_order')->get();
 
         return $this->render('admin.pages.products.templates.create', [
-            'categories' => array_map(fn($c) => $c->toArray(), $categories)
+            'categories' => $categories,
         ]);
     }
 

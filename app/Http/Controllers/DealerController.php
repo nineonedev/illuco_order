@@ -25,10 +25,67 @@ class DealerController extends Controller
             ->query()
             ->where('type', UserType::DEALER);
 
-        $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
-            $q->where('code', 'like', "%{$keyword}%")
-                ->orWhere('phone', 'like', "%{$keyword}%");
-        });
+        // 대리점명
+        $query->when(
+            $name = $request->query('name'),
+            fn($q) => $q->where('name', 'like', "%{$name}%")
+        );
+
+        // 국가
+        $query->when(
+            $country = $request->query('country'),
+            function ($q) use ($country) {
+                $q->whereHas(UserType::DEALER, fn($dealerQ) => 
+                    $dealerQ->where('country', $country)
+                );
+            }
+        );
+
+        // 코드
+        $query->when(
+            $code = $request->query('code'),
+            function ($q) use ($code) {
+                $q->whereHas(UserType::DEALER, fn($dealerQ) => 
+                    $dealerQ->where('code', 'like', "%{$code}%")
+                );
+            }
+        );
+
+        // 연락처
+        $query->when(
+            $phone = $request->query('phone'),
+            fn($q) => $q->where('phone', 'like', "%{$phone}%")
+        );
+
+        // 이메일
+        $query->when(
+            $email = $request->query('email'),
+            fn($q) => $q->where('email', 'like', "%{$email}%")
+        );
+
+        // 정렬
+        $sort = $request->query('sort');
+        if ($sort) {
+            switch ($sort) {
+                case 'created_at_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'name_asc':
+                    $query->orderBy('name');
+                    break;
+                case 'name_desc':
+                    $query->orderByDesc('name');
+                    break;
+                default:
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('created_at');
+        }
 
         $perpage = $request->query('perpage', 15);
         $page = $request->query('page', 1);
@@ -37,8 +94,10 @@ class DealerController extends Controller
         return $this->render('admin.pages.dealers.index', [
             'dealers' => $dealers,
             'query'   => $request->query(),
+            'countries' => __('system.countries'),
         ]);
     }
+
 
     public function create()
     {

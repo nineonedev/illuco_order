@@ -14,6 +14,7 @@ export default class NoticeController extends Controller {
 
     index() {
         this._logger.info("index");
+        this._prepare(); 
     }
 
     create() {

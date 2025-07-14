@@ -1,6 +1,8 @@
 import Controller from "../core/Controller";
 import Modal from "../shared/Modal";
 import Loader from "../shared/Loader";
+import SelectInput from "../components/Inputs/SelectInput";
+import CountrySelectInput from "../components/Inputs/CountrySelectInput";
 
 export default class RoleController extends Controller {
     form;
@@ -10,6 +12,7 @@ export default class RoleController extends Controller {
 
     index() {
         this._logger.info("index");
+        this._prepare(); 
     }
 
     _prepare() {
@@ -17,6 +20,14 @@ export default class RoleController extends Controller {
         this.cancelBtn = document.querySelector('[data-action="cancel"]');
         this.modal = Modal.make('portal').render();
         this.loader = Loader.make('portal').render();
+
+        document.querySelectorAll('[data-view-type="country-select"]').forEach(el => {
+            CountrySelectInput.make(el).render();
+        });
+
+        document.querySelectorAll('[data-view-type="select"]').forEach(el => {
+            SelectInput.make(el).render();
+        });
     }
 
     create() {

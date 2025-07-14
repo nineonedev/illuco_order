@@ -85,6 +85,12 @@ export default class OrderController extends Controller {
 
         this.cancelBtn = form.querySelector('[data-action=cancel]');
 
+        const historyForm = document.getElementById('history-form'); 
+
+        if (historyForm) {
+            historyForm.addEventListener('submit', this._storeHistory.bind(this)); 
+        }
+
         if(form){
             const deleteBtn = form.querySelector('[data-action=delete]');
 
@@ -110,6 +116,36 @@ export default class OrderController extends Controller {
         }
 
     }
+
+    async _storeHistory(e) {
+        e.preventDefault();
+        const button = e.submitter;
+        const form = e.target;
+        this._logger.info(button, form);
+
+        try {
+            button.disabled = true; 
+            this.loader.show();
+
+            const fd = new FormData(form); 
+                
+            if (!fd.get('memo')) {
+                throw new Error("메모를 입력해주세요.");
+            }
+            
+            const result = await new Ajax(false).post(form.action, fd);
+            this._logger.success(result);
+            
+            if (result.success) {
+                location.reload(); 
+            }
+
+        } finally {
+            this.loader.hide();
+            button.disabled = false; 
+        }
+    }
+
     async _restoreAll(e){
         e.preventDefault();
         const button = e.submitter;
@@ -170,6 +206,10 @@ export default class OrderController extends Controller {
             
             const result = await new Ajax(false).put(form.action, fd);
             this._logger.success(result);
+
+            if (result.success) {
+                location.reload(); 
+            }
 
         } finally {
 

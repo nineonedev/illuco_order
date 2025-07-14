@@ -80,13 +80,13 @@
                 <hr class="no-hr--xl">
 
                 <div 
-                    id="country-hook" 
                     data-view-type="country-select" 
-                    data-view-props='{
-                        "name": "dealer[country]",
-                        "label": "국가 선택",
-                        "value": "<?=e($dealer->dealer->country) ?? 'KR'?>"
-                    }'>
+                    data-view-props='<?= e(json_encode([
+                        "name" => "dealer[country]",
+                        "label" => "국가 선택",
+                        "value" => e($dealer->dealer->country) ?? '',
+                        "options" => __('system.countries'),
+                    ])) ?>'>
                 </div>
 
                 <?php

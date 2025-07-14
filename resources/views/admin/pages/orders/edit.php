@@ -52,92 +52,227 @@ use App\Domains\Order\Enums\OrderStatus;
         <div class="no-section-container">
             <!-- 수정 -->
             <section class="no-page-flex">
-                <!-- <h2 class="no-order-update__title">주문 수정</h2> -->
-                <form method="post" id="frm" action="<?= route('admin.orders.update', ['id' => $order->id]) ?>">
-                    <?= csrf_field() ?>
-                    <?= put_field() ?>
-                    <input type="hidden" name="id" value="<?=$order->id?>">
+                <div>
+                    <h2 class="no-order-update__title">주문 수정</h2>
 
-                    <div class="no-form-group">
-                        <div 
-                            class="no-form-control --md"
-                            data-view-type="select"
-                            data-view-props='{
-                                "label": "주문 상태",
-                                "name": "order_status",
-                                "value": "<?= $order->order_status ?>",
-                                "options": [
-                                    { 
-                                        "value": "<?= OrderStatus::NEW ?>", 
-                                        "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>",
-                                        "disabled": true
-                                    },
-                                    { 
-                                        "value": "<?= OrderStatus::CONFIRMED ?>", 
-                                        "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" 
-                                    },
-                                    { 
-                                        "value": "<?= OrderStatus::PREPARING ?>", 
-                                        "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" 
-                                    },
-                                    { 
-                                        "value": "<?= OrderStatus::SHIPPED ?>", 
-                                        "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" 
-                                    },
-                                    { 
-                                        "value": "<?= OrderStatus::COMPLETED ?>", 
-                                        "label": "<?= __('system.order.status.'.OrderStatus::COMPLETED) ?>" 
-                                    },
-                                    { 
-                                        "value": "<?= OrderStatus::CANCELED ?>", 
-                                        "label": "<?= __('system.order.status.'.OrderStatus::CANCELED) ?>",
-                                        "disabled": true
-                                    },
-                                    { 
-                                        "value": "<?= OrderStatus::REJECTED ?>", 
-                                        "label": "<?= __('system.order.status.'.OrderStatus::REJECTED) ?>"
-                                    }
-                                ]
-                            }'
-                        ></div>
+                    <form method="post" id="frm" action="<?= route('admin.orders.update', ['id' => $order->id]) ?>">
+                        <?= csrf_field() ?>
+                        <?= put_field() ?>
+                        <input type="hidden" name="id" value="<?=$order->id?>">
 
-                        <div 
-                            data-view-type="date"
-                            data-view-props='{
-                                "label": "발주일",
-                                "name": "payment_date",
-                                "value": "<?= $order->payment_date ?? ''?>"
-                            }'
-                        ></div>
-                        <div 
-                            data-view-type="date"
-                            data-view-props='{
-                                "label": "납기일",
-                                "name": "delivery_date",
-                                "value": "<?= $order->delivery_date ?? ''?>"
-                            }'
-                        ></div>
-                        <div 
-                            data-view-type="date"
-                            data-view-props='{
-                                "label": "출하일",
-                                "name": "shipping_date",
-                                "value": "<?= $order->shipping_date ?? ''?>"
-                            }'
-                        ></div>
+                        <div class="no-form-group">
+                            <div 
+                                class="no-form-control --md"
+                                data-view-type="select"
+                                data-view-props='{
+                                    "label": "주문 상태",
+                                    "name": "order_status",
+                                    "value": "<?= $order->order_status ?>",
+                                    "options": [
+                                        { 
+                                            "value": "<?= OrderStatus::NEW ?>", 
+                                            "label": "<?= __('system.order.status.'.OrderStatus::NEW) ?>",
+                                            "disabled": true
+                                        },
+                                        { 
+                                            "value": "<?= OrderStatus::CONFIRMED ?>", 
+                                            "label": "<?= __('system.order.status.'.OrderStatus::CONFIRMED) ?>" 
+                                        },
+                                        { 
+                                            "value": "<?= OrderStatus::PREPARING ?>", 
+                                            "label": "<?= __('system.order.status.'.OrderStatus::PREPARING) ?>" 
+                                        },
+                                        { 
+                                            "value": "<?= OrderStatus::SHIPPED ?>", 
+                                            "label": "<?= __('system.order.status.'.OrderStatus::SHIPPED) ?>" 
+                                        },
+                                        { 
+                                            "value": "<?= OrderStatus::COMPLETED ?>", 
+                                            "label": "<?= __('system.order.status.'.OrderStatus::COMPLETED) ?>" 
+                                        },
+                                        { 
+                                            "value": "<?= OrderStatus::CANCELED ?>", 
+                                            "label": "<?= __('system.order.status.'.OrderStatus::CANCELED) ?>",
+                                            "disabled": true
+                                        },
+                                        { 
+                                            "value": "<?= OrderStatus::REJECTED ?>", 
+                                            "label": "<?= __('system.order.status.'.OrderStatus::REJECTED) ?>"
+                                        }
+                                    ]
+                                }'
+                            ></div>
+
+                            <div 
+                                data-view-type="date"
+                                data-view-props='{
+                                    "label": "발주일",
+                                    "name": "payment_date",
+                                    "value": "<?= $order->payment_date ?? ''?>"
+                                }'
+                            ></div>
+                            <div 
+                                data-view-type="date"
+                                data-view-props='{
+                                    "label": "납기일",
+                                    "name": "delivery_date",
+                                    "value": "<?= $order->delivery_date ?? ''?>"
+                                }'
+                            ></div>
+                            <div 
+                                data-view-type="date"
+                                data-view-props='{
+                                    "label": "출하일",
+                                    "name": "shipping_date",
+                                    "value": "<?= $order->shipping_date ?? ''?>"
+                                }'
+                            ></div>
+                        </div>
+
+                        <div class="no-form-action">
+                            <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm">목록</a>
+                            <button type="button" class="no-btn-error --sm" data-action="delete">주문 삭제</button>
+                            <button type="submit" class="no-btn-primary --sm">상태 저장</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="no-order-history">
+                    <h2 class="no-order-update__title">오더 히스토리</h2>
+
+                    <!-- 등록 Form -->
+                    <form method="post" action="<?= route('admin.order_histories.store') ?>" id="history-form">
+                        <?= csrf_field() ?>
+
+                        <input type="hidden" name="order_id" value="<?= $order->id ?>">
+                        <input type="hidden" name="dealer_id" value="<?= $order->dealer_id ?? '' ?>">
+                        <input type="hidden" name="customer_id" value="<?= $order->customer_id ?? ''?>">
+
+                        <div class="no-form-group">
+
+                            <div class="no-form-control">
+                                <label for="balance" class="no-form-control-inner">
+                                    <input type="number" name="balance" id="balance" class="no-form-control-input" placeholder="미수금 변동액 (예: -500 또는 1000)" step="0.01">
+                                    <fieldset class="no-form-control-label">
+                                        <legend class="no-form-control-text">미수금 변동액</legend>
+                                    </fieldset>
+                                </label>
+                                <span class="no-form-control-space"></span>
+                            </div>
+
+                            <div class="no-form-checkbox --md">
+                                <label for="settled" class="no-form-checkbox-pointer">
+                                    <input type="checkbox" name="settled" id="settled" class="no-form-checkbox-input" value="1">
+                                    <div class="no-form-checkbox-ripple">
+                                        <span class="no-form-checkbox-box">
+                                            <div class="no-form-checkbox-icon">
+                                                <i class="fa-solid fa-check"></i>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <span class="no-form-checkbox-text">처리 완료</span>
+                                </label>
+                                 <span class="no-form-control-space"></span>
+                            </div>
+
+                            <div class="no-form-control --textarea">
+                                <label for="memo" class="no-form-control-inner">
+                                    <textarea name="memo" id="memo" class="no-form-control-input" rows="4" placeholder="메모를 입력하세요" required></textarea>
+                                    <fieldset class="no-form-control-label">
+                                        <legend class="no-form-control-text">메모</legend>
+                                    </fieldset>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="no-form-action">
+                            <button type="submit" class="no-btn-primary --sm">히스토리 추가</button>
+                        </div>
+                    </form>
+                </div>
+
+            </section>
+
+            <section>
+                <div class="no-section-container">
+                    <div class="no-page-flex --xl">
+                        <div>
+                            <div class="no-order-history-list">
+                                <h3 class="no-order-update__title">상태 변경 내역</h3>
+                                <table class="no-page-index-table">
+                                    <thead>
+                                        <tr>
+                                            <th>변경자</th>
+                                            <th>이전 상태</th>
+                                            <th>변경 후 상태</th>
+                                            <!-- <th>사유/메모</th> -->
+                                            <th>변경일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($orderLogs as $log): ?>
+                                            <tr>
+                                                <td><?= e($log->user->name ?? '-') ?></td>
+                                                <td><?= $log->previous_status ? __('system.order.status.' . $log->previous_status) : '-' ?></td>
+                                                <td><?= __('system.order.status.' . $log->status) ?></td>
+                                                <!-- <td><?= nl2br(e($log->message ?? '-')) ?></td> -->
+                                                <td><?= date('Y-m-d h:i A', strtotime($log->created_at)) ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="no-order-history-list">
+                                <h3 class="no-order-update__title">히스토리 내역</h3>
+                                <table class="no-page-index-table">
+                                    <thead>
+                                        <tr>
+                                            <th>대상</th>
+                                            <th>주문번호</th>
+                                            <th>작성자</th>
+                                            <th>메모</th>
+                                            <th>미수금 변동</th>
+                                            <th>처리 여부</th>
+                                            <th>작성일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($orderHistories as $history) : ?>
+                                            <?php
+                                            dump($history); 
+                                                // 타깃(대상) 결정
+                                                if ($history->dealer) {
+                                                    $target = $history->dealer->user->name ?? '대리점';
+                                                } elseif ($history->customer) {
+                                                    $target = $history->customer->name ?? '고객';
+                                                } else {
+                                                    $target = '-';
+                                                }
+
+                                                $orderNo = $history->order->order_no;
+                                            ?>
+                                            <tr>
+                                                <td><?= e($target) ?></td>
+                                                <td>
+                                                    <a class="--underline" href="<?= route('admin.orders.edit', ['orderNo' => $orderNo]) ?>"><?= e($orderNo) ?></a>
+                                                </td>
+                                                <td><?= e($history->user->name ?? '-') ?></td>
+                                                <td><?= nl2br(e($history->memo)) ?></td>
+                                                <td><?= number_format($history->balance, 2) ?> USD</td>
+                                                <td><?= $history->settled ? '완료' : '미처리' ?></td>
+                                                <td><?= date('Y-m-d h:i A', strtotime($history->created_at)) ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
-
-                    <div class="no-form-action">
-                        <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm">목록</a>
-                        <button type="button" class="no-btn-error --sm" data-action="delete">주문 삭제</button>
-                        <button type="submit" class="no-btn-primary --sm">상태 저장</button>
-                    </div>
-                </form>
-
-                <form method="post" action="">
-                    <input type="text">
-                    <input type="text">
-                </form>
+                </div>
             </section>
 
             <!-- 문서 -->

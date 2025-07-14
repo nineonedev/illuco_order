@@ -13,24 +13,22 @@
             </div>
 
             <nav class="no-drawer-nav">
-                <!-- <ul class="no-drawer-gnb">
-                    <?php if (can('dashboard.read')): ?>
-                        <li class="no-drawer-gnb-item <?= route_is('admin.dashboard') ? '--active' : '' ?>">
-                            <a href="<?= route('admin.dashboard') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
-                                <div class="no-drawer-gnb-link__icon">
-                                    <i class="fa-light fa-chart-tree-map"></i>
-                                </div>
-                                <div class="no-drawer-gnb-link__text">
-                                    <span>대시보드</span>
-                                </div>
-                                <div data-tooltip-text>
-                                    <span>대시보드</span>
-                                    <span data-tooltip-arrow></span>
-                                </div>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                </ul> -->
+                <ul class="no-drawer-gnb">
+                    <li class="no-drawer-gnb-item <?= route_is('admin.dashboard') ? '--active' : '' ?>">
+                        <a href="<?= route('admin.dashboard') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                            <div class="no-drawer-gnb-link__icon">
+                                <i class="fa-light fa-chart-tree-map"></i>
+                            </div>
+                            <div class="no-drawer-gnb-link__text">
+                                <span>대시보드</span>
+                            </div>
+                            <div data-tooltip-text>
+                                <span>대시보드</span>
+                                <span data-tooltip-arrow></span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
 
                 <ul class="no-drawer-gnb">
                     <!-- 주문 목록 메뉴 -->

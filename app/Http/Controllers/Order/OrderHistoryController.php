@@ -29,6 +29,40 @@ class OrderHistoryController extends Controller
         ], '정상적으로 로드되었습니다.');
     }
 
+
+    public function store(Request $request)
+    {
+        return $this->runInTransaction(function () use ($request) {
+            $request->validateOrFail([
+                'order_id'   => 'required|integer',
+                'balance'    => 'nullable|number',
+                'settled'    => 'nullable|boolean',
+                'memo'       => 'nullable|string',
+                'dealer_id'  => 'nullable|integer',
+                'customer_id'=> 'nullable|integer',
+            ]);
+
+            $data = $request->safe();
+            $data['dealer_id'] = $data['dealer_id'] ?: null;
+            $data['customer_id'] = $data['customer_id'] ?: null;
+            $data['settled'] = $data['settled'] ?? 0;
+
+            $history = new OrderHistory($data);
+            $history->created_by = user()->id;
+
+            $history = OrderHistoryRepository::make()->save($history);
+
+            if (!$history) {
+                throw new RuntimeException("히스토리 저장에 실패하였습니다.");
+            }
+
+            return $this->render(null, [
+                'history' => $history->toArray(),
+            ], '히스토리가 정상적으로 등록되었습니다.');
+        });
+    }
+
+
     public function update(int $id, Request $request)
     {
         return $this->runInTransaction(function() use ($id, $request) {

@@ -106,6 +106,22 @@ class Builder
         return $this->delete();
     }
 
+    public function selectRaw(string $expression): self
+    {
+        $this->columns = [$expression];
+        return $this;
+    }
+
+    public function groupRaw(string $raw): self
+    {
+        $this->groups[] = [
+            'type' => 'raw',
+            'sql' => $raw,
+        ];
+
+        return $this;
+    }
+
     public function getBindings(): array
     {
         $bindings = [];

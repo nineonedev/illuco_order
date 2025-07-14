@@ -172,7 +172,7 @@
 
         th {
             font-weight: 500;
-            background-color: var(--clr-slate-50);
+            background-color: var(--clr-slate-100);
 
             &.order {
                 background-color: var(--clr-table-order);
@@ -187,8 +187,15 @@
 
     }
     tbody {
+        tr {
+            &.bg{
+                background-color: var(--clr-slate-50);
+            }
+        }
+
         td {
             font-weight: 400;
+            
         }
     }
 }

@@ -22,13 +22,13 @@ use App\Domains\User\Entities\Dealer;
 
             <div class="no-form-group">
                 <div 
-                    id="country-hook" 
-                    data-component-type="country-select" 
-                    data-component-props='{
-                        "name": "country",
-                        "label": "국가 선택",
-                        "value": "KR"
-                    }'>
+                    data-view-type="country-select" 
+                    data-view-props='<?= e(json_encode([
+                        "name" => "dealer[country]",
+                        "label" => "국가 선택",
+                        "value" => '',
+                        "options" => __('system.countries'),
+                    ])) ?>'>
                 </div>
                 
                 <!-- FormControl -->

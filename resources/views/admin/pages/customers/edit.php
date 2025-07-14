@@ -18,13 +18,13 @@ use App\Domains\User\Entities\Dealer;?>
             <?= put_field() ?>
             <div class="no-form-group">
                 <div 
-                    id="country-hook" 
-                    data-component-type="country-select" 
-                    data-component-props='{
-                        "name": "country",
-                        "label": "국가 선택",
-                        "value": "<?= $customer->country ?? "KR" ?>"
-                    }'>
+                    data-view-type="country-select" 
+                    data-view-props='<?= e(json_encode([
+                        "name" => "dealer[country]",
+                        "label" => "국가 선택",
+                        "value" => $customer->country ?? '',
+                        "options" => __('system.countries'),
+                    ])) ?>'>
                 </div>
 
                 <?php if (user()->userable instanceof Dealer) : ?>

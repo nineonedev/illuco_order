@@ -12,6 +12,7 @@ class OrderLog extends Entity
         'user_id',
         'status',
         'previous_status',
+        'created_at',
     ];
 
     protected array $casts = [

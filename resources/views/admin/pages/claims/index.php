@@ -1,12 +1,12 @@
 <?php extend('layouts.admin'); ?>
-
-<?php section('title') ?>
-클레임
-<?php end_section() ?>
+<?php section('controller', 'claim') ?>
+<?php section('action', 'index') ?>
+<?php section('title', '클레임 목록') ?>
 
 <?php section('content') ?>
-<div class="no-page-container">
 
+<div class="no-page-container">
+    <form method="get">
     <div class="no-page-row">
         <div class="no-page-head">
             <h1 class="no-heading-sm">클레임</h1>
@@ -17,29 +17,161 @@
         <!-- Head -->
 
         <div class="no-page-index-filter">
-            <form action="" class="no-page-index-filter__form">
-                <div class="no-form-search --sm">
-                    <label for="title" class="no-form-search-inner">
-                        <fieldset class="no-form-search-label --blind">
-                            <legend class="no-form-search-text">검색</legend>
-                        </fieldset>
+            <div class="no-page-index-filter__form">
+
+                <!-- 제목 검색 -->
+                <div class="no-form-search">
+                    <label for="title" class="no-form-label">제목</label>
+                    <div class="no-form-search-inner">
                         <div class="no-form-search__icon">
                             <i class="fa-light fa-magnifying-glass"></i>
                         </div>
-                        <input type="search" name="title" id="title" class="no-form-search-input" placeholder="Search" >
-                    </label>
+                        <input
+                            type="search"
+                            name="title"
+                            id="title"
+                            class="no-form-search-input"
+                            placeholder="제목 검색"
+                            value="<?= e(request()->query('title')) ?>"
+                        >
+                    </div>
                 </div>
 
-            </form>
+                <!-- 대리점 선택 -->
+                <?php
+                $dealerProps = [
+                    'spacing' => false,
+                    'label' => '대리점 선택',
+                    'name' => 'dealer_id',
+                    'value' => request()->query('dealer_id'),
+                    'options' => array_merge(
+                        [['label' => '전체', 'value' => '']],
+                        array_map(fn($dealer) => [
+                            'label' => $dealer->user->name,
+                            'value' => $dealer->id,
+                        ], $dealers)
+                    ),
+                ];
+                ?>
+                <div
+                    class="no-form-field"
+                    data-view-type="select"
+                    data-view-props='<?= e(json_encode($dealerProps)) ?>'
+                ></div>
+
+                <!-- 제품 시리얼 검색 -->
+                <div class="no-form-search">
+                    <label for="product_serial" class="no-form-label">제품 시리얼번호</label>
+                    <div class="no-form-search-inner">
+                        <div class="no-form-search__icon">
+                            <i class="fa-light fa-magnifying-glass"></i>
+                        </div>
+                        <input
+                            type="search"
+                            name="product_serial"
+                            id="product_serial"
+                            class="no-form-search-input"
+                            placeholder="제품 시리얼번호 검색"
+                            value="<?= e(request()->query('product_serial')) ?>"
+                        >
+                    </div>
+                </div>
+
+                <!-- 상태 선택 -->
+                <?php
+                use App\Domains\Communication\Enums\ClaimStatus;
+                
+                $props = [
+                    'spacing' => false,
+                    'label' => '상태 선택',
+                    'name' => 'status',
+                    'value' => request()->query('status'),
+                    'options' => array_merge(
+                        [['label' => '전체', 'value' => '']],
+                        array_map(fn($status) => [
+                            'label' => ClaimStatus::labels()[$status] ?? $status,
+                            'value' => $status,
+                        ], ClaimStatus::all())
+                    ),
+                ];
+                ?>
+                <div
+                    class="no-form-field"
+                    data-view-type="select"
+                    data-view-props='<?= e(json_encode($props)) ?>'
+                ></div>
+
+                <!-- 주문자 검색 -->
+                <div class="no-form-search">
+                    <label for="orderer_name" class="no-form-label">주문자</label>
+                    <div class="no-form-search-inner">
+                        <div class="no-form-search__icon">
+                            <i class="fa-light fa-magnifying-glass"></i>
+                        </div>
+                        <input
+                            type="search"
+                            name="orderer_name"
+                            id="orderer_name"
+                            class="no-form-search-input"
+                            placeholder="주문자 검색"
+                            value="<?= e(request()->query('orderer_name')) ?>"
+                        >
+                    </div>
+                </div>
+
+                <!-- 작성자 검색 -->
+                <div class="no-form-search">
+                    <label for="author_name" class="no-form-label">작성자</label>
+                    <div class="no-form-search-inner">
+                        <div class="no-form-search__icon">
+                            <i class="fa-light fa-magnifying-glass"></i>
+                        </div>
+                        <input
+                            type="search"
+                            name="author_name"
+                            id="author_name"
+                            class="no-form-search-input"
+                            placeholder="작성자 검색"
+                            value="<?= e(request()->query('author_name')) ?>"
+                        >
+                    </div>
+                </div>
+
+                <!-- 정렬 선택 -->
+                <?php
+                $sortProps = [
+                    'spacing' => false,
+                    'label' => '정렬 선택',
+                    'name' => 'sort',
+                    'value' => request()->query('sort'),
+                    'options' => [
+                        ['label' => '전체', 'value' => ''],
+                        ['label' => '등록일 ↑', 'value' => 'created_at_asc'],
+                        ['label' => '등록일 ↓', 'value' => 'created_at_desc'],
+                        ['label' => '제목 ↑', 'value' => 'title_asc'],
+                        ['label' => '제목 ↓', 'value' => 'title_desc'],
+                    ],
+                ];
+                ?>
+                <div
+                    class="no-form-field"
+                    data-view-type="select"
+                    data-view-props='<?= e(json_encode($sortProps)) ?>'
+                ></div>
+
+                <div class="no-page-index-link">
+                    <button type="submit" class="no-btn-primary --sm">검색</button>
+                </div>
+            </div>
 
             <div class="no-page-index-link">
-                <a href="<?=route('admin.claims.create')?>" class="no-btn-primary --sm">
+                <a href="<?= route('admin.claims.create') ?>" class="no-btn-primary --sm">
                     <span>Create</span>
                 </a>
             </div>
         </div>
         <!-- Filter -->
-        
+
         <form method="get" class="no-page-index-table-outer">
             <table class="no-page-index-table">
                 <thead>
@@ -86,8 +218,8 @@
                         </td>
                         <td><?= e($claim->dealer->name ?? '대리점 없음') ?></td>
                         <td><?= e($claim->product->name ?? '제품 없음') ?></td>
-                        <td><?= e($claim->title) ?></td>
-                        <td><?= e($claim->orderer_name) ?></td>
+                        <td><?= e($claim->title ?? '') ?></td>
+                        <td><?= e($claim->orderer_name ?? '') ?></td>
                         <td><?= e($claim->author_name ?? '관리자') ?></td>
                         <td><?= date('Y-m-d', strtotime($claim->created_at ?? 'now')) ?></td>
                         <td class="no-table-action">
@@ -118,11 +250,11 @@
             </table>
         </form>
         <!-- Table -->
-        
-        <?= include_view('admin.components.pagination', ['paginator' => $claims]) ?>
 
+        <?= include_view('admin.components.pagination', ['paginator' => $claims]) ?>
     </div>
     <!-- Row -->
+    </form>
 </div>
 
 <?php end_section() ?>

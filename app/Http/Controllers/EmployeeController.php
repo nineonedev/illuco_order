@@ -21,27 +21,76 @@ class EmployeeController extends Controller
             ->query()
             ->where('type', UserType::EMPLOYEE);
 
+        // 비관리자일 경우 employee 역할만 조회
         if (!user()->isAdmin()) {
             $query->whereHas('roles', function($roleQuery) {
                 $roleQuery->where('name', 'employee');
             });
         }
 
-        $perpage = $request->query('perpage', 15);
-        $page = $request->query('page', 1); 
+        // 이름 검색
+        $query->when(
+            $name = $request->query('name'),
+            fn($q) => $q->where('name', 'like', "%{$name}%")
+        );
 
-        // $query->when($keyword = $request->query('q'), function ($q) use ($keyword) {
-        //     $q->whereHas('user', function ($userQuery) use ($keyword) {
-        //         $userQuery->where('name', 'like', "%{$keyword}%")
-        //                   ->orWhere('email', 'like', "%{$keyword}%");
-        //     });
-        // });
+        // 이메일 검색
+        $query->when(
+            $email = $request->query('email'),
+            fn($q) => $q->where('email', 'like', "%{$email}%")
+        );
+
+        // 연락처 검색
+        $query->when(
+            $phone = $request->query('phone'),
+            fn($q) => $q->where('phone', 'like', "%{$phone}%")
+        );
+
+        // 상태 검색
+        $query->when(
+            $status = $request->query('status'),
+            fn($q) => $q->where('status', $status)
+        );
+
+        // 정렬 처리
+        $sort = $request->query('sort');
+        if ($sort) {
+            switch ($sort) {
+                case 'created_at_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'name_asc':
+                    $query->orderBy('name');
+                    break;
+                case 'name_desc':
+                    $query->orderByDesc('name');
+                    break;
+                case 'email_asc':
+                    $query->orderBy('email');
+                    break;
+                case 'email_desc':
+                    $query->orderByDesc('email');
+                    break;
+                default:
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+        $perpage = $request->query('perpage', 15);
+        $page = $request->query('page', 1);
 
         return $this->render('admin.pages.employees.index', [
             'employees' => $query->paginate($perpage, $page),
             'query'     => $request->query(),
         ]);
     }
+
 
     public function create()
     {

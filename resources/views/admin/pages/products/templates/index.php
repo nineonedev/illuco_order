@@ -1,5 +1,3 @@
-<?php ?>
-
 <?php extend('layouts.admin'); ?>
 <?php section('controller', 'product_template') ?>
 <?php section('action', 'index') ?>
@@ -18,16 +16,109 @@
 
             <div class="no-page-index-filter">
                 <div class="no-page-index-filter__form">
-                    <div class="no-form-search --sm">
-                        <label for="name" class="no-form-search-inner">
-                            <fieldset class="no-form-search-label --blind">
-                                <legend class="no-form-search-text">검색</legend>
-                            </fieldset>
+
+                    <!-- 제품명 검색 -->
+                    <div class="no-form-search">
+                        <label for="name" class="no-form-label">제품명</label>
+                        <div class="no-form-search-inner">
                             <div class="no-form-search__icon">
                                 <i class="fa-light fa-magnifying-glass"></i>
                             </div>
-                            <input type="search" name="name" id="name" class="no-form-search-input" placeholder="Search by name">
-                        </label>
+                            <input
+                                type="search"
+                                name="name"
+                                id="name"
+                                class="no-form-search-input"
+                                placeholder="제품명 검색"
+                                value="<?= e(request()->query('name')) ?>"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 코드 검색 -->
+                    <div class="no-form-search">
+                        <label for="code" class="no-form-label">코드</label>
+                        <div class="no-form-search-inner">
+                            <div class="no-form-search__icon">
+                                <i class="fa-light fa-magnifying-glass"></i>
+                            </div>
+                            <input
+                                type="search"
+                                name="code"
+                                id="code"
+                                class="no-form-search-input"
+                                placeholder="코드 검색"
+                                value="<?= e(request()->query('code')) ?>"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 모델 검색 -->
+                    <div class="no-form-search">
+                        <label for="model" class="no-form-label">모델</label>
+                        <div class="no-form-search-inner">
+                            <div class="no-form-search__icon">
+                                <i class="fa-light fa-magnifying-glass"></i>
+                            </div>
+                            <input
+                                type="search"
+                                name="model"
+                                id="model"
+                                class="no-form-search-input"
+                                placeholder="모델 검색"
+                                value="<?= e(request()->query('model')) ?>"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 카테고리 선택 -->
+                    <?php
+                        $categoryProps = [
+                            'spacing' => false,
+                            'label' => '카테고리',
+                            'name' => 'category_id',
+                            'value' => request()->query('category_id'),
+                            'options' => array_merge(
+                                [['label' => '전체', 'value' => '']],
+                                array_map(fn($cat) => [
+                                    'label' => $cat->label,
+                                    'value' => $cat->id,
+                                ], $categories)
+                            ),
+                        ];
+                    ?>
+                    <div
+                        class="no-form-field"
+                        data-view-type="select"
+                        data-view-props='<?= e(json_encode($categoryProps)) ?>'
+                    ></div>
+
+                    <!-- 정렬 선택 -->
+                    <?php
+                        $sortProps = [
+                            'spacing' => false,
+                            'label' => '정렬 선택',
+                            'name' => 'sort',
+                            'value' => request()->query('sort'),
+                            'options' => [
+                                ['label' => '전체', 'value' => ''],
+                                ['label' => '이름 ↑', 'value' => 'name_asc'],
+                                ['label' => '이름 ↓', 'value' => 'name_desc'],
+                                ['label' => '등록일 ↑', 'value' => 'created_at_asc'],
+                                ['label' => '등록일 ↓', 'value' => 'created_at_desc'],
+                                ['label' => '정렬순서 ↑', 'value' => 'sort_order_asc'],
+                                ['label' => '정렬순서 ↓', 'value' => 'sort_order_desc'],
+                            ],
+                        ];
+                    ?>
+                    <div
+                        class="no-form-field"
+                        data-view-type="select"
+                        data-view-props='<?= e(json_encode($sortProps)) ?>'
+                    ></div>
+
+                    <div class="no-page-index-link">
+                        <button type="submit" class="no-btn-primary --sm">검색</button>
                     </div>
                 </div>
 
@@ -83,11 +174,9 @@
                                 </div>
                             </td>
                             <td>
-                                <!-- 제품 이름 앞에 이미지 삽입 -->
-                                 <?php if ($template->fileattachment && count($template->fileattachment) > 0): ?>
+                                <?php if ($template->fileattachment && count($template->fileattachment) > 0): ?>
                                     <img src="<?= $template->fileattachment[0]->upload_path ?>" alt="<?= e($template->name) ?>" class="product-image" style="width: 60px; height: auto; margin-right: 10px;">
                                 <?php endif; ?>
-                                
                             </td>
                             <td><?= e($template->category->label ?? '-') ?></td>
                             <td><?= e($template->name) ?></td>
