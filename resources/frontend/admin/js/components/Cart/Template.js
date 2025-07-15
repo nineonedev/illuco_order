@@ -1,7 +1,5 @@
 import View from "../../core/View";
 import Button from "../../shared/Button";
-import Helper from "../../supports/Helper";
-import InputFactory from "../Inputs/InputFactroy";
 import SearchButton from "./SearchButton";
 import TemplateForm from "./TemplateForm";
 
@@ -65,7 +63,6 @@ export default class Template extends View {
     }
 
     _renderForm(){
-        
         TemplateForm.make(this.refs.group, {
             template: this._state.template,
             cartitem: this._state.cartitem,

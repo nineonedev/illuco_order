@@ -38,6 +38,7 @@
                 </div>
 
                 <!-- 대리점 선택 -->
+                <?php if ($dealers): ?>
                 <?php
                 $dealerProps = [
                     'spacing' => false,
@@ -58,6 +59,7 @@
                     data-view-type="select"
                     data-view-props='<?= e(json_encode($dealerProps)) ?>'
                 ></div>
+                <?php endif; ?>
 
                 <!-- 제품 시리얼 검색 -->
                 <div class="no-form-search">
@@ -195,58 +197,69 @@
                         <th>제목</th>
                         <th>주문자</th>
                         <th>작성자</th>
+                        <th>상태</th>
                         <th>등록일</th>
                         <th>작업</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($claims->items() as $claim): ?>
-                    <tr class="no-table-hover">
-                        <td class="no-table-check">
-                            <div class="no-form-checkbox --xs">
-                                <label for="claim<?= $claim->id ?>" class="no-form-checkbox-pointer">
-                                    <input type="checkbox" name="claims[]" id="claim<?= $claim->id ?>" class="no-form-checkbox-input">
-                                    <div class="no-form-checkbox-ripple">
-                                        <span class="no-form-checkbox-box">
-                                            <div class="no-form-checkbox-icon">
-                                                <i class="fa-solid fa-check"></i>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </label>
-                            </div>
-                        </td>
-                        <td><?= e($claim->dealer->name ?? '대리점 없음') ?></td>
-                        <td><?= e($claim->product->name ?? '제품 없음') ?></td>
-                        <td><?= e($claim->title ?? '') ?></td>
-                        <td><?= e($claim->orderer_name ?? '') ?></td>
-                        <td><?= e($claim->author_name ?? '관리자') ?></td>
-                        <td><?= date('Y-m-d', strtotime($claim->created_at ?? 'now')) ?></td>
-                        <td class="no-table-action">
-                            <div class="no-page-index-table__action">
-                                <a href="<?= route('admin.claims.show', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip>
-                                    <div class="no-btn-action-ripple">
-                                        <i class="fa-light fa-eye"></i>
-                                        <span data-tooltip-text><span>보기</span><span data-tooltip-arrow></span></span>
-                                    </div>
-                                </a>
-                                <a href="<?= route('admin.claims.edit', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip>
-                                    <div class="no-btn-action-ripple">
-                                        <i class="fa-light fa-pen-to-square"></i>
-                                        <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
-                                    </div>
-                                </a>
-                                <a href="<?= route('admin.claims.destroy', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
-                                    <div class="no-btn-action-ripple">
-                                        <i class="fa-light fa-trash-can"></i>
-                                        <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>
-                                    </div>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                        <tr class="no-table-hover">
+                            <td class="no-table-check">
+                                <div class="no-form-checkbox --xs">
+                                    <label for="claim<?= $claim->id ?>" class="no-form-checkbox-pointer">
+                                        <input type="checkbox" name="claims[]" id="claim<?= $claim->id ?>" class="no-form-checkbox-input">
+                                        <div class="no-form-checkbox-ripple">
+                                            <span class="no-form-checkbox-box">
+                                                <div class="no-form-checkbox-icon">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </td>
+                            <td><?= e($claim->dealer->user->name ?? '대리점 없음') ?></td>
+                            <td>
+                                <div><?= e($claim->product_name) ?></div>
+                                <small class="no-text-secondary">
+                                    모델: <?= e($claim->product_model) ?><br>
+                                    코드: <?= e($claim->product_code) ?><br>
+                                    시리얼: <?= e($claim->product_serial_number) ?>
+                                </small>
+                            </td>
+                            <td><?= e($claim->customer_name) ?></td>
+                            <td><?= e($claim->customer_email) ?></td>
+                            <td><?= e($claim->user->name ?? '관리자') ?></td>
+                            <td>
+                                <span class="claim-status --<?=$claim->status?>">
+                                    <?= ClaimStatus::labels()[$claim->status] ?? $claim->status ?>
+                                </span>
+                            </td>
+                            <td><?= date('Y-m-d', strtotime($claim->created_at ?? 'now')) ?></td>
+                            <td class="no-table-action">
+                                <div class="no-page-index-table__action">
+                                    <a href="<?= route('admin.claims.show', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip>
+                                        <div class="no-btn-action-ripple">
+                                            <i class="fa-light fa-eye"></i>
+                                            <span data-tooltip-text><span>보기</span><span data-tooltip-arrow></span></span>
+                                        </div>
+                                    </a>
+
+                                    <?php if (can('claim.delete')): ?>
+                                    <a href="<?= route('admin.claims.destroy', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
+                                        <div class="no-btn-action-ripple">
+                                            <i class="fa-light fa-trash-can"></i>
+                                            <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>
+                                        </div>
+                                    </a>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
-                </tbody>
+                    </tbody>
+
             </table>
         </form>
         <!-- Table -->

@@ -32,6 +32,7 @@ class ProductTemplateController extends Controller
         $data = [
             'loupe' => Loupe::MODEL_SPECS,
             'headlight' => Headlight::MODEL_SPECS,
+            'countries' => __('system.countries'),
         ];
         
         return $this->render(null, $data, '성공적으로 로드되었습니다.');
@@ -88,6 +89,15 @@ class ProductTemplateController extends Controller
             fn($q) => $q->where('model', 'like', "%{$model}%")
         );
 
+        $query->when(
+            $search = $request->query('search'),
+            fn($q) => $q->where(function ($qq) use ($search) {
+                $qq->where('code', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('model', 'like', "%{$search}%");
+            })
+        );
+
         // 카테고리
         $query->when(
             $categoryId = $request->query('category_id'),
@@ -98,6 +108,12 @@ class ProductTemplateController extends Controller
         $sort = $request->query('sort');
         if ($sort) {
             switch ($sort) {
+                case 'latest':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'oldest':
+                    $query->orderBy('created_at');
+                    break;
                 case 'name_asc':
                     $query->orderBy('name');
                     break;
@@ -139,7 +155,7 @@ class ProductTemplateController extends Controller
         return $this->render('admin.pages.products.templates.index', [
             'templates'   => $templates,
             'query'       => $request->query(),
-            'categories'  => $categories,
+            'categories'  => request()->expectsJson() ? array_map(fn($c) => $c->toArray(), $categories) : $categories,
         ]);
     }
 

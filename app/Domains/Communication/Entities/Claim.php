@@ -12,27 +12,29 @@ class Claim extends Entity
         'product_name',
         'product_code',
         'product_model',
+        'product_serial_number',
+        'product_description',
 
         // 관계
-        'template_id',
         'user_id',
+        'dealer_id',
 
         // 고객 입력 정보 (스냅샷)
         'customer_name',
         'customer_email',
         'customer_phone',
 
-        // 제품 정보
-        'serial_number',
-        'description',
+        // 문의 정보
+        'title',
+        'content',
 
         // 상태
         'status',
-    ]; 
+    ];
 
     protected array $casts = [
-        'template_id'   => 'int',
-        'user_id'       => 'int',
+        'user_id'    => 'int',
+        'dealer_id'  => 'int',
     ];
 
     public static function repositoryClass(): string

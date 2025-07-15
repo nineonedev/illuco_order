@@ -22,6 +22,16 @@ export default class Helper {
         };
     }
     
+    static escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
     /**
      * 객체가 비어 있는지 확인
      */

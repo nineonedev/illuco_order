@@ -57,4 +57,9 @@ class NoticeStatus
             self::SCHEDULED => '예약발행',
         ];
     }
+
+    public static function getLabel(string $label): ?string
+    {
+        return self::labels()[$label] ?? null;
+    }
 }

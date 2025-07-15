@@ -1,7 +1,9 @@
 
+import CartController from '../../controllers/CartController';
 import View from '../../core/View';
 import Button from '../../shared/Button';
 import Helper from '../../supports/Helper';
+import CustomerZone from '../Claim/CustomerZone';
 import CartItem from './CartItem';
 import CartItemList from './CartItemList';
 import SearchButton from './SearchButton';
@@ -38,7 +40,7 @@ export default class Cart extends View {
                 <div data-ref="search"></div>
 
 
-                ${this._renderCustomerZone()}
+                <div id="customer-zone"></div>
 
                 <div id="${this._cartItemsHook}"></div>
             </div>
@@ -73,6 +75,10 @@ export default class Cart extends View {
             onClick: this._handleFresh.bind(this),
         }).render();
         
+        this._customerZone = CustomerZone.make("customer-zone", {
+            customer: this._state.customer || {}
+        }).render();
+
         this._cartItemList = CartItemList.make(this._cartItemsHook, {
             cartitems: this._getCartItemsFromCustomer(),
         }).render();
@@ -122,26 +128,5 @@ export default class Cart extends View {
 
     _handleClick(buttonView, evt){
         this._dispatch('fetch.customers', {cart: this, button: buttonView, evt: evt})
-    }
-
-    _renderCustomerZone(){
-        if (!this.hasCustomer()) {
-            return `
-                <p class="no-form-empty-fallback">선택된 고객이 없습니다.</p>
-            `;
-        }
-        
-        const {name, phone, country, email} = this._state.customer;
-
-        return `
-            <div>
-                <h2>선택된 고객: ${name}</h2>
-                <div>
-                    <p>국가: ${country}</p>
-                    <p>연락처: ${phone ?? '-'}</p>
-                    <p>이메일: ${email}</p>
-                </div>
-            </div>
-        `;
     }
 }

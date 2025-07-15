@@ -1,84 +1,60 @@
-<?php extend('layouts.admin'); ?>
+<?php
 
-<?php section('title') ?>
-클레임 생성
-<?php end_section() ?>
+
+?>
+<?php extend('layouts.admin'); ?>
+<?php section('controller', 'claim') ?>
+<?php section('action', 'create') ?>
+<?php section('title', '클레임 생성') ?>
 
 <?php section('content') ?>
+
 <div class="no-form-container">
     <div class="no-page-row">
-        <div class="no-page-head">
+        <div class="no-page-head__between">
             <h1 class="no-heading-sm">클레임 생성</h1>
+            <button type="submit" class="no-btn-success-outline --xs" id="refresh-btn">
+                <span>초기화</span>
+            </button>
         </div>
         
-        <form method="post" enctype="multipart/form-data" action="<?= route('admin.claims.store') ?>">
+        <form method="post" id="frm" enctype="multipart/form-data" action="<?= route('admin.claims.store') ?>">
             <div class="no-form-group">
                 <h2 class="no-form-group-title no-body-lg">
                     제품 정보
                 </h2>
 
-                <div class="no-form-control --md">
-                    <label for="product_id" class="no-form-control-inner">
-                        <input type="text" name="product_id" id="product_id" class="no-form-control-input" value="IDS3100" placeholder="">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">제품군 선택</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
+                <?php 
+                    $props = [
+                        'label' => '제품검색',
+                    ];
+                ?>
+                <div
+                    id="search-product"
+                    data-view-props='<?=json_encode($props)?>'
+                ></div>
+                <span class="no-form-control-space"></span>
+                <div id="product-zone"></div>
+                <span class="no-form-control-space"></span>
+            </div>
 
-                <div class="no-form-control --md">
-                    <label for="prod_model" class="no-form-control-inner">
-                        <input type="text" name="prod_model" id="prod_model" class="no-form-control-input" value="iMag 3.5x-R" placeholder="">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">제품 모델 번호</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
+            <div class="no-form-group">
+                <h2 class="no-form-group-title no-body-lg">
+                    고객 정보
+                </h2>
 
-                <div class="no-form-control --md">
-                    <label for="prod_desc" class="no-form-control-inner">
-                        <input type="text" name="prod_desc" id="prod_desc" class="no-form-control-input" value="고배율 정밀 진료용 헤드마운트 루페 (3.5배율, 오른쪽 LED 부착형)" placeholder="">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">제품 설명</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <!-- 제목 -->
-                <div class="no-form-control --md">
-                    <label for="title" class="no-form-control-inner">
-                        <input type="text" name="title" id="title" class="no-form-control-input" value="IMAG35R" placeholder="" readonly>
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">코드</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <!-- 제목 -->
-                <div class="no-form-control --md">
-                    <label for="title" class="no-form-control-inner">
-                        <input type="text" name="title" id="title" class="no-form-control-input" value="Eric McDonald" placeholder="" readonly>
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">고객</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-
-                <!-- 제목 -->
-                <div class="no-form-control --md">
-                    <label for="title" class="no-form-control-inner">
-                        <input type="text" name="title" id="title" class="no-form-control-input" value="IM20240515-0037" placeholder="" readonly>
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">시리얼 번호</legend>
-                        </fieldset>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
+                <?php 
+                    $props = [
+                        'label' => '고객검색',
+                    ];
+                ?>
+                <div
+                    id="search-customer"
+                    data-view-props='<?=json_encode($props)?>'
+                ></div>
+                <span class="no-form-control-space"></span>
+                <div id="customer-zone"></div>
+                <span class="no-form-control-space"></span>
             </div>
             
             <hr class="no-form-hr">
@@ -89,10 +65,20 @@
                     문의 접수
                 </h2>
 
+                <div class="no-form-control --md">
+                    <label for="product_serial_number" class="no-form-control-inner">
+                        <input type="text" name="product_serial_number" id="product_serial_number" class="no-form-control-input" required placeholder="">
+                        <fieldset class="no-form-control-label">
+                            <legend class="no-form-control-text">시리얼 번호</legend>
+                        </fieldset>
+                    </label>
+                    <span class="no-form-control-space"></span>
+                </div>
+
                 <!-- 제목 -->
                 <div class="no-form-control --md">
                     <label for="title" class="no-form-control-inner">
-                        <input type="text" name="title" id="title" class="no-form-control-input" placeholder="">
+                        <input type="text" name="title" id="title" class="no-form-control-input" placeholder="" required>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">제목</legend>
                         </fieldset>
@@ -101,44 +87,29 @@
                 </div>
 
                 <!-- 내용 -->
-                <div class="no-form-base --md">
-                    <label for="content" class="no-form-base-label">
-                        <span>내용</span>
-                    </label>
-                    <textarea name="content" id="content" data-text-editor class="no-form-base-input"></textarea>
-                    <span class="no-form-control-space"></span>
-                </div>
+                <?php 
+                    $props = [
+                        "name" => "content",
+                        "label" => "문의내용",
+                    ];
+                ?>
+                <div 
+                    data-view-type="editor"
+                    data-view-props='<?=json_encode($props, true) ?>'    
+                ></div>
 
 
-                <!-- 첨부파일 -->
-                <?php for ($i = 1; $i <= 5; $i++) : ?>
-                <div class="no-form-control no-form-file">
-                    <label for="file_attachment_<?=$i?>" class="no-form-control-inner">
-                        <input 
-                            type="file" 
-                            name="file_attachment_<?=$i?>" 
-                            id="file_attachment_<?=$i?>" 
-                            class="no-form-control-input">
-                        <fieldset class="no-form-control-label">
-                            <legend class="no-form-control-text">첨부파일<?=$i?></legend>
-                        </fieldset>
-                        <button class="no-form-file-input" type="button" data-input-file>
-                            <div class="no-form-file-icon">
-                                <i class="fa-light fa-paperclip-vertical"></i>
-                            </div>
-                            <span class="no-form-file-text" data-input-file-text>선택된 파일 없음</span>
-                            <span class="no-form-file-button-text">파일선택</span>
-                        </button>
-                    </label>
-                    <span class="no-form-control-space"></span>
-                </div>
-                <?php endfor; ?>
+                <div data-view-type="file" data-view-props='{"file_key": "attach_1"}'></div>
+                <div data-view-type="file" data-view-props='{"file_key": "attach_2"}'></div>
+                <div data-view-type="file" data-view-props='{"file_key": "attach_3"}'></div>
+                <div data-view-type="file" data-view-props='{"file_key": "attach_4"}'></div>
+                <div data-view-type="file" data-view-props='{"file_key": "attach_5"}'></div>
 
             </div>
 
             <!-- 액션 버튼 -->
             <div class="no-form-action">
-                <a href="<?= route('admin.claims.index') ?>" class="no-btn-primary-outline --sm">
+                <a href="<?= route('admin.claims.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
                 <button type="submit" class="no-btn-primary --sm">

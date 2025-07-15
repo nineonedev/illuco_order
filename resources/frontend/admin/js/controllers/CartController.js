@@ -308,52 +308,97 @@ export default class CartController extends Controller {
         });
     }
 
-    async _fetchAllCustomers({ button }, evt) {
+    async _fetchAllCustomers({ button, query = null }, evt) {
+        let url = `/admin/customers`;
+        if (query) {
+            url += `?` + query;
+        }
+
         try {
-            button.setState({ disabled: true });
-            const result = await new Ajax(true).get(`/admin/customers`);
+            if (button) {
+                button.setState({ disabled: true });
+            }
+
+            this.loader.show();
+            const result = await new Ajax(true).get(url);
 
             if (!result.success) {
                 return;
             }
 
-            const { customers } = result.data;
+            const { customers, query, dealers, countries} = result.data;
+
+            console.log(result.data);
+            
+
+            if (this.modal.state.open) {
+                this.modal.setState({
+                    open: false,
+                    content: "",
+                    header: "",
+                })
+            }
 
             this.modal.setState({
-                header: button.props.label,
+                header: "고객 검색",
                 content: CustomerSelection.make(
                     null,
-                    { paginator: customers },
+                    { paginator: customers, query: query, dealers, countries },
                     false
                 ),
                 open: true,
             });
         } finally {
-            button.setState({ disabled: false });
+            if (button) {
+                button.setState({ disabled: false });
+            }
+
+            this.loader.hide();
         }
     }
 
-    async _fetchAllTemplates({ button }, evt) {
+    async _fetchAllTemplates({ button, query = null }, evt) {
+        let url = `/admin/product-templates`;
+        if (query) {
+            url += `?` + query;
+        }
+
         try {
-            button.setState({ disabled: true });
-            const result = await new Ajax(true).get(`/admin/product-templates`);
+            if (button) {
+                button.setState({ disabled: true });
+            }
+            this.loader.show();
+
+            const result = await new Ajax(true).get(url);
             const { success, data } = result;
 
             if (!success) return;
 
-            const { templates } = data;
+            const { templates, categories, query } = data;
+
+            if (this.modal.state.open) {
+                this.modal.setState({
+                    open: false,
+                    content: "",
+                    header: "",
+                })
+            }
 
             this.modal.setState({
-                header: button.props.label,
+                header: "제품 검색",
                 content: TemplateSelection.make(
                     null,
-                    { paginator: templates },
+                    { paginator: templates, categories, query: query },
                     false
                 ),
                 open: true,
             });
         } finally {
-            button.setState({ disabled: false });
+            if (button) {
+                button.setState({ disabled: false });
+            }
+
+            this.loader.hide(); 
         }
     }
 

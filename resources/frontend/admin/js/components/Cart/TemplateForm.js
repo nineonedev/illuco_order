@@ -2,6 +2,7 @@ import CartController from "../../controllers/CartController";
 import View from "../../core/View";
 import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
+import ProductZone from "../Claim/ProductZone";
 import InputFactory from "../Inputs/InputFactroy";
 import HeadlightForm from "./HeadlightForm";
 import LoupeForm from "./LoupeForm";
@@ -63,6 +64,7 @@ export default class TemplateForm extends View {
 
                     <fieldset class="no-form-section">
                         <legend class="no-form-section__title">제품 정보</legend>
+                        <div id="product-zone"></div>
                         <div class="no-form-group" id="${this._tempHookId}"></div>
                     </fieldset>
 
@@ -106,56 +108,60 @@ export default class TemplateForm extends View {
         this._inputs = [];
         const { template, quantity } = this._state;
 
+        this.productZone = ProductZone.make('product-zone', {
+            template: template || {},
+        }).render();
+
         if (Helper.isEmptyObject(template)) return;
 
-        const { code, description, fileattachment, price, model, name } =
-            template;
+        // const { code, description, fileattachment, price, model, name } =
+        //     template;
 
-        const nameInput = InputFactory.make("text")
-            .make(this._tempHookId, {
-                label: "이름",
-                name: "product[name]",
-                value: name,
-                readOnly: true,
-            })
-            .render();
+        // const nameInput = InputFactory.make("text")
+        //     .make(this._tempHookId, {
+        //         label: "이름",
+        //         name: "product[name]",
+        //         value: name,
+        //         readOnly: true,
+        //     })
+        //     .render();
 
-        const textInput = InputFactory.make("text")
-            .make(this._tempHookId, {
-                label: "코드",
-                name: "product[code]",
-                value: code,
-                readOnly: true,
-            })
-            .render();
+        // const textInput = InputFactory.make("text")
+        //     .make(this._tempHookId, {
+        //         label: "코드",
+        //         name: "product[code]",
+        //         value: code,
+        //         readOnly: true,
+        //     })
+        //     .render();
 
-        const modelInput = InputFactory.make("text")
-            .make(this._tempHookId, {
-                label: "모델명",
-                name: "product[model]",
-                value: model,
-                readOnly: true,
-            })
-            .render();
+        // const modelInput = InputFactory.make("text")
+        //     .make(this._tempHookId, {
+        //         label: "모델명",
+        //         name: "product[model]",
+        //         value: model,
+        //         readOnly: true,
+        //     })
+        //     .render();
 
-        const priceInput = InputFactory.make("number")
-            .make(this._tempHookId, {
-                label: "단가(USD)",
-                name: "product[price]",
-                value: price,
-                readOnly: true,
-            })
-            .render();
+        // const priceInput = InputFactory.make("number")
+        //     .make(this._tempHookId, {
+        //         label: "단가(USD)",
+        //         name: "product[price]",
+        //         value: price,
+        //         readOnly: true,
+        //     })
+        //     .render();
 
-        const descriptionInput = InputFactory.make("longText")
-            .make(this._tempHookId, {
-                label: "설명",
-                name: "product[description]",
-                rows: "4",
-                value: description,
-                readOnly: true,
-            })
-            .render();
+        // const descriptionInput = InputFactory.make("longText")
+        //     .make(this._tempHookId, {
+        //         label: "설명",
+        //         name: "product[description]",
+        //         rows: "4",
+        //         value: description,
+        //         readOnly: true,
+        //     })
+        //     .render();
 
         const counterInput = InputFactory.make("counter")
             .make(this._tempHookId, {
@@ -177,11 +183,11 @@ export default class TemplateForm extends View {
             .render();
 
         this._inputs.push(
-            nameInput,
-            textInput,
-            modelInput,
-            priceInput,
-            descriptionInput,
+            // nameInput,
+            // textInput,
+            // modelInput,
+            // priceInput,
+            // descriptionInput,
             counterInput
         );
     }

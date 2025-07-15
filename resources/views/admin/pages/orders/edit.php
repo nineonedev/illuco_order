@@ -242,7 +242,6 @@ use App\Domains\Order\Enums\OrderStatus;
                                     <tbody>
                                         <?php foreach ($orderHistories as $history) : ?>
                                             <?php
-                                            dump($history); 
                                                 // 타깃(대상) 결정
                                                 if ($history->dealer) {
                                                     $target = $history->dealer->user->name ?? '대리점';

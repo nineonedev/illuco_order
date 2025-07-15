@@ -67,6 +67,12 @@ class MysqlGrammar extends Grammar
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NULL";
                 } elseif ($where['type'] === 'notNull') {
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NOT NULL";
+                } elseif ($where['type'] === 'nested') {
+                    [$nestedSql, $nestedBindings] = $this->compileSelect($where['query']);
+                    // WHERE 절만 잘라서 nested where로 사용
+                    $nestedWhere = preg_replace('/^select .* from .* where /i', '', $nestedSql);
+                    $parts[] = "{$boolean}({$nestedWhere})";
+                    $bindings = array_merge($bindings, $nestedBindings);
                 }
             }
             if (!empty($parts)) {

@@ -16,7 +16,7 @@ export default class SearchButton extends View {
     }
     
     _template(){
-        const {label, disabled} = this._state;
+        const {label, disabled, spacing} = this._state;
         return `
             <button type="button" class="no-form-search-btn" ${disabled ? 'disabled' : ''}>
                 <span>${label}</span>

@@ -913,6 +913,10 @@
     width: 100%;
     @extend %form-control;
 
+    &.--full{
+        max-width: none;
+    }
+
     &-inner {
         position: relative;
         width: 100%;

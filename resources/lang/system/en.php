@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\Communication\Enums\ClaimStatus;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Enums\OrderStatus;
@@ -36,6 +37,15 @@ return [
             OrderStatus::REJECTED    => 'Order Rejected',
         ]
     ],
+
+    'claim' => [
+        'status' => [
+            ClaimStatus::RECEIVED   => 'Claim Received',
+            ClaimStatus::PROCESSING   => 'Processing',
+            ClaimStatus::COMPLETED    => 'Completed',
+        ]
+    ],
+    
     'countries' => [
         'US' => 'United States',
         'KR' => 'South Korea',

@@ -217,8 +217,6 @@ export default class View {
     _render(){
         if (!this._booted) {
             this._boot();
-            console.log(this);
-            
         }
 
         this._renderElement();

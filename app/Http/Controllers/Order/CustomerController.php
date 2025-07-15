@@ -34,7 +34,18 @@ class CustomerController extends Controller
         // 대리점 로그인 시 자기 고객만 조회
         if ($user->isDealer()) {
             $query->where('dealer_id', $user->dealer->id);
+        } else {
+            $query->when(
+                $dealerId = $request->query('dealer_id'),
+                fn($q) => $q->where('dealer_id', $dealerId)
+            );
         }
+
+        // 국가
+        $query->when(
+            $country = $request->query('country'),
+            fn($q) => $q->where('country', $country)
+        );
 
         // 이름
         $query->when(
@@ -48,30 +59,32 @@ class CustomerController extends Controller
             fn($q) => $q->where('email', 'like', "%{$email}%")
         );
 
-        // 국가
-        $query->when(
-            $country = $request->query('country'),
-            fn($q) => $q->where('country', $country)
-        );
-
         // 전화번호
         $query->when(
             $phone = $request->query('phone'),
             fn($q) => $q->where('phone', 'like', "%{$phone}%")
         );
 
-        // 대리점 (관리자만)
-        if (!$user->isDealer()) {
-            $query->when(
-                $dealerId = $request->query('dealer_id'),
-                fn($q) => $q->where('dealer_id', $dealerId)
-            );
-        }
+
+        $query->when(
+            $search = $request->query('search'),
+            fn($q) => $q->where(function ($qq) use ($search) {
+                $qq->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('phone', 'like', "%{$search}%");
+            })
+        );
 
         // 정렬
         $sort = $request->query('sort');
         if ($sort) {
             switch ($sort) {
+                case 'latest':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'oldest':
+                    $query->orderBy('created_at');
+                    break;
                 case 'created_at_asc':
                     $query->orderBy('created_at');
                     break;
@@ -123,18 +136,22 @@ class CustomerController extends Controller
             return $customer;
         });
 
-        $dealers = DealerRepository::make()
-            ->withoutTrashed()    
-            ->with(['user'])
-            ->all();
-            
-        $dealers = array_filter($dealers, fn($dealer) => $dealer->user);
+        if (user()->isDealer()) {
+            $dealers = [];
+        } else {
+            $dealers = DealerRepository::make()
+                ->withoutTrashed()    
+                ->with(['user'])
+                ->all();
+                
+            $dealers = array_values(array_filter($dealers, fn($dealer) => $dealer->user));
+        }
 
         return $this->render('admin.pages.customers.index', [
             'customers' => $request->expectsJson() ? $customers->toArray() : $customers,
             'query'     => $request->query(),
             'countries' => __('system.countries'),
-            'dealers' => $dealers,
+            'dealers' => request()->expectsJson() ? array_map(fn($d) => $d->toArray(), $dealers) : $dealers,
         ]);
     }
 

@@ -96,10 +96,9 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [ClaimController::class, 'index'])->name('index');
                     Route::get('/create', [ClaimController::class, 'create'])->name('create');
-                    Route::get('{id}/edit', [ClaimController::class, 'edit'])->name('edit');
+                    Route::get('{id}', [ClaimController::class, 'show'])->name('show');
                     
                     Route::post('/', [ClaimController::class, 'store'])->name('store');
-                    Route::put('{id}', [ClaimController::class, 'update'])->name('update');
                     Route::delete('{id}', [ClaimController::class, 'destroy'])->name('destroy');
                 });
 

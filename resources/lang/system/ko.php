@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\Communication\Enums\ClaimStatus;
 use App\Domains\Order\Entities\Customer;
 use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Product\Entities\ProductTemplate;
@@ -33,6 +34,14 @@ return [
             OrderStatus::SHIPPED    => '출고 완료',
             OrderStatus::COMPLETED    => '주문 완료',
             OrderStatus::REJECTED    => '주문 거절됨',
+        ]
+    ],
+
+    'claim' => [
+        'status' => [
+            ClaimStatus::RECEIVED   => '접수됨',
+            ClaimStatus::PROCESSING   => '처리중',
+            ClaimStatus::COMPLETED    => '처리 완료',
         ]
     ],
 
