@@ -35,7 +35,7 @@ use App\Domains\Product\Entities\Loupe;
                                 id="query"
                                 value="<?= e($query['query'] ?? '') ?>"
                                 class="no-form-search-input"
-                                placeholder="">
+                                placeholder="이름, 이메일, 전화번호, 고객명 등">
                         </div>
                     </div>
                     
@@ -118,7 +118,7 @@ use App\Domains\Product\Entities\Loupe;
                                 id="orderer_query"
                                 value="<?= e($query['orderer_query'] ?? '') ?>"
                                 class="no-form-search-input"
-                                placeholder="이름, 나이, 번호, 주소">
+                                placeholder="주문자 이름, 나이, 연락처, 주소 검색">
                         </div>
                     </div>
 

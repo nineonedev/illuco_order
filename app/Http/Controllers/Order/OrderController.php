@@ -64,7 +64,7 @@ class OrderController extends Controller
         }
 
         // ✅ 카테고리
-        if ($categoryId = $request->query('category')) {
+        if ($categoryId = $request->query('category_id')) {
             $query->whereHas('items.product.template', function($q) use ($categoryId) {
                 $q->where('category_id', $categoryId);
             });
@@ -83,17 +83,17 @@ class OrderController extends Controller
         }
 
         // ✅ 주문자 (이름)
-        if ($name = $request->query('name')) {
+        if ($name = $request->query('orderer_query')) {
             $query->where(function($q) use ($name) {
                 $q->where('orderer_name', 'like', "%{$name}%")
-                ->orWhereHas('customer', function($cq) use ($name) {
-                    $cq->where('name', 'like', "%{$name}%");
-                });
+                    ->orWhereHas('customer', function($cq) use ($name) {
+                        $cq->where('name', 'like', "%{$name}%");
+                    });
             });
         }
 
         // ✅ 대리점
-        if ($dealerId = $request->query('dealer')) {
+        if ($dealerId = $request->query('dealer_id')) {
             $query->whereHas('customer', function($cq) use ($dealerId) {
                 $cq->where('dealer_id', $dealerId);
             });
@@ -103,11 +103,11 @@ class OrderController extends Controller
         if ($keyword = $request->query('query')) {
             $query->where(function($q) use ($keyword) {
                 $q->where('orderer_name', 'like', "%{$keyword}%")
-                ->orWhere('orderer_email', 'like', "%{$keyword}%")
-                ->orWhere('orderer_phone', 'like', "%{$keyword}%")
-                ->orWhereHas('customer', function($cq) use ($keyword) {
-                    $cq->where('name', 'like', "%{$keyword}%");
-                });
+                    ->orWhere('orderer_email', 'like', "%{$keyword}%")
+                    ->orWhere('orderer_phone', 'like', "%{$keyword}%")
+                    ->orWhereHas('customer', function($cq) use ($keyword) {
+                        $cq->where('name', 'like', "%{$keyword}%");
+                    });
             });
         }
 
