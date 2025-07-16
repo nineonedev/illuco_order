@@ -180,7 +180,20 @@ use App\Domains\Product\Entities\Loupe;
                 <table class="no-page-index-table">
                     <thead class="center">
                         <tr>
-                            <th class="sticky --check" rowspan="3">선택</th>
+                            <th class="sticky --check" rowspan="3">
+                                <div class="no-form-checkbox --xs">
+                                    <label for="chk-all" class="no-form-checkbox-pointer">
+                                        <input type="checkbox" name="chk-all" id="chk-all" value="1" class="no-form-checkbox-input">
+                                        <div class="no-form-checkbox-ripple">
+                                            <span class="no-form-checkbox-box">
+                                                <div class="no-form-checkbox-icon">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </th>
                             <th colspan="14" class="order">오더 기본 정보</th>
                             <th colspan="1" class="headlight">헤드라이트 정보</th>
                             <th colspan="18" class="loupe">루페 정보</th>

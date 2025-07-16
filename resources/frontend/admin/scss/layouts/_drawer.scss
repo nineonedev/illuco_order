@@ -8,9 +8,6 @@
     background-color: var(--clr-background-secondary);
     transition: width 200ms ease-in-out;
     height: 100%;
-    // min-height: 100dvh;
-    // overflow-y: auto;
-
 
     &.--shrink {
         --drawer-width: 7rem;
@@ -89,6 +86,8 @@
         padding-top: 3.2rem;
         padding-bottom: 3.2rem;
         padding-right: 1.6rem;
+        overflow-y: auto;
+        height: 100vh;
 
         @include mq(lg) {
             padding: 1.6rem;
@@ -176,7 +175,7 @@
 
     &-gnb {
         @extend %nav-bar;
-        
+
         border-bottom: 1px solid var(--clr-table-border);
         margin-bottom: var(--spacing-2);
         padding-bottom: var(--spacing-2);
