@@ -6,12 +6,22 @@ use Framework\Database\Query\Builder;
 
 class MysqlGrammar extends Grammar
 {
-    protected function wrap(string $column): string
+    public function wrap(string $column): string
     {
         if (strpos($column, '.') !== false) {
             return implode('.', array_map(fn($part) => "`$part`", explode('.', $column)));
         }
         return "`$column`";
+    }
+
+    public function wrapTable(string $table): string
+    {
+        return $this->wrap($table);
+    }
+
+    public function raw(string $expression): string
+    {
+        return $expression;
     }
 
     public function compileSelect(Builder $builder): array
@@ -63,6 +73,9 @@ class MysqlGrammar extends Grammar
                     $bindings = array_merge($bindings, $subBindings);
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";
+                    if (!empty($where['bindings'])) {
+                        $bindings = array_merge($bindings, $where['bindings']);
+                    }
                 } elseif ($where['type'] === 'null') {
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NULL";
                 } elseif ($where['type'] === 'notNull') {
@@ -131,7 +144,7 @@ class MysqlGrammar extends Grammar
             $sql .= ' ' . ($union['all'] ? 'union all' : 'union') . " ({$unionSql})";
             $bindings = array_merge($bindings, $unionBindings);
         }
-
+        
         return [$sql, $bindings];
     }
 

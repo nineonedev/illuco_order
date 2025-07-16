@@ -155,6 +155,104 @@ class Builder
 
         return $bindings;
     }
+    
+    public function existsOrFail(): bool
+    {
+        if (!$this->exists()) {
+            throw new \RuntimeException("정보를 찾을 수 없습니다.");
+        }
+        return true;
+    }
+
+    public function increment(string $column, int $amount = 1): int
+    {
+        return $this->update([
+            $column => $this->grammar->raw("{$column} + {$amount}")
+        ]);
+    }
+
+    public function decrement(string $column, int $amount = 1): int
+    {
+        return $this->update([
+            $column => $this->grammar->raw("{$column} - {$amount}")
+        ]);
+    }
+
+    public function clone(): self
+    {
+        return clone $this;
+    }
+
+    public function truncate(): void
+    {
+        $sql = "TRUNCATE TABLE " . $this->grammar->wrapTable($this->table);
+        $this->connection->statement($sql);
+    }
+
+    public function existsByOrFail(array $where): bool
+    {
+        foreach ($where as $column => $value) {
+            $this->where($column, $value);
+        }
+
+        if (!$this->exists()) {
+            throw new \RuntimeException("정보를 찾을 수 없습니다.");
+        }
+
+        return true;
+    }
+
+    public function whereDate(string $column, string $operator, string $value): self
+    {
+        $this->wheres[] = [
+            'type' => 'raw',
+            'sql' => "DATE(" . $this->grammar->wrap($column) . ") {$operator} ?",
+            'boolean' => 'and',
+            'value' => $value,
+        ];
+
+        return $this;
+    }
+
+    public function whereBetween(string $column, array $values): self
+    {
+        if (count($values) !== 2) {
+            throw new \InvalidArgumentException("whereBetween requires exactly 2 values.");
+        }
+
+        $this->wheres[] = [
+            'type' => 'raw',
+            'sql' => $this->grammar->wrap($column) . " BETWEEN ? AND ?",
+            'boolean' => 'and',
+            'values' => $values,
+        ];
+
+        return $this;
+    }
+
+    public function whereYear(string $column, string $operator, string $value): self
+    {
+        $this->wheres[] = [
+            'type' => 'raw',
+            'sql' => "YEAR(" . $this->grammar->wrap($column) . ") {$operator} ?",
+            'boolean' => 'and',
+            'value' => $value,
+        ];
+
+        return $this;
+    }
+
+    public function whereMonth(string $column, string $operator, string $value): self
+    {
+        $this->wheres[] = [
+            'type' => 'raw',
+            'sql' => "MONTH(" . $this->grammar->wrap($column) . ") {$operator} ?",
+            'boolean' => 'and',
+            'value' => $value,
+        ];
+
+        return $this;
+    }
 
     protected function addJoinSub(string $type, SubQuery $subQuery, string $alias, Closure $callback): self
     {
@@ -245,9 +343,14 @@ class Builder
         return $this->connection->select($sql, $bindings);
     }
 
-    public function pluck(string $column): array
+    public function pluck(string $column, ?string $key = null): array
     {
-        $this->columns = [$column];
+        $columns = [$column];
+        if ($key !== null) {
+            $columns[] = $key;
+        }
+
+        $this->columns = $columns;
 
         [$sql, $bindings] = $this->grammar->compileSelect($this);
         $results = $this->connection->select($sql, $bindings);
@@ -256,8 +359,18 @@ class Builder
             return [];
         }
 
-        return array_map(fn($row) => $row->{$column} ?? null, $results);
+        if ($key === null) {
+            return array_map(fn($row) => $row->{$column} ?? null, $results);
+        }
+
+        $pluck = [];
+        foreach ($results as $row) {
+            $pluck[$row->{$key}] = $row->{$column};
+        }
+
+        return $pluck;
     }
+
 
 
     public function first(): ?object
@@ -704,15 +817,17 @@ class Builder
         return $this;
     }
 
-    public function whereRaw(string $raw): self
+    public function whereRaw(string $raw, array $bindings = []): self
     {
         $this->wheres[] = [
             'type' => 'raw',
             'sql' => $raw,
+            'bindings' => $bindings,
             'boolean' => 'and',
         ];
         return $this;
     }
+
 
     public function groupBy(string ...$columns): self
     {

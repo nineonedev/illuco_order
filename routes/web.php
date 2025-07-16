@@ -15,8 +15,6 @@ use App\Http\Controllers\Order\CustomerController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Order\OrderHistoryController;
 use App\Http\Controllers\Order\OrderItemController;
-use App\Http\Controllers\Product\ProductValueController;
-use App\Http\Controllers\Product\ProductOptionController;
 use App\Http\Controllers\Product\ProductTemplateController;
 use Framework\Support\Facades\Route;
 
@@ -50,13 +48,19 @@ Route::middleware(['web'])->group(function(){
         ->group(function(){
             
             Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
-            Route::get('dashboard/data', [AdminController::class, 'dashboardData'])->name('dashboard.data');
             
             Route::get('guide', [AdminController::class, 'guide'])->name('guide');
             Route::get('test', [AdminController::class, 'test'])->name('test');
             Route::get('seting', [AdminController::class, 'setting'])->name('setting'); 
             
             Route::post('upload', [AdminController::class, 'upload'])->name('upload'); 
+            
+            Route::prefix('dashboard')
+                ->name('dashboard')
+                ->group(function() {
+                    Route::get('aggregation', [AdminController::class, 'aggregateApi'])->name('aggregation');
+            });
+                
 
             Route::prefix('me')
                 ->name('me')
@@ -166,13 +170,13 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [CategoryController::class, 'destroy'])->name('destroy');
                 });
 
-            Route::prefix('product-options')
-                ->name('product_options')
-                ->group(function(){
-                    Route::post('/', [ProductOptionController::class, 'store'])->name('store');
-                    Route::put('{id}', [ProductOptionController::class, 'update'])->name('update');
-                    Route::delete('{id}', [ProductOptionController::class, 'destroy'])->name('destroy');
-                });
+            // Route::prefix('product-options')
+            //     ->name('product_options')
+            //     ->group(function(){
+            //         Route::post('/', [ProductOptionController::class, 'store'])->name('store');
+            //         Route::put('{id}', [ProductOptionController::class, 'update'])->name('update');
+            //         Route::delete('{id}', [ProductOptionController::class, 'destroy'])->name('destroy');
+            //     });
 
             // carts
             Route::prefix('cart')
@@ -211,6 +215,7 @@ Route::middleware(['web'])->group(function(){
                     Route::put('{id}', [OrderController::class, 'update'])->name('update');
                     
                     Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy');
+
                 });
 
             Route::prefix('orderitems')
@@ -238,13 +243,13 @@ Route::middleware(['web'])->group(function(){
                 });
 
             // product-values
-            Route::prefix('product-values')
-                ->name('product_values')
-                ->group(function(){
-                    Route::post('/', [ProductValueController::class, 'store'])->name('store');
-                    Route::put('{id}', [ProductValueController::class, 'update'])->name('update');
-                    Route::delete('{id}', [ProductValueController::class, 'destroy'])->name('destroy');
-                });
+            // Route::prefix('product-values')
+            //     ->name('product_values')
+            //     ->group(function(){
+            //         Route::post('/', [ProductValueController::class, 'store'])->name('store');
+            //         Route::put('{id}', [ProductValueController::class, 'update'])->name('update');
+            //         Route::delete('{id}', [ProductValueController::class, 'destroy'])->name('destroy');
+            //     });
 
 
         });

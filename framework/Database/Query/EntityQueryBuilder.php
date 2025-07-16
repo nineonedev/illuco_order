@@ -65,13 +65,25 @@ class EntityQueryBuilder extends Builder
         return $this->get();
     }
 
-    public function pluck(string $column): array
+    public function pluck(string $column, ?string $key = null): array
     {
-        return array_map(
-            fn($entity) => $entity->get($column),
-            $this->get()
-        );
+        $entities = $this->get();
+
+        if ($key === null) {
+            return array_map(
+                fn($entity) => $entity->get($column),
+                $entities
+            );
+        }
+
+        $result = [];
+        foreach ($entities as $entity) {
+            $result[$entity->get($key)] = $entity->get($column);
+        }
+
+        return $result;
     }
+
 
     public function find($id)
     {

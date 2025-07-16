@@ -114,6 +114,25 @@
   }
 }
 
+.no-force-flex{
+  --gap: 2.4rem; 
+
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap);
+
+  @include mq(md){
+    flex-direction: column;
+  }
+
+  > div { 
+    width: calc(50% - var(--gap));
+    
+    @include mq(md){
+      width: 100%;
+    }
+  }
+}
 
 %feedback{
     display: flex;

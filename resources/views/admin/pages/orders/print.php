@@ -24,7 +24,7 @@ use App\Domains\Order\Enums\OrderStatus;
         </div>
 
         <div class="--flex-center">
-            <a href="<?= route('admin.order_documents.edit', ['documentNo' => $document->document_no]) ?>" class="no-btn-primary-outline">목록</a>
+            <a href="<?= route('admin.orders.edit', ['orderNo' => $document->order->order_no]) ?>" class="no-btn-primary-outline">목록</a>
             <button type="button" id="print-btn" class="no-btn-primary">PDF 다운로드</button>
         </div>
 

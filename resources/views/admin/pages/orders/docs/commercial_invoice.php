@@ -174,7 +174,7 @@ $items = $order->items;
         </div>
 
         <div class="no-form-action">
-            <a href="<?= route('admin.orders.show', ['id' => $order->id]) ?>" class="no-btn-primary-outline --sm">취소</a>
+            <a href="<?= route('admin.orders.edit', ['orderNo' => $document->order->order_no]) ?>" class="no-btn-primary-outline --sm">취소</a>
             <button type="submit" class="no-btn-primary --sm">저장</button>
         </div>
     </div>

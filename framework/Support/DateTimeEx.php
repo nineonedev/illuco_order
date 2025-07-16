@@ -66,4 +66,62 @@ class DateTimeEx extends DateTime
     {
         return clone $this;
     }
+
+    public function startOfDay(): self
+    {
+        $this->setTime(0, 0, 0);
+        return $this;
+    }
+
+    public function endOfDay(): self
+    {
+        $this->setTime(23, 59, 59);
+        return $this;
+    }
+
+    public function startOfMonth(): self
+    {
+        $this->setDate((int)$this->format('Y'), (int)$this->format('m'), 1);
+        return $this->startOfDay();
+    }
+
+    public function endOfMonth(): self
+    {
+        $this->setDate((int)$this->format('Y'), (int)$this->format('m'), (int)$this->format('t'));
+        return $this->endOfDay();
+    }
+
+    public function startOfWeek(int $startDay = 1): self
+    {
+        // ISO 주 시작 요일 기준 (월=1, 일=7)
+        $dayOfWeek = (int)$this->format('N'); 
+        $diff = $dayOfWeek - $startDay;
+        if ($diff < 0) {
+            $diff += 7;
+        }
+        return $this->subDays($diff)->startOfDay();
+    }
+
+    public function endOfWeek(int $startDay = 1): self
+    {
+        return $this->startOfWeek($startDay)->addDays(6)->endOfDay();
+    }
+
+    public function setDateComponents(int $year, int $month, int $day): self
+    {
+        $this->setDate($year, $month, $day);
+        return $this;
+    }
+
+    public function setTimeComponents(int $hour, int $minute, int $second = 0): self
+    {
+        $this->setTime($hour, $minute, $second);
+        return $this;
+    }
+
+    public function isSameDay(self $other): bool
+    {
+        return $this->format('Y-m-d') === $other->format('Y-m-d');
+    }
+
 }

@@ -1,3 +1,4 @@
+
 import Controller from "../core/Controller";
 import Modal from "../shared/Modal";
 import Loader from "../shared/Loader";
@@ -5,12 +6,17 @@ import SelectInput from "../components/Inputs/SelectInput";
 import FileInput from "../components/Inputs/FileInput";
 import DateTimeInput from "../components/Inputs/DateTimeInput";
 import EditorInput from "../components/Inputs/EditorInput";
+import DateInput from "../components/Inputs/DateInput";
+
 import {
     Chart,
     CategoryScale,
     LinearScale,
     BarController,
     BarElement,
+    LineController,
+    LineElement,
+    PointElement,
     Tooltip,
     Legend,
 } from "chart.js";
@@ -20,15 +26,23 @@ Chart.register(
     LinearScale,
     BarController,
     BarElement,
+    LineController,
+    LineElement,
+    PointElement,
     Tooltip,
     Legend
 );
+
 
 export default class AdminController extends Controller {
     form;
     cancelBtn;
     modal;
     loader;
+
+    totalChart;
+    illucoChart;
+    dealerChart;
 
     _prepare() {
         this.form = document.getElementById("frm");
@@ -53,92 +67,253 @@ export default class AdminController extends Controller {
             .forEach((el) => {
                 DateTimeInput.make(el).render();
             });
+
+        document
+            .querySelectorAll('[data-view-type="date"]')
+            .forEach((el) => {
+                DateInput.make(el).render();
+            });
     }
 
-    dashboard() {
-        this._logger.info("dashboard");
+    async dashboard() {
         this._prepare();
 
-        // 매출 현황 차트 (대리점별 매출)
-        const salesChartEl = document.getElementById("sales-chart");
-        if (salesChartEl) {
-            new Chart(salesChartEl, {
+        const queryParams = Object.fromEntries(
+            new URLSearchParams(window.location.search).entries()
+        );
+
+        this.loader.show();
+
+        try {
+            const aggregation = await this.fetchAggregation(queryParams);
+
+            if (aggregation) {
+                await this.renderSummary(aggregation);
+                await this.renderTotalChart(aggregation);
+                await this.renderIllucoChart(aggregation);
+                await this.renderDealerChart(aggregation);
+            }
+        } finally {
+            this.loader.hide();
+        }
+    }
+
+    /**
+     * aggregation API 호출(fetch)
+     */
+    async fetchAggregation(query) {
+        const queryString = new URLSearchParams(query).toString();
+        const response = await fetch(`/admin/dashboard/aggregation?${queryString}`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+            }
+        });
+
+        const json = await response.json();
+
+        return json?.data?.aggregation ?? null;
+    }
+
+    /**
+     * 요약 정보 렌더링
+     */
+    async renderSummary(aggr) {
+        const totalEl = document.querySelector("#total-sales-amount");
+        if (totalEl) {
+            totalEl.textContent =
+                `${aggr.total_sales.total_sales.toLocaleString()} USD`;
+        }
+
+        const illucoEl = document.querySelector("#illuco-sales-amount");
+        if (illucoEl) {
+            illucoEl.textContent =
+                `${aggr.illuco_sales.total_sales.toLocaleString()} USD`;
+        }
+
+        const dealerTotal = aggr.dealer_sales.reduce(
+            (sum, d) => sum + (d.total_sales || 0),
+            0
+        );
+
+        const dealerEl = document.querySelector("#dealer-sales-amount");
+        if (dealerEl) {
+            dealerEl.textContent =
+                `${dealerTotal.toLocaleString()} USD`;
+        }
+    }
+
+
+    /**
+     * 전체 매출 차트
+     */
+    async renderTotalChart(aggr) {
+        const sales = aggr.total_sales;
+
+        if (!sales) return;
+
+        const labels = sales.months.map(m => `${m.month}월`);
+        const data = sales.months.map(m => m.total_sales);
+
+        const el = document.getElementById("sales-chart");
+        this.totalChart = this.renderChart(
+            el,
+            this.totalChart,
+            labels,
+            data,
+            "전체 매출 (USD)",
+            "rgba(54, 162, 235, 0.5)"
+        );
+    }
+
+    /**
+     * 일루코 매출 차트
+     */
+    async renderIllucoChart(aggr) {
+        const sales = aggr.illuco_sales;
+
+        if (!sales) return;
+
+        const labels = sales.months.map(m => `${m.month}월`);
+        const data = sales.months.map(m => m.total_sales);
+
+        const el = document.getElementById("illuco-chart");
+        this.illucoChart = this.renderChart(
+            el,
+            this.illucoChart,
+            labels,
+            data,
+            "본사(일루코) 매출 (USD)",
+            "rgba(255, 99, 132, 0.5)"
+        );
+    }
+
+    /**
+     * 대리점 매출 차트
+     */
+    renderDealerChart(aggr) {
+        const sales = aggr.dealer_sales;
+
+        if (!sales) return;
+
+        // 1~12월 라벨
+        const labels = Array.from({ length: 12 }, (_, i) => `${i + 1}월`);
+
+        // 대리점별 dataset
+        const datasets = sales.map((dealer, i) => {
+            // 월별 매출
+            const data = Array(12).fill(0);
+            dealer.months.forEach(m => {
+                data[m.month - 1] = m.total_sales;
+            });
+
+            // 랜덤 컬러 생성 (혹은 고정 컬러 배열 사용 가능)
+            const color = this.getColor(i);
+
+            return {
+                label: dealer.dealer_name,
+                data,
+                borderColor: color,
+                backgroundColor: color,
+                tension: 0.3,
+                fill: false,
+            };
+        });
+
+        const el = document.getElementById("dealer-chart");
+
+        if (!el) {
+            console.warn("Chart rendering skipped: #dealer-chart element not found.");
+            return;
+        }
+
+        if (this.dealerChart) {
+            this.dealerChart.destroy();
+        }
+
+        this.dealerChart = new Chart(el, {
+            type: "line",
+            data: {
+                labels,
+                datasets,
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "매출 (USD)"
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: "월"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    getColor(index) {
+        const colors = [];
+
+        for (let i = 0; i < 100; i++) {
+            const hue = Math.round((i * 360) / 100);
+            colors.push(`hsla(${hue}, 70%, 60%, 0.5)`);
+        }
+
+        return colors[index % colors.length];
+    }
+
+
+
+    renderChart(ctx, chartInstance, labels, data, labelText, color, horizontal = false) {
+        if (!ctx) {
+            console.warn(`Chart rendering skipped: element not found.`);
+            return null;
+        }
+        
+        if (chartInstance) {
+            chartInstance.data.labels = labels;
+            chartInstance.data.datasets[0].data = data;
+            chartInstance.update();
+            return chartInstance;
+        } else {
+            return new Chart(ctx, {
                 type: "bar",
                 data: {
-                    labels: ["대리점A", "대리점B", "대리점C"],
-                    datasets: [
-                        {
-                            label: "매출액 (USD)",
-                            data: [25000, 18000, 32000],
-                            backgroundColor: [
-                                "rgba(54, 162, 235, 0.5)",
-                                "rgba(255, 206, 86, 0.5)",
-                                "rgba(75, 192, 192, 0.5)",
-                            ],
-                            borderWidth: 1,
-                        },
-                    ],
+                    labels,
+                    datasets: [{
+                        label: labelText,
+                        data,
+                        backgroundColor: color,
+                        borderWidth: 1,
+                    }]
                 },
                 options: {
+                    indexAxis: horizontal ? 'y' : 'x',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
+                        y: { beginAtZero: true },
+                        x: { beginAtZero: true }
+                    }
+                }
             });
         }
-
-        // 최근 오더 표
-        const orders = [
-            {
-                orderNo: "ORD20240701",
-                orderer: "김철수",
-                dealer: "대리점A",
-                date: "2024-07-01",
-                amount: "$1200",
-            },
-            {
-                orderNo: "ORD20240628",
-                orderer: "박영희",
-                dealer: "대리점B",
-                date: "2024-06-28",
-                amount: "$800",
-            },
-        ];
-
-        const orderBody = document.getElementById("recent-orders-body");
-        orders.forEach((order) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${order.orderNo}</td>
-                <td>${order.orderer}</td>
-                <td>${order.dealer}</td>
-                <td>${order.date}</td>
-                <td>${order.amount}</td>
-            `;
-            orderBody?.appendChild(tr);
-        });
-
-        // 공지사항 표
-        const notices = [
-            { title: "서버 점검 안내", author: "관리자", date: "2024-07-01" },
-            { title: "신제품 출시", author: "관리자", date: "2024-06-28" },
-        ];
-
-        const noticesBody = document.getElementById("notices-body");
-        notices.forEach((notice) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${notice.title}</td>
-                <td>${notice.author}</td>
-                <td>${notice.date}</td>
-            `;
-            noticesBody?.appendChild(tr);
-        });
     }
+
+
 
     signIn() {
         this._logger.info("signIn");

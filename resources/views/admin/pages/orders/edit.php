@@ -196,7 +196,7 @@ use App\Domains\Order\Enums\OrderStatus;
 
             <section>
                 <div class="no-section-container">
-                    <div class="no-page-flex --xl">
+                    <div class="no-force-flex">
                         <div>
                             <div class="no-order-history-list">
                                 <h3 class="no-order-update__title">상태 변경 내역</h3>

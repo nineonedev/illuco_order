@@ -77,6 +77,8 @@ class MysqlConnection implements ConnectionInterface {
     {
         $stmt = $this->pdo->prepare($query); 
         $stmt->execute($bindings); 
+
+        // dump($query, $bindings); 
         return $stmt->fetchAll();
     }
 

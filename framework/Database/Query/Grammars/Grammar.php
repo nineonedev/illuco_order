@@ -21,4 +21,10 @@ abstract class Grammar
     abstract public function compileUpdate(Builder $builder, array $data): array;
 
     abstract public function compileDelete(Builder $builder): array;
+    
+    abstract public function raw(string $expression): string;
+
+    abstract public function wrapTable(string $table): string;
+
+    abstract public function wrap(string $column): string;
 }

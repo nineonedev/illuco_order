@@ -40,7 +40,7 @@
                     </span>
                 </button>
             </div> -->
-            <div class="no-header-option-item">
+            <!-- <div class="no-header-option-item">
                 <a href="<?=  route('admin.setting') ?>" data-tooltip="bottom" class="no-btn-icon">
                     <i class="fa-light fa-gear"></i>
                     <span data-tooltip-text>
@@ -48,21 +48,24 @@
                         <div data-tooltip-arrow></div>
                     </span>
                 </a>
-            </div>
+            </div> -->
             <div class="no-header-option-item">
                 <a href="<?= route('admin.me.edit') ?>" type="button" class="no-btn-icon --2xl">
-                    <div class="no-header-option-profile">나</div>
+                    <?php
+                        $initial = strtoupper(mb_substr(user()->name, 0, 1, 'UTF-8'));
+                    ?>
+                    <div class="no-header-option-profile"><?= e($initial) ?></div>
                 </a>
                 <!-- <button type="button" class="no-btn-icon --2xl">
                     <div class="no-header-option-profile">나</div>
                 </button> -->
-                <div class="no-header-option-profile-dropdown">
+                <!-- <div class="no-header-option-profile-dropdown">
                     <ul>
                         <li><a href="#">내정보</a></li>
                     </ul>
                     <hr>
                     <button type="button">로그아웃</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

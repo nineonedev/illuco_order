@@ -30,6 +30,12 @@ class Order extends Entity
         'shipping_date',
         'canceled_at',
         'created_at',
+        
+        'total_sales',
+        'month',
+        'date',
+        'weekday',
+        'time_hour',
     ];
 
     protected array $casts = [
@@ -47,6 +53,12 @@ class Order extends Entity
         'shipping_date'  => 'date',
         'canceled_at'  => 'datetime',
         'created_at'  => 'date',
+
+        'total_sales'     => 'decimal',
+        'month'           => '?int',
+        'date'            => 'date',
+        'weekday'         => '?int',
+        'time_hour'       => '?int',
     ];
 
     public static function repositoryClass(): string
