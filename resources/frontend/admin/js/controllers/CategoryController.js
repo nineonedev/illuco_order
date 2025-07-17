@@ -10,23 +10,66 @@ export default class CategoryController extends Controller
         this._logger.info('index');
         this.loader = Loader.make('portal').render();
         this.form = CategoryForm.make('category-form').render();
-        this.categoryList = CategoryList.make('category-list');
+
+        this._handleListDelete(); 
 
         this._listen('category.create', this._handleCreate.bind(this));
         this._listen('category.delete', this._handleDelete.bind(this));
         this._listen('category.update', this._handleUpdate.bind(this));
-
-        this._fetchCategories();
     }
 
-    async _fetchCategories()
-    {
-        const result = await new Ajax(true).get('/admin/product-categories');
-        this._logger.success(result);
-        const items = result.data.categories;
-    
-        this.categoryList.setState({items: items});
+    _handleListDelete() {
+        const forms = document.querySelectorAll('#category-list form');
+
+        forms.forEach(form => {
+            const deleteBtn = form.querySelector('[data-item-action="delete"]');
+
+            if(deleteBtn){ 
+                deleteBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    if (!confirm('정말로 삭제하시겠습니까?')) return;
+
+                    try {
+                        this.loader.show();
+                        const result = await new Ajax(false).delete(deleteBtn.href);
+
+                        if (result.success) {
+                            this._logger.success('카테고리 삭제 성공:', result);
+                            location.reload(); 
+                        } else {
+                            alert('카테고리 삭제 실패');
+                        }
+                    } finally {
+                        this.loader.hide();
+                    }
+                });
+            }
+
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+
+                try {
+                    this.loader.show();
+                    const result = await new Ajax(false).put(form.action, formData);
+
+                    if (result.success) {
+                        this._logger.success('카테고리 수정 성공:', result);
+                        location.reload(); 
+                    } else {
+                        alert('카테고리 수정 실패');
+                    }
+                } finally {
+                    this.loader.hide();
+                }
+            });
+        });
+
     }
+
 
     async _handleDelete({id}) 
     {
@@ -71,8 +114,6 @@ export default class CategoryController extends Controller
 
     async _handleCreate({data, form, button})
     {
-        data.append('sort_order', this.categoryList.getCurrentIndex() + 1);
-
         this._logger.info(Object.fromEntries(data), form, button);
 
         try {
@@ -82,8 +123,7 @@ export default class CategoryController extends Controller
             this._logger.success(result);
             
             if (result.success) {
-                form.reset(); 
-                this.categoryList.addCategory(result.data.category);
+                location.reload(); 
             }
             
         } finally {

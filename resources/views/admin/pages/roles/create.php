@@ -62,14 +62,14 @@
                         <tr>
                             <th>항목</th>
                             <?php foreach ($actions as $action): ?>
-                                <th><?= lang('system.'.$action) ?? ucfirst($action) ?></th>
+                                <th><?= lang('system.action.'.$action) ?? ucfirst($action) ?></th>
                             <?php endforeach; ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($permissions as $roleName => $grants): ?>
                             <tr class="no-table-hover">
-                                <td><?= lang('system.'.$roleName) ?? class_basename($roleName) ?></td>
+                                <td><?= lang('system.role.'.$roleName) ?? class_basename($roleName) ?></td>
                                 <?php foreach ($actions as $action): ?>
                                     <td>
                                         <div class="no-form-checkbox --xs">

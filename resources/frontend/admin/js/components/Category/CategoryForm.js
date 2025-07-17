@@ -1,5 +1,6 @@
 import View from '../../core/View';
 import TextInput from '../Inputs/TextInput';
+import NumberInput from '../Inputs/NumberInput';
 
 export default class CategoryForm extends View {
     _template()
@@ -36,9 +37,15 @@ export default class CategoryForm extends View {
             required: true,
         }).render(); 
 
-        TextInput.make(this._inputHookId, {
-            name: 'slug',
-            label: '식별자',
+        // TextInput.make(this._inputHookId, {
+        //     name: 'slug',
+        //     label: '식별자',
+        //     required: true,
+        // }).render(); 
+
+        NumberInput.make(this._inputHookId, {
+            name: 'sort_order',
+            label: '순서',
             required: true,
         }).render(); 
 

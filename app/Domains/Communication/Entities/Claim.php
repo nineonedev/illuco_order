@@ -4,9 +4,11 @@ namespace App\Domains\Communication\Entities;
 
 use App\Domains\Communication\Repositories\ClaimRepository;
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Traits\SoftDeletes;
 
 class Claim extends Entity
 {
+    use SoftDeletes;
     protected array $fillable = [
         // 스냅샷: 제품 정보
         'product_name',

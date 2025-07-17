@@ -228,6 +228,36 @@ class CustomerController extends Controller
         });
     }
 
+    public function destroyMany(Request $request)
+    {
+        $ids = $request->body('ids', []);
+
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+
+        if (empty($ids)) {
+            return $this->render(null, [], "삭제할 고객이 없습니다.");
+        }
+
+        return $this->runInTransaction(function () use ($ids) {
+            $totalDeleted = 0;
+
+            foreach ($ids as $id) {
+                $customer = $this->repo()->find($id);
+                if (!$customer) continue;
+
+                $deleted = $this->repo()->delete($customer);
+                if ($deleted) {
+                    $totalDeleted++;
+                }
+            }
+
+            return $this->render(null, [], "선택된 고객이 삭제되었습니다. (삭제된 수: {$totalDeleted})");
+        });
+    }
+
+
     protected function save(Customer $customer): Customer
     {
         $customer = $this->repo()->save($customer);

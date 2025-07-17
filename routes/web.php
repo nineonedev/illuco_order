@@ -92,6 +92,8 @@ Route::middleware(['web'])->group(function(){
                     
                     Route::post('/', [NoticeController::class, 'store'])->name('store');
                     Route::put('{id}', [NoticeController::class, 'update'])->name('update');
+
+                    Route::delete('bulk-delete', [NoticeController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [NoticeController::class, 'destroy'])->name('destroy');
                 });
 
@@ -103,6 +105,8 @@ Route::middleware(['web'])->group(function(){
                     Route::get('{id}', [ClaimController::class, 'show'])->name('show');
                     
                     Route::post('/', [ClaimController::class, 'store'])->name('store');
+
+                    Route::delete('bulk-delete', [ClaimController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [ClaimController::class, 'destroy'])->name('destroy');
                 });
 
@@ -116,6 +120,8 @@ Route::middleware(['web'])->group(function(){
                     
                     Route::post('/', [CustomerController::class, 'store'])->name('store');
                     Route::put('{id}', [CustomerController::class, 'update'])->name('update');
+
+                    Route::delete('bulk-delete', [CustomerController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [CustomerController::class, 'destroy'])->name('destroy');
                 });
 
@@ -128,6 +134,8 @@ Route::middleware(['web'])->group(function(){
                     
                     Route::post('/', [DealerController::class, 'store'])->name('store');
                     Route::put('{id}', [DealerController::class, 'update'])->name('update');
+
+                    Route::delete('bulk-delete', [DealerController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [DealerController::class, 'destroy'])->name('destroy');
                 });
 
@@ -140,6 +148,8 @@ Route::middleware(['web'])->group(function(){
                     
                     Route::post('/', [EmployeeController::class, 'store'])->name('store');
                     Route::put('{id}', [EmployeeController::class, 'update'])->name('update');
+
+                    Route::delete('bulk-delete', [EmployeeController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [EmployeeController::class, 'destroy'])->name('destroy');
                 });
     
@@ -158,6 +168,8 @@ Route::middleware(['web'])->group(function(){
                     
                     Route::post('/', [ProductTemplateController::class, 'store'])->name('store');
                     Route::put('{id}', [ProductTemplateController::class, 'update'])->name('update');
+
+                    Route::delete('bulk-delete', [ProductTemplateController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [ProductTemplateController::class, 'destroy'])->name('destroy');
                 });
             
@@ -214,6 +226,7 @@ Route::middleware(['web'])->group(function(){
                     Route::put('/cancel/{orderNo}', [OrderController::class, 'cancel'])->name('cancel');
                     Route::put('{id}', [OrderController::class, 'update'])->name('update');
                     
+                    Route::delete('bulk-delete', [OrderController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [OrderController::class, 'destroy'])->name('destroy');
 
                 });

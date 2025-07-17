@@ -222,4 +222,37 @@ class DealerController extends Controller
             return $this->render(null, [], '정상적으로 삭제되었습니다.');
         });
     }
+
+    public function destroyMany(Request $request)
+    {
+        $ids = $request->body('ids', []);
+
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+
+        if (empty($ids)) {
+            return $this->render(null, [], "삭제할 항목이 없습니다.");
+        }
+
+        return $this->runInTransaction(function () use ($ids) {
+            $totalDeleted = 0;
+
+            foreach ($ids as $id) {
+                $dealer = UserRepository::make()
+                    ->with([UserType::DEALER])
+                    ->find($id);
+
+                if (!$dealer) continue;
+
+                $success = UserRepository::make()->delete($dealer);
+                if ($success) {
+                    $totalDeleted++;
+                }
+            }
+
+            return $this->render(null, [], "선택된 대리점이 삭제되었습니다. (삭제된 수: {$totalDeleted})");
+        });
+    }
+
 }

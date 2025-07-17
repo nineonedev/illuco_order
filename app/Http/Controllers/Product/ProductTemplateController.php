@@ -11,12 +11,15 @@ use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
 use App\Domains\System\Supports\FileAttachmentList;
 use App\Http\Requests\Product\SaveProductTemplateRequest;
+use Framework\Database\ORM\Traits\SoftDeletes;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
 
 class ProductTemplateController extends Controller
 {
+    use SoftDeletes; 
+
     public function repo(): ProductTemplateRepository
     {
         return ProductTemplateRepository::make();
@@ -231,13 +234,46 @@ class ProductTemplateController extends Controller
     {
         return $this->runInTransaction(function () use ($id) {
             $template = $this->repo()->with([FileAttachment::class])->findOrFail($id);
-            $this->fileRepo()->deleteAllFor($template);
 
-            if (!$this->repo()->delete($template)) {
+            $success = $this->repo()->delete($template);
+
+            if (!$success) {
                 throw new RuntimeException("제품 템플릿 삭제에 실패했습니다.");
             }
 
             return $this->render('admin.product_templates.index', [], '제품 템플릿이 삭제되었습니다.');
         });
     }
+
+    public function destroyMany(Request $request)
+    {
+        return $this->runInTransaction(function () use ($request) {
+            $ids = $request->body('ids', []);
+
+            if (is_string($ids)) {
+                $ids = explode(',', $ids);
+            }
+
+            if (empty($ids)) {
+                return $this->render(null, [], "삭제할 항목이 없습니다.");
+            }
+
+            $deletedCount = 0;
+
+            foreach ($ids as $id) {
+                $template = $this->repo()
+                    ->with([FileAttachment::class])
+                    ->find($id);
+
+                if (!$template) continue;
+
+                $success = $this->repo()->delete($template);
+                
+                if ($success) $deletedCount++;
+            }
+
+            return $this->render(null, [], "선택된 제품 템플릿이 삭제되었습니다. (삭제된 수: {$deletedCount})");
+        });
+    }
+
 }

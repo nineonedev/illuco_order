@@ -55,4 +55,24 @@ class Headlight extends Entity
             'wireless_colors' => null,
         ],
     ];
+
+    public static function renderTag(string $type, array $attributes): string
+    {
+        $html = '';
+
+        foreach ($attributes as $field => $value) {
+            if (in_array($field, ['id', 'type'])) continue;  
+
+            if (!$value) continue;
+            
+            $html .= '
+                <div class="no-order-option-tag">
+                    <span class="label">'.lang('system.' . $type . '.' . $field).'</span>
+                    <span class="value">'. e($value) .'</span>
+                </div>
+            ';
+        }
+
+        return $html;
+    }
 }

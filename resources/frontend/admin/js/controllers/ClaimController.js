@@ -22,6 +22,96 @@ export default class ClaimController extends Controller {
     index() {
         this._logger.info("index");
         this._prepare(); 
+        this._handleListDelete();
+    }
+
+     _handleListDelete() {
+        const deleteBtn = document.getElementById('select-delete-btn'); 
+        const chkAll = document.getElementById('chk-all'); 
+        const chkItems = document.querySelectorAll('[name="checked_ids[]"]');
+
+        if (!deleteBtn || !chkAll || chkItems.length === 0) return; 
+
+        const singleDeleteButtons = document.querySelectorAll('[data-item-action="delete"]');
+
+        // ✅ 개별 삭제 처리
+        singleDeleteButtons.forEach(link => {
+            link.addEventListener('click', async e => {
+                e.preventDefault(); 
+
+                if (!confirm("정말로 삭제하시겠습니까?")) return;
+
+                const action = link.getAttribute('href');
+                this.loader.show();
+
+                try {
+                    const result = await new Ajax(false).delete(action);
+
+                    if (result.success) {
+                        location.reload();
+                    } else {
+                        alert("삭제에 실패했습니다.");
+                    }
+                } finally {
+                    this.loader.hide();
+                }
+            });
+        });
+
+        const updateDeleteButtonState = () => {
+            const checkedItems = Array.from(chkItems).filter(chk => chk.checked);
+            const count = checkedItems.length;
+
+            deleteBtn.disabled = count === 0;
+            deleteBtn.textContent = count > 0 ? `총 ${count}개 항목 삭제` : '선택삭제';
+        };
+
+        // ✅ 개별 체크박스 변경 이벤트
+        chkItems.forEach(chk => {
+            chk.addEventListener('change', () => {
+                const allChecked = Array.from(chkItems).every(chk => chk.checked);
+                chkAll.checked = allChecked;
+                updateDeleteButtonState();
+            });
+        });
+
+        // ✅ 전체 선택 체크박스 처리
+        chkAll.addEventListener('change', () => {
+            const checked = chkAll.checked;
+            chkItems.forEach(chk => chk.checked = checked);
+            updateDeleteButtonState();
+        });
+
+        // ✅ 선택삭제 버튼 클릭 이벤트
+        deleteBtn.addEventListener('click', async () => {
+            const checked = Array.from(chkItems).filter(chk => chk.checked);
+            if (checked.length === 0) {
+                alert("삭제할 항목을 선택해주세요.");
+                return;
+            }
+
+            if (!confirm(`정말로 ${checked.length}개의 항목을 삭제하시겠습니까?`)) return;
+
+            const ids = checked.map(chk => chk.value);
+            this.loader.show();
+
+            try {
+                const result = await new Ajax(false).delete('/admin/orders/bulk-delete', {
+                    ids: ids
+                });
+
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert("삭제에 실패했습니다.");
+                }
+            } finally {
+                this.loader.hide();
+            }
+        });
+
+        // 초기 상태 동기화
+        updateDeleteButtonState();
     }
 
     create() {

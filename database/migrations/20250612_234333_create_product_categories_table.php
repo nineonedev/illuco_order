@@ -11,7 +11,7 @@ return new class implements Migration
         Schema::create('product_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_id')->nullable()->constrained('product_categories')->onDeleteCascade();
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->nullable();
             $table->string('label')->unique();
             $table->text('description')->nullable();
             $table->boolean('is_visible')->default(true);

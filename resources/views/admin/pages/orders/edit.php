@@ -2,6 +2,8 @@
 
 use App\Domains\Order\Entities\Order;
 use App\Domains\Order\Enums\OrderStatus;
+use App\Domains\Product\Entities\Headlight;
+use App\Domains\Product\Entities\Loupe;
 
 ?>
 
@@ -353,7 +355,7 @@ use App\Domains\Order\Enums\OrderStatus;
                 
                 <!-- 3. 상품 복원 카드 -->
                 <div class="no-order-restore">
-                    <div class="no-flex-between">
+                    <div class="no-flex-between no-heading-margin">
                         <h2 class="no-order-restore__title">주문 제품 목록</h2>
                         
                         <div>
@@ -397,14 +399,20 @@ use App\Domains\Order\Enums\OrderStatus;
                                     <td>
                                         <div class="no-order-option-tags">
                                             <?php if ($sub) : ?>
-                                                <?php foreach ($sub->getAttributes() as $field => $value) : 
-                                                    if (in_array($field, ['id'])) continue;    
+                                                <?php 
+                                                $subClass = null; 
+
+                                                switch ($type) {
+                                                    case Loupe::alias():
+                                                        $subClass = Loupe::class;
+                                                        break; 
+                                                    case Headlight::alias():
+                                                        $subClass = Headlight::class; 
+                                                        break; 
+                                                } 
+
+                                                echo $subClass::renderTag($type, $sub->getAttributes());
                                                 ?>
-                                                    <div class="no-order-option-tag">
-                                                        <span class="label"><?= lang('system.' . $type . '.' . $field) ?></span>
-                                                        <span class="value"><?= e($value) ?></span>
-                                                    </div>
-                                                <?php endforeach; ?>
                                             <?php endif; ?>
                                         </div>
                                     </td>

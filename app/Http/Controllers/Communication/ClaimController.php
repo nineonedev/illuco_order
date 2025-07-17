@@ -178,6 +178,35 @@ class ClaimController extends Controller
         });
     }
 
+    public function destroyMany(Request $request)
+    {
+        $ids = $request->body('ids', []);
+
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+
+        if (empty($ids)) {
+            return $this->render(null, [], "삭제할 클레임이 없습니다.");
+        }
+
+        return $this->runInTransaction(function () use ($ids) {
+            $totalDeleted = 0;
+
+            foreach ($ids as $id) {
+                $claim = $this->repo()->with([FileAttachment::class])->find($id);
+                if (!$claim) continue;
+
+                if ($this->repo()->delete($claim)) {
+                    $totalDeleted++;
+                }
+            }
+
+            return $this->render(null, [], "선택된 클레임이 삭제되었습니다. (삭제된 수: {$totalDeleted})");
+        });
+    }
+
+
     protected function uploadConfig(): array
     {
         return [

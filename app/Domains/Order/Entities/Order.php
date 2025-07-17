@@ -10,10 +10,13 @@ use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\UserRepository;
 use App\Supports\Mailer;
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Traits\SoftDeletes;
 use RuntimeException;
 
 class Order extends Entity
 {
+    use SoftDeletes;
+    
     protected array $fillable = [
         'user_id',
         'customer_id',
@@ -52,7 +55,7 @@ class Order extends Entity
         'delivery_date'  => 'date',
         'shipping_date'  => 'date',
         'canceled_at'  => 'datetime',
-        'created_at'  => 'date',
+        'created_at'  => 'datetime',
 
         'total_sales'     => 'decimal',
         'month'           => '?int',

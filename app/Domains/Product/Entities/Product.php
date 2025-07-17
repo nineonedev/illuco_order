@@ -4,9 +4,12 @@ namespace App\Domains\Product\Entities;
 
 use App\Domains\Product\Repositories\ProductRepository;
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Traits\SoftDeletes;
 
 class Product extends Entity
 {
+    use SoftDeletes;
+    
     protected array $fillable = [
         'template_id',
         'serial_number',

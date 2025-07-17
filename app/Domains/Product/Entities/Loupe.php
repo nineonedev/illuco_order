@@ -216,4 +216,76 @@ class Loupe extends Entity
     {
         return LoupeRepository::class;
     }
+
+    public static function renderTag(string $type, array $attributes): string
+    {
+        $html = '';
+
+        // custom-made 일 때만 시력 정보 테이블 출력
+        if (($attributes['type'] ?? '') === 'custom-made') {
+            $html .= '
+                <table class="no-order-option-table">
+                    <thead>
+                        <tr>
+                            <th scope="col"><span class="--blind">Eye</span></th>
+                            <th scope="col">SPH</th>
+                            <th scope="col">CYL</th>
+                            <th scope="col">Axis</th>
+                            <th scope="col">Add</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">OD</th>
+                            <td>' . e($attributes['od_sph'] ?? '-') . '</td>
+                            <td>' . e($attributes['od_cyl'] ?? '-') . '</td>
+                            <td>' . e($attributes['od_axis'] ?? '-') . '</td>
+                            <td>' . e($attributes['od_add'] ?? '-') . '</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">OS</th>
+                            <td>' . e($attributes['os_sph'] ?? '-') . '</td>
+                            <td>' . e($attributes['os_cyl'] ?? '-') . '</td>
+                            <td>' . e($attributes['os_axis'] ?? '-') . '</td>
+                            <td>' . e($attributes['os_add'] ?? '-') . '</td>
+                        </tr>
+                    </tbody>
+                </table>
+            ';
+        }
+
+        // 공통 제외 필드
+        $exclude = ['id', 'od_sph', 'os_sph', 'od_cyl', 'os_cyl', 'od_axis', 'os_axis', 'od_add', 'os_add'];
+
+        // ready-made 이면 시력 관련 필드도 제외
+        if (($attributes['type'] ?? '') === 'ready-made') {
+            $exclude = array_merge($exclude, [
+                'pd_right', 'pd_left', 'pd_total',
+                'vertex_distance', 'add_option',
+            ]);
+        }
+
+        // 나머지 옵션들 출력
+        foreach ($attributes as $field => $value) {
+            if (in_array($field, $exclude, true)) {
+                continue;
+            }
+
+            if (!$value) continue;
+
+            if ($field === 'add_option') {
+                $value = self::LABELS["add_option_".$value] ?? '-';
+            }
+
+            $html .= '
+                <div class="no-order-option-tag">
+                    <span class="label">' . lang('system.' . $type . '.' . $field) . '</span>
+                    <span class="value">' . e($value) . '</span>
+                </div>
+            ';
+        }
+
+        return $html;
+    }
+
 }

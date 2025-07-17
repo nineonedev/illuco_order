@@ -11,20 +11,30 @@ use App\Domains\Communication\Entities\Notice;
 use App\Domains\User\Entities\Dealer;
 
 return [
-    'employee' => 'Employee',
-    Notice::alias() => 'Notice',
-    Dealer::alias() => 'Dealer',
-    Claim::alias() => 'Claim',
-    FileAttachment::alias() => 'File Attachment',
-    Customer::alias() => 'Customer',
-    ProductTemplate::alias() => 'Product Manage',
+    // 역할
+    'role' => [
+        'employee' => 'Employee',
+        'dealer' => 'Dealer',
+        'claim' => 'Claim',
+        'notice' => 'Notice',
+        'customer' => 'Customer',
+        'product' => 'Product',
+        'order' => 'Order',
+        'cart' => 'Cart',
+        'role' => 'Role',
+        'category' => 'Category',
+    ],
 
+    // 권한
+    'action' => [
+        'create' => 'Create',
+        'read'   => 'Read',
+        'update' => 'Update',
+        'delete' => 'Delete',
+    ],
+    
+    // 라벨
     'email' => 'Email',
-
-    'create' => 'Create',
-    'read'   => 'Read',
-    'update' => 'Update',
-    'delete' => 'Delete',
 
     'order' => [
         'status' => [

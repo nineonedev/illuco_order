@@ -18,7 +18,7 @@ class CategoryController extends Controller
             ->get();
         
         return $this->render('admin.pages.products.category', [
-            'categories'=> array_map(fn(Category $category) => $category->toArray(), $categories),
+            'categories'=> $categories,
         ]);
     }
 
@@ -27,11 +27,11 @@ class CategoryController extends Controller
         return $this->runInTransaction(function () use ($request) {
             $request->validateOrFail([
                 'label' => 'required', 
-                'slug' => 'required|minLength:4|unique:product_categories,slug',
                 'sort_order' => 'nullable|integer',
+                // 'slug' => 'required|minLength:4|unique:product_categories,slug',
             ]);
 
-            $data = $request->safe(['label', 'slug', 'sort_order']);
+            $data = $request->safe(['label', 'sort_order']);
 
             $category = new Category($data);
             $category = CategoryRepository::make()->save($category);
@@ -78,56 +78,28 @@ class CategoryController extends Controller
     
     public function update(int $id, Request $request)
     {
-        // return $this->runInTransaction(function () use ($id, $request) {
-        //     $request->validateOrFail([
-        //         'label' => 'required',
-        //         'slug' => 'required|minLength:4|unique:product_categories,slug,' . $id, // 현재 ID 제외
-        //         'sort_order' => 'nullable|integer',
-        //     ]);
+        return $this->runInTransaction(function () use ($id, $request) {
+            $request->validateOrFail([
+                'label' => 'required',
+                // 'slug' => 'required|minLength:4|unique:product_categories,slug,' . $id, // 현재 ID 제외
+                'sort_order' => 'nullable|integer',
+            ]);
 
-        //     $data = $request->safe(['label', 'slug', 'sort_order']);
+            $data = $request->safe(['label', 'sort_order']);
 
-        //     $repo = CategoryRepository::make();
-        //     $category = $repo->findOrFail($id);
+            $repo = CategoryRepository::make();
+            $category = $repo->findOrFail($id);
+            $category->fill([
+                'label' => $data['label'],
+                'sort_order' => $data['sort_order'],
+            ]);
 
-        //     $oldOrder = $category->sort_order;
-        //     $newOrder = $data['sort_order'] ?? $oldOrder;
+            $repo->save($category);
 
-
-        //     // 업데이트 할 경우 순서 재조정
-        //     if ($newOrder !== $oldOrder) {
-        //         $categories = $repo->query()
-        //             ->orderByAsc('sort_order')
-        //             ->get();
-
-        //         foreach ($categories as $cat) {
-        //             if ($cat->id === $category->id) continue;
-
-        //             // 위로 올림 → 사이에 있는 항목들 +1
-        //             if ($cat->sort_order >= $newOrder && $cat->sort_order < $oldOrder) {
-        //                 $cat->sort_order += 1;
-        //                 $repo->save($cat);
-        //             } else if ($cat->sort_order <= $newOrder && $cat->sort_order > $oldOrder) {
-        //                     $cat->sort_order -= 1;
-        //                     $repo->save($cat);
-        //             }
-        //         }
-
-        //         // 본인 정렬 순서 마지막에 반영
-        //         $category->sort_order = $newOrder;
-        //     }
-
-        //     $category->fill([
-        //         'label' => $data['label'],
-        //         'slug' => $data['slug'],
-        //     ]);
-
-        //     $repo->save($category);
-
-        //     return $this->render(null, [
-        //         'category' => $category->toArray(),
-        //     ], '카테고리 수정에 성공하였습니다.');
-        // });
+            return $this->render(null, [
+                'category' => $category->toArray(),
+            ], '카테고리 수정에 성공하였습니다.');
+        });
     }
 
 }

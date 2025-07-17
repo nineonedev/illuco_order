@@ -127,6 +127,11 @@ use App\Domains\Communication\Enums\NoticeStatus;
                 </div>
 
                 <div class="no-page-index-link">
+                    <?php if (can('notice.delete')): ?>
+                    <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                        <span>선택삭제</span>
+                    </button>
+                    <?php endif; ?>
                     <?php if (can('notice.create')): ?>
                         <a href="<?= route('admin.notices.create') ?>" class="no-btn-success --sm">
                             <span>Create</span>
@@ -139,11 +144,11 @@ use App\Domains\Communication\Enums\NoticeStatus;
                 <table class="no-page-index-table">
                     <thead>
                         <tr>
-                            <?php if (can('notice.create')): ?>
+                            <?php if (can('notice.delete')): ?>
                             <th class="no-table-check">
                                 <div class="no-form-checkbox --xs">
-                                    <label for="all" class="no-form-checkbox-pointer">
-                                        <input type="checkbox" name="all" id="all" class="no-form-checkbox-input">
+                                    <label for="chk-all" class="no-form-checkbox-pointer">
+                                        <input type="checkbox" name="chk-all" id="chk-all" class="no-form-checkbox-input">
                                         <div class="no-form-checkbox-ripple">
                                             <span class="no-form-checkbox-box">
                                                 <div class="no-form-checkbox-icon">
@@ -168,7 +173,7 @@ use App\Domains\Communication\Enums\NoticeStatus;
                     <tbody>
                         <?php foreach ($notices->items() as $notice): ?>
                             <tr class="no-table-hover">
-                                <?php if (can('notice.create')): ?>
+                                <?php if (can('notice.delete')): ?>
                                 <td class="no-table-check">
                                     <div class="no-form-checkbox --xs">
                                         <label for="notice<?= $notice->id ?>" class="no-form-checkbox-pointer">
@@ -207,7 +212,7 @@ use App\Domains\Communication\Enums\NoticeStatus;
                                                 <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
                                             </div>
                                         </a>
-                                        <a href="<?= route('admin.notices.destroy', ['id' => $notice->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
+                                        <a href="<?= route('admin.notices.destroy', ['id' => $notice->id]) ?>" data-item-action="delete" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
                                             <div class="no-btn-action-ripple">
                                                 <i class="fa-light fa-trash-can"></i>
                                                 <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>

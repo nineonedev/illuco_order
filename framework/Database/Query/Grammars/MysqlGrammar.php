@@ -73,9 +73,15 @@ class MysqlGrammar extends Grammar
                     $bindings = array_merge($bindings, $subBindings);
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";
+
                     if (!empty($where['bindings'])) {
                         $bindings = array_merge($bindings, $where['bindings']);
                     }
+
+                    if (!empty($where['values'])) {
+                        $bindings = array_merge($bindings, $where['values']);
+                    }
+                    
                 } elseif ($where['type'] === 'null') {
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NULL";
                 } elseif ($where['type'] === 'notNull') {
@@ -145,6 +151,10 @@ class MysqlGrammar extends Grammar
             $bindings = array_merge($bindings, $unionBindings);
         }
         
+        // if ($builder->getTable() === 'orders'){
+        //     dump($sql, $bindings);
+        // }
+
         return [$sql, $bindings];
     }
 

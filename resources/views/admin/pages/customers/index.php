@@ -145,6 +145,11 @@
                 </div>
 
                 <div class="no-page-index-link">
+                    <?php if (can('customer.delete')): ?>
+                    <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                        <span>선택삭제</span>
+                    </button>
+                    <?php endif; ?>
                     <a href="<?= route('admin.customers.create') ?>" class="no-btn-primary --sm">
                         <span>등록</span>
                     </a>
@@ -155,6 +160,22 @@
                 <table class="no-page-index-table">
                     <thead>
                         <tr>
+                            <?php if (can('customer.delete')): ?>
+                            <th class="sticky --check">
+                                <div class="no-form-checkbox --xs">
+                                    <label for="chk-all" class="no-form-checkbox-pointer">
+                                        <input type="checkbox" name="chk-all" id="chk-all" value="1" class="no-form-checkbox-input">
+                                        <div class="no-form-checkbox-ripple">
+                                            <span class="no-form-checkbox-box">
+                                                <div class="no-form-checkbox-icon">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </th>
+                            <?php endif; ?>
                             <th>이름</th>
                             <?php if (!user()->isDealer()) :?>
                             <th>대리점</th>
@@ -169,6 +190,22 @@
                     <tbody>
                         <?php foreach ($customers->items() as $customer): ?>
                         <tr class="no-table-hover">
+                            <?php if (can('customer.delete')): ?>
+                            <td class="no-table-check">
+                                <div class="no-form-checkbox --xs">
+                                    <label for="customer<?= $customer->id ?>" class="no-form-checkbox-pointer">
+                                        <input type="checkbox" name="checked_ids[]" id="customer<?= $customer->id ?>" value="<?= $customer->id ?>" class="no-form-checkbox-input">
+                                        <div class="no-form-checkbox-ripple">
+                                            <span class="no-form-checkbox-box">
+                                                <div class="no-form-checkbox-icon">
+                                                    <i class="fa-solid fa-check"></i>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </td>
+                            <?php endif; ?>
                             <td><?= e($customer->name) ?></td>
                             <?php if (!user()->isDealer()) :?>
                             <td>
@@ -193,7 +230,7 @@
                                             <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
                                         </div>
                                     </a>
-                                    <a href="<?= route('admin.customers.destroy', ['id' => $customer->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
+                                    <a href="<?= route('admin.customers.destroy', ['id' => $customer->id]) ?>" class="no-btn-action" data-item-action="delete" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-trash-can"></i>
                                             <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>

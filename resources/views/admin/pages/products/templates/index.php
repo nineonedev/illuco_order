@@ -123,6 +123,12 @@
                 </div>
 
                 <div class="no-page-index-link">
+                    <?php if (can('product.delete')): ?>
+                    <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                        <span>선택삭제</span>
+                    </button>
+                    <?php endif; ?>
+
                     <a href="<?= route('admin.product_templates.create') ?>" class="no-btn-primary --sm">
                         <span>Create</span>
                     </a>
@@ -133,10 +139,11 @@
                 <table class="no-page-index-table">
                     <thead>
                         <tr>
+                            <?php if (can('order.delete')): ?>
                             <th class="no-table-check">
                                 <div class="no-form-checkbox --xs">
-                                    <label for="all" class="no-form-checkbox-pointer">
-                                        <input type="checkbox" name="all" id="all" class="no-form-checkbox-input">
+                                    <label for="chk-all" class="no-form-checkbox-pointer">
+                                        <input type="checkbox" name="chk-all" id="chk-all" class="no-form-checkbox-input">
                                         <div class="no-form-checkbox-ripple">
                                             <span class="no-form-checkbox-box">
                                                 <div class="no-form-checkbox-icon">
@@ -147,6 +154,7 @@
                                     </label>
                                 </div>
                             </th>
+                            <?php endif; ?>
                             <th>이미지</th>
                             <th>카테고리</th>
                             <th>이름</th>
@@ -159,6 +167,7 @@
                     <tbody>
                         <?php foreach ($templates->items() as $template): ?>
                         <tr class="no-table-hover">
+                            <?php if (can('product.delete')): ?>
                             <td class="no-table-check">
                                 <div class="no-form-checkbox --xs">
                                     <label for="template<?= $template->id ?>" class="no-form-checkbox-pointer">
@@ -173,6 +182,7 @@
                                     </label>
                                 </div>
                             </td>
+                            <?php endif; ?>
                             <td>
                                 <?php if ($template->fileattachment && count($template->fileattachment) > 0): ?>
                                     <img src="<?= $template->fileattachment[0]->upload_path ?>" alt="<?= e($template->name) ?>" class="product-image" style="width: 60px; height: auto; margin-right: 10px;">
@@ -191,12 +201,14 @@
                                             <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
                                         </div>
                                     </a>
-                                    <a href="<?= route('admin.product_templates.destroy', ['id' => $template->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
+                                    <?php if (can('product.delete')): ?>
+                                    <a href="<?= route('admin.product_templates.destroy', ['id' => $template->id]) ?>" data-item-action="delete" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-trash-can"></i>
                                             <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>
                                         </div>
                                     </a>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>

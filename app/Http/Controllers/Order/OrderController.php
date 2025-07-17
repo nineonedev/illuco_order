@@ -63,12 +63,26 @@ class OrderController extends Controller
             $query->where('order_status', $status);
         }
 
-        // ✅ 카테고리
-        if ($categoryId = $request->query('category_id')) {
-            $query->whereHas('items.product.template', function($q) use ($categoryId) {
-                $q->where('category_id', $categoryId);
-            });
+        $start = trim($request->query('start') ?? '');
+        $end = trim($request->query('end') ?? '');
+
+        $start = $start !== '' ? $start : null;
+        $end = $end !== '' ? $end : null;
+
+        if ($start && $end) {
+            $query->whereBetween('created_at', [$start, $end]);
+        } elseif ($start) {
+            $query->whereDate('created_at', '>=', $start);
+        } elseif ($end) {
+            $query->whereDate('created_at', '<=', $end);
         }
+
+        // ✅ 카테고리
+        // if ($categoryId = $request->query('category_id')) {
+        //     $query->whereHas('items.product.template', function($q) use ($categoryId) {
+        //         $q->where('category_id', $categoryId);
+        //     });
+        // }
 
         // ✅ 국가
         if ($country = $request->query('country')) {
@@ -143,12 +157,10 @@ class OrderController extends Controller
         }
 
 
-        $histories = OrderHistoryRepository::make()->all(); 
-
         return $this->render('admin.pages.orders.index', [
             'orders' => $orders,
             'query'  => $request->query(),
-            'categories' => CategoryRepository::make()->all(),
+            // 'categories' => CategoryRepository::make()->all(),
             'dealers' => UserRepository::make()
                 ->query()
                 ->with(['dealer'])
@@ -193,31 +205,9 @@ class OrderController extends Controller
                 ->with(['items.product'])
                 ->findOrFail($id);
 
-            foreach ($order->items as $item) {
-                if ($item->product) {
-                    $product = $item->product;
+            $success = $this->deleteOrder($order);
 
-                    switch ($order->order_status) {
-                        case OrderStatus::NEW:
-                        case OrderStatus::CONFIRMED:
-                            ProductRepository::make()->forceDelete($product);
-                            break;
-                        case OrderStatus::PREPARING:
-                        case OrderStatus::SHIPPED:
-                            ProductRepository::make()->softDelete($product);
-                            break;
-                        default:
-                            ProductRepository::make()->softDelete($product);
-                            break;
-                    }
-                }
-
-                OrderItemRepository::make()->delete($item);
-            }
-
-            $deleted = OrderRepository::make()->delete($order);
-
-            if (!$deleted) {
+            if (!$success) {
                 throw new RuntimeException("주문 삭제에 실패했습니다.");
             }
 
@@ -228,6 +218,60 @@ class OrderController extends Controller
                 ->send();
         });
     }
+
+
+    private function deleteOrder(Order $order): bool
+    {
+        foreach ($order->items as $item) {
+            if ($item->product) {
+                $product = $item->product;
+
+                switch ($order->order_status) {
+                    case OrderStatus::NEW:
+                    case OrderStatus::CONFIRMED:
+                        ProductRepository::make()->forceDelete($product);
+                        break;
+                    default:
+                        ProductRepository::make()->softDelete($product);
+                        break;
+                }
+            }
+
+            OrderItemRepository::make()->delete($item);
+        }
+
+        return OrderRepository::make()->delete($order);
+    }
+
+
+    public function destroyMany(Request $request)
+    {
+        $ids = $request->body('ids', []);
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+
+        if (empty($ids)) {
+            return $this->render(null, [], "삭제할 항목이 없습니다.");
+        }
+
+        return $this->runInTransaction(function () use ($ids) {
+            $totalDeleted = 0;
+
+            foreach ($ids as $id) {
+                $order = OrderRepository::make()
+                    ->with(['items.product'])
+                    ->findOrFail($id);
+
+                if ($this->deleteOrder($order)) {
+                    $totalDeleted++;
+                }
+            }
+
+            return $this->render(null, [], "선택된 아이템들이 삭제되었습니다. (삭제된 수: {$totalDeleted})");
+        });
+    }
+
 
     public function cancel(string $orderNo)
     {

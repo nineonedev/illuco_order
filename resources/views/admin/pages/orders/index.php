@@ -59,27 +59,42 @@ use App\Domains\Product\Entities\Loupe;
                         data-view-props='<?= e(json_encode($props)) ?>'
                     ></div>
 
-                    <!-- ✅ 카테고리 -->
+                    <!-- ✅ 기간 - 시작일 -->
                     <?php
                         $props = [
+                            'topLabel' => true,
                             'spacing' => false,
-                            'label' => '카테고리',
-                            'name' => 'category_id',
-                            'value' => request()->query('category_id'),
-                            'options' => array_merge([['label' => '전체', 'value' => '']], array_map(
-                                fn($c) => [
-                                    'label' => $c->label, 
-                                    'value' => $c->id,
-                                ],
-                                $categories
-                            )),
+                            'label' => '시작일',
+                            'name' => 'start',
+                            'value' => request()->query('start') ?? '',
+                            'placeholder' => '시작일',
+                            'format' => 'YYYY-MM-DD',
                         ];
                     ?>
                     <div 
                         class="no-form-field"
-                        data-view-type="select"
+                        data-view-type="date"
                         data-view-props='<?= e(json_encode($props)) ?>'
                     ></div>
+
+                    <!-- ✅ 기간 - 종료일 -->
+                    <?php
+                        $props = [
+                            'topLabel' => true,
+                            'spacing' => false,
+                            'label' => '종료일',
+                            'name' => 'end',
+                            'value' => request()->query('end') ?? '',
+                            'placeholder' => '종료일',
+                            'format' => 'YYYY-MM-DD',
+                        ];
+                    ?>
+                    <div 
+                        class="no-form-field"
+                        data-view-type="date"
+                        data-view-props='<?= e(json_encode($props)) ?>'
+                    ></div>
+
 
                     <!-- ✅ 국가 -->
                     <?php
@@ -170,6 +185,12 @@ use App\Domains\Product\Entities\Loupe;
                 </div>
 
                 <div class="no-page-index-link">
+                    <?php if (can('order.delete')): ?>
+                    <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                        <span>선택삭제</span>
+                    </button>
+                    <?php endif; ?>
+
                     <a href="<?= route('admin.orders.export') ?>" class="no-btn-success --sm">
                         <span>Export</span>
                     </a>
@@ -180,6 +201,7 @@ use App\Domains\Product\Entities\Loupe;
                 <table class="no-page-index-table">
                     <thead class="center">
                         <tr>
+                            <?php if (can('order.delete')): ?>
                             <th class="sticky --check" rowspan="3">
                                 <div class="no-form-checkbox --xs">
                                     <label for="chk-all" class="no-form-checkbox-pointer">
@@ -194,10 +216,12 @@ use App\Domains\Product\Entities\Loupe;
                                     </label>
                                 </div>
                             </th>
+                            <?php endif; ?>
                             <th colspan="14" class="order">오더 기본 정보</th>
                             <th colspan="1" class="headlight">헤드라이트 정보</th>
                             <th colspan="18" class="loupe">루페 정보</th>
                             <th rowspan="3" class="memo">메모</th>
+                            <th rowspan="3">생성일</th>
                             <th rowspan="3">작업</th>
                         </tr>
 
@@ -322,10 +346,14 @@ use App\Domains\Product\Entities\Loupe;
                                         ? abs($pd_right - $pd_left)
                                         : '-';
 
+                                    $detailLink = user()->isDealer()
+                                        ? route('admin.orders.show', ['orderNo' => $order->order_no])
+                                        : route('admin.orders.edit', ['orderNo' => $order->order_no]);
                                 ?>
                                 <tr class="<?=$bgClass?>">
                                     <?php if ($first): ?>
                                         <!-- ✅ 체크박스 -->
+                                        <?php if (can('order.delete')) : ?>
                                         <td class="no-table-check sticky --check" rowspan="<?= $rowspan ?>">
                                             <div class="no-form-checkbox --xs">
                                                 <label for="order<?= $order->id ?>" class="no-form-checkbox-pointer">
@@ -340,9 +368,12 @@ use App\Domains\Product\Entities\Loupe;
                                                 </label>
                                             </div>
                                         </td>
+                                        <?php endif; ?>
 
                                         <!-- ✅ 공통 컬럼들만 rowspan -->
-                                        <td class="sticky --order-no" rowspan="<?= $rowspan ?>"><?= e($order->order_no ?? '-') ?></td>
+                                        <td class="sticky --order-no" rowspan="<?= $rowspan ?>">
+                                            <a href="<?= $detailLink ?>" class="--underline"><?= e($order->order_no ?? '-') ?></a>
+                                        </td>
                                         <td class="sticky --name" rowspan="<?= $rowspan ?>"><?= e($order->orderer_name ?? '-') ?></td>
                                         <td class="sticky --name" rowspan="<?= $rowspan ?>">
                                             <span class="order-status --<?=$order->order_status?>">
@@ -402,6 +433,7 @@ use App\Domains\Product\Entities\Loupe;
 
                                     <?php if ($first): ?>
                                         <td rowspan="<?= $rowspan ?>" class="memo"><?= e($order->memo ?? '-') ?></td>
+                                        <td rowspan="<?= $rowspan ?>"><?= e($order->created_at ?? '-') ?></td>
                                         <td class="no-table-action" rowspan="<?= $rowspan ?>">
                                             <div class="no-page-index-table__action">
                                                 <?php if (user()->isDealer()) : ?>
@@ -418,7 +450,7 @@ use App\Domains\Product\Entities\Loupe;
                                                             <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
                                                         </div>
                                                     </a>
-                                                    <a href="<?= route('admin.orders.destroy', ['id' => $order->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
+                                                    <a href="<?= route('admin.orders.destroy', ['id' => $order->id]) ?>" class="no-btn-action" data-tooltip data-item-action="delete" data-confirm="정말 삭제하시겠습니까?">
                                                         <div class="no-btn-action-ripple">
                                                             <i class="fa-light fa-trash-can"></i>
                                                             <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>

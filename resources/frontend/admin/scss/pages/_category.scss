@@ -8,7 +8,7 @@
 
 .no-category-menu {
     padding: 1.6rem;
-    border-bottom: 1px solid var(--clr-card-border);
+    // border-bottom: 1px solid var(--clr-card-border);
     font-weight: 600;
 }
 
@@ -16,7 +16,8 @@
     display: flex;
     flex-direction: column;
     border-radius: 0.4rem;
-    background-color: var(--clr-slate-50);
+    // background-color: var(--clr-slate-50);
+    gap: 1.2rem;
 
     [data-node="root"] {
         > .no-category-item-block {
@@ -26,37 +27,39 @@
 
     .no-category-item {
         $item: &;
+        border: 1px solid var(--clr-card-border);
 
-        &:first-child {
-            > .no-category-item-block {
-                border-top: 0;
-            }
-        }
+        // &:first-child {
+        //     > .no-category-item-block {
+        //         border-top: 0;
+        //     }
+        // }
 
-        &-add {
-            &__text {
-                color: var(--clr-primary-main);
-            }
-            &__icon {
-                @include flex-center();
-                padding: 0.6rem;
-                border-radius: 0.2rem;
-                border: 1px dashed var(--clr-primary-main);
-                color: var(--clr-primary-main);
+        // &-add {
+        //     &__text {
+        //         color: var(--clr-primary-main);
+        //     }
+        //     &__icon {
+        //         @include flex-center();
+        //         padding: 0.6rem;
+        //         border-radius: 0.2rem;
+        //         border: 1px dashed var(--clr-primary-main);
+        //         color: var(--clr-primary-main);
 
-                i {
-                    font-size: 1rem;
-                }
-            }
-        }
+        //         i {
+        //             font-size: 1rem;
+        //         }
+        //     }
+        // }
 
         &-block {
             display: flex;
             justify-content: space-between;
-            gap: 0.8rem;
+            gap: 1.6rem;
             padding: 1.2rem;
-            border-top: 1px solid var(--clr-card-border);
-            border-left: 1px solid var(--clr-card-border);
+            // border-top: 1px solid var(--clr-card-border);
+            // border-left: 1px solid var(--clr-card-border);
+            flex-wrap: wrap;
             background: var(--clr-background-primary);
 
             &.--add {
@@ -80,8 +83,12 @@
                 align-items: center;
 
                 .no-category-item-head-text {
-                    display: block;
-                    padding-left: 1.2rem;
+                    display: flex;
+                    gap: 1.6rem;
+
+                    @include mq(md){
+                        flex-direction: column;
+                    }
                 }
 
                 .no-category-item-head-move {

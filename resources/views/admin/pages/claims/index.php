@@ -167,6 +167,11 @@
             </div>
 
             <div class="no-page-index-link">
+                <?php if (can('claim.delete')): ?>
+                <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                    <span>선택삭제</span>
+                </button>
+                <?php endif; ?>
                 <a href="<?= route('admin.claims.create') ?>" class="no-btn-primary --sm">
                     <span>Create</span>
                 </a>
@@ -178,10 +183,11 @@
             <table class="no-page-index-table">
                 <thead>
                     <tr>
+                        <?php if (can('claim.delete')): ?>
                         <th class="no-table-check">
                             <div class="no-form-checkbox --xs">
-                                <label for="all" class="no-form-checkbox-pointer">
-                                    <input type="checkbox" name="all" id="all" class="no-form-checkbox-input">
+                                <label for="chk-all" class="no-form-checkbox-pointer">
+                                    <input type="checkbox" name="chk-all" id="chk-all" class="no-form-checkbox-input">
                                     <div class="no-form-checkbox-ripple">
                                         <span class="no-form-checkbox-box">
                                             <div class="no-form-checkbox-icon">
@@ -192,6 +198,7 @@
                                 </label>
                             </div>
                         </th>
+                        <?php endif; ?>
                         <th>대리점</th>
                         <th>제품</th>
                         <th>제목</th>
@@ -205,10 +212,11 @@
                 <tbody>
                     <?php foreach ($claims->items() as $claim): ?>
                         <tr class="no-table-hover">
+                            <?php if (can('claim.delete')): ?>
                             <td class="no-table-check">
                                 <div class="no-form-checkbox --xs">
                                     <label for="claim<?= $claim->id ?>" class="no-form-checkbox-pointer">
-                                        <input type="checkbox" name="claims[]" id="claim<?= $claim->id ?>" class="no-form-checkbox-input">
+                                        <input type="checkbox" name="checked_ids[]" id="claim<?= $claim->id ?>" class="no-form-checkbox-input">
                                         <div class="no-form-checkbox-ripple">
                                             <span class="no-form-checkbox-box">
                                                 <div class="no-form-checkbox-icon">
@@ -219,6 +227,7 @@
                                     </label>
                                 </div>
                             </td>
+                            <?php endif; ?>
                             <td><?= e($claim->dealer->user->name ?? '대리점 없음') ?></td>
                             <td>
                                 <div><?= e($claim->product_name) ?></div>
@@ -247,7 +256,7 @@
                                     </a>
 
                                     <?php if (can('claim.delete')): ?>
-                                    <a href="<?= route('admin.claims.destroy', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
+                                    <a href="<?= route('admin.claims.destroy', ['id' => $claim->id]) ?>" data-item-action="delete" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-trash-can"></i>
                                             <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>

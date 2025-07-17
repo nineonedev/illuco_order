@@ -10,20 +10,30 @@ use App\Domains\Communication\Entities\Notice;
 use App\Domains\User\Entities\Dealer;
 
 return [
-    'employee' => '직원',
-    Notice::alias() => '공지',
-    Dealer::alias() => '대리점',
-    Claim::alias() => '클레임',
-    FileAttachment::alias() => '파일첨부',
-    Customer::alias() => '고객',
-    ProductTemplate::alias() => '제품관리',
-    
-    'email' => '이메일',
+    // 역할
+    'role' => [
+        'employee' => '직원',
+        'dealer' => '대리점',
+        'claim' => '클레임',
+        'notice' => '공지사항',
+        'customer' => '고객',
+        'product' => '제품',
+        'order' => '주문',
+        'cart' => '장바구니',
+        'role' => '권한',
+        'category' => '카테고리',
+    ],
 
-    'create' => '생성',
-    'read'   => '조회',
-    'update' => '수정',
-    'delete' => '삭제',
+    // 권한
+    'action' => [
+        'create' => '생성',
+        'read'   => '조회',
+        'update' => '수정',
+        'delete' => '삭제',
+    ],
+    
+    // 라벨
+    'email' => '이메일',
 
     'order' => [
         'status' => [
@@ -106,10 +116,16 @@ return [
         'AM' => '아르메니아',
     ],
 
+    'headlight' => [
+        'type' => '헤드라이트 종류',
+        'wireless_color' => '색상',
+        'engraving_text' => '각인',
+    ],
     'loupe' => [
         'type'              => '루페 종류',
         'frame_type'        => '프레임 종류',
         'working_distance'  => '작업 거리 (mm)',
+        'engraving_text' => '각인',
 
         'od_sph'            => '우안 구면도수 (OD SPH)',
         'os_sph'            => '좌안 구면도수 (OS SPH)',
