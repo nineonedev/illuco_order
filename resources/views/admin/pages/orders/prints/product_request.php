@@ -81,6 +81,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                 <?php
                     /** @var \App\Domains\Order\Entities\OrderItem|null $item */
                     $item = $items[$i] ?? null;
+                    $itemIdx = $i+1;
 
                     if ($item) {
                         $product = $item->product;
@@ -96,7 +97,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                             e($subProduct->vertex_distance ?? '-'),
                             e($subProduct->frame_type ?? '-'),
                             e($product->serial_no ?? '-'),
-                            '' // 박스번호 수기로 기재 → 빈칸
+                            e($entity->{'item'.$itemIdx.'_no'} ?? '-'),
                         ];
                     } else {
                         $values = array_fill(0, 11, '&nbsp;');

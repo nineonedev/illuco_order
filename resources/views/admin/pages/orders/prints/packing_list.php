@@ -19,7 +19,7 @@ $type = ucwords($type, '-');
 $pdfName = "{$type}-{$document->document_no}.pdf";
 ?>
 
-<div class="packing-doc" id="print-area" data-pdf-name="<?= $pdfName ?>">
+<div class="packing-doc no-preview-container" id="print-area" data-pdf-name="<?= $pdfName ?>">
 
     <!-- Header -->
     <div class="packing-header">

@@ -19,6 +19,10 @@ return new class implements Migration
             $table->string('manager_name')->nullable();
             $table->string('document_no')->nullable();
 
+            for ($i = 1; $i <= 16; $i++) {
+                $table->string("item{$i}_no")->nullable();
+            }
+
             // 박스 정보 (최대 5개)
             for ($i = 1; $i <= 5; $i++) {
                 $table->string("box{$i}_no")->nullable();

@@ -8,81 +8,14 @@ use App\Domains\Order\Entities\Documents\ProductRequest;
 use App\Domains\Order\Entities\Documents\ProformaInvoice;
 use App\Domains\Order\Entities\OrderItem;
 use App\Domains\Order\Repositories\OrderDocumentRepository;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use Exception;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
-use Mpdf\Mpdf;
+use Exception;
+
 use RuntimeException;
 
 class OrderDocumentController extends Controller
 {
-    public function show()
-    {
-
-    }
-
-    public function download(string $documentNo)
-    {
-        // ① 문서 불러오기
-        $document = OrderDocumentRepository::make()
-            ->query()
-            ->with(['order.items.product'])
-            ->where('document_no', $documentNo)
-            ->firstOrFail();
-
-        $document->load([$document->type]);
-
-        foreach ($document->order->items as $item) {
-            $subType = $item->product->type;
-
-            if ($subType) {
-                $item->product->load([$subType]);
-            }
-        }
-
-        $orderItems = OrderItem::groupBySet($document->order->items);
-
-        $document->order->forgetRelation('items');
-        $document->order->setRelation('items', $orderItems);
-
-        // ② DomPDF 옵션 설정
-        $options = new Options();
-        $options->set('defaultFont', 'dejavusans');  // 한글 지원
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true); // 외부 이미지 허용 (URL 접근)
-
-        $dompdf = new Dompdf($options);
-
-        // ③ HTML 캡처
-        ob_start();
-        echo render("admin.pages.orders.prints.{$document->type}", [
-            'document' => $document,
-        ]);
-        $html = ob_get_clean();
-
-        // ④ CSS 로딩 (선택)
-        $stylesheetPath = base_path('resources/assets/css/admin.min.css');
-        if (file_exists($stylesheetPath)) {
-            $css = file_get_contents($stylesheetPath);
-            $html = "<style>{$css}</style>" . $html;
-        }
-
-        // ⑤ DomPDF로 PDF 생성
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        // ⑥ PDF 다운로드
-        $pdfName = "Proforma-Invoice-{$documentNo}.pdf";
-        $dompdf->stream($pdfName, [
-            'Attachment' => true
-        ]);
-
-        exit;
-    }
-
 
     public function print(string $documentNo, Request $request)
     {

@@ -5,174 +5,137 @@
 $entity = $document->product_request;
 $order = $document->order;
 $items = $order->items;
+
+$type = str_replace('_', '-', $document->type);
+$type = ucwords($type, '-');
+$pdfName = "{$type}-{$document->document_no}.pdf";
 ?>
 
-<form
-    id="frm"
-    action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>"
-    method="POST"
->
+<div class="document-container">
+<form class="document-editor" id="frm" method="POST" action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>">
     <?= csrf_field() ?>
     <?= method_field('PUT') ?>
 
-    <div class="no-order-doc-edit">
+    <div class="lh-doc" id="print-area" data-pdf-name="<?= $pdfName ?>" data-page="landscape">
 
-        <!-- Header -->
-        <div class="invoice-header">
+        <div class="lh-header">
             <div class="logo">
                 <img src="<?= asset_path('img/meta/logo-primary.svg') ?>" alt="ILLUCO">
             </div>
-            <div class="invoice-title">
-                <h1>LH 생산의뢰서 (Product Request)</h1>
+
+            <div class="lh-title">
+                LH 생산의뢰서
             </div>
         </div>
 
-        <!-- Header Info -->
-        <div class="invoice-between">
-            <table class="ref-table">
-                <tr>
-                    <td>국가</td>
-                    <td>
-                        <input type="text" name="country"
-                               placeholder="USA"
-                               value="<?= e($entity->country) ?>">
-                    </td>
-                    <td>고객명</td>
-                    <td>
-                        <input type="text" name="customer_name"
-                               placeholder="CRL"
-                               value="<?= e($entity->customer_name) ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>작성일</td>
-                    <td>
-                        <input type="date" name="created_date"
-                               value="<?= e($entity->created_date) ?>">
-                    </td>
-                    <td>납기일</td>
-                    <td>
-                        <input type="date" name="delivery_date"
-                               value="<?= e($entity->delivery_date) ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>담당자</td>
-                    <td>
-                        <input type="text" name="manager_name"
-                               placeholder="Angela"
-                               value="<?= e($entity->manager_name) ?>">
-                    </td>
-                    <td>문서번호</td>
-                    <td>
-                        <input type="text" name="document_no"
-                               placeholder="US-CRL-28"
-                               value="<?= e($entity->document_no) ?>">
-                    </td>
-                </tr>
-            </table>
+        <div class="lh-info-no">
+            <dl>
+                <dt>문서번호</dt>
+                <dd><?= e($entity->document->document_no ?? $document->document_no) ?></dd>
+            </dl>
         </div>
 
-        <!-- Items Table -->
-        <div class="table-section">
-            <table class="item-table">
-                <thead>
+        <table class="lh-info-table">
+            <thead>
+                <tr>
+                    <th>국가</th>
+                    <th>고객명</th>
+                    <th>작성일</th>
+                    <th>납기일</th>
+                    <th>담당자</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="country" value="<?= e($entity->country) ?>"></td>
+                    <td><input type="text" name="customer_name" value="<?= e($entity->customer_name) ?>"></td>
+                    <td><input type="date" name="created_date" value="<?= e($entity->created_date) ?>"></td>
+                    <td><input type="date" name="delivery_date" value="<?= e($entity->delivery_date) ?>"></td>
+                    <td><!-- 담당자 입력란 비어있으면 필요 시 추가 --></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="lh-items-table">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Product</th>
+                    <th>Name</th>
+                    <th>수량</th>
+                    <th>Engraving</th>
+                    <th>WD</th>
+                    <th>PD</th>
+                    <th>VD</th>
+                    <th>Frame</th>
+                    <th>시리얼넘버</th>
+                    <th>박스번호</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $no = 1; ?>
+                <?php for ($i = 0; $i < 16; $i++): ?>
+                    <?php
+                        $item = $items[$i] ?? null;
+                        if ($item) {
+                            $product = $item->product;
+                            $sub = $product->{$product->type};
+                        }
+
+                        $itemIdx = $i+1;
+                    ?>
                     <tr>
-                        <th>No.</th>
-                        <th>Product</th>
-                        <th>Model</th>
-                        <th>Name</th>
-                        <th>수량</th>
-                        <th>Engraving</th>
-                        <th>WD</th>
-                        <th>PD</th>
-                        <th>VD</th>
-                        <th>Frame</th>
-                        <th>시리얼넘버</th>
-                        <th>박스번호</th>
+                        <td><?= $item ? $no++ : '&nbsp;' ?></td>
+                        <td><?= $item ? e($product->name) : '&nbsp;' ?></td>
+                        <td><?= $item ? e($product->model) : '&nbsp;' ?></td>
+                        <td><?= $item ? e($item->quantity) : '&nbsp;' ?></td>
+                        <td><?= $item ? e($sub->engraving_text ?? '') : '&nbsp;' ?></td>
+                        <td><?= $item ? e($sub->working_distance ?? '') : '&nbsp;' ?></td>
+                        <td><?= $item ? e($sub->pd_total ?? '') : '&nbsp;' ?></td>
+                        <td><?= $item ? e($sub->vertex_distance ?? '') : '&nbsp;' ?></td>
+                        <td><?= $item ? e($sub->frame_type ?? '') : '&nbsp;' ?></td>
+                        <td><?= $item ? e($product->serial_no ?? '') : '&nbsp;' ?></td>
+                        <td>
+                            <input type="number" min="1" max="5" name="item<?= $itemIdx ?>_no" value="<?= e($entity->{"item{$itemIdx}_no"} ?? '') ?>">
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php $no = 1; ?>
-                    <?php foreach ($items as $item): ?>
-                        <?php 
-                            $product = $item->product; 
-                            $subProduct = $item->product->{$product->type};
-                        ?>
+                <?php endfor; ?>
+            </tbody>
+        </table>
+
+        <div class="lh-bottom">
+            <div class="lh-box-section">
+                <table>
+                    <thead>
                         <tr>
-                            <td><?= $no++ ?></td>
-                            <td><?= e($product->name) ?></td>
-                            <td><?= e($product->model) ?></td>
-                            <td><?= e($subProduct->engraving_text ?? '-') ?></td>
-                            <td class="right"><?= e($item->quantity) ?></td>
-                            <td><?= e($subProduct->engraving_text ?? '-') ?></td>
-                            <td><?= e($subProduct->working_distance ?? '-') ?></td>
-                            <td><?= e($subProduct->pd_total ?? '-') ?></td>
-                            <td><?= e($subProduct->vertex_distance ?? '-') ?></td>
-                            <td><?= e($subProduct->frame_type ?? '-') ?></td>
-                            <td><?= e($product->serial_no ?? '-') ?></td>
-                            <td><!-- 박스번호는 수기로 입력 → 빈칸 유지 --></td>
+                            <th>박스번호</th>
+                            <th>무게</th>
+                            <th>사이즈</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Box Info -->
-        <div class="table-section">
-            <h3>박스 정보</h3>
-            <table class="meta-table">
-                <thead>
-                    <tr>
-                        <th>Box No</th>
-                        <th>무게</th>
-                        <th>사이즈</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                        <tr>
-                            <td>
-                                <input type="text" name="box<?= $i ?>_no"
-                                       value="<?= e($entity->{"box{$i}_no"}) ?>">
-                            </td>
-                            <td>
-                                <input type="text" name="box<?= $i ?>_weight"
-                                       value="<?= e($entity->{"box{$i}_weight"}) ?>">
-                            </td>
-                            <td>
-                                <input type="text" name="box<?= $i ?>_size"
-                                       value="<?= e($entity->{"box{$i}_size"}) ?>">
-                            </td>
-                        </tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Note -->
-        <div class="bank">
-            <p><strong>메모</strong></p>
-            <textarea name="note" rows="5"
-                      placeholder="특이사항 기재"><?= e($entity->note) ?></textarea>
-        </div>
-
-        <div class="sign-zone --edit">
-            <p class="sign-text">Supplied by</p>
-            <div class="sign-img">
-                <img src="<?= asset_path('img/meta/sign.png') ?>" alt="ILLUCO CO., LTD">
+                    </thead>
+                    <tbody>
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <tr>
+                                <td><input type="number" min="1" max="5" name="box<?= $i ?>_no" value="<?= e($entity->{"box{$i}_no"}) ?>"></td>
+                                <td><input type="text" name="box<?= $i ?>_weight" value="<?= e($entity->{"box{$i}_weight"}) ?>"></td>
+                                <td><input type="text" name="box<?= $i ?>_size" value="<?= e($entity->{"box{$i}_size"}) ?>"></td>
+                            </tr>
+                        <?php endfor; ?>
+                    </tbody>
+                </table>
             </div>
-        </div>
 
-        <div class="footer">
-            <p>ILLUCO Co., Ltd. 102-304 SK Ventium, #166 Gosan-ro, Gunpo-si, Gyeonggi-do, Korea</p>
-            <p>www.illuco.co.kr Tel. +82 31 429 8825 Fax. +82 31 429 8826 info@illuco.co.kr</p>
+            <div class="lh-note">
+                <label for="note">메모:</label>
+                <textarea name="note" id="note" rows="6"><?= e($entity->note) ?></textarea>
+            </div>
         </div>
 
         <div class="no-form-action">
-            <a href="<?= route('admin.orders.edit', ['orderNo' => $document->order->order_no]) ?>" class="no-btn-primary-outline --sm">취소</a>
+            <a href="<?= route('admin.orders.edit', ['orderNo' => $order->order_no]) ?>" class="no-btn-primary-outline --sm" data-action="cancel">취소</a>
             <button type="submit" class="no-btn-primary --sm">저장</button>
         </div>
 
     </div>
 </form>
+</div>

@@ -64,6 +64,7 @@ Rel::setConfig([
     ],
     Claim::class => [
         Rel::belongsTo('user',  User::class, 'user_id'),
+        Rel::belongsTo('dealer',  Dealer::class, 'dealer_id'),
         Rel::morphMany(FileAttachment::class),
     ],
     FileAttachment::class => [

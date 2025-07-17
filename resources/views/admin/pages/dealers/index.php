@@ -140,7 +140,7 @@
 
                 <div class="no-page-index-link">
                     <?php if (can('dealer.delete')): ?>
-                    <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                    <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
                         <span>선택삭제</span>
                     </button>
                     <?php endif; ?>

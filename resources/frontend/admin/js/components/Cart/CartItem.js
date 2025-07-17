@@ -161,8 +161,8 @@ export default class CartItem extends View {
         if (this._state.product.type) {
             this._editBtn = Button.make(this._aggtHookId, {
                 className: "no-btn-primary-outline --sm",
-                ariaLabel: "아이템 수정",
-                label: "수정",
+                ariaLabel: "불러오기",
+                label: "불러오기",
                 type: "button",
                 onClick: this._handleEdit.bind(this),
             }).render();

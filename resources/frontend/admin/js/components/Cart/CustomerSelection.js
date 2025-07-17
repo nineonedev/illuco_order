@@ -56,7 +56,7 @@ export default class CustomerSelection extends View {
 
 
                         <div data-ref="country"></div>
-                        <div data-ref="dealer"></div>
+                        ${this._state.dealers.length > 0 ? `<div data-ref="dealer"></div>`: ``}
                         <div data-ref="sort"></div>
                     </div>
                 </form>
@@ -102,7 +102,7 @@ export default class CustomerSelection extends View {
         }).render();
 
         if (this._state.dealers.length > 0) {
-            
+
             SelectInput.make(this.refs.dealer, {
                 label: "대리점",
                 name: 'dealer_id',

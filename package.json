@@ -21,8 +21,10 @@
         "chart.js": "^4.5.0",
         "choices.js": "^11.1.0",
         "flatpickr": "^4.6.13",
+        "html2canvas": "^1.4.1",
         "html2pdf.js": "^0.10.3",
         "jquery": "^3.7.1",
+        "jspdf": "^3.0.1",
         "sortablejs": "^1.15.6",
         "summernote": "^0.9.1"
     }

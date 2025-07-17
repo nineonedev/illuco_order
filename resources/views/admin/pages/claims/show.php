@@ -1,4 +1,7 @@
-<?php ?>
+<?php 
+
+use App\Domains\Communication\Enums\ClaimStatus;
+use Composer\Autoload\ClassLoader;?>
 
 <?php extend('layouts.admin'); ?>
 <?php section('controller', 'claim') ?>
@@ -13,13 +16,62 @@
             <h1 class="no-heading-sm">클레임 상세보기</h1>
         </div>
 
+        <?php if (can('claim.update')): ?>
+        <div>
+            <form action="<?= route('admin.claims.update', ['id' => $claim->id]) ?>" method="post" id="frm">
+                <?= csrf_field() ?>
+                <?= put_field() ?>
+
+                <?php 
+                    $props = [
+                        'label' => '상태',
+                        'name' => 'status',
+                        'value' => $claim->status,
+                        'options' => array_map(fn ($s) => [
+                            'label' => ClaimStatus::labels()[$s],
+                            'value' => $s,
+                        ] , ClaimStatus::all()),
+                    ]
+                ?>
+                <div 
+                    class="no-form-control --md"
+                    data-view-type="select"
+                    data-view-props='<?= json_encode($props) ?>'
+                ></div>
+
+                <button type="submit" class="no-btn-primary --sm">수정</button>
+                
+            </form>
+        </div>
+        <?php endif; ?>
+
         <div class="no-claim-show">
             <div class="no-form-group">
                 <h2 class="no-form-group-title no-body-lg">
                     제품 정보
                 </h2>
 
-                <div id="product-zone"></div>
+                <div class="no-product-zone">
+                    <?php if ($productImage): ?>
+                    <figure class="no-product-zone-img">
+                        <img src="<?= e($productImage) ?>" alt="<?= e($claim->product_name) ?>" />
+                    </figure>
+                    <?php endif; ?>
+                    <div class="no-product-zone-content">
+                        <div class="no-product-info">
+                            <span class="no-product-info__label">제품명</span>
+                            <span class="no-product-info__value"><?= e($claim->product_name) ?></span>
+                        </div>
+                        <div class="no-product-info">
+                            <span class="no-product-info__label">모델명</span>
+                            <span class="no-product-info__value"><?= e($claim->product_model) ?></span>
+                        </div>
+                        <div class="no-product-info">
+                            <span class="no-product-info__label">코드</span>
+                            <span class="no-product-info__value"><?= e($claim->product_code) ?></span>
+                        </div>
+                    </div>
+                </div>
 
                 <dl class="no-claim-show__list">
                     <div class="no-claim-show__item">
@@ -45,7 +97,11 @@
 
                     <div class="no-claim-show__item">
                         <dt>문의내용</dt>
-                        <dd><?= nl2br(e($claim->content)) ?></dd>
+                        <dd>
+                            <div class="no-claim-show__content">
+                                <?= $claim->content ?>
+                            </div>
+                        </dd>
                     </div>
                 </dl>
 

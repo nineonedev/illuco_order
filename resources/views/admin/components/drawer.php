@@ -87,7 +87,7 @@
                         <?php endif; ?>
                     </ul>
 
-                    
+                    <?php if (can('product.read') || can('category.read')): ?>
                     <ul class="no-drawer-gnb">
                         <!-- 제품 메뉴 -->
                         <?php if (can('product.read')): ?>
@@ -125,6 +125,7 @@
                             </li>
                         <?php endif; ?>
                     </ul>
+                    <?php endif; ?>
 
 
                     <ul class="no-drawer-gnb">

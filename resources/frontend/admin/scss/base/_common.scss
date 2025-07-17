@@ -114,6 +114,20 @@
   }
 }
 
+.no-base-gap{
+  &.--sm{
+    gap: 0.8rem;
+  }
+
+  &.--md{
+    gap: 1.6rem;
+  }
+
+  &.--lg{
+    gap: 2.4rem;
+  }
+}
+
 
 .--align-center{
   align-items: center;

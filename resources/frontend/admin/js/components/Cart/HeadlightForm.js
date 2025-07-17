@@ -48,10 +48,7 @@ export default class HeadlightForm extends View {
             label: "각인 여부",
             name: "headlight[use_engraving]",
             checked: hasEngraving,
-            onChange: Helper.debounce(
-                this._handleEngraving.bind(this),
-                300
-            ),
+            onChange: this._handleEngraving.bind(this),
             helperText: "각인을 선택하시면 문구 입력이 가능하며, 발주 수량은 1개로 제한됩니다.",
         }).render();
 

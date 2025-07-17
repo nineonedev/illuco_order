@@ -186,7 +186,7 @@ use App\Domains\Product\Entities\Loupe;
 
                 <div class="no-page-index-link">
                     <?php if (can('order.delete')): ?>
-                    <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                    <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
                         <span>선택삭제</span>
                     </button>
                     <?php endif; ?>
@@ -386,17 +386,15 @@ use App\Domains\Product\Entities\Loupe;
                                         <td rowspan="<?= $rowspan ?>"><?= e($order->delivery_date ?? '-') ?></td>
                                         <td rowspan="<?= $rowspan ?>"><?= e($order->shipping_date ?? '-') ?></td>
                                         
-                                        <?php if (!user()->isDealer()) : ?>
-                                            <td rowspan="<?= $rowspan ?>">
-                                                <?php if ($order->user && $order->user->isDealer()) : ?>
-                                                    <a href="<?= route('admin.dealers.edit', ['id' => $order->user->id]) ?>">
-                                                        <?= e($order->user->name) ?>
-                                                    </a>
-                                                <?php else: ?>
-                                                    <span>-</span>
-                                                <?php endif; ?>
-                                            </td>
-                                        <?php endif; ?>
+                                        <td rowspan="<?= $rowspan ?>">
+                                            <?php if ($order->user && $order->user->isDealer()) : ?>
+                                                <a href="<?= route('admin.dealers.edit', ['id' => $order->user->id]) ?>">
+                                                    <?= e($order->user->name) ?>
+                                                </a>
+                                            <?php else: ?>
+                                                <span>-</span>
+                                            <?php endif; ?>
+                                        </td>
 
                                     <?php endif; ?>
 

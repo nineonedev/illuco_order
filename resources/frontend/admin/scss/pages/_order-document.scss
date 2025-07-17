@@ -1,5 +1,13 @@
 @use '../abstracts' as *;
 
+.document-container {
+  overflow-x: auto;  
+  padding: 0.2rem;
+}
+
+.document-editor {
+  min-width: 76.8rem;
+}
 
 .no-order-docs-list {
   list-style: none;
@@ -308,36 +316,38 @@
 
 
 .lh-doc {
-  --border-width: 0.15px; 
-  // width: 297mm;
-  // height: 210mm;
+  // === 커스텀 변수 정의 ===
+  --lh-padding-x: 14mm;
+  --lh-padding-y: 14mm;
+  --lh-font-size: 12pt;
+  --border-width: 0.1px;
+
   width: 100%;
   box-sizing: border-box;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 8pt;
+  font-size: var(--lh-font-size);
   color: var(--clr-slate-800);
-  // overflow: hidden;
-  padding: 10mm;
+  padding: var(--lh-padding-y) var(--lh-padding-x);
 
   .lh-header {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 4mm;
+    margin-bottom: 6mm;
     position: relative;
     background-color: var(--clr-slate-200);
-    height: 10mm;
+    height: 12mm;
 
     .logo {
       position: absolute;
-      left: 5mm;
+      left: var(--lh-padding-x);
       top: 50%;
-      width: 28mm;
+      width: 30mm;
       transform: translateY(-50%);
     }
 
     .lh-title {
-      font-size: 14pt;
+      font-size: 18pt;
       font-weight: bold;
       color: var(--clr-primary-main);
     }
@@ -346,15 +356,16 @@
   .lh-info-no {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 2mm;
+    margin-bottom: 3mm;
 
     dl {
       display: flex;
       border: var(--border-width) solid var(--clr-slate-500);
 
-      dt, dd {
-        padding: 0.8mm 2mm;
-        font-size: 7.5pt;
+      dt,
+      dd {
+        padding: 1mm 2.5mm;
+        font-size: var(--lh-font-size);
       }
 
       dt {
@@ -368,13 +379,14 @@
   .lh-info-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 2mm;
+    margin-bottom: 3mm;
 
-    th, td {
+    th,
+    td {
       border: var(--border-width) solid var(--clr-slate-500);
-      padding: 0.8mm 1.2mm;
+      padding: 1mm 2mm;
       vertical-align: middle;
-      font-size: 7.5pt;
+      font-size: var(--lh-font-size);
       text-align: center;
     }
 
@@ -382,25 +394,34 @@
       background: var(--clr-slate-100);
       color: var(--clr-slate-800);
       font-weight: bold;
-      text-align: center;
     }
   }
 
   .lh-items-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 2mm;
+    margin-bottom: 3mm;
     table-layout: fixed;
 
-    th, td {
+    th,
+    td {
       border: var(--border-width) solid var(--clr-slate-500);
-      padding: 0.5mm 1mm;
+      padding: 1.2mm 2mm;
       text-align: center;
-      font-size: 7.5pt;
-      height: 6.5mm;
-      font-size: 7.5pt;   
+      height: 7mm;
+      font-size: var(--lh-font-size);
       vertical-align: middle;
       word-break: break-word;
+
+      input {
+        border: 1px solid var(--clr-slate-500);
+        width: 100%;
+
+        &:focus{
+          border-width: 2px;
+          border-color:var(--clr-primary-main);
+        }
+      }
     }
 
     th {
@@ -421,8 +442,17 @@
   .lh-bottom {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 3mm;
-    margin-top: 2mm;
+    gap: 4mm;
+    margin-top: 3mm;
+
+    input, textarea {
+      border: 1px solid var(--clr-slate-500);
+
+      &:focus{
+        border-width: 2px;
+        border-color: var(--clr-primary-main);
+      }
+    }
   }
 
   .lh-box-section {
@@ -430,12 +460,13 @@
       width: 100%;
       border-collapse: collapse;
 
-      th, td {
+      th,
+      td {
         border: var(--border-width) solid var(--clr-slate-500);
-        padding: 0.6mm 1mm;
+        padding: 1mm 2mm;
         text-align: center;
-        font-size: 7.5pt;
-        height: 5.5mm;
+        font-size: var(--lh-font-size);
+        height: 6mm;
       }
 
       th {
@@ -448,29 +479,47 @@
 
   .lh-note {
     border: var(--border-width) solid var(--clr-slate-500);
-    padding: 2mm;
-    font-size: 7.5pt;
-    min-height: 20mm;
+    padding: 2.5mm;
+    font-size: var(--lh-font-size);
+    min-height: 22mm;
     color: var(--clr-slate-800);
+
+    label {
+      display: block;
+      width: 100%;
+
+    }
+
+    textarea{
+      width: 100%;
+      display: block;
+    }
   }
 }
 
 
-.packing-doc {
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  color: var(--clr-text-primary);
-  padding: 10mm;
 
-  input, textarea {
+.packing-doc {
+  // === 커스텀 변수 정의 ===
+  --packing-font-size: 11px;
+  --packing-font-size-lg: 12px;
+  --packing-padding-x: 12mm;
+  --packing-padding-y: 12mm;
+
+  font-family: Arial, sans-serif;
+  font-size: var(--packing-font-size-lg);
+  color: var(--clr-text-primary);
+  padding: var(--packing-padding-y) var(--packing-padding-x);
+
+  input,
+  textarea {
     width: 100%;
     border: 1px solid var(--clr-slate-500);
     background: transparent;
     font-family: inherit;
     font-size: inherit;
     padding: 2px 4px;
-    margin-top: 2px;
-    margin-bottom: 5px;
+    margin: 2px 0 5px;
 
     &:focus {
       outline: none;
@@ -499,8 +548,9 @@
     .packing-meta-table {
       border-collapse: collapse;
 
-      th, td {
-        font-size: 11px;
+      th,
+      td {
+        font-size: var(--packing-font-size);
         text-align: left;
         padding: 3px 6px;
         vertical-align: top;
@@ -538,11 +588,12 @@
     border-collapse: collapse;
     margin-bottom: 20px;
 
-    th, td {
+    th,
+    td {
       border: 1px solid var(--clr-slate-500);
       text-align: center;
       padding: 3px 5px;
-      font-size: 11px;
+      font-size: var(--packing-font-size);
     }
 
     th {
@@ -557,10 +608,11 @@
     border-collapse: collapse;
     margin-bottom: 10px;
 
-    th, td {
+    th,
+    td {
       border: 1px solid var(--clr-slate-500);
       padding: 3px 5px;
-      font-size: 11px;
+      font-size: var(--packing-font-size);
       text-align: center;
     }
 
@@ -581,7 +633,7 @@
     .packing-note,
     .packing-hs {
       margin: 5px 0;
-      font-size: 11px;
+      font-size: var(--packing-font-size);
 
       textarea {
         width: 100%;
@@ -600,6 +652,7 @@
     }
   }
 }
+
 
 
 .commercial-doc {
@@ -625,6 +678,13 @@
     }
   }
 
+  .commercial-meta-end{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+
   .commercial-header {
     display: flex;
     justify-content: space-between;
@@ -634,6 +694,7 @@
     .commercial-logo img {
       width: 120px;
       height: auto;
+      position: relative;
     }
 
     .commercial-title h1 {
@@ -743,6 +804,7 @@
     img {
       max-width: 150px;
       height: auto;
+      margin-top: -2rem;
     }
   }
 }

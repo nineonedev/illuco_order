@@ -105,7 +105,8 @@ Route::middleware(['web'])->group(function(){
                     Route::get('{id}', [ClaimController::class, 'show'])->name('show');
                     
                     Route::post('/', [ClaimController::class, 'store'])->name('store');
-
+                    Route::put('{id}', [ClaimController::class, 'update'])->name('update');
+                    
                     Route::delete('bulk-delete', [ClaimController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [ClaimController::class, 'destroy'])->name('destroy');
                 });
@@ -242,7 +243,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('print/{documentNo}', [OrderDocumentController::class, 'print'])->name('print');
                     Route::get('edit/{documentNo}', [OrderDocumentController::class, 'edit'])->name('edit');
-                    // Route::get('download/{documentNo}', [OrderDocumentController::class, 'download'])->name('download');
+                    Route::get('download/{documentNo}', [OrderDocumentController::class, 'download'])->name('download');
                     Route::get('{documentNo}', [OrderDocumentController::class, 'show'])->name('show');
                     Route::put('{id}', [OrderDocumentController::class, 'update'])->name('update'); 
                 });

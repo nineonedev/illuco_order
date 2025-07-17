@@ -3,37 +3,100 @@ import Modal from '../shared/Modal';
 import Loader from '../shared/Loader';
 import Ajax from "../core/Ajax";
 
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
 export default class OrderController extends Controller {
     loader;
     modal;
     form;
     cancelBtn;
 
-    print(){
+    // print(){
+    //     const element = document.getElementById('print-area');
+
+    //     if (!element) {
+    //         console.error('print-area not found!');
+    //         return;
+    //     }
+
+    //     const printBtn = document.getElementById('print-btn');
+
+    //     if(!printBtn) {
+    //         console.error('print-btn not found!');
+    //         return;
+    //     }
+
+    //     printBtn.addEventListener('click', () => {
+    //         html2pdf(element, {
+    //             margin:       0,
+    //             filename:     element.dataset.pdfName || 'order-document',
+    //             image:        { type: 'jpeg', quality: 0.98 },
+    //             html2canvas:  { scale: 2, useCORS: true, dpi: 300},
+    //             jsPDF:        { unit: 'mm', format: 'a4', orientation: element.dataset.page || 'portrait' }
+    //         });
+    //     });
+        
+    // }
+
+    print() {
+        const printBtn = document.getElementById('print-btn');
         const element = document.getElementById('print-area');
 
-        if (!element) {
-            console.error('print-area not found!');
+        if (!printBtn || !element) {
+            console.error('print-btn or print-area not found!');
             return;
         }
 
-        const printBtn = document.getElementById('print-btn');
+        printBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
 
-        if(!printBtn) {
-            console.error('print-btn not found!');
-            return;
-        }
+            this.loader = this.loader || Loader.make('portal').render();
+            this.loader.show();
 
-        printBtn.addEventListener('click', () => {
-            html2pdf(element, {
-                margin:       0,
-                filename:     element.dataset.pdfName || 'order-document',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, dpi: 300},
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: element.dataset.page || 'portrait' }
-            });
+            try {
+                const filename = element.dataset.pdfName || 'order-document.pdf';
+                const orientation = element.dataset.page || 'portrait'; // 'portrait' or 'landscape'
+                
+                await this.exportToPdf(element, filename, orientation);
+            } catch (err) {
+                console.error('PDF 생성 실패:', err);
+            } finally {
+                this.loader.hide();
+            }
         });
-        
+    }
+
+    async exportToPdf(element, filename = 'document.pdf', orientation = 'portrait') {
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            logging: false
+        });
+
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        const pdf = new jsPDF(orientation === 'landscape' ? 'l' : 'p', 'mm', 'a4');
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+            position -= pageHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+
+        pdf.save(filename);
     }
 
     edit() {
@@ -43,6 +106,8 @@ export default class OrderController extends Controller {
         
         const form = document.getElementById('frm'); 
         this.form = form;
+
+        this.cancelBtn = document.querySelector('[data-action="cancel"]');
 
         form.addEventListener('submit', this._update.bind(this)); 
     }
@@ -60,6 +125,14 @@ export default class OrderController extends Controller {
             const fd = new FormData(form);
             const result = await new Ajax(false).put(form.action, fd);
             this._logger.success(result);
+
+            if (result.success) {
+                if (this.cancelBtn) {
+                    this.cancelBtn.click(); 
+                } else {
+                    location.reload(); 
+                }
+            }   
             
         } finally {
             this.loader.hide();

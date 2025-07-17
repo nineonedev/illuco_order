@@ -128,12 +128,12 @@ use App\Domains\Communication\Enums\NoticeStatus;
 
                 <div class="no-page-index-link">
                     <?php if (can('notice.delete')): ?>
-                    <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                    <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
                         <span>선택삭제</span>
                     </button>
                     <?php endif; ?>
                     <?php if (can('notice.create')): ?>
-                        <a href="<?= route('admin.notices.create') ?>" class="no-btn-success --sm">
+                        <a href="<?= route('admin.notices.create') ?>" class="no-btn-primary --sm">
                             <span>Create</span>
                         </a>
                     <?php endif; ?>

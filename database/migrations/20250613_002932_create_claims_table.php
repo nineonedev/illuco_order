@@ -21,7 +21,7 @@ return new class implements Migration
 
             // 관계
             $table->foreignId('user_id')->nullable()->constrained('users')->onDeleteCascade();
-            $table->foreignId('delaer_id')->nullable()->constrained('dealers')->onDeleteSetNull();
+            $table->foreignId('dealer_id')->nullable()->constrained('dealers')->onDeleteSetNull();
 
             // 고객 입력 정보 (스냅샷)
             $table->string('customer_name');

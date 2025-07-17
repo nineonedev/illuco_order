@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Auth\Repositories\RoleRepository;
+use App\Domains\Product\Repositories\CategoryRepository;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\UserRepository;
@@ -140,7 +141,11 @@ class AuthController extends Controller
                 return $this->render('home.pages.auth.me', ['user' => $user]);
             case UserType::DEALER:
                 $user->load([UserType::DEALER]);
-                return $this->render('admin.pages.dealers.edit', ['dealer' => $user]);
+                $categories = CategoryRepository::make()->all();
+                return $this->render('admin.pages.dealers.edit', [
+                    'dealer' => $user,
+                    'categories' => $categories,
+                ]);
 
             case UserType::EMPLOYEE:
                 return $this->render('admin.pages.employees.edit', ['employee' => $user]);

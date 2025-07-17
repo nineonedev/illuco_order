@@ -45,10 +45,11 @@ export default class ProductZone extends View {
             : "/static/app/img/meta/thumb.jpg";
 
         const hiddenInputs = `
-            <input type="hidden" name="product_name" value="${Helper.escapeHtml(name)}" />
-            <input type="hidden" name="product_code" value="${Helper.escapeHtml(code)}" />
-            <input type="hidden" name="product_model" value="${Helper.escapeHtml(model)}" />
-            <input type="hidden" name="product_description" value="${Helper.escapeHtml(description || '')}" />
+            <input type="hidden" name="product[name]" value="${Helper.escapeHtml(name)}" />
+            <input type="hidden" name="product[code]" value="${Helper.escapeHtml(code)}" />
+            <input type="hidden" name="product[model]" value="${Helper.escapeHtml(model)}" />
+            <input type="hidden" name="product[price]" value="${price}" />
+            <input type="hidden" name="product[description]" value="${Helper.escapeHtml(description || '')}" />
         `;
         
 

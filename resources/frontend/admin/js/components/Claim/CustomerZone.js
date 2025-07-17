@@ -1,4 +1,5 @@
 import ClaimController from '../../controllers/ClaimController';
+import CartController from '../../controllers/ClaimController';
 import View from '../../core/View';
 import Helper from '../../supports/Helper';
 
@@ -37,7 +38,9 @@ export default class CustomerZone extends View {
             description
         } = customer;
 
-        const countryLabel = ClaimController.attributes.countries[country] ?? country; 
+        const countryLabel = ClaimController.attributes?.countries[country] 
+            ?? CartController.attributes?.countries[country] 
+            ?? country; 
 
         const hiddenInputs = `
             <input type="hidden" name="customer_name" value="${Helper.escapeHtml(name)}" />

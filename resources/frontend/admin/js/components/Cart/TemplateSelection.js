@@ -97,12 +97,14 @@ export default class TemplateSelection extends View {
             onChange: this._handleSearch.bind(this),
         }).render();
 
+        const options = this.state.categories.length > 1 ? [{ label: '전체', value: '' }] : [];
+
         SelectInput.make(this.refs.category, {
             label: '제품군 선택',
             name: 'category_id',
             value: this._state.query.category_id || '',
             options: [
-                { label: '전체', value: '' },
+                ...options,
                 ...this._state.categories.map(c => ({
                     label: c.label,
                     value: c.id

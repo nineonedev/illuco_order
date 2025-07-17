@@ -48,7 +48,7 @@ export default class ClaimController extends Controller {
                     const result = await new Ajax(false).delete(action);
 
                     if (result.success) {
-                        location.reload();
+                         location.reload();
                     } else {
                         alert("삭제에 실패했습니다.");
                     }
@@ -96,10 +96,8 @@ export default class ClaimController extends Controller {
             this.loader.show();
 
             try {
-                const result = await new Ajax(false).delete('/admin/orders/bulk-delete', {
-                    ids: ids
-                });
-
+                const result = await new Ajax(false).delete('/admin/claims/bulk-delete', new URLSearchParams({ids: ids}));
+                
                 if (result.success) {
                     location.reload();
                 } else {
@@ -114,9 +112,10 @@ export default class ClaimController extends Controller {
         updateDeleteButtonState();
     }
 
-    create() {
+    async create() {
         this._logger.info("create");
         this._prepare();
+        await this._loadAllData();
 
         this.productZone = ProductZone.make('product-zone').render();
         this.customerZone = CustomerZone.make('customer-zone').render(); 
@@ -161,9 +160,38 @@ export default class ClaimController extends Controller {
 
     show() {
         this._logger.info("show");
+        this._prepare();
 
-        // const deleteBtn = this.form.querySelector('[data-action="delete"]');
-        // deleteBtn?.addEventListener("click", this._destroy.bind(this));
+        const frm = document.getElementById('frm'); 
+
+        frm.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            
+            const submitter = e.submitter; 
+            const t = e.target; 
+            const fd = new FormData(t); 
+
+            try {
+                this.loader.show();
+                submitter.disabled = true; 
+                
+                const result = await new Ajax(false).put(t.action, fd);
+
+                if (result.success) {
+                    location.reload(); 
+                }
+                
+            } finally {
+                submitter.disabled = false; 
+                this.loader.hide();
+            }
+
+        });
+
+        const deleteBtn = this.form.querySelector('[data-action="delete"]');
+        if (deleteBtn){
+            deleteBtn.addEventListener("click", this._destroy.bind(this));
+        }
     }
 
     async _store(e) {
@@ -381,7 +409,6 @@ export default class ClaimController extends Controller {
             DateTimeInput.make(el).render();
         });
 
-        await this._loadAllData();
     }
 
     async _loadAllData() {

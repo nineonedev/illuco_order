@@ -5,17 +5,18 @@
 $entity = $document->packing_list;
 $order = $document->order;
 $items = $order->items;
+
+$type = str_replace('_', '-', $document->type);
+$type = ucwords($type, '-');
+$pdfName = "{$type}-{$document->document_no}.pdf";
 ?>
 
-<form
-    id="frm"
-    action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>"
-    method="POST"
->
+<div class="document-container">
+<form class="document-editor" id="frm" method="POST" action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>">
     <?= csrf_field() ?>
     <?= method_field('PUT') ?>
 
-    <div class="packing-doc">
+    <div class="packing-doc no-preview-container" id="print-area" data-pdf-name="<?= $pdfName ?>">
 
         <!-- Header -->
         <div class="packing-header">
@@ -31,31 +32,19 @@ $items = $order->items;
             <table class="packing-meta-table">
                 <tr>
                     <th>Ref. No.</th>
-                    <td>
-                        <input type="text" name="ref_no"
-                               value="<?= e($entity->ref_no) ?>">
-                    </td>
+                    <td><input type="text" name="ref_no" value="<?= e($entity->ref_no) ?>"></td>
                 </tr>
                 <tr>
                     <th>Date</th>
-                    <td>
-                        <input type="date" name="packing_date"
-                               value="<?= e($entity->packing_date) ?>">
-                    </td>
+                    <td><input type="date" name="packing_date" value="<?= e($entity->packing_date) ?>"></td>
                 </tr>
                 <tr>
                     <th>PI No.</th>
-                    <td>
-                        <input type="text" name="pi_no"
-                               value="<?= e($entity->pi_no) ?>">
-                    </td>
+                    <td><input type="text" name="pi_no" value="<?= e($entity->pi_no) ?>"></td>
                 </tr>
                 <tr>
                     <th>PO No.</th>
-                    <td>
-                        <input type="text" name="po_no"
-                               value="<?= e($entity->po_no) ?>">
-                    </td>
+                    <td><input type="text" name="po_no" value="<?= e($entity->po_no) ?>"></td>
                 </tr>
             </table>
         </div>
@@ -64,19 +53,19 @@ $items = $order->items;
         <div class="packing-between">
             <div class="packing-block">
                 <p class="packing-label">BILL TO:</p>
-                <p><input type="text" name="bill_to_name" value="<?= e($entity->bill_to_name) ?>" placeholder="Company Name"></p>
-                <p><input type="text" name="bill_to_address" value="<?= e($entity->bill_to_address) ?>" placeholder="Address"></p>
+                <p><strong><input type="text" name="bill_to_name" value="<?= e($entity->bill_to_name) ?>"></strong></p>
+                <p><input type="text" name="bill_to_address" value="<?= e($entity->bill_to_address) ?>"></p>
                 <p>Tel.: <input type="text" name="bill_to_tel" value="<?= e($entity->bill_to_tel) ?>"></p>
                 <p>Attn.: <input type="text" name="bill_to_attn" value="<?= e($entity->bill_to_attn) ?>"></p>
-                <p>Email: <input type="text" name="bill_to_email" value="<?= e($entity->bill_to_email) ?>"></p>
+                <p>Email: <input type="email" name="bill_to_email" value="<?= e($entity->bill_to_email) ?>"></p>
             </div>
             <div class="packing-block">
                 <p class="packing-label">SHIP TO:</p>
-                <p><input type="text" name="ship_to_name" value="<?= e($entity->ship_to_name) ?>" placeholder="Company Name"></p>
-                <p><input type="text" name="ship_to_address" value="<?= e($entity->ship_to_address) ?>" placeholder="Address"></p>
+                <p><strong><input type="text" name="ship_to_name" value="<?= e($entity->ship_to_name) ?>"></strong></p>
+                <p><input type="text" name="ship_to_address" value="<?= e($entity->ship_to_address) ?>"></p>
                 <p>Tel.: <input type="text" name="ship_to_tel" value="<?= e($entity->ship_to_tel) ?>"></p>
                 <p>Attn.: <input type="text" name="ship_to_attn" value="<?= e($entity->ship_to_attn) ?>"></p>
-                <p>Email: <input type="text" name="ship_to_email" value="<?= e($entity->ship_to_email) ?>"></p>
+                <p>Email: <input type="email" name="ship_to_email" value="<?= e($entity->ship_to_email) ?>"></p>
             </div>
         </div>
 
@@ -117,38 +106,68 @@ $items = $order->items;
                 </thead>
                 <tbody>
                     <?php $no = 1; ?>
-                    <?php foreach ($items as $item): ?>
-                        <?php $product = $item->product; ?>
+                    <?php for ($i = 0; $i < 16; $i++): ?>
+                        <?php
+                            $item = $items[$i] ?? null;
+                            if ($item) {
+                                $product = $item->product;
+                            }
+                        ?>
                         <tr>
-                            <td><?= $no ?>/1</td>
-                            <td><?= e($product->model) ?></td>
-                            <td><?= e($product->description) ?></td>
-                            <td class="right"><?= e($item->quantity) ?> PC(S)</td>
-                            <td class="right"><?= e($item->net_weight ?? '-') ?></td>
-                            <td><?= e($item->measurement_cm ?? '-') ?></td>
+                            <td>
+                                <input type="text" name="items[<?= $i ?>][carton_no]" 
+                                    value="<?= $item ? $no . '/1' : '' ?>" />
+                            </td>
+                            <td>
+                                <input type="text" name="items[<?= $i ?>][model]" 
+                                    value="<?= $item ? e($product->model) : '' ?>" />
+                            </td>
+                            <td>
+                                <input type="text" name="items[<?= $i ?>][description]" 
+                                    value="<?= $item ? e($product->description) : '' ?>" />
+                            </td>
+                            <td>
+                                <input type="text" name="items[<?= $i ?>][quantity]" 
+                                    value="<?= $item ? e($item->quantity) : '' ?>" />
+                            </td>
+                            <td>
+                                <input type="text" name="items[<?= $i ?>][net_weight]" 
+                                    value="<?= $item ? e($item->net_weight ?? '') : '' ?>" />
+                            </td>
+                            <td>
+                                <input type="text" name="items[<?= $i ?>][measurement_cm]" 
+                                    value="<?= $item ? e($item->measurement_cm ?? '') : '' ?>" />
+                            </td>
                         </tr>
-                        <?php $no++; ?>
-                    <?php endforeach; ?>
+                        <?php if ($item) $no++; ?>
+                    <?php endfor; ?>
                 </tbody>
+
                 <tfoot>
                     <tr>
                         <td colspan="3" class="right">Grand Total:</td>
-                        <td class="right"><?= e($entity->total_quantity) ?> PC(S)</td>
-                        <td class="right"><?= e($entity->total_weight) ?> g</td>
-                        <td class="right"><?= e($entity->total_volume_cbm) ?> CBM</td>
+                        <td class="right">
+                            <input type="text" name="total_quantity" value="<?= e($entity->total_quantity) ?>"> PC(S)
+                        </td>
+                        <td class="right">
+                            <input type="text" name="total_weight" value="<?= e($entity->total_weight) ?>"> g
+                        </td>
+                        <td class="right">
+                            <input type="text" name="total_volume_cbm" value="<?= e($entity->total_volume_cbm) ?>"> CBM
+                        </td>
                     </tr>
                 </tfoot>
             </table>
         </div>
 
+        <!-- Footer -->
         <div class="packing-footer">
             <p class="packing-note">
                 * Packing Details:
-                <textarea name="packing_details" rows="2" placeholder="e.g. 1CTN(S) / 3240g / 0.023125CBM"><?= e($entity->packing_details) ?></textarea>
+                <textarea name="packing_details" rows="3"><?= e($entity->packing_details) ?></textarea>
             </p>
             <p class="packing-hs">
-                HS Code:
-                <input type="text" name="hs_code" value="<?= e($entity->hs_code) ?>">
+                HS Code: <input type="text" name="hs_code" value="<?= e($entity->hs_code) ?>">
             </p>
         </div>
 
@@ -158,8 +177,10 @@ $items = $order->items;
         </div>
 
         <div class="no-form-action">
-            <a href="<?= route('admin.orders.edit', ['orderNo' => $document->order->order_no]) ?>" class="no-btn-primary-outline --sm">취소</a>
+            <a href="<?= route('admin.orders.edit', ['orderNo' => $order->order_no]) ?>" class="no-btn-primary-outline --sm">취소</a>
             <button type="submit" class="no-btn-primary --sm">저장</button>
         </div>
     </div>
 </form>
+
+</div>

@@ -168,13 +168,16 @@
 
             <div class="no-page-index-link">
                 <?php if (can('claim.delete')): ?>
-                <button id="select-delete-btn" class="no-btn-error --sm" disabled>
+                <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
                     <span>선택삭제</span>
                 </button>
                 <?php endif; ?>
+
+                <?php if (can('claim.create')): ?>
                 <a href="<?= route('admin.claims.create') ?>" class="no-btn-primary --sm">
                     <span>Create</span>
                 </a>
+                <?php endif;?>
             </div>
         </div>
         <!-- Filter -->
@@ -216,7 +219,7 @@
                             <td class="no-table-check">
                                 <div class="no-form-checkbox --xs">
                                     <label for="claim<?= $claim->id ?>" class="no-form-checkbox-pointer">
-                                        <input type="checkbox" name="checked_ids[]" id="claim<?= $claim->id ?>" class="no-form-checkbox-input">
+                                        <input type="checkbox" name="checked_ids[]" id="claim<?= $claim->id ?>" class="no-form-checkbox-input" value="<?=$claim->id?>">
                                         <div class="no-form-checkbox-ripple">
                                             <span class="no-form-checkbox-box">
                                                 <div class="no-form-checkbox-icon">
@@ -228,7 +231,7 @@
                                 </div>
                             </td>
                             <?php endif; ?>
-                            <td><?= e($claim->dealer->user->name ?? '대리점 없음') ?></td>
+                            <td><?= $claim->dealer ? $claim->dealer->user->name : '-' ?></td>
                             <td>
                                 <div><?= e($claim->product_name) ?></div>
                                 <small class="no-text-secondary">
@@ -237,8 +240,10 @@
                                     시리얼: <?= e($claim->product_serial_number) ?>
                                 </small>
                             </td>
+                            <td>
+                                <a href="<?= route('admin.claims.show', ['id' => $claim->id]) ?>" class="--underline"><?= e($claim->title) ?></a>
+                            </td>
                             <td><?= e($claim->customer_name) ?></td>
-                            <td><?= e($claim->customer_email) ?></td>
                             <td><?= e($claim->user->name ?? '관리자') ?></td>
                             <td>
                                 <span class="claim-status --<?=$claim->status?>">

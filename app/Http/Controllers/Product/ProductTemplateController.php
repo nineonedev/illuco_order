@@ -74,6 +74,8 @@ class ProductTemplateController extends Controller
             ->with([FileAttachment::class, 'category'])
             ->query();
 
+        $categoryId = user()->isDealer() && user()->dealer->category_id ? user()->dealer->category_id : null;
+
         // 제품명 검색
         $query->when(
             $name = $request->query('name'),
@@ -101,10 +103,9 @@ class ProductTemplateController extends Controller
             })
         );
 
-        // 카테고리
         $query->when(
-            $categoryId = $request->query('category_id'),
-            fn($q) => $q->where('category_id', $categoryId)
+            $categoryId,
+            fn($q) =>  $q->where('category_id', $categoryId)
         );
 
         // 정렬
@@ -150,15 +151,22 @@ class ProductTemplateController extends Controller
         $templates = $request->expectsJson() ? $paginator->toArray() : $paginator;
 
         // 카테고리 목록도 같이 내려줌
-        $categories = CategoryRepository::make()
+        $categoryQuery = CategoryRepository::make()
             ->query()
-            ->orderByAsc('sort_order')
-            ->get();
+            ->orderByAsc('sort_order');
+
+        if ($categoryId) {
+            $categoryQuery->where('id', $categoryId);
+        }
+
+        $categories = $categoryQuery->get();
 
         return $this->render('admin.pages.products.templates.index', [
             'templates'   => $templates,
             'query'       => $request->query(),
             'categories'  => request()->expectsJson() ? array_map(fn($c) => $c->toArray(), $categories) : $categories,
+            'isDealer' => user()->isDealer(),
+            'category_id' => $categoryId,
         ]);
     }
 

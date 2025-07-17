@@ -236,7 +236,14 @@
     .no-summary-table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 60rem; // 600px → 60rem
+         // 600px → 60rem
+        @include mq(md){
+            min-width: 76.8rem;
+        }
+
+        @include mq(sm){
+            min-width: 44rem;
+        }
 
         th,
         td {

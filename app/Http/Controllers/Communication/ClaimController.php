@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Communication;
 
 use App\Domains\Communication\Entities\Claim;
 use App\Domains\Communication\Repositories\ClaimRepository;
+use App\Domains\Product\Repositories\ProductTemplateRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
 use App\Domains\System\Supports\FileAttachmentList;
@@ -27,7 +28,8 @@ class ClaimController extends Controller
 
     public function index(Request $request)
     {
-        $query = $this->repo()->query();
+        $query = $this->repo()->with(['dealer.user'])->query();
+
 
         // ✅ 제목 검색
         $query->when(
@@ -131,8 +133,22 @@ class ClaimController extends Controller
             FileAttachmentList::make($claim->fileattachment)
         );
 
+        $template = ProductTemplateRepository::make()
+            ->query()
+            ->with(['fileattachment'])
+            ->where('model', $claim->product_model)
+            ->first();
+
+        $productImage = null; 
+
+        if ($template && $template->fileattachment) {
+            $productImage = $template->fileattachment[0]->upload_path;
+        }
+
         return $this->render('admin.pages.claims.show', [
-            'claim' => $claim
+            'claim' => $claim,
+            'template' => $template,
+            'productImage' => $productImage,
         ]);
     }
 
@@ -145,14 +161,17 @@ class ClaimController extends Controller
                 'product_serial_number' => 'required|string|maxLength:255',
             ]);
 
-            $claim = new Claim($request->all());
+            $data = $request->all();
+            $data['product_name'] = $data['product']['name'];
+            $data['product_code'] = $data['product']['code'];
+            $data['product_model'] = $data['product']['model'];
+                
+            $claim = new Claim($data);
             $claim->user_id = guard()->id();
-
-            if (user()->isDealer()) {
-                $claim->dealer_id = user()->dealer->id;
-            }
-
-            $claim = $this->repo()->save($claim);
+            $claim->dealer_id = user()->isDealer() ? user()->dealer->id : null;
+            
+            $claim = ClaimRepository::make()->save($claim);
+            
             if (!$claim) {
                 throw new RuntimeException("클레임 저장에 실패했습니다.");
             }
@@ -203,6 +222,26 @@ class ClaimController extends Controller
             }
 
             return $this->render(null, [], "선택된 클레임이 삭제되었습니다. (삭제된 수: {$totalDeleted})");
+        });
+    }
+
+    public function update(string $id, Request $request)
+    {
+        return $this->runInTransaction(function () use ($id, $request) {
+            $request->validateOrFail([
+                'status' => 'required|string',
+            ]);
+
+            $claim = $this->repo()->findOrFail($id);
+            $claim->status = $request->body('status');
+
+            if (!$this->repo()->save($claim)) {
+                throw new RuntimeException("클레임 상태 변경에 실패했습니다.");
+            }
+
+            // 처리 완료될 경우 이메일!
+
+            return $this->render(null, ['claim' => $claim], '상태가 성공적으로 변경되었습니다.');
         });
     }
 

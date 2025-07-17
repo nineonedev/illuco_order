@@ -173,7 +173,7 @@ class AdminController extends Controller
 
     protected function aggregateTotalSales(?int $year = null, ?int $month = null): array
     {
-        $query = db('orders');
+        $query = db('orders')->whereNull('deleted_at');
 
         if ($year) {
             $query->whereRaw("YEAR(created_at) = ?", [$year]);
@@ -189,6 +189,7 @@ class AdminController extends Controller
             ->selectRaw("YEAR(created_at) as year, SUM(total_amount) as total_sales")
             ->groupBy('year')
             ->orderBy('year')
+            ->whereNull('deleted_at')
             ->get();
 
         foreach ($rows as $row) {
@@ -212,6 +213,7 @@ class AdminController extends Controller
             ->groupBy('year', 'month')
             ->orderBy('year')
             ->orderBy('month')
+            ->whereNull('deleted_at')
             ->get();
 
         foreach ($rows as $row) {
@@ -227,7 +229,7 @@ class AdminController extends Controller
 
     protected function aggregateIllucoSales(?int $year = null, ?int $month = null): array
     {
-        $query = db('orders')->whereNull('dealer_id');
+        $query = db('orders')->whereNull('dealer_id')->whereNull('deleted_at');
 
         if ($year) {
             $query->whereRaw("YEAR(created_at) = ?", [$year]);
@@ -244,6 +246,7 @@ class AdminController extends Controller
             ->selectRaw("YEAR(created_at) as year, SUM(total_amount) as total_sales")
             ->groupBy('year')
             ->orderBy('year')
+            ->whereNull('deleted_at')
             ->get();
 
         $yearsResult = [];
@@ -270,6 +273,7 @@ class AdminController extends Controller
             ->groupBy('year', 'month')
             ->orderBy('year')
             ->orderBy('month')
+            ->whereNull('deleted_at')
             ->get();
 
         foreach ($rows as $row) {
@@ -288,7 +292,7 @@ class AdminController extends Controller
         ?int $month = null,
         ?int $specificDealerId = null
     ): array {
-        $query = db('orders')->whereNotNull('dealer_id');
+        $query = db('orders')->whereNotNull('dealer_id')->whereNull('deleted_at');
 
         if ($specificDealerId) {
             $query->where('dealer_id', $specificDealerId);
@@ -309,11 +313,13 @@ class AdminController extends Controller
             ")
             ->groupBy('dealer_id')
             ->orderByDesc('last_order_at')
+            ->whereNull('deleted_at')
             ->get();
 
         $dealers = UserRepository::make()->query()
             ->with(['dealer'])
             ->where('type', 'dealer')
+            ->whereNull('deleted_at')
             ->get();
 
         $dealerList = [];
@@ -334,6 +340,7 @@ class AdminController extends Controller
                 ->selectRaw("YEAR(created_at) as year, SUM(total_amount) as total_sales")
                 ->groupBy('year')
                 ->orderBy('year')
+                ->whereNull('deleted_at')
                 ->get();
 
             $years = [];
@@ -360,6 +367,7 @@ class AdminController extends Controller
                 ->groupBy('year', 'month')
                 ->orderBy('year')
                 ->orderBy('month')
+                ->whereNull('deleted_at')
                 ->get();
 
             foreach ($monthsRows as $mo) {

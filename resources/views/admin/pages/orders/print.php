@@ -23,9 +23,9 @@ use App\Domains\Order\Enums\OrderStatus;
             <?= include_view('admin.pages.orders.prints.'.$document->type, ['document' => $document]) ?>
         </div>
 
-        <div class="--flex-center">
+        <div class="--flex-center no-base-gap --sm">
             <a href="<?= route('admin.orders.edit', ['orderNo' => $document->order->order_no]) ?>" class="no-btn-primary-outline">목록</a>
-            <button type="button" id="print-btn" class="no-btn-primary">PDF 다운로드</button>
+            <a id="print-btn" href="<?= route('admin.order_documents.download',['documentNo' => $document->document_no]) ?>" class="no-btn-primary">PDF 다운로드</a>
         </div>
 
         <!-- END CONTENT -->

@@ -33,7 +33,7 @@ $grandTotal = $subTotal + $freightCharge;
 
 ?>
 
-<div class="commercial-doc" id="print-area" data-pdf-name="<?= $pdfName ?>">
+<div class="commercial-doc no-preview-container" id="print-area" data-pdf-name="<?= $pdfName ?>">
 
     <!-- Header -->
     <div class="commercial-header">
@@ -43,6 +43,9 @@ $grandTotal = $subTotal + $freightCharge;
         <div class="commercial-title">
             <h1>Commercial Invoice</h1>
         </div>
+    </div>
+
+    <div class="commercial-meta-end">
         <table class="commercial-meta-table">
             <tr>
                 <th>Ref. No.</th>

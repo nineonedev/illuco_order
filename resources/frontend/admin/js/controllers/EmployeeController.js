@@ -85,9 +85,9 @@ export default class EmployeeController extends Controller {
                 this.loader.show();
     
                 try {
-                    const result = await new Ajax(false).delete('/admin/orders/bulk-delete', {
+                    const result = await new Ajax(false).delete('/admin/emloyees/bulk-delete', new URLSearchParams({
                         ids: ids
-                    });
+                    }));
     
                     if (result.success) {
                         location.reload();
