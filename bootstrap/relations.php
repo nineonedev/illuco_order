@@ -115,6 +115,8 @@ Rel::setConfig([
         Rel::belongsTo('customer', Customer::class, 'customer_id'),
         Rel::hasMany('items', OrderItem::class, 'order_id'),
         Rel::hasMany('documents', OrderDocument::class, 'order_id'),
+        Rel::hasMany('histories', OrderHistory::class, 'order_id'),
+        Rel::hasMany('logs', OrderLog::class, 'order_id'),
     ],
     OrderLog::class => [
         Rel::belongsTo('order', Order::class, 'order_id'),
@@ -122,7 +124,7 @@ Rel::setConfig([
     ],
     OrderHistory::class => [
         Rel::belongsTo('order', Order::class, 'order_id'),
-        Rel::belongsTo('customer', Order::class, 'customer_id'),
+        Rel::belongsTo('customer', Customer::class, 'customer_id'),
         Rel::belongsTo('user', User::class, 'created_by'),
         Rel::belongsTo('dealer', Dealer::class, 'dealer_id'),
     ],

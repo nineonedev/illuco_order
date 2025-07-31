@@ -253,12 +253,16 @@ use App\Domains\Product\Entities\Loupe;
                                                     $target = '-';
                                                 }
 
-                                                $orderNo = $history->order->order_no;
+                                                $orderNo = $history->order->order_no ?? null;
                                             ?>
                                             <tr>
                                                 <td><?= e($target) ?></td>
                                                 <td>
+                                                    <?php if ($orderNo): ?>
                                                     <a class="--underline" href="<?= route('admin.orders.edit', ['orderNo' => $orderNo]) ?>"><?= e($orderNo) ?></a>
+                                                    <?php else: ?>
+                                                    <span> - </span>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td><?= e($history->user->name ?? '-') ?></td>
                                                 <td><?= nl2br(e($history->memo)) ?></td>

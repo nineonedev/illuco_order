@@ -73,8 +73,12 @@ class ProductTemplateController extends Controller
         $query = $this->repo()
             ->with([FileAttachment::class, 'category'])
             ->query();
+        
+        $hasCategory = user()->isDealer() && user()->dealer->category_id;
 
-        $categoryId = user()->isDealer() && user()->dealer->category_id ? user()->dealer->category_id : null;
+        $categoryId = $hasCategory
+            ? user()->dealer->category_id 
+            : $request->query('category_id');
 
         // 제품명 검색
         $query->when(
@@ -155,7 +159,7 @@ class ProductTemplateController extends Controller
             ->query()
             ->orderByAsc('sort_order');
 
-        if ($categoryId) {
+        if ($hasCategory) {
             $categoryQuery->where('id', $categoryId);
         }
 

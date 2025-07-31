@@ -232,7 +232,7 @@ export default class TemplateSelection extends View {
                 params.append(key, value);
             }
         }
-
+        
         this._dispatch('fetch.templates', {
             query: params.toString()
         });
