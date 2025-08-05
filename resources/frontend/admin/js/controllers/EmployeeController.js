@@ -2,6 +2,7 @@ import Controller from "../core/Controller";
 import Modal from '../shared/Modal';
 import Loader from '../shared/Loader';
 import SelectInput from '../components/Inputs/SelectInput';
+import Ajax from "../core/Ajax";
 export default class EmployeeController extends Controller {
     form;
     cancelBtn;

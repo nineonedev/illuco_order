@@ -185,13 +185,16 @@ use App\Domains\Product\Entities\Loupe;
                 </div>
 
                 <div class="no-page-index-link">
+                    <a href="<?= route('admin.orders.index') ?>" class="no-btn-success --sm">
+                        <span>필터 초기화</span>
+                    </a>
                     <?php if (can('order.delete')): ?>
                     <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
                         <span>선택삭제</span>
                     </button>
                     <?php endif; ?>
 
-                    <a href="<?= route('admin.orders.export') ?>" class="no-btn-success --sm">
+                    <a href="<?= route('admin.orders.export') ?>" class="no-btn-warning --sm">
                         <span>Export</span>
                     </a>
                 </div>

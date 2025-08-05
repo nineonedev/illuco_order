@@ -254,6 +254,9 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('{orderId}', [OrderHistoryController::class, 'index'])->name('index');
                     Route::post('/', [OrderHistoryController::class, 'store'])->name('store');
+
+                    Route::put('{id}', [OrderHistoryController::class, 'update'])->name('update');
+                    Route::delete('{id}', [OrderHistoryController::class, 'destroy'])->name('destroy');
                 });
 
             // product-values

@@ -103,6 +103,42 @@
                     data-view-props='<?= e(json_encode($props)) ?>'
                 ></div>
 
+                <!-- ✅ 기간 - 시작일 -->
+                <?php
+                    $props = [
+                        'topLabel' => true,
+                        'spacing' => false,
+                        'label' => '시작일',
+                        'name' => 'start',
+                        'value' => request()->query('start') ?? '',
+                        'placeholder' => '시작일',
+                        'format' => 'YYYY-MM-DD',
+                    ];
+                ?>
+                <div 
+                    class="no-form-field"
+                    data-view-type="date"
+                    data-view-props='<?= e(json_encode($props)) ?>'
+                ></div>
+
+                <!-- ✅ 기간 - 종료일 -->
+                <?php
+                    $props = [
+                        'topLabel' => true,
+                        'spacing' => false,
+                        'label' => '종료일',
+                        'name' => 'end',
+                        'value' => request()->query('end') ?? '',
+                        'placeholder' => '종료일',
+                        'format' => 'YYYY-MM-DD',
+                    ];
+                ?>
+                <div 
+                    class="no-form-field"
+                    data-view-type="date"
+                    data-view-props='<?= e(json_encode($props)) ?>'
+                ></div>
+
                 <!-- 주문자 검색 -->
                 <div class="no-form-search">
                     <label for="orderer_name" class="no-form-label">주문자</label>
@@ -167,6 +203,10 @@
             </div>
 
             <div class="no-page-index-link">
+                <a href="<?= route('admin.claims.index') ?>" class="no-btn-success --sm">
+                    <span>필터 초기화</span>
+                </a>
+
                 <?php if (can('claim.delete')): ?>
                 <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
                     <span>선택삭제</span>

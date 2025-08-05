@@ -30,9 +30,7 @@ class NoticeController extends Controller
     {
         $query = $this->repo()
             ->with([FileAttachment::class])
-            ->query();
-
-        $query
+            ->query()
             ->when(
                 $t = $request->query('title'),
                 fn($q) => $q->where('title', 'like', "%{$t}%")
@@ -46,25 +44,38 @@ class NoticeController extends Controller
                 fn($q) => $q->where('is_pinned', (bool) $p)
             )
             ->when(
-                $request->query('author'),
-                fn($q, $author) => $q->whereHas('user', fn($subQ) => $subQ->where('name', 'like', "%{$author}%"))
+                $author = $request->query('author'),
+                fn($q) => $q->whereHas('user', fn($subQ) => $subQ->where('name', 'like', "%{$author}%"))
             )
             ->when(
                 $request->query('visible') === 'now',
                 function ($q) {
                     $now = now();
-
                     $q->where('status', NoticeStatus::PUBLISHED)
-                        ->where(fn($q) =>
-                            $q->whereNull('visible_from')
-                                ->orWhere('visible_from', '<=', $now)
-                        )
-                        ->where(fn($q) =>
-                            $q->whereNull('visible_to')
-                                ->orWhere('visible_to', '>=', $now)
-                        );
+                    ->where(fn($q) => 
+                        $q->whereNull('visible_from')->orWhere('visible_from', '<=', $now)
+                    )
+                    ->where(fn($q) => 
+                        $q->whereNull('visible_to')->orWhere('visible_to', '>=', $now)
+                    );
+                }
+            )
+            ->when(
+                true,
+                function ($q) use ($request) {
+                    $start = trim($request->query('start') ?? '') ?: null;
+                    $end = trim($request->query('end') ?? '') ?: null;
+
+                    if ($start && $end) {
+                        $q->whereBetween('created_at', [$start, $end]);
+                    } elseif ($start) {
+                        $q->where('created_at', '>=', $start);
+                    } elseif ($end) {
+                        $q->where('created_at', '<=', $end);
+                    }
                 }
             );
+
 
         // ✅ 정렬
         $sort = $request->query('sort');

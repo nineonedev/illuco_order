@@ -68,6 +68,21 @@ class ClaimController extends Controller
             fn($q) => $q->where('orderer_name', 'like', "%{$orderer}%")
         );
 
+        
+        $start = trim($request->query('start') ?? '');
+        $end = trim($request->query('end') ?? '');
+
+        $start = $start !== '' ? $start : null;
+        $end = $end !== '' ? $end : null;
+
+        if ($start && $end) {
+            $query->whereBetween('created_at', [$start, $end]);
+        } elseif ($start) {
+            $query->where('created_at', '>=', $start);
+        } elseif ($end) {
+            $query->where('created_at', '<=', $end);
+        }
+
         // ✅ 정렬
         $sort = $request->query('sort');
         if ($sort) {
@@ -158,14 +173,16 @@ class ClaimController extends Controller
             $request->validateOrFail([
                 'title' => 'required|string|maxLength:255',
                 'content' => 'required|string',
-                'product_serial_number' => 'required|string|maxLength:255',
             ]);
 
             $data = $request->all();
-            $data['product_name'] = $data['product']['name'];
-            $data['product_code'] = $data['product']['code'];
-            $data['product_model'] = $data['product']['model'];
-                
+
+            if (isset($data['product'])) {
+                $data['product_name'] = $data['product']['name'];
+                $data['product_code'] = $data['product']['code'];
+                $data['product_model'] = $data['product']['model'];
+            }
+           
             $claim = new Claim($data);
             $claim->user_id = guard()->id();
             $claim->dealer_id = user()->isDealer() ? user()->dealer->id : null;

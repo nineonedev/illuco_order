@@ -198,7 +198,67 @@ use App\Domains\Product\Entities\Loupe;
 
             <section>
                 <div class="no-section-container">
-                    <div class="no-force-flex">
+                    <div class="no-force-column">
+                        <div>
+                            <div class="no-order-history-list">
+                                <h3 class="no-order-update__title">히스토리 내역</h3>
+                                <table class="no-page-index-table">
+                                    <thead>
+                                        <tr>
+                                            <th>대상</th>
+                                            <th>주문번호</th>
+                                            <th>작성자</th>
+                                            <th>메모</th>
+                                            <th>미수금 변동</th>
+                                            <th>처리 여부</th>
+                                            <th>작성일</th>
+                                            <th>관리</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($orderHistories as $history) : ?>
+                                            <?php
+                                                // 타깃(대상) 결정
+                                                if ($history->dealer) {
+                                                    $target = $history->dealer->user->name ?? '대리점';
+                                                } elseif ($history->customer) {
+                                                    $target = $history->customer->name ?? '고객';
+                                                } else {
+                                                    $target = '-';
+                                                }
+
+                                                $orderNo = $history->order->order_no ?? null;
+                                            ?>
+                                            <tr data-order-history>
+                                                <td><?= e($target) ?></td>
+                                                <td>
+                                                    <?php if ($orderNo): ?>
+                                                    <a class="--underline" href="<?= route('admin.orders.edit', ['orderNo' => $orderNo]) ?>"><?= e($orderNo) ?></a>
+                                                    <?php else: ?>
+                                                    <span> - </span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?= e($history->user->name ?? '-') ?></td>
+                                                <td><?= nl2br(e($history->memo)) ?></td>
+                                                <td><?= number_format($history->balance, 2) ?> USD</td>
+                                                <td>
+                                                    <select data-type="select-one" name="settled" id="settled_<?=$history->id?>">
+                                                        <option value="0" <?= $history->settled == 0 ? 'selected' : '' ?>>미처리</option>
+                                                        <option value="1" <?= $history->settled == 1 ? 'selected' : '' ?>>완료</option>
+                                                    </select>
+                                                </td>
+                                                <td><?= date('Y-m-d h:i A', strtotime($history->created_at)) ?></td>
+                                                <td>
+                                                    <button type="button" class="no-btn-primary --xxs" data-history-method="put" data-history-action="<?= route('admin.order_histories.update', ['id' => $history->id]) ?>">수정</button>
+                                                    <button type="button" class="no-btn-error --xxs" data-history-method="delete" data-history-action="<?= route('admin.order_histories.destroy', ['id' => $history->id]) ?>">삭제</button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
                         <div>
                             <div class="no-order-history-list">
                                 <h3 class="no-order-update__title">상태 변경 내역</h3>
@@ -220,55 +280,6 @@ use App\Domains\Product\Entities\Loupe;
                                                 <td><?= __('system.order.status.' . $log->status) ?></td>
                                                 <!-- <td><?= nl2br(e($log->message ?? '-')) ?></td> -->
                                                 <td><?= date('Y-m-d h:i A', strtotime($log->created_at)) ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="no-order-history-list">
-                                <h3 class="no-order-update__title">히스토리 내역</h3>
-                                <table class="no-page-index-table">
-                                    <thead>
-                                        <tr>
-                                            <th>대상</th>
-                                            <th>주문번호</th>
-                                            <th>작성자</th>
-                                            <th>메모</th>
-                                            <th>미수금 변동</th>
-                                            <th>처리 여부</th>
-                                            <th>작성일</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($orderHistories as $history) : ?>
-                                            <?php
-                                                // 타깃(대상) 결정
-                                                if ($history->dealer) {
-                                                    $target = $history->dealer->user->name ?? '대리점';
-                                                } elseif ($history->customer) {
-                                                    $target = $history->customer->name ?? '고객';
-                                                } else {
-                                                    $target = '-';
-                                                }
-
-                                                $orderNo = $history->order->order_no ?? null;
-                                            ?>
-                                            <tr>
-                                                <td><?= e($target) ?></td>
-                                                <td>
-                                                    <?php if ($orderNo): ?>
-                                                    <a class="--underline" href="<?= route('admin.orders.edit', ['orderNo' => $orderNo]) ?>"><?= e($orderNo) ?></a>
-                                                    <?php else: ?>
-                                                    <span> - </span>
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td><?= e($history->user->name ?? '-') ?></td>
-                                                <td><?= nl2br(e($history->memo)) ?></td>
-                                                <td><?= number_format($history->balance, 2) ?> USD</td>
-                                                <td><?= $history->settled ? '완료' : '미처리' ?></td>
-                                                <td><?= date('Y-m-d h:i A', strtotime($history->created_at)) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -335,6 +346,7 @@ use App\Domains\Product\Entities\Loupe;
                 <div class="no-order-summary">
                     <h2 class="no-order-summary__title">주문 정보</h2>
                     <div class="no-order-summary__grid">
+                        <div class="no-order-summary__item"><span class="label">주문번호</span><span class="value"><?= e($order->order_no) ?></span></div>
                         <div class="no-order-summary__item"><span class="label">주문자 이름</span><span class="value"><?= e($order->orderer_name) ?></span></div>
                         <div class="no-order-summary__item"><span class="label">이메일</span><span class="value"><?= e($order->orderer_email) ?></span></div>
                         <div class="no-order-summary__item"><span class="label">전화번호</span><span class="value"><?= e($order->orderer_phone ?: '-') ?></span></div>

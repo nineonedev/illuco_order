@@ -20,7 +20,7 @@ $freightCharge = $entity->freight_charge ?? 0;
 $grandTotal = $subTotal + $freightCharge;
 ?>
 
-<form id="frm" method="POST" action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>">
+<form id="frm" method="POST" action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>" class="no-document__edit">
     <?= csrf_field() ?>
     <?= method_field('PUT') ?>
 

@@ -12,6 +12,7 @@ import ProductZone from "../components/Claim/ProductZone";
 import Helper from "../supports/Helper";
 import CustomerSelection from "../components/Cart/CustomerSelection";
 import CustomerZone from "../components/Claim/CustomerZone";
+import DateInput from "../components/Inputs/DateInput";
 
 export default class ClaimController extends Controller {
     form;
@@ -197,15 +198,15 @@ export default class ClaimController extends Controller {
     async _store(e) {
         e.preventDefault();
 
-        if (Helper.isEmptyObject(this.productZone.state.template)) {
-            alert('문의할 제품을 선택해주세요.');
-            return; 
-        }
+        // if (Helper.isEmptyObject(this.productZone.state.template)) {
+        //     alert('문의할 제품을 선택해주세요.');
+        //     return; 
+        // }
 
-        if (Helper.isEmptyObject(this.customerZone.state.template)) {
-            alert('클레임 대상을 선택해주세요.');
-            return; 
-        }
+        // if (Helper.isEmptyObject(this.customerZone.state.template)) {
+        //     alert('클레임 대상을 선택해주세요.');
+        //     return; 
+        // }
 
         const t = e.target;
         const fd = new FormData(t);
@@ -408,6 +409,11 @@ export default class ClaimController extends Controller {
         document.querySelectorAll('[data-view-type="datetime"]').forEach(el => {
             DateTimeInput.make(el).render();
         });
+
+        document.querySelectorAll('[data-view-type="date"]').forEach(el => {
+            const props = el.dataset.viewProps || '{}';
+            DateInput.make(el, JSON.parse(props)).render();
+        })
 
     }
 

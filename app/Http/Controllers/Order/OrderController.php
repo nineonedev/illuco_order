@@ -72,9 +72,9 @@ class OrderController extends Controller
         if ($start && $end) {
             $query->whereBetween('created_at', [$start, $end]);
         } elseif ($start) {
-            $query->whereDate('created_at', '>=', $start);
+            $query->where('created_at', '>=', $start);
         } elseif ($end) {
-            $query->whereDate('created_at', '<=', $end);
+            $query->where('created_at', '<=', $end);
         }
 
         // ✅ 카테고리

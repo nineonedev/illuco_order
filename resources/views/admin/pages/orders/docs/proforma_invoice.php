@@ -16,7 +16,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
 ?>
 
 <div class="document-container">
-<form class="document-editor" id="frm" action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>" method="POST">
+<form class="document-editor no-document__edit" id="frm" action="<?= route('admin.order_documents.update', ['id' => $entity->id]) ?>" method="POST">
 <?= csrf_field() ?>
 <?= method_field('PUT') ?>
 

@@ -808,3 +808,13 @@
     }
   }
 }
+
+.no-document__edit {
+  .table-section table{
+    font-size: 1.3rem;
+
+      @include mq(md){
+        font-size: 1.1rem;
+      }
+    }
+} 

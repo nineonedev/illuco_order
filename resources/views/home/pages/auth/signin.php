@@ -20,6 +20,11 @@
                 </p>
             </header>
             <div>
+                
+                <?php 
+                    $savedEmail = cookie()->get('saved_email') ?? '';
+                ?>  
+                
                 <form method="post" action="<?= route('auth.login') ?>" id="frm">
                     <?= csrf_field() ?>
                     <div class="no-form-control">
@@ -31,6 +36,7 @@
                                 class="no-form-control-input" 
                                 placeholder="" 
                                 required
+                                value="<?= e($savedEmail) ?>" 
                             >
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">이메일</legend>
@@ -58,9 +64,10 @@
                     </div>
                     <!-- FormControl -->
 
+
                     <div class="no-form-checkbox --sm">
-                        <label for="remember_me" class="no-form-checkbox-pointer">
-                            <input type="checkbox" name="remember_me" id="remember_me" class="no-form-checkbox-input">
+                        <label for="save_email" class="no-form-checkbox-pointer">
+                            <input type="checkbox" name="save_email" id="save_email" value="1" <?= $savedEmail ? 'checked' : '' ?> class="no-form-checkbox-input">
                             <div class="no-form-checkbox-ripple">
                                 <span class="no-form-checkbox-box">
                                     <div class="no-form-checkbox-icon">
@@ -68,7 +75,7 @@
                                     </div>
                                 </span>
                             </div>
-                            <span class="no-form-checkbox-text">자동로그인</span>
+                            <span class="no-form-checkbox-text">이메일 저장</span>
                         </label>
                     </div>
                     <!-- FormControl -->

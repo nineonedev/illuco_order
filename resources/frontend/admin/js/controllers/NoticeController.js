@@ -5,6 +5,7 @@ import SelectInput from "../components/Inputs/SelectInput";
 import FileInput from "../components/Inputs/FileInput";
 import DateTimeInput from "../components/Inputs/DateTimeInput";
 import EditorInput from "../components/Inputs/EditorInput";
+import DateInput from "../components/Inputs/DateInput";
 
 export default class NoticeController extends Controller {
     form;
@@ -215,5 +216,10 @@ export default class NoticeController extends Controller {
         document.querySelectorAll('[data-view-type="datetime"]').forEach(el => {
             DateTimeInput.make(el).render();
         });
+
+        document.querySelectorAll('[data-view-type="date"]').forEach(el => {
+            const props = el.dataset.viewProps || '{}';
+            DateInput.make(el, JSON.parse(props)).render();
+        })
     }
 }

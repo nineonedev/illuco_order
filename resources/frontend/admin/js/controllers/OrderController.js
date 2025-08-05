@@ -179,6 +179,66 @@ export default class OrderController extends Controller {
 
         }
 
+        const historyItems = document.querySelectorAll('[data-order-history]'); 
+        console.log(historyItems);
+
+
+        if (historyItems) {
+            historyItems.forEach(item => {
+                const deleteBtn = item.querySelector('[data-history-method="delete"]'); 
+                const updateBtn = item.querySelector('[data-history-method="put"]');
+
+                deleteBtn.addEventListener('click', async (e) => {
+                    if(!confirm('정말로 삭제하시겠습니까')) {
+                        return;
+                    }
+
+                    const button = e.currentTarget; 
+                    try {
+                        button.disabled = true; 
+                        this.loader.show();
+                        
+                        const result = await new Ajax(false).delete(button.getAttribute('data-history-action'), fd);
+                        this._logger.success(result);
+                        
+                        if (result.success) {
+                            location.reload(); 
+                        }
+
+                    } finally {
+                        this.loader.hide();
+                        button.disabled = false; 
+                    }
+                });
+
+                updateBtn.addEventListener('click', async (e) => {
+                    const button = e.currentTarget; 
+                    const settledInput = item.querySelector('[name="settled"]');
+                    
+                    try {
+                        button.disabled = true; 
+                        this.loader.show();
+
+                        const fd = new URLSearchParams({
+                            settled: settledInput.value,
+                        });
+                        
+                        const result = await new Ajax(false).put(button.getAttribute('data-history-action'), fd);
+                        this._logger.success(result);
+                        
+                        if (result.success) {
+                            location.reload(); 
+                        }
+
+                    } finally {
+                        this.loader.hide();
+                        button.disabled = false; 
+                    }
+                });
+            })
+        }
+        
+
         this.cancelBtn = form.querySelector('[data-action=cancel]');
 
         const historyForm = document.getElementById('history-form'); 

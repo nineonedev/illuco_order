@@ -96,6 +96,12 @@ class AuthController extends Controller
                 ->withInput($request->all());
         }
 
+        if ($request->input('save_email')) {
+            cookie()->set('saved_email', $request->input('email'), 60 * 24 * 30); // 30일
+        } else {
+            cookie()->forget('saved_email');
+        }
+
         return $this->redirectToDashboard(lang('validation.login_success'), auth()->user());
     }
 

@@ -26,6 +26,8 @@ class Claim extends Entity
         'customer_email',
         'customer_phone',
 
+        'order_no',
+
         // 문의 정보
         'title',
         'content',
@@ -36,7 +38,7 @@ class Claim extends Entity
 
     protected array $casts = [
         'user_id'    => 'int',
-        'dealer_id'  => 'int',
+        'dealer_id'  => '?int',
     ];
 
     public static function repositoryClass(): string

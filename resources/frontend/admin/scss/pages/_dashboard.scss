@@ -14,16 +14,17 @@
     border: 1px solid var(--clr-card-border);
     border-radius: 8px;
     padding: fluid(16, 24);
-    overflow-x: auto;
+    height: fluid(300, 600);
+    min-width: 64rem;
+    
 
     canvas {
       width: 100%;
-      min-width: 76.8rem;
-      height: 30rem;
+      // min-width: 76.8rem;
     
-      @include mq(md){
-        min-width: 54rem;
-      }
+      // @include mq(md){
+      //   min-width: 54rem;
+      // }
     }
   }
 
@@ -33,6 +34,7 @@
 
   .dashboard-section {
     margin-bottom: 32px;
+    overflow-x: auto;
 
     &-title {
       font-size: 18px;
@@ -62,6 +64,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
+
+    @include mq(md){
+      grid-template-columns: 1fr;
+    }
 
     .dashboard-summary-card {
       background: var(--clr-background-primary);

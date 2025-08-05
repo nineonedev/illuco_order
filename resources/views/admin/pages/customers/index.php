@@ -145,6 +145,9 @@
                 </div>
 
                 <div class="no-page-index-link">
+                    <a href="<?= route('admin.customers.index') ?>" class="no-btn-success --sm">
+                        <span>필터 초기화</span>
+                    </a>
                     <?php if (can('customer.delete')): ?>
                     <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
                         <span>선택삭제</span>

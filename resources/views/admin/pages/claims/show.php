@@ -75,6 +75,13 @@ use Composer\Autoload\ClassLoader;?>
 
                 <dl class="no-claim-show__list">
                     <div class="no-claim-show__item">
+                        <dt>주문번호 번호</dt>
+                        <dd><?= e($claim->order_no) ?></dd>
+                    </div>
+                </dl>
+
+                <dl class="no-claim-show__list">
+                    <div class="no-claim-show__item">
                         <dt>시리얼 번호</dt>
                         <dd><?= e($claim->product_serial_number) ?></dd>
                     </div>
@@ -108,14 +115,32 @@ use Composer\Autoload\ClassLoader;?>
                 <?php for ($i = 1; $i <= 5; $i++): ?>
                     <?php $file = $claim->fileattachment->get("attach_$i"); ?>
                     <?php if ($file): ?>
+                        <?php
+                            $isImage = str_starts_with($file->mime_type, 'image/');
+                            $isVideo = str_starts_with($file->mime_type, 'video/');
+                            $isDocument = !$isImage && !$isVideo;
+                        ?>
                         <div class="no-claim-show__file">
                             <span class="no-claim-show__file-label">첨부파일 <?= $i ?>:</span>
-                            <a href="<?= $file->upload_path ?>" target="_blank" class="no-claim-show__file-link">
-                                <?= e($file->original_name) ?>
-                            </a>
+
+                            <?php if ($isImage): ?>
+                                <a href="<?= $file->upload_path ?>" target="_blank" class="no-claim-show__file-link">
+                                    <img src="<?= $file->upload_path ?>" alt="<?= e($file->original_name) ?>" style="max-width: 200px; border: 1px solid #ccc;">
+                                </a>
+                            <?php elseif ($isVideo): ?>
+                                <video controls style="max-width: 400px;">
+                                    <source src="<?= $file->upload_path ?>" type="<?= $file->mime_type ?>">
+                                    브라우저가 video 태그를 지원하지 않습니다.
+                                </video>
+                            <?php else: ?>
+                                <a href="<?= $file->upload_path ?>" target="_blank" class="no-claim-show__file-link">
+                                    <?= e($file->original_name) ?>
+                                </a>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
                 <?php endfor; ?>
+
             </div>
 
             <div class="no-form-action">
