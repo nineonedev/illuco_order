@@ -194,7 +194,11 @@ class DealerController extends Controller
             $dealer = $user->{$user->type};
             
             $dealer = $dealer->fill($dealerData); 
-            $dealer->category_id = $dealerData['category_id'] ?: null;
+
+            if (!user()->isDealer()) {
+                $dealer->category_id = $dealerData['category_id'] ?: null;
+            }
+            
             $dealer = DealerRepository::make()->save($dealer); 
 
             if (!$dealer) {

@@ -111,7 +111,7 @@ use App\Domains\Product\Entities\ProductTemplate;
 
                     <!-- 대표 이미지 -->
                     <?php $mainImage = $template->fileattachment->props('main_image', ['label' => '메인 이미지']) ?? '{}'; ?>
-                    <div data-component-type="file" data-component-props='<?= $mainImage ?>'></div>
+                    <div data-view-type="file" data-view-props='<?= $mainImage ?>'></div>
 
                     <!-- 정렬 순서 -->
                     <div class="no-form-control --md">

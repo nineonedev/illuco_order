@@ -106,6 +106,8 @@ class EmployeeController extends Controller
                 ->query()
                 ->whereIn('name', ['employee', 'sales'])
                 ->get(); 
+        } else {
+            $roles = [];
         }
 
         $employee->load(['roles']);
@@ -188,4 +190,35 @@ class EmployeeController extends Controller
             return $this->render(null, [], '정상적으로 삭제되었습니다.');
         });
     }
+
+    public function destroyMany(Request $request)
+    {
+        $ids = $request->body('ids', []);
+
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+
+        if (empty($ids)) {
+            return $this->render(null, [], "삭제할 직원이 없습니다.");
+        }
+
+        return $this->runInTransaction(function () use ($ids) {
+            $totalDeleted = 0;
+
+            foreach ($ids as $id) {
+                $employee = UserRepository::make()->find($id);
+                if (!$employee) {
+                    continue;
+                }
+
+                if (UserRepository::make()->delete($employee)) {
+                    $totalDeleted++;
+                }
+            }
+
+            return $this->render(null, [], "선택된 직원이 삭제되었습니다. (삭제된 수: {$totalDeleted})");
+        });
+    }
+
 }

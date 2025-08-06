@@ -120,7 +120,13 @@ class NoticeController extends Controller
 
     public function show(string $id)
     {
-        return $this->render('admin.pages.notices.show', ['id' => $id]);
+        $notice = NoticeRepository::make()
+            ->make()
+            ->with([FileAttachment::class])
+            ->findOrFail($id);
+
+        $notice->setRelation(FileAttachment::alias(), FileAttachmentList::make($notice->fileattachment));
+        return $this->render('admin.pages.notices.show', ['notice' => $notice]);
     }
 
     public function edit(string $id)
@@ -147,8 +153,10 @@ class NoticeController extends Controller
             
             $this->fileRepo()->handleUpload($notice, $this->uploadConfig());
             
-            $notice->mailToDealers(); 
-            return $this->render(null, ['notice' => $notice], '정상적으로 생성되었습니다.');
+            if (config('app.mail.dealer')) {
+                $notice->mailToDealers();
+            }
+            return $this->render(null, ['notice' => $notice->toArray()], '정상적으로 생성되었습니다.');
         });
     }
 

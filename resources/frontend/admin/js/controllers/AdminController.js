@@ -7,6 +7,7 @@ import FileInput from "../components/Inputs/FileInput";
 import DateTimeInput from "../components/Inputs/DateTimeInput";
 import EditorInput from "../components/Inputs/EditorInput";
 import DateInput from "../components/Inputs/DateInput";
+import Ajax from "../core/Ajax";
 
 import {
     Chart,

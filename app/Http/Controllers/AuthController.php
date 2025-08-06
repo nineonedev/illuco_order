@@ -142,6 +142,8 @@ class AuthController extends Controller
             throw new UnauthenticatedException();
         }
 
+        $user->load(['roles']); 
+
         switch ($user->type) {
             case UserType::ADMIN:
                 return $this->render('home.pages.auth.me', ['user' => $user]);
@@ -154,7 +156,15 @@ class AuthController extends Controller
                 ]);
 
             case UserType::EMPLOYEE:
-                return $this->render('admin.pages.employees.edit', ['employee' => $user]);
+                 if (user()->isAdmin()) {
+                    $roles = RoleRepository::make()
+                        ->query()
+                        ->whereIn('name', ['employee', 'sales'])
+                        ->get(); 
+                } else {
+                    $roles = [];
+                }
+                return $this->render('admin.pages.employees.edit', ['employee' => $user, 'roles' => $roles]);
             default:
                 throw new RuntimeException('Unknown user type.');
         }

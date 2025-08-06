@@ -3,7 +3,7 @@ import CountrySelectInput from '../components/Inputs/CountrySelectInput';
 import Modal from '../shared/Modal';
 import Loader from '../shared/Loader';
 import SelectInput from "../components/Inputs/SelectInput";
-
+import Ajax from "../core/Ajax";
 export default class CustomerController extends Controller {
     form;
     cancelBtn;
@@ -140,7 +140,12 @@ export default class CustomerController extends Controller {
             this._logger.success(result);
 
             if (success && data && data.customer) {
-                location.href = `${action}/${data.customer.id}/edit`;
+
+                if (this.cancelBtn) {
+                    this.cancelBtn.click(); 
+                } else {
+                    location.href = `${action}/${data.customer.id}/edit`;
+                }
             }
 
         } finally {

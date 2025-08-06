@@ -6,6 +6,7 @@ import FileInput from "../components/Inputs/FileInput";
 import DateTimeInput from "../components/Inputs/DateTimeInput";
 import EditorInput from "../components/Inputs/EditorInput";
 import DateInput from "../components/Inputs/DateInput";
+import Ajax from "../core/Ajax";
 
 export default class NoticeController extends Controller {
     form;
@@ -139,9 +140,14 @@ export default class NoticeController extends Controller {
 
             const result = await this._ajax.post(action, fd);
             const { success, data } = result;
+            
 
             if (success && data && data.notice) {
-                location.href = `${action}/edit/${data.notice.id}`;
+                if (this.cancelBtn) {
+                    this.cancelBtn.click();
+                } else {
+                    location.href = `${action}/edit/${data.notice.id}`;
+                }
             }
         } finally {
             this.loader.hide();

@@ -20,28 +20,6 @@ use App\Domains\Communication\Enums\NoticeStatus;
         <div class="no-notice-show__block">
             <h2 class="no-notice-show__title"><?= e($notice->title) ?></h2>
 
-            <dl class="no-notice-show__info">
-                <div class="no-notice-show__row">
-                    <dt>상태</dt>
-                    <dd><?= NoticeStatus::getLabel($notice->status) ?></dd>
-                </div>
-
-                <div class="no-notice-show__row">
-                    <dt>노출 시작일</dt>
-                    <dd><?= $notice->visible_from ?? '-' ?></dd>
-                </div>
-
-                <div class="no-notice-show__row">
-                    <dt>노출 종료일</dt>
-                    <dd><?= $notice->visible_to ?? '-' ?></dd>
-                </div>
-
-                <div class="no-notice-show__row">
-                    <dt>상단 고정</dt>
-                    <dd><?= $notice->is_pinned ? '예' : '아니오' ?></dd>
-                </div>
-            </dl>
-
             <div class="no-notice-show__content">
                 <?= $notice->content ?>
             </div>
@@ -49,32 +27,60 @@ use App\Domains\Communication\Enums\NoticeStatus;
             <div class="no-notice-show__files">
                 <h3 class="no-notice-show__files-title">첨부파일</h3>
                 <?php
-                    $files = $notice->fileattachment->all();
+                    $files = $notice->fileattachment;
                 ?>
                 <?php if (!empty($files)) : ?>
                     <ul class="no-notice-show__files-list">
                         <?php foreach ($files as $file) : ?>
-                            <li>
-                                <a href="<?= $file->upload_path ?>" target="_blank">
-                                    <?= e($file->original_name) ?>
-                                </a>
+                            <?php
+                                $ext = strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION));
+
+                                if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'])) {
+                                    $fileType = 'image';
+                                } elseif (in_array($ext, ['mp4', 'mov', 'avi', 'webm'])) {
+                                    $fileType = 'video';
+                                } elseif (in_array($ext, ['pdf'])) {
+                                    $fileType = 'document';
+                                } else {
+                                    $fileType = 'file';
+                                }
+                            ?>
+                            <li class="file-type-<?= $fileType ?>">
+                                <div class="file-preview">
+                                    <?php if ($fileType === 'image') : ?>
+                                        <img src="<?= e($file->upload_path) ?>" alt="<?= e($file->original_name) ?>" style="max-width: 100%; height: auto; border: 1px solid #ccc;">
+                                        <div><?= e($file->original_name) ?></div>
+
+                                    <?php elseif ($fileType === 'video') : ?>
+                                        <video controls style="max-width: 100%;">
+                                            <source src="<?= e($file->upload_path) ?>" type="video/<?= $ext ?>">
+                                            해당 브라우저는 video 태그를 지원하지 않습니다.
+                                        </video>
+                                        <div><?= e($file->original_name) ?></div>
+
+                                    <?php elseif ($fileType === 'document') : ?>
+                                        <iframe src="<?= e($file->upload_path) ?>" style="width: 100%; height: 500px; border: 1px solid #ccc;"></iframe>
+                                        <div><?= e($file->original_name) ?></div>
+
+                                    <?php else : ?>
+                                        <a href="<?= e($file->upload_path) ?>" target="_blank" download>
+                                            📁 <?= e($file->original_name) ?>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 <?php else : ?>
                     <p>첨부된 파일이 없습니다.</p>
                 <?php endif; ?>
+
             </div>
 
             <div class="no-notice-show__actions">
                 <a href="<?= route('admin.notices.index') ?>" class="no-btn-primary-outline --sm">
                     목록으로
                 </a>
-                <?php if (user()->can('notice.edit')) : ?>
-                    <a href="<?= route('admin.notices.edit', ['id' => $notice->id]) ?>" class="no-btn-primary --sm">
-                        수정
-                    </a>
-                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -10,4 +10,9 @@ return [
     'stores' => [
         'app',
     ],
+    'mail' => [
+        'order' => false, 
+        'claim' => false, 
+        'notice' => false,
+    ],
 ];

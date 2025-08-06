@@ -1,0 +1,115 @@
+@use "../abstracts" as *;
+
+.no-notice-show {
+    padding: fluid(32, 64) 0;
+    display: flex;
+    max-width: 960px;
+    width: 100%;
+
+
+    .no-page-row {
+        width: 100%;
+    }
+    
+  &__block {
+    background: var(--clr-background-primary);
+    border: 1px solid var(--clr-border);
+    border-radius: 1.6rem;
+    padding: fluid(32, 48);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  &__title {
+    font-size: var(--heading-xl);
+    font-weight: 700;
+    color: var(--clr-text-primary);
+    margin-bottom: 2rem;
+    word-break: keep-all;
+  }
+
+  &__content {
+    padding: 2rem 0;
+    line-height: 1.75;
+    font-size: var(--text-md);
+    color: var(--clr-text-default);
+    border-top: 1px solid var(--clr-border);
+    border-bottom: 1px solid var(--clr-border);
+    margin-bottom: 3rem;
+
+    p, ul, ol, li {
+      word-break: break-word;
+    }
+  }
+
+  &__files {
+    margin-bottom: 3rem;
+
+    &-title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: var(--clr-text-primary);
+    }
+
+    &-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      list-style: none;
+      padding: 0;
+
+      li {
+        border: 1px solid var(--clr-border);
+        border-radius: 1rem;
+        padding: 1rem;
+        background-color: var(--clr-surface);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .file-preview {
+          width: 100%;
+
+          img, video, iframe {
+            max-width: 100%;
+            width: 100%;
+            border-radius: 0.8rem;
+            border: 1px solid #ddd;
+            margin-bottom: 0.5rem;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+          }
+
+          div {
+            font-size: var(--text-sm);
+            color: var(--clr-text-secondary);
+            margin-top: 0.25rem;
+            word-break: break-word;
+          }
+
+          a {
+            font-size: var(--text-sm);
+            color: var(--clr-primary);
+            text-decoration: underline;
+
+            &:hover {
+              color: var(--clr-primary-dark);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__actions {
+    text-align: center;
+    margin-top: 3rem;
+
+    .no-btn-primary-outline {
+      padding: 0.9rem 2.4rem;
+      font-size: var(--text-sm);
+      border-radius: 0.6rem;
+    }
+  }
+}

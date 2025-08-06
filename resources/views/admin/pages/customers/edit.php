@@ -20,7 +20,7 @@ use App\Domains\User\Entities\Dealer;?>
                 <div 
                     data-view-type="country-select" 
                     data-view-props='<?= e(json_encode([
-                        "name" => "dealer[country]",
+                        "name" => "country",
                         "label" => "국가 선택",
                         "value" => $customer->country ?? '',
                         "options" => __('system.countries'),

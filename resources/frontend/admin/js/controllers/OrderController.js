@@ -124,15 +124,21 @@ export default class OrderController extends Controller {
 
     show(){
         this._prepare();
+
         this._logger.info("show");
 
         const form = document.getElementById('cancel-frm'); 
-        if (!form) {
-            console.error('No found form with id: "frm"');   
+        if (form) {
+            this.cancelBtn = document.querySelector('[data-action=cancel]');
+            this.form = form;
+            form.addEventListener('submit', this.cancel.bind(this));
         }
+
+        const restoreForm = document.getElementById('restore-form'); 
         
-        this.form = form;
-        form.addEventListener('submit', this.cancel.bind(this));
+        if (restoreForm){
+            restoreForm.addEventListener('submit', this._restoreAll.bind(this));
+        }
 
     }
 
@@ -180,7 +186,6 @@ export default class OrderController extends Controller {
         }
 
         const historyItems = document.querySelectorAll('[data-order-history]'); 
-        console.log(historyItems);
 
 
         if (historyItems) {

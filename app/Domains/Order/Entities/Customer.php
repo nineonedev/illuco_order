@@ -4,9 +4,11 @@ namespace App\Domains\Order\Entities;
 
 use App\Domains\Order\Repositories\CustomerRepository;
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Traits\SoftDeletes;
 
 class Customer extends Entity
 {
+    use SoftDeletes;
     protected array $fillable = [
         'country',
         'user_id',
@@ -20,7 +22,8 @@ class Customer extends Entity
 
     protected array $casts = [
         'user_id' => 'int',
-        'dealer_id' => 'int',
+        'dealer_id' => '?int',
+        'age' => '?int'
     ];
 
     public static function repositoryClass(): string

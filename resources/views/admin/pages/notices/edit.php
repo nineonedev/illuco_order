@@ -49,7 +49,7 @@ use App\Domains\Communication\Enums\NoticeStatus;
                         <span class="no-form-control-space"></span>
                     </div>
 
-                    <div 
+                    <!-- <div 
                         class="no-form-control --md"
                         data-view-type="select"
                         data-view-props='{
@@ -75,9 +75,9 @@ use App\Domains\Communication\Enums\NoticeStatus;
                                 }
                             ]
                         }'
-                    ></div>
+                    ></div> -->
 
-                    <div class="no-form-flex">
+                    <!-- <div class="no-form-flex">
                         <div class="no-form-control --md" 
                             data-view-type="datetime" 
                             data-view-props='{
@@ -95,7 +95,7 @@ use App\Domains\Communication\Enums\NoticeStatus;
                                 "value": "<?= $notice->visible_to ? $notice->visible_to : '' ?>"
                             }'
                         ></div>
-                    </div>
+                    </div> -->
                     
                     <div class="no-form-base --md" 
                         data-view-type="editor" 

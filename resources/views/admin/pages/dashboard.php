@@ -49,7 +49,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="5">주문 내역이 없습니다.</td>
+                            <td colspan="6">주문 내역이 없습니다.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -99,6 +99,29 @@
         </div>
     </div>
 
+    
+
+    <!-- 총 매출 요약 -->
+    <div class="dashboard-section">
+        <h2 class="dashboard-section-title">요약</h2>
+        <div class="dashboard-summary">
+            <?php if (!user()->isDealer()): ?>
+            <div class="dashboard-summary-card">
+                <p class="dashboard-summary-label">총 매출</p>
+                <p class="dashboard-summary-value" id="total-sales-amount">-</p>
+            </div>
+            <div class="dashboard-summary-card">
+                <p class="dashboard-summary-label">본사(일루코) 매출</p>
+                <p class="dashboard-summary-value" id="illuco-sales-amount">-</p>
+            </div>
+            <?php endif ?>
+            <div class="dashboard-summary-card">
+                <p class="dashboard-summary-label">대리점 매출</p>
+                <p class="dashboard-summary-value" id="dealer-sales-amount">-</p>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-section">
         <form id="filter-form" method="get" class="no-form-inline">
             <div class="no-page-row">
@@ -139,30 +162,9 @@
         </form>
     </div>
 
-    <!-- 총 매출 요약 -->
-    <div class="dashboard-section">
-        <h2 class="dashboard-section-title">요약</h2>
-        <div class="dashboard-summary">
-            <?php if (!user()->isDealer()): ?>
-            <div class="dashboard-summary-card">
-                <p class="dashboard-summary-label">총 매출</p>
-                <p class="dashboard-summary-value" id="total-sales-amount">-</p>
-            </div>
-            <div class="dashboard-summary-card">
-                <p class="dashboard-summary-label">본사(일루코) 매출</p>
-                <p class="dashboard-summary-value" id="illuco-sales-amount">-</p>
-            </div>
-            <?php endif ?>
-            <div class="dashboard-summary-card">
-                <p class="dashboard-summary-label">대리점 매출</p>
-                <p class="dashboard-summary-value" id="dealer-sales-amount">-</p>
-            </div>
-        </div>
-    </div>
-
     <?php if (!user()->isDealer()): ?>
     <!-- 전체 매출 차트 -->
-    <div class="dashboard-section">
+    <div class="dashboard-section --overflow-x">
         <h2 class="dashboard-section-title">전체 매출 (월별)</h2>
         <div class="dashboard-chart">
             <canvas id="sales-chart"></canvas>
@@ -171,7 +173,7 @@
 
 
     <!-- 본사(일루코) 매출 차트 -->
-    <div class="dashboard-section">
+    <div class="dashboard-section --overflow-x">
         <h2 class="dashboard-section-title">본사(일루코) 매출 (월별)</h2>
 
         <div class="dashboard-chart">
@@ -181,7 +183,7 @@
     <?php endif; ?>
 
     <!-- 대리점별 매출 차트 -->
-    <div class="dashboard-section">
+    <div class="dashboard-section --overflow-x">
         <h2 class="dashboard-section-title"><?= user()->isDealer() ? '매출' : '대리점별 매출' ?></h2>
 
         <div class="dashboard-chart">

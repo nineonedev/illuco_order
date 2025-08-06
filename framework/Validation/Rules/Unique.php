@@ -24,6 +24,10 @@ class Unique extends Rule
             $query->where('id', '!=', $this->exceptId);
         }
 
+        if ($this->hasDeletedAtColumn()) {
+            $query->whereNull('deleted_at');
+        }
+
         return empty($query->get());
     }
 
@@ -32,5 +36,15 @@ class Unique extends Rule
         return transfer('rule.unique', 'system.' . $this->field)
             ?? lang('rule.unique', [$this->field]) 
             ?? "{$this->field} 값이 이미 존재합니다.";
+    }
+
+    protected function hasDeletedAtColumn(): bool
+    {
+        try {
+            $columns = db()->schema()->getColumnListing($this->table);
+            return in_array('deleted_at', $columns);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

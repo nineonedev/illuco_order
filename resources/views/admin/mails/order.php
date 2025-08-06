@@ -119,17 +119,11 @@
     <!-- 주문자 정보 -->
     <div class="no-order-mail__box">
         <h2 style="font-size:16px; font-weight:600; margin-bottom:10px; color:#0052cc;">주문자 정보</h2>
+        <p><span class="label">주문번호</span> <span class="value"><?= e($order->order_no) ?></span></p>
+        <p><span class="label">상태</span> <span class="value"><?= __('system.order.status.'.$order->order_status) ?></span></p>
         <p><span class="label">주문자</span> <span class="value"><?= e($order->orderer_name) ?></span></p>
         <p><span class="label">이메일</span> <span class="value"><?= e($order->orderer_email) ?></span></p>
         <p><span class="label">전화번호</span> <span class="value"><?= e($order->orderer_phone ?? '-') ?></span></p>
-    </div>
-
-    <!-- 대리점 정보 -->
-    <div class="no-order-mail__box">
-        <h2 style="font-size:16px; font-weight:600; margin-bottom:10px; color:#0052cc;">대리점 정보</h2>
-        <p><span class="label">대리점명</span> <span class="value"><?= e($order->dealer->name ?? '-') ?></span></p>
-        <p><span class="label">이메일</span> <span class="value"><?= e($order->dealer->email ?? '-') ?></span></p>
-        <p><span class="label">전화번호</span> <span class="value"><?= e($order->dealer->phone ?? '-') ?></span></p>
     </div>
 
     <!-- 고객 정보 -->

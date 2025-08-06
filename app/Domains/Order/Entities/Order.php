@@ -113,12 +113,15 @@ class Order extends Entity
             $this->load(['dealer']);
         }
 
+
         $orderLogData = [
             'order_id' => $this->id, 
             'user_id' => user()->id,
             'status' => $status,
             'previous_status' => $this->order_status,
         ];
+
+        $this->order_status = $status; 
 
         $orderLog = new OrderLog($orderLogData);
         $orderLog = OrderLogRepository::make()->save($orderLog);
@@ -127,8 +130,15 @@ class Order extends Entity
             throw new RuntimeException("오더 상태 기록에 실패하였습니다.");
         }
 
+        $success = OrderRepository::make()->save($this);
+        if (!$success) {
+            throw new RuntimeException("오더 상태변경에 실패하였습니다.");
+        }
+
         // if (config->useEmail) JSON으로 해도될듯? 아니면 그냥 row로 나눠도 되고 key, value 방식으로 
-        $this->sendEmailToEmployee();
+        if (config('app.mail.order')) {
+            $this->sendEmailToEmployee();
+        }
     }
 
     public function sendEmailToEmployee()
@@ -138,7 +148,7 @@ class Order extends Entity
             ->with(['roles'])
             ->where('type', UserType::EMPLOYEE)
             ->get();
-        
+
         if (!$employees || count($employees) === 0) {
             return;
         }
@@ -151,6 +161,19 @@ class Order extends Entity
                 'name'  => $emp->name,
             ];
         }
+
+        $this->load([
+            'customer', 
+            'user', 
+            'items.product' => [
+                'template' => [
+                    'fileattachment',
+                    'category'
+                ],
+                'loupe',
+                'headlight',
+            ] 
+        ]);
 
         $subject = "[일루코] 주문 상태 변경 알림";
         $body = render('admin.mails.order', ['order' => $this]);

@@ -67,7 +67,7 @@
 
                 <div class="no-form-control --md">
                     <label for="order_no" class="no-form-control-inner">
-                        <input type="text" name="order_no" id="order_no" class="no-form-control-input" placeholder="" required>
+                        <input type="text" name="order_no" id="order_no" class="no-form-control-input" placeholder="" >
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">주문번호</legend>
                         </fieldset>

@@ -76,6 +76,18 @@
     }
 }
 
+
+.no-status-card{
+    display: flex;
+    align-items: center;
+
+    span {
+        &:first-child {
+            font-weight: 700;
+        }
+    }
+}
+
 .no-form-flex {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

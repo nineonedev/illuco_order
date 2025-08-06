@@ -126,7 +126,7 @@ export default class CartItem extends View {
                 optionHtml = `<div class="no-cart-item-chip-group">` +
                     options.map(opt => `
                         <span class="no-cart-item-chip">
-                            ${opt.label}: ${opt.value}
+                            ${opt.label}: ${opt.value ?? '-'}
                         </span>
                     `).join('') +
                     `</div>`;

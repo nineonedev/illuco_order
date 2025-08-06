@@ -138,6 +138,7 @@ use App\Domains\Product\Entities\Loupe;
                     </div>
 
                     <!-- ✅ 대리점 -->
+                    <?php if (!user()->isDealer()) :?>
                     <?php
                         $props = [
                             'spacing' => false,
@@ -156,6 +157,7 @@ use App\Domains\Product\Entities\Loupe;
                         data-view-type="select"
                         data-view-props='<?= e(json_encode($props)) ?>'
                     ></div>
+                    <?php endif; ?>
 
                     <!-- ✅ 정렬 -->
                     <?php
@@ -377,7 +379,7 @@ use App\Domains\Product\Entities\Loupe;
                                         <td class="sticky --order-no" rowspan="<?= $rowspan ?>">
                                             <a href="<?= $detailLink ?>" class="--underline"><?= e($order->order_no ?? '-') ?></a>
                                         </td>
-                                        <td class="sticky --name" rowspan="<?= $rowspan ?>"><?= e($order->orderer_name ?? '-') ?></td>
+                                        <td class="sticky --name" rowspan="<?= $rowspan ?>"><?= e($order->customer->name ?? '-') ?></td>
                                         <td class="sticky --name" rowspan="<?= $rowspan ?>">
                                             <span class="order-status --<?=$order->order_status?>">
                                                 <?= e(__('system.order.status.'.$order->order_status) ?? '-') ?>

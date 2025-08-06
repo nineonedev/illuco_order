@@ -59,7 +59,7 @@
                 </div>
 
                 <?php if (can('dealer.delete')): ?>
-                <div class="no-form-block">
+                <!-- <div class="no-form-block">
                     <div class="no-form-checkbox --md">
                         <label for="is_active" class="no-form-checkbox-pointer">
                             <input type="checkbox" name="is_active" id="is_active" class="no-form-checkbox-input" <?= $dealer->is_active ? 'checked' : '' ?> >
@@ -74,7 +74,7 @@
                         </label>
                         <p class="no-form-radio-helper-text">체크 해제할 경우 해당 계정은 비활성화됩니다.</p>
                     </div>
-                </div>
+                </div> -->
                 <?php endif ?>
 
                 <hr class="no-hr--xl">
@@ -89,6 +89,7 @@
                     ])) ?>'>
                 </div>
 
+                <?php if (!user()->isDealer()) :?>
                 <?php
                     $props = [
                         'label' => '제품군 선택',
@@ -108,8 +109,10 @@
                     data-view-type="select"
                     data-view-props='<?= e(json_encode($props)) ?>'
                 ></div>
+                <?php endif; ?>
 
 
+                <?php if (!user()->isDealer()) :?>
                 <div class="no-form-control --md">
                     <label for="code" class="no-form-control-inner">
                         <input type="text" name="dealer[code]" id="code" class="no-form-control-input" value="<?= e($dealer->dealer->code) ?>">
@@ -119,6 +122,7 @@
                     </label>
                     <span class="no-form-control-space"></span>
                 </div>
+                <?php endif; ?>
 
                 <div class="no-form-control --md">
                     <label for="address" class="no-form-control-inner">

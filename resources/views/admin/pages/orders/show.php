@@ -23,62 +23,16 @@ use App\Domains\Order\Enums\OrderStatus;
         </div>
 
         <div class="no-section-container">
-            <!-- 주문 상태 및 날짜들 -->
-            <section class="no-form-container">
-                <div class="no-form-group">
-                    <div class="no-form-control --md">
-                        <label class="no-form-label">주문 상태</label>
-                        <div class="no-form-value">
-                            <?= __('system.order.status.' . $order->order_status) ?>
-                        </div>
-                    </div>
-
-                    <div class="no-form-control --md">
-                        <label class="no-form-label">발주일</label>
-                        <div class="no-form-value">
-                            <?= e($order->payment_date ?: '-') ?>
-                        </div>
-                    </div>
-
-                    <div class="no-form-control --md">
-                        <label class="no-form-label">납기일</label>
-                        <div class="no-form-value">
-                            <?= e($order->delivery_date ?: '-') ?>
-                        </div>
-                    </div>
-
-                    <div class="no-form-control --md">
-                        <label class="no-form-label">출하일</label>
-                        <div class="no-form-value">
-                            <?= e($order->shipping_date ?: '-') ?>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="no-form-action">
-                    <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm" data-action="cancel">목록</a>
-
-                    <?php if ($order->isCanceled()) : ?>
-                        <span class="no-text-error">이미 취소된 주문입니다.</span>
-
-                    <?php elseif (!$order->isFinalized()) : ?>
-                        <form action="<?= route('admin.orders.cancel', ['orderNo' => $order->order_no]) ?>" method="POST" id="cancel-frm">
-                            <?= csrf_field() ?>
-                            <?= put_field() ?>
-                            <button type="submit" class="no-btn-error --sm">주문 취소</button>
-                        </form>
-
-                    <?php else : ?>
-                        <a href="<?= route('admin.claims.create') ?>" class="no-btn-success --sm">클레임 접수</a>
-                    <?php endif; ?>
-                </div>
-            </section>
 
             <!-- 상세정보 -->
             <section>
                 <div class="no-order-summary">
                     <h2 class="no-order-summary__title">주문 정보</h2>
                     <div class="no-order-summary__grid">
+                        <div class="no-order-summary__item">
+                            <span class="label">주문 상태</span>
+                            <span class="value"><?= __('system.order.status.' . $order->order_status) ?></span>
+                        </div>
                         <div class="no-order-summary__item">
                             <span class="label">주문자 이름</span>
                             <span class="value"><?= e($order->orderer_name) ?></span>
@@ -111,12 +65,38 @@ use App\Domains\Order\Enums\OrderStatus;
                         </div>
                     </div>
                 </div>
+
+                <div class="no-form-action">
+                    <a href="<?= route_with_query('admin.orders.index') ?>" class="no-btn-primary-outline --sm" data-action="cancel">목록</a>
+
+                    <?php if ($order->isCanceled()) : ?>
+                        <span class="no-text-error">이미 취소된 주문입니다.</span>
+
+                    <?php elseif (!$order->isFinalized()) : ?>
+                        <form action="<?= route('admin.orders.cancel', ['orderNo' => $order->order_no]) ?>" method="POST" id="cancel-frm">
+                            <?= csrf_field() ?>
+                            <?= put_field() ?>
+                            <button type="submit" class="no-btn-error --sm">주문 취소</button>
+                        </form>
+
+                    <?php else : ?>
+                        <a href="<?= route('admin.claims.create') ?>" class="no-btn-success --sm">클레임 접수</a>
+                    <?php endif; ?>
+                </div>
             </section>
 
             <!-- 주문 제품 목록 -->
             <section>
                 <div class="no-order-restore">
-                    <h2 class="no-order-restore__title">주문 제품 목록</h2>
+                    <div class="no-flex-between no-heading-margin">
+                        <h2 class="no-order-restore__title">주문 제품 목록</h2>
+                        <div>
+                            <form method="post" action="<?= route('admin.orders.restore_all', ['orderId' => $order->id]) ?>" id="restore-form">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="no-btn-success">전체 다시 장바구니에 담기</button>
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="no-page-index-table-outer">
                         <table class="no-page-index-table">

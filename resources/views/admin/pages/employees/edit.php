@@ -82,6 +82,7 @@
                     <span class="no-form-control-space"></span>
                 </div>
 
+                <?php if (user()->isAdmin()) : ?>
                 <div class="no-form-block">
                     <div class="no-form-checkbox --md">
                         <label for="is_active" class="no-form-checkbox-pointer">
@@ -98,13 +99,14 @@
                         <p class="no-form-radio-helper-text">체크 해제할 경우 해당 계정은 비활성화됩니다.</p>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
 
             <div class="no-form-action">
                 <a href="<?= route('admin.employees.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
-                <?php if(can('employee.delete')) : ?>
+                <?php if(can('employee.delete') && $employee->roles[0]->name !== 'sales') : ?>
                 <button type="button" class="no-btn-error-outline --sm" data-action="delete">
                     <span>삭제</span>
                 </button>

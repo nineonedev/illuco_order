@@ -3,7 +3,7 @@ import CountrySelectInput from '../components/Inputs/CountrySelectInput';
 import SelectInput from "../components/Inputs/SelectInput";
 import Modal from '../shared/Modal';
 import Loader from '../shared/Loader';
-
+import Ajax from "../core/Ajax";
 export default class DealerController extends Controller {
     form;
     cancelBtn;
@@ -94,7 +94,7 @@ export default class DealerController extends Controller {
             this.loader.show();
 
             try {
-                const result = await new Ajax(false).delete('/admin/delaers/bulk-delete',new URLSearchParams({
+                const result = await new Ajax(false).delete('/admin/dealers/bulk-delete',new URLSearchParams({
                     ids: ids
                 }));
 

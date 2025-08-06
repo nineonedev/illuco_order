@@ -3,7 +3,7 @@ import Modal from "../shared/Modal";
 import Loader from "../shared/Loader";
 import SelectInput from "../components/Inputs/SelectInput";
 import CountrySelectInput from "../components/Inputs/CountrySelectInput";
-
+import Ajax from "../core/Ajax";
 export default class RoleController extends Controller {
     form;
     cancelBtn;

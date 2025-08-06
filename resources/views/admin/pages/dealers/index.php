@@ -37,16 +37,18 @@
 
                     <!-- 국가 선택 -->
                     <?php
+                        $countries = array_map(
+                                fn($code, $label) => ['value' => $code, 'label' => $label],
+                                array_keys($countries),
+                                array_values($countries)
+                        );
+
                         $countryProps = [
                             'spacing' => false,
                             'label' => '국가',
                             'name' => 'country',
                             'value' => request()->query('country'),
-                            'options' => array_map(
-                                fn($code, $label) => ['value' => $code, 'label' => $label],
-                                array_keys($countries),
-                                array_values($countries)
-                            )
+                            'options' => array_merge([['label' => '전체', 'value' => '']], $countries)
                         ];
                     ?>
                     <div

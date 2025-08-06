@@ -25,6 +25,7 @@ use App\Domains\User\Repositories\UserRepository;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Routing\Controller;
+use Framework\Support\Str;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -190,6 +191,7 @@ class OrderController extends Controller
 
             $order->fill($data);
             $order = OrderRepository::make()->save($order);
+            
             $order->setStatus($newStatus);
 
             return $this->render(null, [
@@ -288,8 +290,8 @@ class OrderController extends Controller
             );
         }
 
-        $order->setStatus(OrderStatus::CANCELED);
         $order = OrderRepository::make()->save($order);
+        $order->setStatus(OrderStatus::CANCELED);
 
         // 오더 취소요청 => 메일!
 
@@ -371,7 +373,7 @@ class OrderController extends Controller
             if ($user->isDealer()) {
                 $dealer = $user->dealer;
             }
-
+            
             $orderData = [
                 'customer_id'    => $customer->id,
                 'dealer_id'      => $dealer ? $dealer->id : null,
@@ -386,11 +388,12 @@ class OrderController extends Controller
             $order = new Order($orderData);
             $order->generateOrderNumber($dealer ? $dealer->code : null);
             $order = OrderRepository::make()->save($order);
-            // $order->sendEmailToEmployee();
+            
 
             if (!$order) {
                 throw new RuntimeException('주문 생성에 실패하였습니다.');
             }
+
 
             // order_items 저장
             foreach ($cartitems as $cartitem) {
@@ -446,6 +449,10 @@ class OrderController extends Controller
             
             $documents = OrderDocumentRepository::make()->createDocuments($order);
             $order->setRelation('documents', $documents);
+
+            if (config('app.mail.order')) {
+                $order->sendEmailToEmployee();
+            }
 
             return $this->render(null, [
                 'order' => $order->toArray(),
@@ -929,11 +936,13 @@ class OrderController extends Controller
         // === 3) CartItem 생성 ===
         $setGroupId = $orderItem->set_group_id ? $orderItem->set_group_id : null;
 
+        
+        $newSetGroupId = Str::uuid(); 
         $cartItemData = [
             'cart_id'        => $cart->id,
             'product_id'     => $newProduct->id,
             'quantity'       => $orderItem->quantity,
-            'set_group_id'   => $setGroupId,
+            'set_group_id'   => $newSetGroupId,
             'set_group_sort' => $orderItem->set_group_sort,
             'is_main_item'   => $orderItem->is_main_item,
         ];
@@ -1003,7 +1012,7 @@ class OrderController extends Controller
                     'cart_id'         => $cart->id,
                     'product_id'      => $newSetProduct->id,
                     'quantity'        => $setItem->quantity,
-                    'set_group_id'    => $setGroupId,
+                    'set_group_id'    => $newSetGroupId,
                     'set_group_sort'  => $setItem->set_group_sort,
                     'is_main_item'    => false,
                 ];

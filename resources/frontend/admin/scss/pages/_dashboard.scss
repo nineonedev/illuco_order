@@ -34,7 +34,10 @@
 
   .dashboard-section {
     margin-bottom: 32px;
-    overflow-x: auto;
+    
+    &.--overflow-x {
+      overflow-x: auto;
+    }
 
     &-title {
       font-size: 18px;

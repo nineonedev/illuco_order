@@ -97,7 +97,7 @@ use App\Domains\Product\Entities\ProductTemplate;
                     ></div>
 
 
-                    <div data-component-type="file" data-component-props='{"file_key": "main_image", "label": "대표 이미지"}'></div>
+                    <div data-view-type="file" data-view-props='{"file_key": "main_image", "label": "대표 이미지"}'></div>
 
                     <div class="no-form-control --md">
                         <label for="sort_order" class="no-form-control-inner">

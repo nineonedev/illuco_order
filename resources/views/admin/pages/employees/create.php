@@ -56,7 +56,6 @@
                     </label>
                     <span class="no-form-control-space"></span>
                 </div>
-                
             </div>
 
             <div class="no-form-action">

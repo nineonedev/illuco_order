@@ -11,7 +11,58 @@ class App {
         this.initHeader();
         this.initTab();
         this.dispatch();
+        this.initTel(); 
     }
+
+    static initTel(){
+        document.querySelectorAll('input[type="tel"]').forEach(input => {
+            // 최초 로딩 시 포맷 적용
+            input.value = this.formatPhone(input.value);
+
+            // 입력 시 자동 포맷
+            input.addEventListener('input', (e) => {
+                const pos = input.selectionStart;
+                const raw = input.value.replace(/[^0-9]/g, '');
+                const formatted = this.formatPhone(raw);
+                input.value = formatted;
+
+                // 커서 위치 유지 개선 필요시 추가 로직 삽입
+            });
+        });
+    }
+
+    static formatPhone(value) {
+        // 숫자만 남기기
+        value = value.replace(/[^0-9]/g, '');
+
+        // 02 지역번호 (서울)
+        if (value.startsWith("02")) {
+            if (value.length < 3) {
+                return value;
+            } else if (value.length < 6) {
+                // 02-1~3자리
+                return value.replace(/(\d{2})(\d+)/, "$1-$2");
+            } else if (value.length < 9) {
+                // 02-XXX-XXXX
+                return value.replace(/(\d{2})(\d{3})(\d+)/, "$1-$2-$3");
+            } else {
+                // 02-XXXX-XXXX
+                return value.replace(/(\d{2})(\d{4})(\d{4})/, "$1-$2-$3");
+            }
+        }
+
+        // 기타 지역번호 or 휴대폰
+        if (value.length < 4) {
+            return value;
+        } else if (value.length < 8) {
+            return value.replace(/(\d{3})(\d+)/, "$1-$2");
+        } else if (value.length < 12) {
+            return value.replace(/(\d{3})(\d{3,4})(\d+)/, "$1-$2-$3");
+        } else {
+            return value.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+        }
+    }
+
 
     static dispatch(){
         

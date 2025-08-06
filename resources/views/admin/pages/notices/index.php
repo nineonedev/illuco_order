@@ -56,11 +56,11 @@ use App\Domains\Communication\Enums\NoticeStatus;
                             ),
                         ];
                     ?>
-                    <div
+                    <!-- <div
                         class="no-form-field"
                         data-view-type="select"
                         data-view-props='<?= e(json_encode($props)) ?>'
-                    ></div>
+                    ></div> -->
 
                     <!-- ✅ 고정 여부 -->
                     <?php
@@ -76,11 +76,11 @@ use App\Domains\Communication\Enums\NoticeStatus;
                             ],
                         ];
                     ?>
-                    <div
+                    <!-- <div
                         class="no-form-field"
                         data-view-type="select"
                         data-view-props='<?= e(json_encode($props)) ?>'
-                    ></div>
+                    ></div> -->
                     
 
                     <!-- ✅ 기간 - 시작일 -->
@@ -203,11 +203,9 @@ use App\Domains\Communication\Enums\NoticeStatus;
                             <th>공지</th>
                             <th>제목</th>
                             <th>작성자</th>
-                            <th>공개여부</th>
+                            <!-- <th>공개여부</th> -->
                             <th>등록일</th>
-                            <?php if (can('notice.create')): ?>
                             <th>작업</th>
-                            <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -234,33 +232,37 @@ use App\Domains\Communication\Enums\NoticeStatus;
                                 </td>
                                 <td><?= e($notice->title) ?></td>
                                 <td><?= e($notice->author_name ?? '관리자') ?></td>
-                                <td><?= $notice->status === 'public' ? '공개' : '비공개' ?></td>
+                                <!-- <td><?= $notice->status === 'public' ? '공개' : '비공개' ?></td> -->
                                 <td><?= date('Y-m-d', strtotime($notice->created_at ?? 'now')) ?></td>
 
-                                <?php if (can('notice.create')): ?>
                                 <td class="no-table-action">
                                     <div class="no-page-index-table__action">
+                                        <?php if (can('notice.read')): ?>
                                         <a href="<?= route('admin.notices.show', ['id' => $notice->id]) ?>" class="no-btn-action" data-tooltip>
                                             <div class="no-btn-action-ripple">
                                                 <i class="fa-light fa-eye"></i>
                                                 <span data-tooltip-text><span>보기</span><span data-tooltip-arrow></span></span>
                                             </div>
                                         </a>
+                                        <?php endif; ?>
+                                        <?php if (can('notice.update')): ?>
                                         <a href="<?= route('admin.notices.edit', ['id' => $notice->id]) ?>" class="no-btn-action" data-tooltip>
                                             <div class="no-btn-action-ripple">
                                                 <i class="fa-light fa-pen-to-square"></i>
                                                 <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
                                             </div>
                                         </a>
+                                        <?php endif; ?>
+                                        <?php if (can('notice.delete')): ?>
                                         <a href="<?= route('admin.notices.destroy', ['id' => $notice->id]) ?>" data-item-action="delete" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
                                             <div class="no-btn-action-ripple">
                                                 <i class="fa-light fa-trash-can"></i>
                                                 <span data-tooltip-text><span>삭제</span><span data-tooltip-arrow></span></span>
                                             </div>
                                         </a>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
-                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

@@ -11,11 +11,11 @@ class SaveNoticeRequest extends FormRequest
         return [
             'title'        => 'required|string',
             'content'      => 'nullable|string',
-            'visible_from' => 'nullable|date',
-            'visible_to'   => 'nullable|date',
+            // 'visible_from' => 'nullable|date',
+            // 'visible_to'   => 'nullable|date',
             'is_pinned'    => 'nullable|boolean',
             // 'status'       => 'required|in:draft,published,archived,scheduled',
-            'status'       => 'required',
+            // 'status'       => 'required',
         ];
     }
 }

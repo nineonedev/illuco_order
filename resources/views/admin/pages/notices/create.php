@@ -43,7 +43,7 @@ use App\Domains\Communication\Enums\NoticeStatus;
                     </div>
                     <!-- FormControl -->
 
-                    <div 
+                    <!-- <div 
                         class="no-form-control --md"
                         data-view-type="select"
                         data-view-props='{
@@ -69,31 +69,17 @@ use App\Domains\Communication\Enums\NoticeStatus;
                                 }
                             ]
                         }'
-                    ></div>
+                    ></div> -->
 
-                    <div class="no-form-flex">
+                    <!-- <div class="no-form-flex">
                         <div class="no-form-control --md" data-view-type="datetime" data-view-props='{"name": "visible_from", "label": "노출 시작일"}'>
-                            <!-- <label for="visible_from" class="no-form-control-inner">
-                                <input type="datetime-local" name="visible_from" id="visible_from" class="no-form-control-input" placeholder="" >
-                                <fieldset class="no-form-control-label">
-                                    <legend class="no-form-control-text">노출 시작일</legend>
-                                </fieldset>
-                            </label>
-                            <span class="no-form-control-space"></span> -->
+                            
                         </div>
-                        <!-- FormControl -->
 
                         <div class="no-form-control --md" data-view-type="datetime" data-view-props='{"name": "visible_to", "label": "노출 종료일"}'>
-                            <!-- <label for="visible_to" class="no-form-control-inner">
-                                <input type="datetime-local" name="visible_to" id="visible_to" class="no-form-control-input" placeholder="" >
-                                <fieldset class="no-form-control-label">
-                                    <legend class="no-form-control-text">노출 종료일</legend>
-                                </fieldset>
-                            </label>
-                            <span class="no-form-control-space"></span> -->
+                           
                         </div>
-                        <!-- FormControl -->
-                    </div>
+                    </div> -->
                     
                     <div class="no-form-base --md" data-view-type="editor" data-view-props='{"name": "content"}'></div>
 

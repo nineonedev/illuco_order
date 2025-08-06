@@ -8,8 +8,11 @@ use App\Domains\Product\Repositories\ProductTemplateRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
 use App\Domains\System\Supports\FileAttachmentList;
+use App\Domains\User\Enums\UserType;
+use App\Domains\User\Repositories\UserRepository;
 use App\Http\Requests\Communication\SaveClaimRequest;
 use App\Domains\User\Repositories\DealerRepository;
+use App\Supports\Mailer;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
@@ -25,6 +28,35 @@ class ClaimController extends Controller
     {
         return FileAttachmentRepository::make();
     }
+
+    protected function sendEmailToEmployees(Claim $claim): void
+    {
+        $employees = UserRepository::make()
+            ->query()
+            ->with(['roles'])
+            ->where('type', UserType::EMPLOYEE)
+            ->get();
+
+        if (!$employees || count($employees) === 0) {
+            return;
+        }
+
+        $recipients = [];
+
+        foreach ($employees as $emp) {
+            $recipients[] = [
+                'email' => $emp->email,
+                'name'  => $emp->name,
+            ];
+        }
+
+        $subject = "[일루코] 신규 클레임이 접수되었습니다.";
+        $body = render('admin.mails.claim', ['claim' => $claim]);
+
+        $mailer = new Mailer();
+        $mailer->sendBulk($recipients, $subject, $body);
+    }
+
 
     public function index(Request $request)
     {
@@ -194,6 +226,10 @@ class ClaimController extends Controller
             }
 
             $this->fileRepo()->handleUpload($claim, $this->uploadConfig());
+
+            if (config('app.mail.claim')) {
+                $this->sendEmailToEmployees($claim);
+            }
 
             return $this->render(null, ['claim' => $claim], '정상적으로 생성되었습니다.');
         });

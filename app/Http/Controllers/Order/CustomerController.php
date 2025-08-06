@@ -194,8 +194,14 @@ class CustomerController extends Controller
             $customer = new Customer($request->all());
             $customer->user_id = $user->id;
 
+            if (!$customer->age) {
+                $customer->age = null; 
+            }
+
             if ($user->isDealer()) {
                 $customer->dealer_id = $user->dealer->id;
+            } else {
+                $customer->dealer_id = null; 
             }
 
             $customer = $this->save($customer);
@@ -208,6 +214,15 @@ class CustomerController extends Controller
         return $this->runInTransaction(function () use ($id, $request) {
             $customer = $this->repo()->findOrFail($id);
             $customer->fill($request->all());
+
+
+            if (!$customer->dealer_id) {
+                $customer->dealer_id = null; 
+            }
+            
+            if (!$customer->age) {
+                $customer->age = null; 
+            }
 
             $customer = $this->save($customer);
 
