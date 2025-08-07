@@ -21,7 +21,7 @@ class OrderDocumentController extends Controller
     {
         $document = OrderDocumentRepository::make()
             ->query()
-            ->with(['order.items.product'])
+            ->with(['order' => ['customer', 'items.product.serials', 'user.dealer']])
             ->where('document_no', $documentNo)
             ->firstOrFail(); 
 
@@ -49,7 +49,7 @@ class OrderDocumentController extends Controller
     {
         $document = OrderDocumentRepository::make()
             ->query()
-            ->with(['order.items.product'])
+            ->with(['order' => ['customer', 'items.product.serials', 'user.dealer']])
             ->where('document_no', $documentNo)
             ->firstOrFail(); 
 

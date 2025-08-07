@@ -13,6 +13,8 @@ $grandTotal = $totalAmount + $freightCharge;
 $type = str_replace('_', '-', $document->type);
 $type = ucwords($type, '-');
 $pdfName = "{$type}-{$document->document_no}.pdf";
+
+
 ?>
 
 <div class="document-container">
@@ -33,21 +35,21 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
   <div class="invoice-between">
     <div class="buyer-section">
       <p><strong>Buyer</strong></p>
-      <p>Company: <input type="text" name="buyer_name" value="<?= e($entity->buyer_name) ?>"></p>
-      <p>Address: <input type="text" name="buyer_address" value="<?= e($entity->buyer_address) ?>"></p>
-      <p>Tel.: <input type="text" name="buyer_tel" value="<?= e($entity->buyer_tel) ?>"></p>
+      <p>Company: <input type="text" name="buyer_name" value="<?= e($entity->buyer_name ?: $order->customer->name) ?>"></p>
+      <p>Address: <input type="text" name="buyer_address" value="<?= e($entity->buyer_address ?: $order->customer->address) ?>"></p>
+      <p>Tel.: <input type="text" name="buyer_tel" value="<?= e($entity->buyer_tel ?: $order->customer->phone) ?>"></p>
       <p>Attn.: <input type="text" name="buyer_attn" value="<?= e($entity->buyer_attn) ?>"></p>
-      <p>Email: <input type="email" name="buyer_email" value="<?= e($entity->buyer_email) ?>"></p>
+      <p>Email: <input type="email" name="buyer_email" value="<?= e($entity->buyer_email ?: $order->customer->email) ?>"></p>
     </div>
 
     <table class="ref-table">
       <tr>
         <td>Ref. No.</td>
-        <td><input type="text" name="document_no" value="<?= e($entity->document_no) ?>"></td>
+        <td><input type="text" name="document_no" value="<?= e($document->document_no) ?>"></td>
       </tr>
       <tr>
         <td>Date</td>
-        <td><input type="date" name="invoice_date" value="<?= e($entity->invoice_date) ?>"></td>
+        <td><input type="date" name="invoice_date" value="<?= e($entity->invoice_date ?? date('Y-m-d')) ?>"></td>
       </tr>
       <tr>
         <td>P.O. No.</td>
@@ -71,10 +73,10 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
         <th>Shipment by</th>
       </tr>
       <tr>
-        <td><input type="text" name="salesperson_name" value="<?= e($entity->salesperson_name) ?>"></td>
+        <td><input type="text" name="salesperson_name" value="<?= e($entity->salesperson_name ?: $order->orderer_name) ?>"></td>
         <td>
-          <input type="text" name="salesperson_tel" value="<?= e($entity->salesperson_tel) ?>"><br>
-          <input type="email" name="salesperson_email" value="<?= e($entity->salesperson_email) ?>">
+          <input type="text" name="salesperson_tel" value="<?= e($entity->salesperson_tel ?: $order->orderer_phone) ?>"><br>
+          <input type="email" name="salesperson_email" value="<?= e($entity->salesperson_email ?: $order->orderer_email) ?>">
         </td>
         <td><input type="text" name="estimated_date_of_delivery" value="<?= e($entity->estimated_date_of_delivery) ?>"></td>
         <td colspan="2"><input type="text" name="price_terms" value="<?= e($entity->price_terms) ?>"></td>

@@ -300,6 +300,7 @@ use App\Domains\Product\Entities\Loupe;
                             <div class="no-order-docs-item__title">
                                 <span>PI</span>
                                 <h3>Proforma Inovice</h3>
+                                <i><?= $order->proforma_invoice->document->document_no ?></i>
                             </div>
                             <div class="no-order-docs-item__action">
                                 <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->proforma_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
@@ -310,6 +311,7 @@ use App\Domains\Product\Entities\Loupe;
                             <div class="no-order-docs-item__title">
                                 <span>PR</span>
                                 <h3>생산의뢰서</h3>
+                                <i><?= $order->product_request->document->document_no ?></i>
                             </div>
                             <div class="no-order-docs-item__action">
                                 <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->product_request->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
@@ -320,6 +322,7 @@ use App\Domains\Product\Entities\Loupe;
                             <div class="no-order-docs-item__title">
                                 <span>PL</span>
                                 <h3>Packing List</h3>
+                                <i><?= $order->packing_list->document->document_no ?></i>
                             </div>
                             <div class="no-order-docs-item__action">
                                 <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->packing_list->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
@@ -330,6 +333,7 @@ use App\Domains\Product\Entities\Loupe;
                             <div class="no-order-docs-item__title">
                                 <span>CI</span>
                                 <h3>Commercial Inovice</h3>
+                                <i><?= $order->commercial_invoice->document->document_no ?></i>
                             </div>
                             <div>
                                 <a href="<?= route('admin.order_documents.print', ['documentNo' => $order->commercial_invoice->document->document_no]) ?>" class="no-btn-success-outline --xs">다운로드</a>
@@ -390,6 +394,7 @@ use App\Domains\Product\Entities\Loupe;
                                     <th>제품명</th>
                                     <th>모델명</th>
                                     <th>코드</th>
+                                    <th>시리얼번호</th>
                                     <th>옵션</th>
                                     <th>수량</th>
                                     <th>복원</th>
@@ -398,8 +403,12 @@ use App\Domains\Product\Entities\Loupe;
                             <tbody>
                                 <?php foreach ($order->items as $item): 
                                     $product = $item->product;
+                                    $product->load(['serials']);
                                     $type = $item->product->type;
                                     $sub = $type ? $item->product->{$type} : null;
+                                    $serials = $product->serials 
+                                        ? implode(', <br>', array_map(fn($s) => $s->serial_number, $product->serials))
+                                        : '-';
                                 ?>
                                 <tr>
                                     <td style="width: 10rem">
@@ -412,6 +421,7 @@ use App\Domains\Product\Entities\Loupe;
                                     <td><?= e($product->name) ?></td>
                                     <td><?= e($product->model) ?></td>
                                     <td><?= e($product->code) ?></td>
+                                    <td><?= $serials ?></td>
                                     <td>
                                         <div class="no-order-option-tags">
                                             <?php if ($sub) : ?>
@@ -449,6 +459,10 @@ use App\Domains\Product\Entities\Loupe;
                                         $setProduct = $setItem->product;
                                         $setType = $setProduct->type;
                                         $setSub = $setType ? $setProduct->{$setType} : null;
+                                        $setProduct->load(['serials']);
+                                        $serials = $setProduct->serials 
+                                        ? implode(', <br>', array_map(fn($s) => $s->serial_number, $setProduct->serials))
+                                        : '-';
                                     ?>
                                     <tr class="no-order-subitem">
                                         <td style="padding-left: 2rem">
@@ -461,6 +475,7 @@ use App\Domains\Product\Entities\Loupe;
                                         <td><?= e($setProduct->name) ?></td>
                                         <td><?= e($setProduct->model) ?></td>
                                         <td><?= e($setProduct->code) ?></td>
+                                        <td><?= $serials ?></td>
                                         <td>
                                             <div class="no-order-option-tags">
                                                 <?php if ($setSub) : ?>

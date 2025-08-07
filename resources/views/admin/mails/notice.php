@@ -92,7 +92,7 @@
     </div>
 
     <div class="no-notice-mail__content">
-        <?= nl2br(e($notice->content)) ?>
+        <?= nl2br($notice->content) ?>
     </div>
 
     <?php if (!empty($notice->fileattachment)): ?>

@@ -41,11 +41,11 @@ $grandTotal = $subTotal + $freightCharge;
             <table class="commercial-meta-table">
                 <tr>
                     <th>Ref. No.</th>
-                    <td><input type="text" name="ref_no" value="<?= e($entity->ref_no) ?>"></td>
+                    <td><input type="text" name="ref_no" value="<?= e($entity->ref_no ?: $document->document_no) ?>"></td>
                 </tr>
                 <tr>
                     <th>Date</th>
-                    <td><input type="date" name="invoice_date" value="<?= e($entity->invoice_date) ?>"></td>
+                    <td><input type="date" name="invoice_date" value="<?= e($entity->invoice_date ?: date('Y-m-d')) ?>"></td>
                 </tr>
                 <tr>
                     <th>PI No.</th>
@@ -62,20 +62,20 @@ $grandTotal = $subTotal + $freightCharge;
         <div class="commercial-between">
             <div class="commercial-block">
                 <p class="commercial-label">BILL TO:</p>
-                <p><strong><input type="text" name="bill_to_name" value="<?= e($entity->bill_to_name) ?>"></strong></p>
-                <p><input type="text" name="bill_to_address" value="<?= e($entity->bill_to_address) ?>"></p>
-                <p>Tel.: <input type="text" name="bill_to_tel" value="<?= e($entity->bill_to_tel) ?>"></p>
+                <p><strong><input type="text" name="bill_to_name" value="<?= e($entity->bill_to_name ?: $order->customer->name) ?>" placeholder="name"></strong></p>
+                <p><input type="text" name="bill_to_address" value="<?= e($entity->bill_to_address ?: $order->customer->address) ?>" placeholder="address"></p>
+                <p>Tel.: <input type="text" name="bill_to_tel" value="<?= e($entity->bill_to_tel ?: $order->customer->phone) ?>"></p>
                 <p>Attn.: <input type="text" name="bill_to_attn" value="<?= e($entity->bill_to_attn) ?>"></p>
-                <p>Email: <input type="email" name="bill_to_email" value="<?= e($entity->bill_to_email) ?>"></p>
+                <p>Email: <input type="email" name="bill_to_email" value="<?= e($entity->bill_to_email ?: $order->customer->email) ?>"></p>
             </div>
             <div class="commercial-block">
                 <p class="commercial-label">SHIP TO:</p>
-                <p>Currency: <input type="text" name="currency" value="<?= e($entity->currency ?? 'USD') ?>"></p>
-                <p><strong><input type="text" name="ship_to_name" value="<?= e($entity->ship_to_name) ?>"></strong></p>
-                <p><input type="text" name="ship_to_address" value="<?= e($entity->ship_to_address) ?>"></p>
-                <p>Tel.: <input type="text" name="ship_to_tel" value="<?= e($entity->ship_to_tel) ?>"></p>
+                <p>Currency: <input type="text" name="currency" value="<?= e($entity->currency ?: 'USD') ?>" placeholder="USD"></p>
+                <p><strong><input type="text" name="ship_to_name" value="<?= e($entity->ship_to_name ?: $order->customer->name) ?>"placeholder="name"></strong></p>
+                <p><input type="text" name="ship_to_address" value="<?= e($entity->ship_to_address ?: $order->customer->address) ?>" placeholder="address"></p>
+                <p>Tel.: <input type="text" name="ship_to_tel" value="<?= e($entity->ship_to_tel ?: $order->customer->phone) ?>"></p>
                 <p>Attn.: <input type="text" name="ship_to_attn" value="<?= e($entity->ship_to_attn) ?>"></p>
-                <p>Email: <input type="email" name="ship_to_email" value="<?= e($entity->ship_to_email) ?>"></p>
+                <p>Email: <input type="email" name="ship_to_email" value="<?= e($entity->ship_to_email ?: $order->customer->email) ?>"></p>
             </div>
         </div>
 

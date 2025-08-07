@@ -329,6 +329,14 @@ use App\Domains\Product\Entities\Loupe;
                             <?php foreach ($order->set_group_items as $item): ?>
                                 <?php
                                     $product = $item->product;
+
+                                    if ($product) {
+                                        $serials = $product->serials ? implode(', <br>', array_map(fn($s) => $s->serial_number, $product->serials)) : ' - '; 
+                                    } else {
+                                        $serials = ' - ';
+                                    }
+                                    
+
                                     $category = $product->template->category ?? null;
                                     $model = $product->template->model; 
                                     $isHeadlight = ($product->type === 'headlight');
@@ -354,6 +362,7 @@ use App\Domains\Product\Entities\Loupe;
                                     $detailLink = user()->isDealer()
                                         ? route('admin.orders.show', ['orderNo' => $order->order_no])
                                         : route('admin.orders.edit', ['orderNo' => $order->order_no]);
+
                                 ?>
                                 <tr class="<?=$bgClass?>">
                                     <?php if ($first): ?>
@@ -407,7 +416,7 @@ use App\Domains\Product\Entities\Loupe;
                                     <td><?= e($category ? $category->label : '-') ?></td>
 
                                     <!-- ✅ 아이템별 td는 매번 출력 -->
-                                    <td><?= $product ? e($product->serial_number ?? '-') : '-' ?></td>
+                                    <td><?= $product ? $serials : '-' ?></td>
                                     <td><?= $model ?></td>
                                     <td><?= $type ?></td>
                                     <td><?= $headlight ? e($headlight->wireless_color ?? '-') : '-' ?></td>

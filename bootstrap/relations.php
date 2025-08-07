@@ -20,6 +20,7 @@ use App\Domains\Product\Entities\Category;
 use App\Domains\Product\Entities\Headlight;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
+use App\Domains\Product\Entities\ProductSerial;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\User\Entities\Dealer;
@@ -87,6 +88,7 @@ Rel::setConfig([
         Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
         Rel::hasOne('loupe', Loupe::class, 'id'),
         Rel::hasOne('headlight', Headlight::class, 'id'),
+        Rel::hasMany('serials', ProductSerial::class, 'product_id'),
     ],
     Loupe::class => [
         Rel::belongsTo('product', Product::class, 'id'),

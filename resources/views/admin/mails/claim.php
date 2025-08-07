@@ -95,7 +95,7 @@
     </div>
 
     <div class="no-claim-mail__content">
-        <?= nl2br(e($claim->content)) ?>
+        <?= nl2br($claim->content) ?>
     </div>
 
     <?php if (!empty($claim->fileattachment)): ?>

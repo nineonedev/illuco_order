@@ -9,6 +9,7 @@ $items = $order->items;
 $type = str_replace('_', '-', $document->type);
 $type = ucwords($type, '-');
 $pdfName = "{$type}-{$document->document_no}.pdf";
+
 ?>
 
 <div class="document-container">
@@ -47,11 +48,11 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" name="country" value="<?= e($entity->country) ?>"></td>
-                    <td><input type="text" name="customer_name" value="<?= e($entity->customer_name) ?>"></td>
-                    <td><input type="date" name="created_date" value="<?= e($entity->created_date) ?>"></td>
+                    <td><input type="text" name="country" value="<?= e($entity->country ?: __('system.countries.'.$order->customer->country)) ?>"></td>
+                    <td><input type="text" name="customer_name" value="<?= e($entity->customer_name ?: $order->customer->name) ?>"></td>
+                    <td><input type="date" name="created_date" value="<?= e($entity->created_date ?: date('Y-m-d')) ?>"></td>
                     <td><input type="date" name="delivery_date" value="<?= e($entity->delivery_date) ?>"></td>
-                    <td><!-- 담당자 입력란 비어있으면 필요 시 추가 --></td>
+                    <td><input type="text" name="manager_name" value="<?= e($order->manager_name ?: $order->orderer_name) ?>"></td>
                 </tr>
             </tbody>
         </table>
@@ -77,11 +78,18 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                 <?php for ($i = 0; $i < 16; $i++): ?>
                     <?php
                         $item = $items[$i] ?? null;
+                        $serials = '-'; 
+
                         if ($item) {
                             $product = $item->product;
+                            $product->load(['serials']);
                             $sub = $product->{$product->type};
-                        }
 
+                            if ($product->serials) {
+                                $serials = $product->serials[0]->serial_number . ' 등 ' . count($product->serials) . '개';
+                            }
+                        }
+                        
                         $itemIdx = $i+1;
                     ?>
                     <tr>
@@ -94,7 +102,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                         <td><?= $item ? e($sub->pd_total ?? '') : '&nbsp;' ?></td>
                         <td><?= $item ? e($sub->vertex_distance ?? '') : '&nbsp;' ?></td>
                         <td><?= $item ? e($sub->frame_type ?? '') : '&nbsp;' ?></td>
-                        <td><?= $item ? e($product->serial_no ?? '') : '&nbsp;' ?></td>
+                        <td><?= $item ? e($serials) : '&nbsp;' ?></td>
                         <td>
                             <input type="number" min="1" max="5" name="item<?= $itemIdx ?>_no" value="<?= e($entity->{"item{$itemIdx}_no"} ?? '') ?>">
                         </td>

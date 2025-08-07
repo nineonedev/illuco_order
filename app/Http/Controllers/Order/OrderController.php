@@ -42,6 +42,7 @@ class OrderController extends Controller
             'customer', 
             'user', 
             'items.product' => [
+                'serials',
                 'template' => [
                     'fileattachment',
                     'category'
@@ -339,7 +340,7 @@ class OrderController extends Controller
                     ->with(['product'])
                     ->where('is_main_item', false)
                     ->where('set_group_id', $cartitem->set_group_id)
-                    ->get();  
+                    ->get();
 
                 $cartitem->setRelation('sets', $sets);
 
@@ -467,6 +468,7 @@ class OrderController extends Controller
             'customer',
             'user',
             'items.product' => [
+                'serials',
                 'template' => [
                     'fileattachment',
                     'category'
@@ -664,6 +666,8 @@ class OrderController extends Controller
                     ? abs($pd_right - $pd_left)
                     : '-';
 
+                $product->load(['serials']);
+                
                 $rowData = [
                     $order->order_no,
                     $order->orderer_name,
@@ -676,7 +680,9 @@ class OrderController extends Controller
                     $order->user ? $order->user->name : null,
                     $headlight ? $headlight->engraving_text : ($loupe ? $loupe->engraving_text : '-'),
                     $category,
-                    $product ? $product->serial_number : '-',
+                    $product ? 
+                        ($product->serials ? implode(", \n", array_map(fn($s) => $s->serial_number, $product->serials)) : '-')
+                        : '-',
                     $model,
                     $type,
                     $headlight ? $headlight->wireless_color : '-',

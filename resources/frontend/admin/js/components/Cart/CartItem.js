@@ -158,15 +158,15 @@ export default class CartItem extends View {
             onClick: this._handleDelete.bind(this),
         }).render();
 
-        if (this._state.product.type) {
-            this._editBtn = Button.make(this._aggtHookId, {
-                className: "no-btn-primary-outline --sm",
-                ariaLabel: "불러오기",
-                label: "불러오기",
-                type: "button",
-                onClick: this._handleEdit.bind(this),
-            }).render();
-        }
+        // if (this._state.product.type) {
+        //     this._editBtn = Button.make(this._aggtHookId, {
+        //         className: "no-btn-primary-outline --sm",
+        //         ariaLabel: "불러오기",
+        //         label: "불러오기",
+        //         type: "button",
+        //         onClick: this._handleEdit.bind(this),
+        //     }).render();
+        // }
 
         // 수량 카운터
         this._counter = InputFactory.make("counter")

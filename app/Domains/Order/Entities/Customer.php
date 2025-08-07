@@ -18,6 +18,7 @@ class Customer extends Entity
         'email',
         'description',
         'age',
+        'address',
         'created_at'
     ];
 

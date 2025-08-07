@@ -17,6 +17,7 @@ $type = ucwords($type, '-');
 
 // 최종 파일명
 $pdfName = "{$type}-{$document->document_no}.pdf";
+
 ?>
 
 <div class="lh-doc" id="print-area" data-pdf-name="<?= $pdfName ?>" data-page="landscape">
@@ -86,17 +87,28 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                     if ($item) {
                         $product = $item->product;
                         $subProduct = $item->product->{$product->type};
+
+                        $serials = '-'; 
+
+                        if ($item) {
+                            $product->load(['serials']);
+
+                            if ($product->serials) {
+                                $serials = $product->serials[0]->serial_number . ' 등 ' . count($product->serials) . '개';
+                            }
+                        }
+
                         $values = [
                             $no,
                             e($product->name),
-                            e($subProduct->engraving_text ?? '-'),
+                            e($product->model ?? '-'),
                             e($item->quantity),
                             e($subProduct->engraving_text ?? '-'),
                             e($subProduct->working_distance ?? '-'),
                             e($subProduct->pd_total ?? '-'),
                             e($subProduct->vertex_distance ?? '-'),
                             e($subProduct->frame_type ?? '-'),
-                            e($product->serial_no ?? '-'),
+                            e($serials),
                             e($entity->{'item'.$itemIdx.'_no'} ?? '-'),
                         ];
                     } else {

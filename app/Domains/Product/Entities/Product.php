@@ -68,4 +68,29 @@ class Product extends Entity
         return $serial;
     }
 
+    public function makeNextSerialNumber(?string $specialCode = null, string $revision = 'A'): string
+    {
+        $specialCode = $specialCode ?: 'NNN';
+        $year = date('y');
+        $prefix = $this->code . $specialCode . $year;
+
+        $latestSerial = ProductSerial::repositoryClass()::make()
+            ->query()
+            ->where('product_id', $this->id)
+            ->where('serial_number', 'LIKE', "{$prefix}%")
+            ->orderByDesc('serial_number')
+            ->first();
+
+        $nextSeq = 1;
+
+        if ($latestSerial) {
+            $seqPart = substr($latestSerial->serial_number, strlen($prefix), 6);
+            $nextSeq = intval($seqPart) + 1;
+        }
+
+        $seqNum = str_pad((string)$nextSeq, 6, '0', STR_PAD_LEFT);
+
+        return $prefix . $seqNum . $revision;
+    }
+
 }

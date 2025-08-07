@@ -190,20 +190,39 @@ class Order extends Entity
         $items = $this->items ?? [];
 
         foreach ($items as $item) {
-            $product = $item->product; 
-            /** @var \App\Domains\Product\Entities\Product $product */
-            if (!empty($product->serial_number)) {
-                continue;
+            $product = $item->product;
+
+            // 현재 이 order_item_id에 이미 생성된 시리얼 수
+            $existingCount = \App\Domains\Product\Repositories\ProductSerialRepository::make()
+                ->query()
+                ->where('order_item_id', $item->id)
+                ->count();
+
+            $remaining = $item->quantity - $existingCount;
+
+            if ($remaining <= 0) {
+                continue; // 이미 다 생성됨
             }
 
-            $product->generateSerialNumber();
-            $product = ProductRepository::make()->save($product); 
-            
-            if (!$product) {
-                throw new RuntimeException("제품 시리얼 번호 생성에 실패하였습니다. 잠시 후 다시 시도해주세요.");
+            for ($i = 0; $i < $remaining; $i++) {
+                $serial = $product->makeNextSerialNumber();
+
+                $serialEntity = new \App\Domains\Product\Entities\ProductSerial([
+                    'product_id'     => $product->id,
+                    'serial_number'  => $serial,
+                    'status'         => 'sold',
+                    'order_item_id'  => $item->id,
+                ]);
+
+                $saved = \App\Domains\Product\Repositories\ProductSerialRepository::make()->save($serialEntity);
+
+                if (!$saved) {
+                    throw new RuntimeException("시리얼 번호 저장에 실패하였습니다.");
+                }
             }
         }
     }
+
 
     /**
      * 주문번호 생성 (예: OR-DA001-20250702-00001)
