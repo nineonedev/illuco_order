@@ -55,7 +55,6 @@ class Order extends Entity
         'delivery_date'  => 'date',
         'shipping_date'  => 'date',
         'canceled_at'  => 'datetime',
-        'created_at'  => 'datetime',
 
         'total_sales'     => 'decimal',
         'month'           => '?int',

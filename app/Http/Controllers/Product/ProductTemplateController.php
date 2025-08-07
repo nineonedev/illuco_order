@@ -145,7 +145,7 @@ class ProductTemplateController extends Controller
                     break;
             }
         } else {
-            $query->orderByDesc('created_at');
+            $query->orderByDesc('sort_order')->orderByDesc('created_at');
         }
 
         $perPage = $request->query('perpage', 15);
@@ -218,6 +218,11 @@ class ProductTemplateController extends Controller
     {
         return $this->runInTransaction(function () use ($request) {
             $productTemplate = new ProductTemplate($request->safe());
+
+            if (!$request->body('category_id')) {
+                $productTemplate->category_id = null; 
+            }
+
             $productTemplate = $this->repo()->save($productTemplate);
             $this->fileRepo()->handleUpload($productTemplate, $this->uploadConfig());
 
@@ -233,6 +238,10 @@ class ProductTemplateController extends Controller
         return $this->runInTransaction(function () use ($id, $request) {
             $template = $this->repo()->findOrFail($id);
             $template->fill($request->all());
+
+            if (!$request->body('category_id')) {
+                $template->category_id = null; 
+            }
 
             $this->repo()->save($template);
             $this->fileRepo()->handleDelete($template);

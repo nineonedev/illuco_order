@@ -436,7 +436,7 @@ use App\Domains\Product\Entities\Loupe;
 
                                     <?php if ($first): ?>
                                         <td rowspan="<?= $rowspan ?>" class="memo"><?= e($order->memo ?? '-') ?></td>
-                                        <td rowspan="<?= $rowspan ?>"><?= e($order->created_at ?? '-') ?></td>
+                                        <td rowspan="<?= $rowspan ?>"><?= date('Y-m-d h:i A', strtotime($order->created_at ?? 'now')) ?></td>
                                         <td class="no-table-action" rowspan="<?= $rowspan ?>">
                                             <div class="no-page-index-table__action">
                                                 <?php if (user()->isDealer()) : ?>

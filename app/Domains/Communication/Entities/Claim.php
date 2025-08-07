@@ -34,6 +34,7 @@ class Claim extends Entity
 
         // 상태
         'status',
+        'created_at'
     ];
 
     protected array $casts = [

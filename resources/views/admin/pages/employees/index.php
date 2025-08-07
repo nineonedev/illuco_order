@@ -186,7 +186,7 @@
                             <td><?= e($employee->name ?? '-') ?></td>
                             <td><?= e($employee->email ?? '-') ?></td>
                             <td><?= e($employee->phone ?? '-') ?></td>
-                            <td><?= date('Y-m-d', strtotime($employee->created_at ?? 'now')) ?></td>
+                            <td><?= date('Y-m-d h:i A', strtotime($employee->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
                                     <a href="<?= route('admin.employees.edit', ['id' => $employee->id]) ?>" class="no-btn-action" data-tooltip>

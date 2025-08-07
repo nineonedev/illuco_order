@@ -208,7 +208,7 @@
                             <td><?= e($dealer->dealer->code ?? '-') ?></td>
                             <td><?= e($dealer->phone ?? '-') ?></td>
                             <td><?= e($dealer->email ?? '-') ?></td>
-                            <td><?= date('Y-m-d', strtotime($dealer->created_at ?? 'now')) ?></td>
+                            <td><?= date('Y-m-d h:i A', strtotime($dealer->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
                                     <a href="<?= route('admin.dealers.edit', ['id' => $dealer->id]) ?>" class="no-btn-action" data-tooltip>

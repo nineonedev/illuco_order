@@ -18,7 +18,7 @@ class ProductTemplate extends Entity
     ];
 
     protected array $casts = [
-        'category_id' => 'int',
+        'category_id' => '?int',
         'sort_order' => 'int',
         'price' => 'decimal',
     ];

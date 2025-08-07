@@ -18,6 +18,7 @@ class Customer extends Entity
         'email',
         'description',
         'age',
+        'created_at'
     ];
 
     protected array $casts = [

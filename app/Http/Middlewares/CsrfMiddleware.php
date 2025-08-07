@@ -21,7 +21,7 @@ class CsrfMiddleware implements MiddlewareInterface
 
     public function handle(Request $request, Closure $next, ...$args): ResponseInterface
     {
-        if ($this->isReading($request) || $this->shouldSkip($request)) {
+        if ($this->isReading($request)) {
             return $next($request);
         }
 
@@ -33,11 +33,6 @@ class CsrfMiddleware implements MiddlewareInterface
         }
 
         return $next($request);
-    }
-
-    protected function shouldSkip(Request $request): bool
-    {
-        return $request->is('auth/login') && $request->method() === 'POST'; 
     }
 
     protected function isReading(Request $request): bool

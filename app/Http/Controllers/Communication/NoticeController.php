@@ -29,7 +29,7 @@ class NoticeController extends Controller
     public function index(Request $request)
     {
         $query = $this->repo()
-            ->with([FileAttachment::class])
+            ->with([FileAttachment::class, 'user'])
             ->query()
             ->when(
                 $t = $request->query('title'),

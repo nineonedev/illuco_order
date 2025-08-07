@@ -4,7 +4,7 @@ return [
     'unexpected' => '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
 
     // CSRF & Auth
-    'csrf_mismatch' => 'CSRF 토큰이 일치하지 않습니다.',
+    'csrf_mismatch' => '세션이 만료되었습니다. 페이지를 새로고침한 뒤 다시 시도해주세요.',
     'unauthenticated' => '로그인이 필요합니다.',
     'unauthorized' => '이 작업을 수행할 권한이 없습니다.',
     'forbidden' => '접근이 거부되었습니다.',

@@ -77125,3 +77125,124 @@ Stack trace:
     "meta": []
 }
 --------------------------------------------------------------------------------
+[2025-08-06 08:37:11] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-06 09:08:55] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-06 23:20:43] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-06 23:20:45] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 01:10:14] ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'dealer_id' in 'where clause'
+{
+    "code": 500,
+    "message": "SQLSTATE[42S22]: Column not found: 1054 Unknown column 'dealer_id' in 'where clause'",
+    "exception": "PDOException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 78,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php(78): PDO->prepare('select * from `...')\n#1 \/var\/www\/html\/framework\/Database\/Query\/Builder.php(343): Framework\\Database\\Connections\\MysqlConnection->select('select * from `...', Array)\n#2 \/var\/www\/html\/framework\/Database\/Query\/EntityQueryBuilder.php(32): Framework\\Database\\Query\\Builder->get()\n#3 \/var\/www\/html\/framework\/Database\/ORM\/Relations\/HasOne.php(54): Framework\\Database\\Query\\EntityQueryBuilder->get()\n#4 \/var\/www\/html\/framework\/Database\/ORM\/Loaders\/EagerLoader.php(35): Framework\\Database\\ORM\\Relations\\HasOne->getEagerResults(Array)\n#5 \/var\/www\/html\/framework\/Database\/ORM\/Loaders\/EagerLoader.php(14): Framework\\Database\\ORM\\Loaders\\EagerLoader->loadNestedRelation(Array, Array)\n#6 \/var\/www\/html\/framework\/Database\/ORM\/Repositories\/Repository.php(295): Framework\\Database\\ORM\\Loaders\\EagerLoader->load(Array, Array)\n#7 \/var\/www\/html\/framework\/Database\/Query\/EntityQueryBuilder.php(59): Framework\\Database\\ORM\\Repositories\\Repository->loadRelations(Array)\n#8 \/var\/www\/html\/framework\/Database\/Query\/Builder.php(718): Framework\\Database\\Query\\EntityQueryBuilder->get()\n#9 \/var\/www\/html\/app\/Http\/Controllers\/Order\/CustomerController.php(118): Framework\\Database\\Query\\Builder->paginate(15, 1)\n#10 [internal function]: App\\Http\\Controllers\\Order\\CustomerController->index(Object(Framework\\Http\\Request))\n#11 \/var\/www\/html\/framework\/Core\/Reflector.php(41): ReflectionMethod->invokeArgs(Object(App\\Http\\Controllers\\Order\\CustomerController), Array)\n#12 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#13 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#14 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Order\\CustomerController), 'index', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#15 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#16 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#17 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#19 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#21 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(25): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#23 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#24 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#25 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#26 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#27 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 01:10:16] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 01:11:22] ERROR: Trying to get property 'id' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'id' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php",
+    "line": 216,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php(216): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 216, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.cus...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.cus...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.cus...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 01:11:52] ERROR: Trying to get property 'user' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'user' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php",
+    "line": 216,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php(216): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 216, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.cus...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.cus...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.cus...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 01:12:32] ERROR: Trying to get property 'id' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'id' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php",
+    "line": 216,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php(216): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 216, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.cus...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.cus...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.cus...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 01:13:48] ERROR: Trying to get property 'id' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'id' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php",
+    "line": 216,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php(216): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 216, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.cus...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.cus...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.cus...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 01:14:00] ERROR: Trying to get property 'user' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'user' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php",
+    "line": 217,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/customers\/index.php(217): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 217, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.cus...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.cus...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.cus...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------

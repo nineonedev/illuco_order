@@ -133,6 +133,7 @@ class CustomerController extends Controller
 
                 $customer->cart->setRelation('cartitems_grouped', $groupedItems);
             }
+
             return $customer;
         });
 

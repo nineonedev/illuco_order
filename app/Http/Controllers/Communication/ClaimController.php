@@ -60,8 +60,11 @@ class ClaimController extends Controller
 
     public function index(Request $request)
     {
-        $query = $this->repo()->with(['dealer.user'])->query();
+        $query = $this->repo()->with(['dealer.user', 'user'])->query();
 
+        if (user()->isDealer()){
+			user()->load(['dealer']); 
+		}
 
         // ✅ 제목 검색
         $query->when(
@@ -89,10 +92,14 @@ class ClaimController extends Controller
         );
 
         // ✅ 대리점 검색
-        $query->when(
-            $dealerId = $request->query('dealer_id'),
-            fn($q) => $q->where('dealer_id', $dealerId)
-        );
+        if (user()->isDealer()) {
+           $query->where('dealer_id', user()->dealer->id);
+        } else {
+            $query->when($request->has('dealer_id'), function ($q) use ($request) {
+                return $q->where('dealer_id', $request->query('dealer_id'));
+            });
+        }
+
 
         // ✅ 주문자 검색
         $query->when(
@@ -138,13 +145,21 @@ class ClaimController extends Controller
         } else {
             $query->orderByDesc('created_at');
         }
+        
+        if (user()->isDealer()) {
+            $dealers = [];
+        } else {
+            $dealers = DealerRepository::make()
+                ->withoutTrashed()
+                ->with(['user'])
+                ->all();
 
-        $dealers = DealerRepository::make()
-            ->withoutTrashed()
-            ->with(['user'])
-            ->all();
+            $dealers = array_values(array_filter($dealers, fn($dealer) => $dealer->user));
 
-        $dealers = array_values(array_filter($dealers, fn($dealer) => $dealer->user));
+            $dealers = $request->expectsJson()
+                    ? array_map(fn($d) => $d->toArray(), $dealers)
+                    : $dealers;
+        }
 
         $claims = $query->paginate(
             $request->query('perpage', 15),
@@ -154,9 +169,7 @@ class ClaimController extends Controller
         return $this->render('admin.pages.claims.index', [
             'claims' => $claims,
             'query' => $request->query(),
-            'dealers' => $request->expectsJson()
-                ? array_map(fn($d) => $d->toArray(), $dealers)
-                : $dealers,
+            'dealers' => $dealers,
         ]);
     }
 

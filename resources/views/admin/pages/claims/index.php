@@ -290,7 +290,7 @@
                                     <?= ClaimStatus::labels()[$claim->status] ?? $claim->status ?>
                                 </span>
                             </td>
-                            <td><?= date('Y-m-d', strtotime($claim->created_at ?? 'now')) ?></td>
+                            <td><?= date('Y-m-d h:i A', strtotime($claim->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
                                     <a href="<?= route('admin.claims.show', ['id' => $claim->id]) ?>" class="no-btn-action" data-tooltip>

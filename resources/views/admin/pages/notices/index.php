@@ -231,9 +231,9 @@ use App\Domains\Communication\Enums\NoticeStatus;
                                     <?= $notice->is_pinned ? '<i class="fa-solid fa-megaphone"></i>' : '-' ?>
                                 </td>
                                 <td><?= e($notice->title) ?></td>
-                                <td><?= e($notice->author_name ?? '관리자') ?></td>
+                                <td><?= e($notice->user->name ?? '관리자') ?></td>
                                 <!-- <td><?= $notice->status === 'public' ? '공개' : '비공개' ?></td> -->
-                                <td><?= date('Y-m-d', strtotime($notice->created_at ?? 'now')) ?></td>
+                                <td><?= date('Y-m-d h:i A', strtotime($notice->created_at ?? 'now')) ?></td>
 
                                 <td class="no-table-action">
                                     <div class="no-page-index-table__action">

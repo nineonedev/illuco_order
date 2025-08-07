@@ -212,19 +212,19 @@
                             <td><?= e($customer->name) ?></td>
                             <?php if (!user()->isDealer()) :?>
                             <td>
-                                <?php if ($customer->dealer) : ?>
-                                <a href="<?= route('admin.dealers.edit', ['id' => $customer->dealer->id]) ?>" class="no-direct-link">
-                                    <?= $customer->dealer->user->name ?>
+                                <?php if ($customer->dealer_id) : ?>
+                                <a href="<?= route('admin.dealers.edit', ['id' => $customer->user->dealer->id]) ?>" class="no-direct-link">
+                                    <?= $customer->user->name ?>
                                 </a>
                                 <?php else : ?>
-                                <span> - </span>
+                                <span> <?= $customer->user->name ?> </span>
                                 <?php endif; ?>
                             </td>
                             <?php endif; ?>
                             <td><?= lang('system.countries.'.e($customer->country)) ?></td>
                             <td><?= e($customer->email) ?></td>
                             <td><?= e($customer->phone) ?></td>
-                            <td><?= date('Y-m-d', strtotime($customer->created_at ?? 'now')) ?></td>
+                            <td><?= date('Y-m-d h:i A', strtotime($customer->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
                                     <a href="<?= route('admin.customers.edit', ['id' => $customer->id]) ?>" class="no-btn-action" data-tooltip>

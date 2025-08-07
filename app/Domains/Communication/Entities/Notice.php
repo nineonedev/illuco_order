@@ -29,7 +29,6 @@ class Notice extends Entity
         'is_pinned' => 'bool',
         'visible_from' => 'datetime',
         'visible_to' => 'datetime',
-        'created_at' => 'datetime',
     ];
 
     public static function repositoryClass(): string
