@@ -48,6 +48,8 @@ class Disk
     {
         if (!is_dir($newRoot)) {
             throw new RuntimeException("Invalid disk root path: {$newRoot}");
+            // error_log("Warning: Attempted to set invalid disk root path: {$newRoot}");
+            // return $this; 
         }
 
         $this->root = $newRoot;

@@ -24,5 +24,5 @@ RUN curl -sS https://getcomposer.org/download/2.2.21/composer.phar -o /usr/local
     chmod +x /usr/local/bin/composer
 
 # 퍼미션 정리
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /home/illu0423order/www/
 # RUN chown -h www-data:www-data /var/www/html/uploads
