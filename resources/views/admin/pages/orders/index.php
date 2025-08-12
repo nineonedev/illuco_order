@@ -338,7 +338,7 @@ use App\Domains\Product\Entities\Loupe;
                                     
 
                                     $category = $product->template->category ?? null;
-                                    $model = $product->template->model; 
+                                    $model = $product ? $product->template->model : '-'; 
                                     $isHeadlight = ($product->type === 'headlight');
                                     $isLoupe = ($product->type === 'loupe');
                                     $headlight = $isHeadlight ? $product->headlight : null;

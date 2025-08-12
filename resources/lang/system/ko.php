@@ -34,6 +34,7 @@ return [
     
     // 라벨
     'email' => '이메일',
+    'code' => '코드',
 
     'order' => [
         'status' => [

@@ -78522,3 +78522,850 @@ Stack trace:
     "meta": []
 }
 --------------------------------------------------------------------------------
+[2025-08-07 09:33:21] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 09:38:08] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:05:19] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:10:46] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:30:49] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:30:54] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:30:59] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:40:11] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:55:24] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 10:55:29] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 11:46:39] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 12:44:58] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 12:51:38] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 12:54:53] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 13:01:48] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 13:04:33] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 13:05:05] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 13:05:10] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 13:05:15] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 13:19:29] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-07 13:19:34] ERROR: MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [2002] php_network_getaddresses: getaddrinfo failed: Name or service not known",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 08:59:04] ERROR: MySQL Connection failed: SQLSTATE[HY000] [1049] Unknown database 'nineonelabs'
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [1049] Unknown database 'nineonelabs'",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 08:59:05] ERROR: MySQL Connection failed: SQLSTATE[HY000] [1049] Unknown database 'nineonelabs'
+{
+    "code": 500,
+    "message": "MySQL Connection failed: SQLSTATE[HY000] [1049] Unknown database 'nineonelabs'",
+    "exception": "RuntimeException",
+    "file": "\/var\/www\/html\/framework\/Database\/Connections\/MysqlConnection.php",
+    "line": 45,
+    "trace": "#0 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(45): Framework\\Database\\Connections\\MysqlConnection->__construct(Array)\n#1 \/var\/www\/html\/framework\/Database\/DatabaseManager.php(33): Framework\\Database\\DatabaseManager->createConnection(Array)\n#2 \/var\/www\/html\/framework\/Database\/Database.php(52): Framework\\Database\\DatabaseManager->connection('mysql')\n#3 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(38): Framework\\Database\\Database->schema()\n#4 \/var\/www\/html\/app\/Providers\/AppServiceProvider.php(19): App\\Providers\\AppServiceProvider->handlePermissions()\n#5 \/var\/www\/html\/framework\/Core\/Application.php(288): App\\Providers\\AppServiceProvider->boot()\n#6 \/var\/www\/html\/framework\/Core\/Application.php(303): Framework\\Core\\Application->bootProvider(Object(App\\Providers\\AppServiceProvider))\n#7 \/var\/www\/html\/framework\/Configurations\/ApplicationConfigurator.php(138): Framework\\Core\\Application->boot()\n#8 \/var\/www\/html\/bootstrap\/app.php(31): Framework\\Configurations\\ApplicationConfigurator->create()\n#9 \/var\/www\/html\/index.php(7): require_once('\/var\/www\/html\/b...')\n#10 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:01:33] ERROR: 세션이 만료되었습니다. 페이지를 새로고침한 뒤 다시 시도해주세요.
+{
+    "code": 403,
+    "message": "세션이 만료되었습니다. 페이지를 새로고침한 뒤 다시 시도해주세요.",
+    "exception": "Framework\\Support\\Exceptions\\Http\\ForbiddenException",
+    "file": "\/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php",
+    "line": 32,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#1 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#2 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:01:37] ERROR: 세션이 만료되었습니다. 페이지를 새로고침한 뒤 다시 시도해주세요.
+{
+    "code": 403,
+    "message": "세션이 만료되었습니다. 페이지를 새로고침한 뒤 다시 시도해주세요.",
+    "exception": "Framework\\Support\\Exceptions\\Http\\ForbiddenException",
+    "file": "\/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php",
+    "line": 32,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#1 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#2 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#3 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#4 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#5 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:02:26] ERROR: 이미 존재하는 입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:02:36] ERROR: 이미 존재하는 입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:08:12] ERROR: 이미 존재하는 모델입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 모델입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:08:30] ERROR: 이미 존재하는 Model입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 Model입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:08:40] ERROR: 이미 존재하는 입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:08:43] ERROR: 이미 존재하는 입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:09:34] ERROR: 이미 존재하는 model입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 model입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:30:57] ERROR: Trying to get property 'model' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'model' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php",
+    "line": 341,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php(341): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 341, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:30:59] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:31:11] ERROR: Trying to get property 'model' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'model' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php",
+    "line": 341,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php(341): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 341, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:31:47] ERROR: Trying to get property 'model' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'model' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php",
+    "line": 341,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php(341): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 341, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:32:34] ERROR: Trying to get property 'model' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'model' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php",
+    "line": 343,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php(343): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 343, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:32:53] ERROR: Trying to get property 'model' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'model' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php",
+    "line": 341,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php(341): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 341, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:38:01] ERROR: Trying to get property 'model' of non-object
+{
+    "code": 500,
+    "message": "Trying to get property 'model' of non-object",
+    "exception": "ErrorException",
+    "file": "\/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php",
+    "line": 341,
+    "trace": "#0 \/var\/www\/html\/resources\/views\/admin\/pages\/orders\/index.php(341): Framework\\Boostrap\\HandleExceptions->Framework\\Boostrap\\{closure}(8, 'Trying to get p...', '\/var\/www\/html\/r...', 341, Array)\n#1 \/var\/www\/html\/framework\/View\/ViewEngine.php(86): include('\/var\/www\/html\/r...')\n#2 \/var\/www\/html\/framework\/View\/ViewEngine.php(56): Framework\\View\\ViewEngine->include('admin.pages.ord...', Array)\n#3 \/var\/www\/html\/framework\/Support\/Facades\/Facade.php(94): Framework\\View\\ViewEngine->render('admin.pages.ord...', Array)\n#4 \/var\/www\/html\/framework\/Support\/Helpers\/view.php(16): Framework\\Support\\Facades\\Facade::__callStatic('render', Array)\n#5 \/var\/www\/html\/framework\/Http\/Responses\/ViewResponse.php(36): render('admin.pages.ord...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Responses\\ViewResponse->send()\n#7 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#8 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:40:12] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:42:07] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 09:51:30] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:07:14] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:42:57] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:45:41] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:46:46] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:46:56] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:46:58] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:47:27] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:47:28] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:47:59] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:48:05] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:50:32] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:52:48] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:52:54] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:54:13] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:55:10] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:55:59] ERROR: 이미 존재하는 model입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 model입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:56:07] ERROR: 이미 존재하는 model입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 model입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:57:34] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:57:48] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:58:08] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:58:09] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:59:06] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:59:17] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:59:36] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 10:59:42] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:01:57] ERROR: 이미 존재하는 model입니다.
+{
+    "code": 422,
+    "message": "이미 존재하는 model입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'update', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:03:03] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:03:28] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:05:53] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:05:54] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:05:56] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:06:15] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:08:03] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:08:13] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-08-12 11:08:35] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------

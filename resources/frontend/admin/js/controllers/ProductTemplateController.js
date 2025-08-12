@@ -89,7 +89,7 @@ export default class ProductTemplateController extends Controller {
             this.loader.show();
 
             try {
-                const result = await new Ajax(false).delete('/admin/orders/bulk-delete', new URLSearchParams({
+                const result = await new Ajax(false).delete('/admin/product-templates/bulk-delete', new URLSearchParams({
                     ids: ids
                 }));
 

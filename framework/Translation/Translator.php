@@ -31,13 +31,18 @@ class Translator implements TranslatorInterface
             $value = Arr::get($fallbackLines, $key);
         }
 
+        // 값이 없으면 key 자체를 반환
+        if ($value === null) {
+            return $key;
+        }
+
         if (is_string($value)) {
             foreach ($replace as $i => $v) {
-                $value = str_replace('{' . $i . '}', $v, $value);
+                $value = str_replace('{' . $i . '}', (string)($v ?? ''), $value);
             }
 
             foreach ($replace as $k => $v) {
-                $value = str_replace(':' . $k, $v, $value);
+                $value = str_replace(':' . $k, (string)($v ?? ''), $value);
             }
         }
 
