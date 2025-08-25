@@ -6,7 +6,7 @@ services:
             context: .
         container_name: web
         volumes:
-            - ./:/home/illu0423order/www
+            - ./:/var/www/html
         ports:
             - "8080:80"
         depends_on:

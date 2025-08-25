@@ -78,12 +78,17 @@
         gap: 0.8rem;
 
         &-profile {
-            background-color: var(--clr-primary-light);
-            border-radius: 50%;
-            font-size: 2rem;
+            border:1px solid var(--clr-primary-light);
+            border-radius: 0.6rem;
+            font-size: 1.4rem;
+            padding: 0.8rem 1.6rem;
 
-            @include mq(lg) {
-                font-size: 1.6rem;
+            &:hover {
+                background: var(--clr-primary-light);
+            }
+
+            @include mq(md){
+                font-size: 1.2rem;
             }
 
             &-dropdown {

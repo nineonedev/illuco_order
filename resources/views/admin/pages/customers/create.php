@@ -6,14 +6,14 @@ use App\Domains\User\Entities\Dealer;
 <?php extend('layouts.admin'); ?>
 <?php section('controller', 'customer') ?>
 <?php section('action', 'create') ?>
-<?php section('title', '주문자 생성') ?>
+<?php section('title', '고객 생성') ?>
 
 <?php section('content') ?>
 <div class="no-form-container">
 
     <div class="no-page-row">
         <div class="no-page-head">
-            <h1 class="no-heading-sm">주문자 생성</h1>
+            <h1 class="no-heading-sm">고객 생성</h1>
         </div>
         <!-- Head -->
         
@@ -26,7 +26,7 @@ use App\Domains\User\Entities\Dealer;
                     data-view-props='<?= e(json_encode([
                         "name" => "country",
                         "label" => "국가 선택",
-                        "value" => '',
+                        "value" => user()->isDealer() ? user()->dealer->country : 'KR',
                         "options" => __('system.countries'),
                     ])) ?>'>
                 </div>

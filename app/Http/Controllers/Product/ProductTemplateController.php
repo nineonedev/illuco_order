@@ -120,7 +120,7 @@ class ProductTemplateController extends Controller
                     $query->orderByDesc('created_at');
                     break;
                 case 'oldest':
-                    $query->orderBy('created_at');
+                    $query->orderByAsc('created_at');
                     break;
                 case 'name_asc':
                     $query->orderBy('name');

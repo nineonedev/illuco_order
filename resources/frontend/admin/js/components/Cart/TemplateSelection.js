@@ -32,6 +32,9 @@ export default class TemplateSelection extends View {
                         <button type="button" class="no-btn-success --xs" id="btn-reset">
                             초기화
                         </button>
+                        <button type="submit" class="no-btn-primary --xs" id="btn-submit">
+                            검색
+                        </button>
                     </div>
 
                     <div class="no-page-search-form-row">
@@ -94,7 +97,6 @@ export default class TemplateSelection extends View {
                 { label: "최신순", value: "latest" },
                 { label: "오래된순", value: "oldest" }
             ],
-            onChange: this._handleSearch.bind(this),
         }).render();
 
         const options = this.state.categories.length > 1 ? [{ label: '전체', value: '' }] : [];
@@ -110,7 +112,6 @@ export default class TemplateSelection extends View {
                     value: c.id
                 }))
             ],
-            onChange: this._handleSearch.bind(this),
         }).render();
     }
 
@@ -186,9 +187,16 @@ export default class TemplateSelection extends View {
             this.on(btn, 'click', this._handleClick.bind(this));
         });
 
-        const searchInput = this.qs('#query');
-        if (searchInput) {
-            this.on(searchInput, 'input', Helper.debounce(this._handleSearch.bind(this), 500));
+        // const searchInput = this.qs('#query');
+        // if (searchInput) {
+        //     this.on(searchInput, 'input', Helper.debounce(this._handleSearch.bind(this), 500));
+        // }
+
+        if (this.form) {
+            this.on(this.form, 'submit', (e) => {
+                e.preventDefault(); 
+                this._handleSearch(this.form, e);
+            });
         }
 
         const moveButtons = this.qsAll('.no-btn-move');
@@ -204,6 +212,11 @@ export default class TemplateSelection extends View {
         const resetButton = this.qs('#btn-reset');
         if (resetButton) {
             this.on(resetButton, 'click', this._handleReset.bind(this));
+        }
+        
+        const submitBtn = this.qs('#btn-submit');
+        if (submitBtn) {
+            this.on(submitBtn, 'click', this._handleSearch.bind(this));
         }
     }
 

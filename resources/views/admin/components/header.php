@@ -50,11 +50,10 @@
                 </a>
             </div> -->
             <div class="no-header-option-item">
-                <a href="<?= route('admin.me.edit') ?>" type="button" class="no-btn-icon --2xl">
-                    <?php
-                        $initial = strtoupper(mb_substr(user()->name, 0, 1, 'UTF-8'));
-                    ?>
-                    <div class="no-header-option-profile"><?= e($initial) ?></div>
+                <a href="<?= route('admin.me.edit') ?>" type="button" class="">
+                    <div class="no-header-option-profile">
+                        <?= user()->name ?>
+                    </div>
                 </a>
                 <!-- <button type="button" class="no-btn-icon --2xl">
                     <div class="no-header-option-profile">나</div>
