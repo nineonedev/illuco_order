@@ -68,6 +68,18 @@ class Product extends Entity
         return $serial;
     }
 
+    public function makeNextSerialNumberWithCursor(int &$cursor, ?string $specialCode = null, string $revision = 'A'): string
+    {
+        $specialCode = $specialCode ?: 'NNN';
+        $year   = date('y');
+        $prefix = $this->code . $specialCode . $year;
+
+        $cursor++;
+        $seqNum = str_pad((string)$cursor, 6, '0', STR_PAD_LEFT);
+        return $prefix . $seqNum . $revision;
+    }
+
+
     public function makeNextSerialNumber(?string $specialCode = null, string $revision = 'A'): string
     {
         $specialCode = $specialCode ?: 'NNN';

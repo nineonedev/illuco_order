@@ -75,13 +75,6 @@ use Composer\Autoload\ClassLoader;?>
 
                 <dl class="no-claim-show__list">
                     <div class="no-claim-show__item">
-                        <dt>주문번호 번호</dt>
-                        <dd><?= e($claim->order_no) ?></dd>
-                    </div>
-                </dl>
-
-                <dl class="no-claim-show__list">
-                    <div class="no-claim-show__item">
                         <dt>시리얼 번호</dt>
                         <dd><?= e($claim->product_serial_number) ?></dd>
                     </div>

@@ -12,9 +12,7 @@ use App\Domains\Communication\Enums\NoticeStatus;
 
 
 <?php section('content') ?>
-
 <div class="no-form-container">
-
     <div class="no-page-row">
         <div class="no-page-head">
             <h1 class="no-heading-sm">공지사항 생성</h1>

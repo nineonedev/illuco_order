@@ -198,26 +198,18 @@ export default class ClaimController extends Controller {
     async _store(e) {
         e.preventDefault();
 
-        // if (Helper.isEmptyObject(this.productZone.state.template)) {
-        //     alert('문의할 제품을 선택해주세요.');
-        //     return; 
-        // }
-
-        // if (Helper.isEmptyObject(this.customerZone.state.template)) {
-        //     alert('클레임 대상을 선택해주세요.');
-        //     return; 
-        // }
+        if (Helper.isEmptyObject(this.productZone.state.template) 
+            || Helper.isEmptyObject(this.customerZone.state.template)
+        ) {
+            alert('문의 대상 또는 클레임 대상 중 하나는 반드시 선택해주세요.');
+            return; 
+        }
 
         const t = e.target;
         const fd = new FormData(t);
         const action = t.action;
         const submitter = e.submitter;
-        
-        if (!fd.get('product_serial_number')) {
-            alert('문의내용을 입력해주세요.');
-            return; 
-        }
-
+    
         if (!fd.get('title')) {
             alert('제목을 입력해주세요.');
             return; 

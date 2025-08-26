@@ -65,7 +65,7 @@
                     문의 접수
                 </h2>
 
-                <div class="no-form-control --md">
+                <!-- <div class="no-form-control --md">
                     <label for="order_no" class="no-form-control-inner">
                         <input type="text" name="order_no" id="order_no" class="no-form-control-input" placeholder="" >
                         <fieldset class="no-form-control-label">
@@ -74,11 +74,11 @@
                     </label>
                     <span class="no-form-control-helper-text">주문관련 문의일 경우 주문번호를 입력해주세요.</span>
                     <span class="no-form-control-space"></span>
-                </div>
+                </div> -->
 
                 <div class="no-form-control --md">
                     <label for="product_serial_number" class="no-form-control-inner">
-                        <input type="text" name="product_serial_number" id="product_serial_number" class="no-form-control-input" required placeholder="">
+                        <input type="text" name="product_serial_number" id="product_serial_number" class="no-form-control-input"  placeholder="">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">시리얼 번호</legend>
                         </fieldset>

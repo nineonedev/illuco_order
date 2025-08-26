@@ -5,7 +5,9 @@ namespace App\Domains\Order\Entities;
 use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Order\Repositories\OrderLogRepository;
 use App\Domains\Order\Repositories\OrderRepository;
+use App\Domains\Product\Entities\ProductSerial;
 use App\Domains\Product\Repositories\ProductRepository;
+use App\Domains\Product\Repositories\ProductSerialRepository;
 use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\UserRepository;
 use App\Supports\Mailer;
@@ -188,40 +190,103 @@ class Order extends Entity
         }
 
         $items = $this->items ?? [];
+        if (!$items) return;
 
+        // prefix별 로컬 커서 캐시: [prefix => currentMaxSeq]
+        $seqCursor = [];
+
+        /** @var \App\Domains\Order\Entities\OrderItem $item */
         foreach ($items as $item) {
             $product = $item->product;
+            if (!$product) {
+                continue;
+            }
 
-            // 현재 이 order_item_id에 이미 생성된 시리얼 수
-            $existingCount = \App\Domains\Product\Repositories\ProductSerialRepository::make()
+            // 이미 이 주문아이템에 대해 생성된 시리얼 수
+            $alreadyCount = (int) ProductSerialRepository::make()
                 ->query()
                 ->where('order_item_id', $item->id)
                 ->count();
 
-            $remaining = $item->quantity - $existingCount;
-
-            if ($remaining <= 0) {
-                continue; // 이미 다 생성됨
+            $need = max(0, (int)$item->quantity - $alreadyCount);
+            if ($need <= 0) {
+                continue;
             }
 
-            for ($i = 0; $i < $remaining; $i++) {
-                $serial = $product->makeNextSerialNumber();
+            // prefix 계산 (제품코드 + 특수코드 + 연도 2자리)
+            $special = $item->special_code ?? null; // 없으면 NNN
+            $special = $special ?: 'NNN';
+            $year    = date('y');
+            $prefix  = $product->code . $special . $year;
+            $rev     = 'A'; // 필요시 규칙에 따라 변경
 
-                $serialEntity = new \App\Domains\Product\Entities\ProductSerial([
-                    'product_id'     => $product->id,
-                    'serial_number'  => $serial,
-                    'status'         => 'sold',
-                    'order_item_id'  => $item->id,
-                ]);
+            // prefix별 현재 최대 시퀀스를 한 번만 조회
+            if (!array_key_exists($prefix, $seqCursor)) {
+                $latest = ProductSerial::repositoryClass()::make()
+                    ->query()
+                    ->where('product_id', $product->id)
+                    ->where('serial_number', 'LIKE', "{$prefix}%")
+                    ->orderByDesc('serial_number')
+                    ->first();
 
-                $saved = \App\Domains\Product\Repositories\ProductSerialRepository::make()->save($serialEntity);
-
-                if (!$saved) {
-                    throw new RuntimeException("시리얼 번호 저장에 실패하였습니다.");
+                if ($latest) {
+                    $seqPart = substr($latest->serial_number, strlen($prefix), 6);
+                    $seqCursor[$prefix] = (int) $seqPart; // 현재 최대값
+                } else {
+                    $seqCursor[$prefix] = 0; // 아직 없음
                 }
             }
-        }
+
+            // 필요 수만큼 생성
+            for ($i = 0; $i < $need; $i++) {
+                $attempt     = 0;
+                $maxAttempts = 10;
+
+                while (true) {
+                    $attempt++;
+
+                    // 로컬 커서를 1 올려서 새 번호 생성
+                    $seqCursor[$prefix] = $seqCursor[$prefix] + 1;
+                    $seqNum             = str_pad((string)$seqCursor[$prefix], 6, '0', STR_PAD_LEFT);
+                    $serialNumber       = $prefix . $seqNum . $rev;
+
+                    try {
+                        $entity = ProductSerial::make([
+                            'product_id'    => $product->id,
+                            'order_item_id' => $item->id,
+                            'serial_number' => $serialNumber,
+                            'status'        => 'sold', // 필요 시 'created' 등 단계 분리
+                        ]);
+
+                        $saved = ProductSerialRepository::make()->save($entity);
+                        if (!$saved) {
+                            throw new RuntimeException('시리얼번호 저장 실패');
+                        }
+
+                        // 성공
+                        break;
+
+                    } catch (\Throwable $e) {
+                        // 중복이면 커서만 올리고 재시도 (DB 재조회 X)
+                        $msg = $e->getMessage();
+                        $code = ($e instanceof \PDOException) ? $e->getCode() : null;
+                        $isDup = ($code === '23000') && (
+                            strpos($msg, '1062') !== false || stripos($msg, 'Duplicate entry') !== false
+                        );
+
+                        if ($isDup && $attempt < $maxAttempts) {
+                            // 바로 다음 번호로 재시도
+                            continue;
+                        }
+
+                        throw $e;
+                    }
+                } // while
+            } // for need
+        } // foreach items
     }
+
+
 
 
     /**
