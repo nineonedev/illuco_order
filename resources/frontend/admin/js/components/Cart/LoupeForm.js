@@ -7,7 +7,7 @@ import RadioInput from "../Inputs/RadioInput";
 import TextInput from "../Inputs/TextInput";
 
 export default class LoupeForm extends View {
-    static PRECISON_LENS = 'PR-LENS-30';
+    static PRECISON_LENS = "PR-LENS-30";
 
     _boot() {
         this._attrHookId = this._generateHookId();
@@ -21,23 +21,23 @@ export default class LoupeForm extends View {
             sets: [],
             template: {},
             product: {
-                type: 'ready-made',
-                frame_type: '',
-                working_distance: '',
-                engraving_text: '',
-                add_option: '',
-                vertex_distance: '',
-                pd_right: '',
-                pd_left: '',
-                pd_total: '',
-                od_sph: '0.00',
-                os_sph: '0.00',
-                od_cyl: '0.00',
-                os_cyl: '0.00',
-                od_axis: '0',
-                os_axis: '0',
-                od_add: '0.00',
-                os_add: '0.00',
+                type: "ready-made",
+                frame_type: "",
+                working_distance: "",
+                engraving_text: "",
+                add_option: "",
+                vertex_distance: "",
+                pd_right: "",
+                pd_left: "",
+                pd_total: "",
+                od_sph: "0.00",
+                os_sph: "0.00",
+                od_cyl: "0.00",
+                os_cyl: "0.00",
+                od_axis: "0",
+                os_axis: "0",
+                od_add: "0.00",
+                os_add: "0.00",
             },
             onChangeQuantity: (count) => {},
             onUpdateSets: (sets) => {},
@@ -64,37 +64,43 @@ export default class LoupeForm extends View {
         super._render();
 
         // 1) 제품 템플릿 기반으로 타입 자동 결정 (라디오 없음)
-        const autoType = this._state.template?.type || 'custom-made';
+        const autoType = this._state.template?.type || "custom-made";
         if (this._state.product.type !== autoType) {
-            this.setState({ product: { ...this._state.product, type: autoType } }, false);
+            this.setState(
+                { product: { ...this._state.product, type: autoType } },
+                false
+            );
         }
 
         const { model } = this._state.template;
 
-        const {
-            engraving_text,
-            working_distance,
-            frame_type,
-        } = this._state.product;
+        const { engraving_text, working_distance, frame_type } =
+            this._state.product;
 
         // 2) 각인
-        const hasEngraving = !(engraving_text === null || engraving_text.trim() === '');
+        const hasEngraving = !(
+            engraving_text === null || engraving_text.trim() === ""
+        );
         CheckboxInput.make(this._attrHookId, {
             label: "각인 여부",
             name: "loupe[use_engraving]",
             checked: hasEngraving,
             onChange: this._handleEngraving.bind(this),
-            helperText: '각인을 선택하시면 문구 입력이 가능하며, 발주 수량은 1개로 제한됩니다.',
+            helperText:
+                "각인을 선택하시면 문구 입력이 가능하며, 발주 수량은 1개로 제한됩니다.",
         }).render();
 
         this.engravingInput = TextInput.make(this._attrHookId, {
-            label: '각인 입력',
-            name: 'loupe[engraving_text]',
+            label: "각인 입력",
+            name: "loupe[engraving_text]",
             value: engraving_text,
             required: hasEngraving,
             display: hasEngraving,
             maxlength: 14,
-            onChange: Helper.debounce(this._handleEngravingText.bind(this), 300),
+            onChange: Helper.debounce(
+                this._handleEngravingText.bind(this),
+                300
+            ),
         }).render();
 
         if (hasEngraving) {
@@ -115,7 +121,10 @@ export default class LoupeForm extends View {
                 name: "loupe[frame_type]",
                 value: frame_type,
                 options: frame_types,
-                onChange: Helper.debounce(this._handleFrameTypeChange.bind(this), 300),
+                onChange: Helper.debounce(
+                    this._handleFrameTypeChange.bind(this),
+                    300
+                ),
             }).render();
         }
 
@@ -127,7 +136,10 @@ export default class LoupeForm extends View {
                 min: wd.min,
                 max: wd.max,
                 step: 0.1,
-                onChange: Helper.debounce(this._handleWorkingDistanceChange.bind(this), 300),
+                onChange: Helper.debounce(
+                    this._handleWorkingDistanceChange.bind(this),
+                    300
+                ),
             }).render();
         }
 
@@ -142,18 +154,16 @@ export default class LoupeForm extends View {
         }
     }
 
-
     // async _render() {
     //     super._render();
     //     const { type, model } = this._state.template;
-        
+
     //     const {
     //         type: loupeType,
     //         engraving_text,
-    //         working_distance, 
+    //         working_distance,
     //         frame_type,
-    //     } = this._state.product; 
-        
+    //     } = this._state.product;
 
     //     RadioInput.make(this._attrHookId, {
     //         label: "형태",
@@ -167,11 +177,11 @@ export default class LoupeForm extends View {
     //     }).render();
 
     //     const hasEngraving = !(engraving_text === null || engraving_text.trim() === '');
-        
+
     //     CheckboxInput.make(this._attrHookId, {
     //         label: "각인 여부",
     //         name: "loupe[use_engraving]",
-    //         checked: hasEngraving, 
+    //         checked: hasEngraving,
     //         onChange: this._handleEngraving.bind(this),
     //         helperText: '각인을 선택하시면 문구 입력이 가능하며, 발주 수량은 1개로 제한됩니다.',
     //     }).render();
@@ -181,8 +191,8 @@ export default class LoupeForm extends View {
     //         name: 'loupe[engraving_text]',
     //         value: engraving_text,
     //         required: hasEngraving,
-    //         display: hasEngraving, 
-    //         maxlength: 14, 
+    //         display: hasEngraving,
+    //         maxlength: 14,
     //         onChange: Helper.debounce(this._handleEngravingText.bind(this), 300),
     //     }).render();
 
@@ -190,15 +200,13 @@ export default class LoupeForm extends View {
     //         this._props.onChangeQuantity(1, true);
     //     }
 
-        
-    //     const attributes = this._state.attributes; 
+    //     const attributes = this._state.attributes;
     //     if (!attributes) return;
-        
+
     //     this._logger.success(model, attributes);
 
     //     const { frame_type: frame_types, working_distance:wd } = attributes;
 
-        
     //     if (frame_types) {
     //         RadioInput.make(this._attrHookId, {
     //             label: "테정보",
@@ -227,7 +235,6 @@ export default class LoupeForm extends View {
     //         }).render();
     //     }
 
-
     //     if (loupeType === "custom-made") {
     //         this._renderAttributes();
     //         this._bindCustomValidation();
@@ -250,7 +257,7 @@ export default class LoupeForm extends View {
     // --------------------------
     // Individual Handlers
     // --------------------------
-    _handleEngravingText({value}) {
+    _handleEngravingText({ value }) {
         if (value.length > 14) {
             this._setFieldError(
                 "loupe[engraving_text]",
@@ -260,16 +267,19 @@ export default class LoupeForm extends View {
             this._clearFieldError("loupe[engraving_text]");
         }
 
-        this.setState({
-            product: {
-                ...this._state.product,
-                engraving_text: value
-            }
-        }, false);
+        this.setState(
+            {
+                product: {
+                    ...this._state.product,
+                    engraving_text: value,
+                },
+            },
+            false
+        );
     }
 
-    _handleEngraving({value}) {
-        this.engravingInput.setState({display: value, required: value});
+    _handleEngraving({ value }) {
+        this.engravingInput.setState({ display: value, required: value });
 
         if (value) {
             this._props.onChangeQuantity(1, true);
@@ -279,9 +289,9 @@ export default class LoupeForm extends View {
     }
 
     _handleTypeChange() {
-        const autoType = this._state.template?.type || 'custom-made';
-        this.setState({ product: {...this._state.product, type: autoType} });
-        if (autoType !== 'custom-made') {
+        const autoType = this._state.template?.type || "custom-made";
+        this.setState({ product: { ...this._state.product, type: autoType } });
+        if (autoType !== "custom-made") {
             this._state.sets = [];
         }
         this._props.onUpdateSets(this._state.sets);
@@ -289,8 +299,9 @@ export default class LoupeForm extends View {
     }
 
     _handleFrameTypeChange({ value }) {
-        const allowed = this._state.attributes?.frame_type?.map((x) => x.value) || [];
-            
+        const allowed =
+            this._state.attributes?.frame_type?.map((x) => x.value) || [];
+
         if (!value) {
             this._setFieldError(
                 "loupe[frame_type]",
@@ -329,8 +340,6 @@ export default class LoupeForm extends View {
         const val = el?.value ?? "";
         const allowed = ["ignore", "include", "zero_diopter"];
 
-        
-
         if (!val) {
             this._setFieldError(
                 "loupe[add_option]",
@@ -355,8 +364,7 @@ export default class LoupeForm extends View {
             `[name="loupe[use_engraving]"]`
         );
 
-        const isEngravingChecked =
-            useEngravingEl?.checked ?? false;
+        const isEngravingChecked = useEngravingEl?.checked ?? false;
 
         if (isEngravingChecked) {
             const engravingInput = document.querySelector(
@@ -364,14 +372,14 @@ export default class LoupeForm extends View {
             );
             if (engravingInput) {
                 this._handleEngravingText({
-                    value: engravingInput.value
+                    value: engravingInput.value,
                 });
             }
         } else {
             // 각인 사용 안 하면 에러 제거
             this._clearFieldError("loupe[engraving_text]");
         }
-        
+
         this._handleFrameTypeChange({
             value:
                 document.querySelector(`[name="loupe[frame_type]"]:checked`)
@@ -440,24 +448,26 @@ export default class LoupeForm extends View {
         const map = {
             "loupe[vertex_distance]": { min: 10, max: 25, exclusive: true }, // 참고용
             "loupe[pd_right]": { min: 27, max: 40 },
-            "loupe[pd_left]":  { min: 27, max: 40 },
-            "loupe[od_sph]":   { min: -20, max: 20, step: 0.25 },
-            "loupe[os_sph]":   { min: -20, max: 20, step: 0.25 },
-            "loupe[od_cyl]":   { min: -10, max: 0,  step: 0.25 }, // 상한 0으로 축소(뷰 속성도 max=0 권장)
-            "loupe[os_cyl]":   { min: -10, max: 0,  step: 0.25 },
-            "loupe[od_axis]":  { min: 0, max: 180 },
-            "loupe[os_axis]":  { min: 0, max: 180 },
-            "loupe[od_add]":   { min: 0, max: 4,   step: 0.25 },
-            "loupe[os_add]":   { min: 0, max: 4,   step: 0.25 },
+            "loupe[pd_left]": { min: 27, max: 40 },
+            "loupe[od_sph]": { min: -20, max: 20, step: 0.25 },
+            "loupe[os_sph]": { min: -20, max: 20, step: 0.25 },
+            "loupe[od_cyl]": { min: -10, max: 0, step: 0.25 }, // 상한 0으로 축소(뷰 속성도 max=0 권장)
+            "loupe[os_cyl]": { min: -10, max: 0, step: 0.25 },
+            "loupe[od_axis]": { min: 0, max: 180 },
+            "loupe[os_axis]": { min: 0, max: 180 },
+            "loupe[od_add]": { min: 0, max: 4, step: 0.25 },
+            "loupe[os_add]": { min: 0, max: 4, step: 0.25 },
             "loupe[frame_type]": {
                 // allowedValues: this._state.attributes.frame_type.map((x) => x.value) || [],
-                allowedValues: (this._state.attributes?.frame_type || []).map(x => x.value),
+                allowedValues: (this._state.attributes?.frame_type || []).map(
+                    (x) => x.value
+                ),
             },
-            "loupe[working_distance]": this._state.attributes.working_distance || null,
+            "loupe[working_distance]":
+                this._state.attributes.working_distance || null,
         };
         return name ? map[name] : map;
     }
-
 
     _setFieldError(name, message) {
         this._state.errors[name] = message;
@@ -566,7 +576,7 @@ export default class LoupeForm extends View {
         const addOptionEls = document.querySelectorAll(
             '[name="loupe[add_option]"]'
         );
-        
+
         addOptionEls.forEach((el) => {
             el.addEventListener("change", () => {
                 this._handleAddOptionChange();
@@ -576,14 +586,13 @@ export default class LoupeForm extends View {
         const pdRightEl = document.querySelector('[name="loupe[pd_right]"]');
         const pdLeftEl = document.querySelector('[name="loupe[pd_left]"]');
         const pdTotalEl = document.querySelector('[name="loupe[pd_total]"]');
-        
 
         if (pdRightEl && pdLeftEl && pdTotalEl) {
             const checkPdDiff = () => {
                 const right = parseFloat(pdRightEl.value || "0");
                 const left = parseFloat(pdLeftEl.value || "0");
                 const total = right + left;
-                
+
                 pdTotalEl.value = total ? total.toFixed(1) : "";
 
                 if (Math.abs(right - left) > 2) {
@@ -627,10 +636,10 @@ export default class LoupeForm extends View {
 
         const errors = [];
 
-        const violated = (odSum < -10 || odSum > 6) || (osSum < -10 || osSum > 6);
+        const violated = odSum < -10 || odSum > 6 || osSum < -10 || osSum > 6;
         if (violated && !this._warnedSumOnce) {
             this._warnedSumOnce = true;
-            alert('SPH + CYL 합이 -10 ~ +6 범위를 벗어나 제작이 불가합니다.');
+            alert("SPH + CYL 합이 -10 ~ +6 범위를 벗어나 제작이 불가합니다.");
         }
 
         if (odSum < -10 || odSum > 6) {
@@ -678,40 +687,70 @@ export default class LoupeForm extends View {
 
         const num = parseFloat(value);
         if (value === "" || isNaN(num)) {
-            return this._setFieldError(name, `${document.querySelector(`[name="${name}"]`)?.dataset.label || name} 값은 필수입니다.`);
+            return this._setFieldError(
+                name,
+                `${
+                    document.querySelector(`[name="${name}"]`)?.dataset.label ||
+                    name
+                } 값은 필수입니다.`
+            );
         }
 
         // ---- 배타 범위(VD) 처리 ----
-        if (name === 'loupe[vertex_distance]') {
+        if (name === "loupe[vertex_distance]") {
             if (!(num > 10 && num < 25)) {
-                return this._setFieldError(name, `VD 값은 10과 25를 제외한 (10 ~ 25) 사이여야 합니다.`);
+                return this._setFieldError(
+                    name,
+                    `VD 값은 10과 25를 제외한 (10 ~ 25) 사이여야 합니다.`
+                );
             }
         } else {
             // 기존 범위 체크(포함)
             if (spec.min !== undefined && num < spec.min) {
-                return this._setFieldError(name, `${document.querySelector(`[name="${name}"]`)?.dataset.label || name} 값은 ${spec.min} 이상이어야 합니다.`);
+                return this._setFieldError(
+                    name,
+                    `${
+                        document.querySelector(`[name="${name}"]`)?.dataset
+                            .label || name
+                    } 값은 ${spec.min} 이상이어야 합니다.`
+                );
             }
             if (spec.max !== undefined && num > spec.max) {
-                return this._setFieldError(name, `${document.querySelector(`[name="${name}"]`)?.dataset.label || name} 값은 ${spec.max} 이하여야 합니다.`);
+                return this._setFieldError(
+                    name,
+                    `${
+                        document.querySelector(`[name="${name}"]`)?.dataset
+                            .label || name
+                    } 값은 ${spec.max} 이하여야 합니다.`
+                );
             }
         }
 
         // ---- CYL 음수 전용 ----
-        if (name === 'loupe[od_cyl]' || name === 'loupe[os_cyl]') {
+        if (name === "loupe[od_cyl]" || name === "loupe[os_cyl]") {
             if (num > 0) {
-                return this._setFieldError(name, `CYL 값은 음수( - )만 입력 가능합니다.`);
+                return this._setFieldError(
+                    name,
+                    `CYL 값은 음수( - )만 입력 가능합니다.`
+                );
             }
         }
 
         // ---- 0.25 배수 강제(SPH/CYL/ADD) ----
         const stepNames = new Set([
-            'loupe[od_sph]','loupe[os_sph]',
-            'loupe[od_cyl]','loupe[os_cyl]',
-            'loupe[od_add]','loupe[os_add]'
+            "loupe[od_sph]",
+            "loupe[os_sph]",
+            "loupe[od_cyl]",
+            "loupe[os_cyl]",
+            "loupe[od_add]",
+            "loupe[os_add]",
         ]);
         if (stepNames.has(name)) {
             if (!this._isStepOf(num, 0.25)) {
-                return this._setFieldError(name, `0.25 단위로만 입력 가능합니다.`);
+                return this._setFieldError(
+                    name,
+                    `0.25 단위로만 입력 가능합니다.`
+                );
             }
         }
 
@@ -719,7 +758,9 @@ export default class LoupeForm extends View {
     }
 
     _renderAdditionalProducts() {
-        const lens = CartController.findSetGroupItemByModel(LoupeForm.PRECISON_LENS);
+        const lens = CartController.findSetGroupItemByModel(
+            LoupeForm.PRECISON_LENS
+        );
         this._state.sets = [];
 
         if (!lens || this._lensCount === 0) {
@@ -818,8 +859,7 @@ export default class LoupeForm extends View {
             os_add,
             vertex_distance,
             add_option,
-        } = this._state.product; 
-        
+        } = this._state.product;
 
         return `
             <div>
@@ -907,7 +947,7 @@ export default class LoupeForm extends View {
                                 value="${vertex_distance}"
                             >
                             <fieldset class="no-form-control-label">
-                                <legend class="no-form-control-text">허용: 10과 25를 제외한 값</legend>
+                                <legend class="no-form-control-text">VD (단위: mm)</legend>
                             </fieldset>
                         </label>
                         <!-- <span class="no-form-control-helper-text">
@@ -1087,7 +1127,7 @@ export default class LoupeForm extends View {
                                     id="add_option_1" 
                                     value="ignore" 
                                     data-label="모렌즈 ADD 값 선택"
-                                    ${add_option === 'ignore' ? 'checked' : ''}
+                                    ${add_option === "ignore" ? "checked" : ""}
                                 />
                                 <div class="no-form-radio-ripple">
                                     <div class="no-form-radio-box">
@@ -1111,7 +1151,7 @@ export default class LoupeForm extends View {
                                     id="add_option_2" 
                                     value="include" 
                                     data-label="모렌즈 ADD 값 선택"
-                                    ${add_option === 'include' ? 'checked' : ''}
+                                    ${add_option === "include" ? "checked" : ""}
                                 />
                                 <div class="no-form-radio-ripple">
                                     <div class="no-form-radio-box">
@@ -1135,7 +1175,11 @@ export default class LoupeForm extends View {
                                     id="add_option_3" 
                                     value="zero_diopter" 
                                     data-label="모렌즈 ADD 값 선택"
-                                    ${add_option === 'zero_diopter' ? 'checked' : ''}
+                                    ${
+                                        add_option === "zero_diopter"
+                                            ? "checked"
+                                            : ""
+                                    }
                                 />
                                 <div class="no-form-radio-ripple">
                                     <div class="no-form-radio-box">

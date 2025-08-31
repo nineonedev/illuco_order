@@ -1,5 +1,3 @@
-import Choices from "choices.js";
-import "choices.js/public/assets/styles/choices.min.css";
 import View from "../../core/View";
 
 export default class MultiSelectInput extends View {
@@ -14,15 +12,15 @@ export default class MultiSelectInput extends View {
             readOnly: false,
             required: false,
             invalid: false,
-            invalidMessage: '',
+            invalidMessage: "",
             spacing: true,
-            onChange: () => {}
+            onChange: () => {},
         };
     }
 
     _defineState() {
         return {
-            ...this._props
+            ...this._props,
         };
     }
 
@@ -35,7 +33,11 @@ export default class MultiSelectInput extends View {
                 <label for="${nodeId}" class="no-form-control-inner">
                     <span class="no-form-label">${label}</span>
                     <select id="${nodeId}" name="${name}" data-ref="select" class="no-form-control-input" multiple>
-                        ${fallback ? `<option value="">-- 선택 --</option>` : ``}
+                        ${
+                            fallback
+                                ? `<option value="">-- 선택 --</option>`
+                                : ``
+                        }
                         ${this._renderOptions(options)}
                     </select>
                 </label>
@@ -45,13 +47,17 @@ export default class MultiSelectInput extends View {
     }
 
     _renderOptions(options) {
-        const selectedValues = Array.isArray(this._state.value) ? this._state.value : [];
+        const selectedValues = Array.isArray(this._state.value)
+            ? this._state.value
+            : [];
 
         return options
             .map((opt) => {
                 const value = typeof opt === "string" ? opt : opt.value;
                 const label = typeof opt === "string" ? opt : opt.label;
-                const selected = selectedValues.includes(value) ? 'selected' : '';
+                const selected = selectedValues.includes(value)
+                    ? "selected"
+                    : "";
 
                 return `<option value="${value}" ${selected}>${label}</option>`;
             })
@@ -68,7 +74,9 @@ export default class MultiSelectInput extends View {
 
         if (typeof this._props.onChange === "function") {
             selectEl.addEventListener("change", (e) => {
-                const selectedOptions = Array.from(selectEl.selectedOptions).map(opt => opt.value);
+                const selectedOptions = Array.from(
+                    selectEl.selectedOptions
+                ).map((opt) => opt.value);
                 this._props.onChange({ value: selectedOptions, view: this }, e);
             });
         }

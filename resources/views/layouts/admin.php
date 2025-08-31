@@ -14,6 +14,7 @@
     
     
     <link href="<?=asset_path('lib/fontawesome/css/all.min.css')?>" rel="stylesheet" />
+    <link href="<?=asset_path('lib/choices.js/public/assets/styles/choices.min.css')?>" rel="stylesheet" />
     <link href="<?=asset_path('lib/flatpickr/flatpickr.min.css')?>" rel="stylesheet" />
     <link href="<?=asset_path('css/admin.min.css?v='.time())?>" rel="stylesheet" />
     
@@ -46,9 +47,13 @@
     <?= yield_section('portal') ?>
     <div id="portal"></div>
     
+    <script src="<?=asset_path('lib/jquery/dist/jquery.min.js')?>"></script>
     <script src="<?=asset_path('lib/flatpickr/flatpickr.min.js')?>"></script>
     <script src="<?=asset_path('lib/flatpickr/ko.js')?>"></script>
     <script src="<?=asset_path('lib/html2pdf/html2pdf.bundle.min.js')?>"></script>
+    <script src="<?=asset_path('lib/bootstrap/dist/js/bootstrap.bundle.min.js')?>"></script>
+    <script src="<?=asset_path('lib/summernote/dist/summernote.min.js')?>"></script>
+    <script src="<?=asset_path('lib/choices.js/public/assets/scripts/choices.min.js')?>"></script>
     <script src="<?=asset_path('js/admin.min.js?v='.time())?>"></script>
     <?= yield_section('script') ?>
 </body>

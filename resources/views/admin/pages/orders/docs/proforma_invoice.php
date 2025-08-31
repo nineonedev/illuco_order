@@ -32,10 +32,22 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
     </div>
   </div>
 
+  <?php 
+    $buyerCompany = ''; 
+    $buyerAddress = ''; 
+    $buyerTel = ''; 
+    $buyerAttn = ''; 
+    $buyerEmail = '';
+    
+    if (user()->isDealer()) {
+      $buyerCompany = user();
+    }
+  ?>
+
   <div class="invoice-between">
     <div class="buyer-section">
       <p><strong>Buyer</strong></p>
-      <p>Company: <input type="text" name="buyer_name" value="<?= e($entity->buyer_name ?: $order->customer->name) ?>"></p>
+      <p>Company: <input type="text" name="buyer_name" value="<?= e($entity->buyer_name ?:  $order->customer->name) ?>"></p>
       <p>Address: <input type="text" name="buyer_address" value="<?= e($entity->buyer_address ?: $order->customer->address) ?>"></p>
       <p>Tel.: <input type="text" name="buyer_tel" value="<?= e($entity->buyer_tel ?: $order->customer->phone) ?>"></p>
       <p>Attn.: <input type="text" name="buyer_attn" value="<?= e($entity->buyer_attn) ?>"></p>

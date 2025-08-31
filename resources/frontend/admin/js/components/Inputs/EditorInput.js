@@ -1,6 +1,3 @@
-import $ from "jquery";
-import "bootstrap/dist/js/bootstrap.min.js";
-import "summernote/dist/summernote.min.js";
 import View from "../../core/View";
 import Ajax from "../../core/Ajax";
 
@@ -55,12 +52,15 @@ export default class EditorInput extends View {
                 onImageUpload: function (files) {
                     const fd = new FormData();
                     const file = files[0];
-                    fd.append('file', file);
+                    fd.append("file", file);
 
                     ajax.post(uploadUrl, fd)
                         .then((res) => {
                             if (res.success) {
-                                target.summernote("insertImage", res.data.file.upload_path);
+                                target.summernote(
+                                    "insertImage",
+                                    res.data.file.upload_path
+                                );
                             }
                         })
                         .catch((err) => {

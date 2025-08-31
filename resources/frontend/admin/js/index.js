@@ -1,28 +1,27 @@
 import Controllers from "./bootstrap/Controllers";
-import SelectInput from "./components/Inputs/SelectInput";
 
 class App {
     static init() {
         document.addEventListener("DOMContentLoaded", this.run.bind(this));
-        import('../scss/index.scss');
+        import("../scss/index.scss");
     }
 
     static run() {
         this.initHeader();
         this.initTab();
         this.dispatch();
-        this.initTel(); 
+        this.initTel();
     }
 
-    static initTel(){
-        document.querySelectorAll('input[type="tel"]').forEach(input => {
+    static initTel() {
+        document.querySelectorAll('input[type="tel"]').forEach((input) => {
             // 최초 로딩 시 포맷 적용
             input.value = this.formatPhone(input.value);
 
             // 입력 시 자동 포맷
-            input.addEventListener('input', (e) => {
+            input.addEventListener("input", (e) => {
                 const pos = input.selectionStart;
-                const raw = input.value.replace(/[^0-9]/g, '');
+                const raw = input.value.replace(/[^0-9]/g, "");
                 const formatted = this.formatPhone(raw);
                 input.value = formatted;
 
@@ -33,7 +32,7 @@ class App {
 
     static formatPhone(value) {
         // 숫자만 남기기
-        value = value.replace(/[^0-9]/g, '');
+        value = value.replace(/[^0-9]/g, "");
 
         // 02 지역번호 (서울)
         if (value.startsWith("02")) {
@@ -63,12 +62,9 @@ class App {
         }
     }
 
-
-    static dispatch(){
-        
+    static dispatch() {
         const controllerName = document.body.dataset.controller;
         const actionName = document.body.dataset.action;
-
 
         if (!controllerName || !actionName) {
             console.warn(
@@ -105,11 +101,13 @@ class App {
         }
     }
 
-    static initTab(){
+    static initTab() {
         const tabs = document.querySelectorAll(".no-base-tab-btn");
-        const sections = document.querySelectorAll(".no-base-tab-contents > section, .no-base-tab-contents > div");
+        const sections = document.querySelectorAll(
+            ".no-base-tab-contents > section, .no-base-tab-contents > div"
+        );
 
-        if (!tabs || tabs.length === 0) return; 
+        if (!tabs || tabs.length === 0) return;
 
         // 초기 상태: 첫 번째 탭 활성화
         tabs[0].classList.add("is-active");
@@ -119,60 +117,58 @@ class App {
 
         tabs.forEach((tab, idx) => {
             tab.addEventListener("click", () => {
-            tabs.forEach(t => t.classList.remove("is-active"));
-            tab.classList.add("is-active");
+                tabs.forEach((t) => t.classList.remove("is-active"));
+                tab.classList.add("is-active");
 
-            sections.forEach((section, i) => {
-                section.style.display = i === idx ? "block" : "none";
-            });
+                sections.forEach((section, i) => {
+                    section.style.display = i === idx ? "block" : "none";
+                });
             });
         });
     }
 
     static initHeader() {
         // #drawer-menu-btn 클릭 시 #drawer에 --shrink 클래스 토글
-        const menuBtn = document.getElementById('drawer-menu-btn');
-        const drawer = document.getElementById('drawer');
-        const openBtn = document.getElementById('drawer-open-btn');
-        const closeBtn = document.getElementById('drawer-close-btn');
-        
+        const menuBtn = document.getElementById("drawer-menu-btn");
+        const drawer = document.getElementById("drawer");
+        const openBtn = document.getElementById("drawer-open-btn");
+        const closeBtn = document.getElementById("drawer-close-btn");
+
         if (!menuBtn || !drawer || !openBtn || !closeBtn) return;
 
         // 화면 크기 확인 후, 1024px 이하일 경우 --shrink 클래스 제거
         function checkScreenSize() {
             if (window.innerWidth <= 1024) {
-                drawer.classList.remove('--shrink'); // 화면이 1024px 이하일 때 --shrink 클래스 제거
+                drawer.classList.remove("--shrink"); // 화면이 1024px 이하일 때 --shrink 클래스 제거
             } else {
-                drawer.classList.remove('--open'); // PC에서는 --open 클래스 제거
+                drawer.classList.remove("--open"); // PC에서는 --open 클래스 제거
             }
         }
 
         // 클릭 이벤트 리스너 추가
-        menuBtn.addEventListener('click', function() {
-            drawer.classList.toggle('--shrink'); // --shrink 클래스 토글
+        menuBtn.addEventListener("click", function () {
+            drawer.classList.toggle("--shrink"); // --shrink 클래스 토글
             checkScreenSize(); // 화면 크기 체크하여 --shrink 클래스 자동 제거
         });
 
-        openBtn.addEventListener('click', function() {
-            drawer.classList.add('--open'); // --open 클래스 추가
+        openBtn.addEventListener("click", function () {
+            drawer.classList.add("--open"); // --open 클래스 추가
             checkScreenSize(); // 화면 크기 체크하여 --open 클래스 유지
         });
 
-        closeBtn.addEventListener('click', function() {
-            drawer.classList.remove('--open'); // --open 클래스 제거
+        closeBtn.addEventListener("click", function () {
+            drawer.classList.remove("--open"); // --open 클래스 제거
             checkScreenSize(); // 화면 크기 체크하여 --open 클래스 제거
         });
 
         // 화면 크기 변경 시 자동으로 --shrink, --open 클래스 처리
-        window.addEventListener('resize', function() {
+        window.addEventListener("resize", function () {
             checkScreenSize();
         });
 
-
-        document.querySelectorAll('.no-drawer-gnb').forEach(gnb => {
-            
-            if (gnb.children.length === 0){
-                gnb.classList.add('--empty');
+        document.querySelectorAll(".no-drawer-gnb").forEach((gnb) => {
+            if (gnb.children.length === 0) {
+                gnb.classList.add("--empty");
             }
         });
     }
