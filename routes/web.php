@@ -135,18 +135,32 @@ Route::middleware(['web'])->group(function(){
                 });
 
             Route::prefix('dealers')
-                ->name('dealers')
-                ->group(function(){
-                    Route::get('/', [DealerController::class, 'index'])->name('index');
-                    Route::get('/create', [DealerController::class, 'create'])->name('create');
-                    Route::get('/edit/{id}', [DealerController::class, 'edit'])->name('edit');
-                    
-                    Route::post('/', [DealerController::class, 'store'])->name('store');
-                    Route::put('{id}', [DealerController::class, 'update'])->name('update');
+                ->name('dealers.')
+                ->group(function () {
+                    // 목록/생성/수정 화면
+                    Route::get('/',            [DealerController::class, 'index'])->name('index');
+                    Route::get('/create',      [DealerController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}',   [DealerController::class, 'edit'])->name('edit');
 
+                    // 저장/수정
+                    Route::post('/',           [DealerController::class, 'store'])->name('store');
+                    Route::put('{id}',         [DealerController::class, 'update'])->name('update');
+
+                    // 비밀번호 변경
+                    Route::put('{id}/password', [DealerController::class, 'updatePassword'])->name('password.update');
+
+                    // 임시 비밀번호 발급 / 회수
+                    Route::post('{id}/temp-password',   [DealerController::class, 'issueTempPassword'])
+                        ->name('temp-password.issue');
+                    Route::delete('{id}/temp-password', [DealerController::class, 'revokeTempPassword'])
+                        ->name('temp-password.revoke');
+
+                    // 삭제
                     Route::delete('bulk-delete', [DealerController::class, 'destroyMany'])->name('destroyMany');
-                    Route::delete('{id}', [DealerController::class, 'destroy'])->name('destroy');
+                    Route::delete('{id}',        [DealerController::class, 'destroy'])->name('destroy');
                 });
+
+
 
             Route::prefix('employees')
                 ->name('employees')

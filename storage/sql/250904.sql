@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- 호스트: db:3306
--- 생성 시간: 25-09-04 08:53
--- 서버 버전: 8.0.42
+-- 생성 시간: 25-09-04 12:39
+-- 서버 버전: 8.0.43
 -- PHP 버전: 8.2.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -960,11 +960,7 @@ INSERT INTO `product_categories` (`id`, `parent_id`, `slug`, `label`, `descripti
 (1, NULL, 'headlight', 'Headlights', NULL, 1, 1, '2025-07-03 11:34:38', '2025-08-12 11:06:47'),
 (2, NULL, 'loupe', 'Loupes', NULL, 1, 0, '2025-07-03 11:34:44', '2025-08-12 11:06:47'),
 (3, NULL, 'dermatoscope', 'Dermatoscope', NULL, 1, 3, '2025-07-03 11:34:52', '2025-08-12 11:07:00'),
-(11, NULL, NULL, 'Dental Mirror', NULL, 1, 2, '2025-08-06 14:09:47', '2025-08-12 11:06:47'),
-(12, NULL, NULL, 'Frame', NULL, 1, 4, '2025-08-12 10:06:09', '2025-08-12 11:07:15'),
-(14, NULL, NULL, 'Loupe & Headlight Accessory', NULL, 1, 5, '2025-08-12 10:06:09', '2025-08-12 11:07:22'),
-(15, NULL, NULL, 'Dermatoscope Accessory', NULL, 1, 6, '2025-08-12 10:06:09', '2025-08-12 11:07:27'),
-(16, NULL, NULL, 'Camera', NULL, 1, 7, '2025-08-16 13:49:34', '2025-08-16 13:49:34');
+(11, NULL, NULL, 'Dental Mirror', NULL, 1, 2, '2025-08-06 14:09:47', '2025-08-12 11:06:47');
 
 -- --------------------------------------------------------
 
@@ -1091,60 +1087,60 @@ INSERT INTO `product_templates` (`id`, `category_id`, `name`, `code`, `model`, `
 (22, 2, 'Prismatic', 'ITL-1055P', 'ITL-1055P', 1350.00, 7, 'TTL 프리즘 루페 5.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
 (23, 2, 'Prismatic', 'ITL-1065P', 'ITL-1065P', 1350.00, 8, 'TTL 프리즘 루페 6.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
 (24, 2, 'Flip-Up Loupes', 'IFL-1030G', 'IFL-1030G', 605.00, 9, '플립업 갈릴레안 루페', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(25, 12, 'Goggle - Rimless', 'GOGGLE_RIMLESS', 'Goggle - Rimless', 0.00, 10, '루페/헤드라이트용 고글 프레임(림리스)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(26, 12, 'Goggle - Rimmed', 'GOGGLE_RIMMED', 'Goggle - Rimmed', 0.00, 11, '루페/헤드라이트용 고글 프레임(림 있음)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
+(25, 2, 'Goggle - Rimless', 'GOGGLE_RIMLESS', 'Goggle - Rimless', 0.00, 10, '루페/헤드라이트용 고글 프레임(림리스)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:29:44'),
+(26, 2, 'Goggle - Rimmed', 'GOGGLE_RIMMED', 'Goggle - Rimmed', 0.00, 11, '루페/헤드라이트용 고글 프레임(림 있음)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:29:47'),
 (30, 1, 'IHL-1000 - wired', 'IHL-1000', 'IHL-1000 - wired', 1050.00, 15, '유선 헤드라이트, UV 필터 포함', NULL, '2025-08-12 10:06:09', '2025-08-12 10:58:54'),
 (31, 1, 'IHL-2000 - wireless', 'IHL-2000', 'IHL-2000 - wireless', 1150.00, 16, '무선 헤드라이트, 교체식 배터리', NULL, '2025-08-12 10:06:09', '2025-08-12 10:58:35'),
-(32, 14, 'Additional Battery for Wired Headlight', 'BATTERY_WIRED_HEADLIGHT', 'Battery for IHL-1000', 365.00, 17, '유선 헤드라이트 전용 예비 배터리', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(33, 14, 'Additional Battery for Wireless Headlight', 'BATTERY_WIRELESS_HEADLIGHT', 'Battery for IHL-2000', 150.00, 18, '무선 헤드라이트 추가 배터리', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(34, 14, 'Headband', 'HEADBAND', 'Headband', 210.00, 19, '헤드라이트 전용 헤드밴드', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(35, 14, 'Frame for Headlights', 'FRAME_FOR_HEADLIGHTS', 'Frame for Headlight', 180.00, 20, '헤드라이트 장착용 프레임(헤드라이트 미포함)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(36, 14, 'Universal Adapter', 'UNIVERSAL_ADAPTER', 'Universal Adapter', 45.00, 21, '헤드라이트 범용 어댑터', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(37, 14, 'Clamp Adapter', 'CLAMP_ADAPTER', 'Clamp Type Adapter', 50.00, 22, '헤드라이트 클램프형 어댑터', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(38, 14, 'Belt Clip for Wired Headlight', 'BELT_CLIP_WIRED', 'Belt Clip', 25.00, 23, '유선 헤드라이트 배터리 클립', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(39, 14, 'Extension Cable', 'EXTENSION_CABLE', 'Extension Cable', 0.00, 24, '연장 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(40, 14, 'Headstrap for Metal Frame', 'HEADSTRAP_METAL', 'Headstrap for Metal Frame', 0.00, 25, '메탈 프레임용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(41, 14, 'Headstrap for Goggle', 'HEADSTRAP_GOGGLE', 'Headstrap for Goggle', 0.00, 26, '고글용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(42, 14, 'Side Shield for Metal Frame', 'SIDE_SHIELD_METAL', 'Side Shield for Metal Frame', 13.99, 27, '메탈 프레임용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(43, 14, 'Side Shield for Goggle', 'SIDE_SHIELD_GOGGLE', 'Side Shield for Goggle', 13.99, 28, '고글용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(44, 14, 'Cleaning Kit', 'CLEANING_KIT_HEADLIGHT', 'H-Cleaning-Kit ', 0.00, 29, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 11:02:41'),
-(45, 14, 'Screwdriver', 'SCREWDRIVER', 'Screwdriver', 0.00, 30, '소형 드라이버(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(46, 14, 'Nose Pad', 'NOSE_PAD', 'Nose Pad', 0.00, 31, '코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(47, 14, 'U Shaped Nose Pad', 'U_SHAPED_NOSE_PAD', 'U-Shaped Nose Pad', 0.00, 32, 'U자형 코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(48, 14, 'UV Filter', 'UV_FILTER', 'UV Filter', 0.00, 33, 'UV 필터(별도 판매가 미확인, 본체 동봉)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
+(32, 1, 'Additional Battery for Wired Headlight', 'BATTERY_WIRED_HEADLIGHT', 'Battery for IHL-1000', 365.00, 17, '유선 헤드라이트 전용 예비 배터리', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:44'),
+(33, 1, 'Additional Battery for Wireless Headlight', 'BATTERY_WIRELESS_HEADLIGHT', 'Battery for IHL-2000', 150.00, 18, '무선 헤드라이트 추가 배터리', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:47'),
+(34, 1, 'Headband', 'HEADBAND', 'Headband', 210.00, 19, '헤드라이트 전용 헤드밴드', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:51'),
+(35, 1, 'Frame for Headlights', 'FRAME_FOR_HEADLIGHTS', 'Frame for Headlight', 180.00, 20, '헤드라이트 장착용 프레임(헤드라이트 미포함)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:53'),
+(36, 1, 'Universal Adapter', 'UNIVERSAL_ADAPTER', 'Universal Adapter', 45.00, 21, '헤드라이트 범용 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:54'),
+(37, 1, 'Clamp Adapter', 'CLAMP_ADAPTER', 'Clamp Type Adapter', 50.00, 22, '헤드라이트 클램프형 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:56'),
+(38, 1, 'Belt Clip for Wired Headlight', 'BELT_CLIP_WIRED', 'Belt Clip', 25.00, 23, '유선 헤드라이트 배터리 클립', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:58'),
+(39, 2, 'Extension Cable', 'EXTENSION_CABLE', 'Extension Cable', 0.00, 24, '연장 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:16'),
+(40, 2, 'Headstrap for Metal Frame', 'HEADSTRAP_METAL', 'Headstrap for Metal Frame', 0.00, 25, '메탈 프레임용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:17'),
+(41, 2, 'Headstrap for Goggle', 'HEADSTRAP_GOGGLE', 'Headstrap for Goggle', 0.00, 26, '고글용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:19'),
+(42, 2, 'Side Shield for Metal Frame', 'SIDE_SHIELD_METAL', 'Side Shield for Metal Frame', 13.99, 27, '메탈 프레임용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:20'),
+(43, 2, 'Side Shield for Goggle', 'SIDE_SHIELD_GOGGLE', 'Side Shield for Goggle', 13.99, 28, '고글용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:21'),
+(44, 2, 'Cleaning Kit', 'CLEANING_KIT_HEADLIGHT', 'H-Cleaning-Kit ', 0.00, 29, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:23'),
+(45, 2, 'Screwdriver', 'SCREWDRIVER', 'Screwdriver', 0.00, 30, '소형 드라이버(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:24'),
+(46, 2, 'Nose Pad', 'NOSE_PAD', 'Nose Pad', 0.00, 31, '코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:26'),
+(47, 2, 'U Shaped Nose Pad', 'U_SHAPED_NOSE_PAD', 'U-Shaped Nose Pad', 0.00, 32, 'U자형 코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:27'),
+(48, 2, 'UV Filter', 'UV_FILTER', 'UV Filter', 0.00, 33, 'UV 필터(별도 판매가 미확인, 본체 동봉)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:28'),
 (49, 11, 'DENTAL MIRROR', 'IDM-P', 'IDM-P', 155.00, 34, '치과 포토 미러(포토 미러 계열)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
 (50, 11, 'DENTAL MIRROR', 'IDM-M', 'IDM-M', 85.00, 35, '치과 구강 미러(핸들 포함, 5팩 기준)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
 (51, 3, 'IDS-1100C', 'DS', 'IDS-1100C', 950.00, 36, '더마토스코프 1100, 10배/25mm 렌즈', NULL, '2025-08-12 10:06:09', '2025-08-12 10:53:38'),
 (52, 3, 'IDS-1000', 'DS', 'IDS-1000', 650.00, 37, '더마토스코프 1000(단종/가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:55:19'),
 (53, 3, 'IDS 3100', 'DS', 'IDS-3100', 850.00, 38, '우드램프(365/395/405nm)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:54:32'),
-(54, 15, 'Compact Universal Clamp', 'COMPACT_UNIVERSAL_CLAMP', 'Universal Phone Clamp', 65.00, 39, '스마트폰 고정 클램프(IDS-1100/1000+ 호환)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(55, 15, '8mm Small Contact Plate', 'CONTACT_PLATE_8MM', '8mm Small Contact Plate', 0.00, 40, '8mm 소형 콘택트 플레이트(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(56, 15, 'Belt Clip Leather Pouch', 'LEATHER_POUCH', 'Leather Pouch w/ Belt Clip', 30.00, 41, '레더 파우치(벨트클립 포함)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(57, 15, 'Sleeve with Lanyard (1100)', 'SLEEVE_1100', 'Sleeve with Lanyard (1100)', 26.00, 42, '실리콘 슬리브+랜야드(IDS-1100)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(58, 15, 'Sleeve with Lanyard (1000)', 'SLEEVE_1000', 'Sleeve with Lanyard (1000)', 26.00, 43, '실리콘 슬리브+랜야드(IDS-1000)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(59, 15, 'Replacement Battery (1100)', 'REPL_BATT_1100', 'Replacement Battery (1100)', 75.00, 44, 'IDS-1100/1100C 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(60, 15, 'Replacement Battery (1000)', 'REPL_BATT_1000', 'Replacement Battery (1000)', 40.00, 45, 'IDS-1000 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(61, 15, 'Replacement Battery (3100)', 'REPL_BATT_3100', 'Replacement Battery (3100)', 160.00, 46, 'IDS-3100 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(62, 15, 'Mirrorless Camera Adapter', 'MIRRORLESS_ADAPTER', 'Mirrorless Camera Adapter', 260.00, 47, '미러리스 카메라 어댑터', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(63, 15, 'Protective Glass (1100)', 'PROTECTIVE_GLASS_1100', 'Protective Glass (1100)', 150.00, 48, 'IDS-1100/1100C 보호유리(호환 렌즈)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(64, 15, 'Protective Glass (1000)', 'PROTECTIVE_GLASS_1000', 'Protective Glass (1000)', 0.00, 49, 'IDS-1000 보호유리(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(65, 15, 'USB Cable', 'USB_CABLE', 'USB Cable', 0.00, 50, 'USB 충전 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(66, 15, 'Magnet USB charging Cable for 1100C', 'MAGNET_USB_CABLE_1100C', 'Magnet USB Cable (1100C)', 0.00, 51, '마그넷 USB 충전 케이블(1100C)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(67, 15, 'Cleaning Kit', 'CLEANING_KIT_DERMATO', 'Cleaning-Kit-D', 0.00, 52, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 11:05:44'),
-(68, 12, 'Frame 1 - Black', 'FRAME1_BLACK', 'Frame 1 (Black)', 0.00, 1, 'Frame 1 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(69, 12, 'Frame 1 - Coffee', 'FRAME1_COFFEE', 'Frame 1 (Coffee)', 0.00, 2, 'Frame 1 - 커피 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(70, 12, 'Frame 1 - Green', 'FRAME1_GREEN', 'Frame 1 (Green)', 0.00, 3, 'Frame 1 - 그린 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(71, 12, 'Frame 1 - Red', 'FRAME1_RED', 'Frame 1 (Red)', 0.00, 4, 'Frame 1 - 레드 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(72, 12, 'Frame 1 - Blue', 'FRAME1_BLUE', 'Frame 1 (Blue)', 0.00, 5, 'Frame 1 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(73, 12, 'Frame 2 - Silver', 'FRAME2_SILVER', 'Frame 2 (Silver)', 0.00, 6, 'Frame 2 - 실버 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(74, 12, 'Frame 2 - Blue', 'FRAME2_BLUE', 'Frame 2 (Blue)', 0.00, 7, 'Frame 2 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(76, 12, 'Frame 4 - Brown', 'FRAME4_BROWN', 'Frame 4 (Brown)', 0.00, 9, 'Frame 4 - 브라운 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(77, 12, 'Frame 4 - Black', 'FRAME4_BLACK', 'Frame 4 (Black)', 0.00, 10, 'Frame 4 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
-(78, 12, 'Frame 4 - Orange', 'FRAME4_ORANGE', 'Frame 4 (Orange)', 0.00, 11, 'Frame 4 - 오렌지 색상', NULL, '2025-08-12 10:50:22', '2025-08-12 10:50:22'),
+(54, 3, 'Compact Universal Clamp', 'COMPACT_UNIVERSAL_CLAMP', 'Universal Phone Clamp', 65.00, 39, '스마트폰 고정 클램프(IDS-1100/1000+ 호환)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:26'),
+(55, 3, '8mm Small Contact Plate', 'CONTACT_PLATE_8MM', '8mm Small Contact Plate', 0.00, 40, '8mm 소형 콘택트 플레이트(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:37'),
+(56, 3, 'Belt Clip Leather Pouch', 'LEATHER_POUCH', 'Leather Pouch w/ Belt Clip', 30.00, 41, '레더 파우치(벨트클립 포함)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:39'),
+(57, 3, 'Sleeve with Lanyard (1100)', 'SLEEVE_1100', 'Sleeve with Lanyard (1100)', 26.00, 42, '실리콘 슬리브+랜야드(IDS-1100)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:40'),
+(58, 3, 'Sleeve with Lanyard (1000)', 'SLEEVE_1000', 'Sleeve with Lanyard (1000)', 26.00, 43, '실리콘 슬리브+랜야드(IDS-1000)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:41'),
+(59, 3, 'Replacement Battery (1100)', 'REPL_BATT_1100', 'Replacement Battery (1100)', 75.00, 44, 'IDS-1100/1100C 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:42'),
+(60, 3, 'Replacement Battery (1000)', 'REPL_BATT_1000', 'Replacement Battery (1000)', 40.00, 45, 'IDS-1000 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:43'),
+(61, 3, 'Replacement Battery (3100)', 'REPL_BATT_3100', 'Replacement Battery (3100)', 160.00, 46, 'IDS-3100 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:46'),
+(62, 3, 'Mirrorless Camera Adapter', 'MIRRORLESS_ADAPTER', 'Mirrorless Camera Adapter', 260.00, 47, '미러리스 카메라 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:47'),
+(63, 3, 'Protective Glass (1100)', 'PROTECTIVE_GLASS_1100', 'Protective Glass (1100)', 150.00, 48, 'IDS-1100/1100C 보호유리(호환 렌즈)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:50'),
+(64, 3, 'Protective Glass (1000)', 'PROTECTIVE_GLASS_1000', 'Protective Glass (1000)', 0.00, 49, 'IDS-1000 보호유리(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:51'),
+(65, 3, 'USB Cable', 'USB_CABLE', 'USB Cable', 0.00, 50, 'USB 충전 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:53'),
+(66, 3, 'Magnet USB charging Cable for 1100C', 'MAGNET_USB_CABLE_1100C', 'Magnet USB Cable (1100C)', 0.00, 51, '마그넷 USB 충전 케이블(1100C)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:54'),
+(67, 3, 'Cleaning Kit', 'CLEANING_KIT_DERMATO', 'Cleaning-Kit-D', 0.00, 52, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:56'),
+(68, 2, 'Frame 1 - Black', 'FRAME1_BLACK', 'Frame 1 (Black)', 0.00, 1, 'Frame 1 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:48'),
+(69, 2, 'Frame 1 - Coffee', 'FRAME1_COFFEE', 'Frame 1 (Coffee)', 0.00, 2, 'Frame 1 - 커피 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:49'),
+(70, 2, 'Frame 1 - Green', 'FRAME1_GREEN', 'Frame 1 (Green)', 0.00, 3, 'Frame 1 - 그린 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:51'),
+(71, 2, 'Frame 1 - Red', 'FRAME1_RED', 'Frame 1 (Red)', 0.00, 4, 'Frame 1 - 레드 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:52'),
+(72, 2, 'Frame 1 - Blue', 'FRAME1_BLUE', 'Frame 1 (Blue)', 0.00, 5, 'Frame 1 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:54'),
+(73, 2, 'Frame 2 - Silver', 'FRAME2_SILVER', 'Frame 2 (Silver)', 0.00, 6, 'Frame 2 - 실버 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:56'),
+(74, 2, 'Frame 2 - Blue', 'FRAME2_BLUE', 'Frame 2 (Blue)', 0.00, 7, 'Frame 2 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:58'),
+(76, 2, 'Frame 4 - Brown', 'FRAME4_BROWN', 'Frame 4 (Brown)', 0.00, 9, 'Frame 4 - 브라운 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:59'),
+(77, 2, 'Frame 4 - Black', 'FRAME4_BLACK', 'Frame 4 (Black)', 0.00, 10, 'Frame 4 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:30:00'),
+(78, 2, 'Frame 4 - Orange', 'FRAME4_ORANGE', 'Frame 4 (Orange)', 0.00, 11, 'Frame 4 - 오렌지 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:30:01'),
 (79, 3, 'IDS-1100', 'DS', 'IDS-1100', 950.00, 36, 'IDS-1100', NULL, '2025-08-12 10:56:17', '2025-08-12 10:56:35'),
 (80, 3, 'IDS-1000 Plus', 'DS', 'IDS-1000-PLUS', 1000.00, 37, 'IDS-1000 Plus', NULL, '2025-08-12 10:57:26', '2025-08-12 10:57:26'),
-(81, 14, '처방렌즈', 'PR-LEN-30', 'PR-LENS-30', 30.00, 0, '', NULL, '2025-08-12 20:24:16', '2025-08-12 20:24:16'),
-(82, 16, '9100 Camera', '9100cam', 'Dermaview', 1000.00, 0, 'Camera for 9100', NULL, '2025-08-16 13:52:06', '2025-08-16 13:52:06');
+(81, 2, '처방렌즈', 'PR-LEN-30', 'PR-LENS-30', 30.00, 0, '', NULL, '2025-08-12 20:24:16', '2025-09-04 12:32:29'),
+(82, NULL, '9100 Camera', '9100cam', 'Dermaview', 1000.00, 0, 'Camera for 9100', NULL, '2025-08-16 13:52:06', '2025-08-16 13:52:06');
 
 -- --------------------------------------------------------
 
@@ -1383,18 +1379,18 @@ INSERT INTO `role_users` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`
 
 CREATE TABLE `sales_info` (
   `id` bigint UNSIGNED NOT NULL,
-  `beneficiary` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bank_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bank_address` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `swift_code` char(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `account_no` varchar(34) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `remarks` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_tel` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_fax` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company_website` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `beneficiary` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank_address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `swift_code` char(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `account_no` varchar(34) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_tel` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_fax` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company_website` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1487,7 +1483,8 @@ INSERT INTO `sessions` (`id`, `session_id`, `user_id`, `ip_address`, `user_agent
 (495, '7860d303fdcfdc018793381fa20d24b59fde0f0c', NULL, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.0.2534 Yowser/2.5 Safari/537.36', '2025-09-04 17:29:31', 'a:0:{}', '2025-09-04 08:29:31', '2025-09-04 17:29:31'),
 (496, '057071621c69a97e45c783b52d76df91b05636d1', NULL, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 YaBrowser/23.7.0.2534 Yowser/2.5 Safari/537.36', '2025-09-04 17:29:32', 'a:1:{s:11:\"_csrf_token\";s:64:\"46098d905b695451e19332b0f1f5306c40e26f40b8da03d305de53a74016328a\";}', '2025-09-04 08:29:32', '2025-09-04 17:29:32'),
 (497, 'b5d2e7bc35ea2ba35a7b9cdd5d28595b35404fa9', NULL, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0', '2025-09-04 17:30:08', 'a:0:{}', '2025-09-04 08:30:08', '2025-09-04 17:30:08'),
-(498, '3a7996e1e5b8097f6e3fcf67d67b6ea8174bbea9', NULL, '172.23.0.1', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0', '2025-09-04 17:32:12', 'a:1:{s:11:\"_csrf_token\";s:64:\"4d3668e63692950c49fd27ea2b03be249ba4f500404631fbebe1dbbe2ba4c2ec\";}', '2025-09-04 08:32:12', '2025-09-04 17:32:12');
+(498, '3a7996e1e5b8097f6e3fcf67d67b6ea8174bbea9', NULL, '172.23.0.1', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0', '2025-09-04 17:32:12', 'a:1:{s:11:\"_csrf_token\";s:64:\"4d3668e63692950c49fd27ea2b03be249ba4f500404631fbebe1dbbe2ba4c2ec\";}', '2025-09-04 08:32:12', '2025-09-04 17:32:12'),
+(500, '6cf8914a7d686f2efd52323276ce8c9f3a48bdbc', 18, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-09-04 21:32:58', 'a:2:{s:11:\"_csrf_token\";s:64:\"8c92f0088e1e7e7bf0d57707b72d9357b171335340be56f6f98c14c167b17a9c\";s:7:\"user_id\";i:18;}', '2025-09-04 11:51:20', '2025-09-04 21:32:58');
 
 -- --------------------------------------------------------
 
@@ -1966,7 +1963,7 @@ ALTER TABLE `serial_numbers`
 -- 테이블의 AUTO_INCREMENT `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=499;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=501;
 
 --
 -- 테이블의 AUTO_INCREMENT `users`

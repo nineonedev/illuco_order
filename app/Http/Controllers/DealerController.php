@@ -14,6 +14,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use Framework\Validation\Validator;
+use Framework\Support\Facades\Hash;
 use RuntimeException;
 
 class DealerController extends Controller
@@ -35,7 +36,7 @@ class DealerController extends Controller
         $query->when(
             $country = $request->query('country'),
             function ($q) use ($country) {
-                $q->whereHas(UserType::DEALER, fn($dealerQ) => 
+                $q->whereHas(UserType::DEALER, fn($dealerQ) =>
                     $dealerQ->where('country', $country)
                 );
             }
@@ -45,7 +46,7 @@ class DealerController extends Controller
         $query->when(
             $code = $request->query('code'),
             function ($q) use ($code) {
-                $q->whereHas(UserType::DEALER, fn($dealerQ) => 
+                $q->whereHas(UserType::DEALER, fn($dealerQ) =>
                     $dealerQ->where('code', 'like', "%{$code}%")
                 );
             }
@@ -92,12 +93,11 @@ class DealerController extends Controller
         $dealers = $query->paginate($perpage, $page);
 
         return $this->render('admin.pages.dealers.index', [
-            'dealers' => $dealers,
-            'query'   => $request->query(),
+            'dealers'   => $dealers,
+            'query'     => $request->query(),
             'countries' => __('system.countries'),
         ]);
     }
-
 
     public function create()
     {
@@ -109,7 +109,7 @@ class DealerController extends Controller
 
     public function edit(string $id)
     {
-        $dealer = UserRepository::make()->findOrFail($id); 
+        $dealer = UserRepository::make()->findOrFail($id);
         $dealer->load([UserType::DEALER]);
         $categories = CategoryRepository::make()->all();
 
@@ -118,16 +118,16 @@ class DealerController extends Controller
         }
 
         return $this->render('admin.pages.dealers.edit', [
-            'dealer' => $dealer,
+            'dealer'     => $dealer,
             'categories' => $categories,
         ]);
     }
 
     public function store(RegisterRequest $request)
     {
-        return $this->runInTransaction(function() use ($request) {
+        return $this->runInTransaction(function () use ($request) {
             $user = new User($request->safe());
-            $user->type = UserType::DEALER; 
+            $user->type = UserType::DEALER;
             $user = UserRepository::make()->save($user);
 
             if (!$user) {
@@ -138,7 +138,7 @@ class DealerController extends Controller
                 ->query()
                 ->where('name', 'dealer')
                 ->first();
-            
+
             if (!$dealerRole) {
                 throw new RuntimeException("대리점 전용 권한을 찾을 수 없습니다.");
             }
@@ -146,21 +146,22 @@ class DealerController extends Controller
             $user->roles()->attach($dealerRole);
 
             $validator = Validator::make($request->body($user->type), [
-                'country' => 'required',
-                'code' => 'required|unique:dealers',
-                'address' => 'nullable',
+                'country'     => 'required',
+                'code'        => 'required|unique:dealers',
+                'address'     => 'nullable',
                 'description' => 'nullable',
                 'category_id' => 'nullable|integer',
             ]);
 
             $validator->validateOrFail();
             $dealerData = $validator->validated();
-            $dealer = new Dealer($dealerData); 
-            $dealer->id = $user->id; 
-            $dealer->category_id = $dealerData['category_id'] ?: null; 
-            $dealer = DealerRepository::make()->save($dealer); 
 
-            if (!$dealer) { 
+            $dealer = new Dealer($dealerData);
+            $dealer->id = $user->id;
+            $dealer->category_id = $dealerData['category_id'] ?: null;
+            $dealer = DealerRepository::make()->save($dealer);
+
+            if (!$dealer) {
                 throw new RuntimeException("대리점 생성에 실패하였습니다.");
             }
 
@@ -176,15 +177,14 @@ class DealerController extends Controller
             $user->load([UserType::DEALER]);
 
             if (empty($data['password'])) {
-                unset($data['password']); 
+                unset($data['password']);
             }
 
-            $isActive = $request->body('is_active') ? true : false; 
-            $data['is_active'] = $isActive; 
+            $isActive = $request->body('is_active') ? true : false;
+            $data['is_active'] = $isActive;
 
-
-            $user->fill($data); 
-            $user = UserRepository::make()->save($user); 
+            $user->fill($data);
+            $user = UserRepository::make()->save($user);
 
             if (!$user) {
                 throw new RuntimeException("대리점 기본정보 수정에 실패하였습니다.");
@@ -192,21 +192,21 @@ class DealerController extends Controller
 
             $dealerData = $request->body($user->type);
             $dealer = $user->{$user->type};
-            
-            $dealer = $dealer->fill($dealerData); 
+
+            $dealer = $dealer->fill($dealerData);
 
             if (!user()->isDealer()) {
                 $dealer->category_id = $dealerData['category_id'] ?: null;
             }
-            
-            $dealer = DealerRepository::make()->save($dealer); 
+
+            $dealer = DealerRepository::make()->save($dealer);
 
             if (!$dealer) {
                 throw new RuntimeException("대리점 기본정보 수정에 실패하였습니다.");
             }
-            
-            $dealer->setRelation('user', $user); 
-            
+
+            $dealer->setRelation('user', $user);
+
             return $this->render(null, [
                 'dealer' => $dealer,
             ], '정상적으로 수정되었습니다.');
@@ -215,9 +215,9 @@ class DealerController extends Controller
 
     public function destroy(string $id)
     {
-        return $this->runInTransaction(function() use ($id) {
+        return $this->runInTransaction(function () use ($id) {
             $employee = UserRepository::make()->findOrFail($id);
-            $success = UserRepository::make()->delete($employee); 
+            $success = UserRepository::make()->delete($employee);
 
             if (!$success) {
                 throw new RuntimeException("대리점 삭제에 실패하였습니다.");
@@ -247,7 +247,9 @@ class DealerController extends Controller
                     ->with([UserType::DEALER])
                     ->find($id);
 
-                if (!$dealer) continue;
+                if (!$dealer) {
+                    continue;
+                }
 
                 $success = UserRepository::make()->delete($dealer);
                 if ($success) {
@@ -259,4 +261,106 @@ class DealerController extends Controller
         });
     }
 
+    /**
+     * 비밀번호 변경 (관리자에서 직접 변경)
+     * Route: PUT /dealers/{id}/password  -> name: dealers.password.update
+     */
+    public function updatePassword(Request $request, string $id)
+    {
+        // 간단 검증: 최소 길이 8, 확인값 일치 등
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:8', // confirmed -> password_confirmation 필요
+        ]);
+        $validator->validateOrFail();
+
+        return $this->runInTransaction(function () use ($id, $request) {
+            $user = UserRepository::make()->findOrFail($id);
+
+            // 실제 해시 저장 (UserRepository 내부에서 해시한다면 이 줄은 repo 정책에 맞게 조정)
+            $user->password = Hash::make($request->body('password'));
+
+            // 비번 수동 변경 시 기존 임시비번은 즉시 무효화
+            $user->temp_password_hash = null;
+            $user->temp_password_expires_at = null;
+
+            $saved = UserRepository::make()->save($user);
+            if (!$saved) {
+                throw new RuntimeException('비밀번호 변경에 실패하였습니다.');
+            }
+
+            return $this->render(null, [], '비밀번호가 변경되었습니다.');
+        });
+    }
+
+    /**
+     * 임시 비밀번호 발급
+     * Route: POST /dealers/{id}/temp-password  -> name: dealers.temp-password.issue
+     * 응답: temp_password(평문, 1회 노출), expires_at
+     */
+    public function issueTempPassword(Request $request, string $id)
+    {
+        $hours = (int)($request->body('hours', 24));
+        if ($hours < 1) $hours = 24;
+
+        return $this->runInTransaction(function () use ($id, $hours) {
+            $user = UserRepository::make()->findOrFail($id);
+
+            $plain = $this->readableToken(12);
+            $hash  = Hash::make($plain);
+
+            // 문자열로 저장
+            $expiresAt = (new \DateTimeImmutable('now'))
+                            ->modify("+{$hours} hours")
+                            ->format('Y-m-d H:i:s');
+
+            $user->temp_password_hash = $hash;
+            $user->temp_password_expires_at = $expiresAt;
+
+            $saved = UserRepository::make()->save($user);
+            if (!$saved) {
+                throw new RuntimeException('임시 비밀번호 생성에 실패하였습니다.');
+            }
+
+            return $this->render(null, [
+                'temp_password' => $plain,
+                'expires_at'    => $expiresAt,
+            ], '임시 비밀번호가 생성되었습니다.');
+        });
+    }
+
+
+    /**
+     * 임시 비밀번호 회수(무효화)
+     * Route: DELETE /dealers/{id}/temp-password  -> name: dealers.temp-password.revoke
+     */
+    public function revokeTempPassword(string $id)
+    {
+        return $this->runInTransaction(function () use ($id) {
+            $user = UserRepository::make()->findOrFail($id);
+            $user->temp_password_hash = null;
+            $user->temp_password_expires_at = null;
+
+            $saved = UserRepository::make()->save($user);
+            if (!$saved) {
+                throw new RuntimeException('임시 비밀번호 해제에 실패하였습니다.');
+            }
+
+            return $this->render(null, [], '임시 비밀번호를 해제했습니다.');
+        });
+    }
+
+    /**
+     * 사람이 읽기 쉬운 임시 토큰 생성 (혼동문자 제외)
+     */
+    private function readableToken(int $len = 12): string
+    {
+        $alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+        $n = strlen($alphabet);
+        $bytes = random_bytes($len);
+        $out = '';
+        for ($i = 0; $i < $len; $i++) {
+            $out .= $alphabet[ord($bytes[$i]) % $n];
+        }
+        return $out;
+    }
 }

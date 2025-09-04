@@ -41,8 +41,8 @@ $info = $info ?? null;
                     <div class="no-form-control --md">
                         <label for="company_name" class="no-form-control-inner">
                             <input type="text" name="company_name" id="company_name"
-                                   class="no-form-control-input"
-                                   value="<?= e($info->company_name ?? '') ?>" placeholder="">
+                                    class="no-form-control-input"
+                                    value="<?= e($info->company_name ?? '') ?>" placeholder="">
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">회사명</legend>
                             </fieldset>
@@ -53,8 +53,8 @@ $info = $info ?? null;
                     <div class="no-form-control --lg">
                         <label for="company_address" class="no-form-control-inner">
                             <input type="text" name="company_address" id="company_address"
-                                   class="no-form-control-input"
-                                   value="<?= e($info->company_address ?? '') ?>" placeholder="">
+                                    class="no-form-control-input"
+                                    value="<?= e($info->company_address ?? '') ?>" placeholder="">
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">회사 주소</legend>
                             </fieldset>
@@ -134,8 +134,8 @@ $info = $info ?? null;
                     <div class="no-form-control --md">
                         <label for="bank_name" class="no-form-control-inner">
                             <input type="text" name="bank_name" id="bank_name"
-                                   class="no-form-control-input"
-                                   value="<?= e($info->bank_name ?? '') ?>" placeholder="">
+                                    class="no-form-control-input"
+                                    value="<?= e($info->bank_name ?? '') ?>" placeholder="">
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">은행명</legend>
                             </fieldset>
@@ -146,8 +146,8 @@ $info = $info ?? null;
                     <div class="no-form-control --lg">
                         <label for="bank_address" class="no-form-control-inner">
                             <input type="text" name="bank_address" id="bank_address"
-                                   class="no-form-control-input"
-                                   value="<?= e($info->bank_address ?? '') ?>" placeholder="">
+                                    class="no-form-control-input"
+                                    value="<?= e($info->bank_address ?? '') ?>" placeholder="">
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">은행 주소</legend>
                             </fieldset>
@@ -158,8 +158,8 @@ $info = $info ?? null;
                     <div class="no-form-control --sm">
                         <label for="swift_code" class="no-form-control-inner">
                             <input type="text" name="swift_code" id="swift_code" maxlength="11"
-                                   class="no-form-control-input"
-                                   value="<?= e($info->swift_code ?? '') ?>" placeholder="8~11자">
+                                    class="no-form-control-input"
+                                    value="<?= e($info->swift_code ?? '') ?>" placeholder="8~11자">
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">SWIFT/BIC</legend>
                             </fieldset>
@@ -170,8 +170,8 @@ $info = $info ?? null;
                     <div class="no-form-control --md">
                         <label for="account_no" class="no-form-control-inner">
                             <input type="text" name="account_no" id="account_no" maxlength="34"
-                                   class="no-form-control-input"
-                                   value="<?= e($info->account_no ?? '') ?>" placeholder="">
+                                    class="no-form-control-input"
+                                    value="<?= e($info->account_no ?? '') ?>" placeholder="">
                             <fieldset class="no-form-control-label">
                                 <legend class="no-form-control-text">계좌번호(IBAN 가능)</legend>
                             </fieldset>
@@ -190,7 +190,7 @@ $info = $info ?? null;
                 <div class="no-form-control --full --textarea">
                     <label for="remarks" class="no-form-control-inner">
                         <textarea name="remarks" id="remarks" rows="8" class="no-form-control-input"
-                                  placeholder="FTA 관련 문구"><?= e($info->remarks ?? '') ?></textarea>
+                                    placeholder="FTA 관련 문구"><?= e($info->remarks ?? '') ?></textarea>
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">Remarks</legend>
                         </fieldset>

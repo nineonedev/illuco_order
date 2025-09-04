@@ -5,6 +5,7 @@ namespace Framework\Security\Auth;
 use App\Domains\User\Entities\User;
 use Framework\Security\Auth\Contracts\GuardInterface;
 use Framework\Security\Auth\Providers\AuthenticatableInterface;
+use Framework\Security\Auth\Providers\SupportsTempPasswordInterface;
 use Framework\Security\Auth\Providers\UserProviderInterface;
 use Framework\Security\Session\Contracts\SessionInterface;
 use Framework\Support\Facades\Hash;
@@ -39,10 +40,38 @@ class SessionGuard implements GuardInterface
     }
 
 
+    // protected function validateCredentials(AuthenticatableInterface $user, array $credentials): bool
+    // {
+    //     return Hash::check($credentials['password'], $user->getAuthPassword()); 
+    // }
     protected function validateCredentials(AuthenticatableInterface $user, array $credentials): bool
     {
-        return Hash::check($credentials['password'], $user->getAuthPassword()); 
+        $plain = $credentials['password'] ?? null;
+
+        if (!$plain) {
+            return false;
+        }
+
+        // 1) 기본 비밀번호
+        if (Hash::check($plain, $user->getAuthPassword())) {
+            return true;
+        }
+
+        // 2) 임시 비밀번호
+        if ($user instanceof SupportsTempPasswordInterface) {
+            $hash = $user->getTempPasswordHash();
+            $exp  = $user->getTempPasswordExpiresAt();
+
+            if ($hash && $exp && $exp >= new \DateTimeImmutable() && Hash::check($plain, $hash)) {
+                // 성공 즉시 만료
+                $user->clearTempPassword();
+                return true;
+            }
+        }
+
+        return false;
     }
+
 
     public function login(AuthenticatableInterface $user): void
     {
