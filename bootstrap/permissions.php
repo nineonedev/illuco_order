@@ -11,4 +11,5 @@ return [
     'cart' => ['create', 'read', 'update', 'delete'],
     'role' => ['create', 'read', 'update', 'delete'],
     'category' => ['create', 'read', 'update', 'delete'],
+    'salesinfo' => ['create', 'read', 'update', 'delete'],
 ];

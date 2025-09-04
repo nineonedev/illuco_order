@@ -183,11 +183,14 @@ class OrderController extends Controller
                 'payment_date' => 'nullable|date',
                 'delivery_date' => 'nullable|date',
                 'shipping_date' => 'nullable|date',
+                'use_remarks' => 'nullable|boolean'
             ]);
 
             $data = $request->safe();
-            $newStatus = $data['order_status'];
 
+            $data['use_remarks'] = $data['use_remarks'] ?? 0;
+            
+            $newStatus = $data['order_status'];
             unset($data['order_status']);
 
             $order->fill($data);

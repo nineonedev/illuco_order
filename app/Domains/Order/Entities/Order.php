@@ -41,6 +41,7 @@ class Order extends Entity
         'date',
         'weekday',
         'time_hour',
+        'use_remarks',
     ];
 
     protected array $casts = [
@@ -63,6 +64,7 @@ class Order extends Entity
         'date'            => 'date',
         'weekday'         => '?int',
         'time_hour'       => '?int',
+        'use_remarks'   => 'bool',
     ];
 
     public static function repositoryClass(): string
@@ -114,22 +116,23 @@ class Order extends Entity
             $this->load(['dealer']);
         }
 
+        if ($this->status !== $status) {
+            $orderLogData = [
+                'order_id' => $this->id, 
+                'user_id' => user()->id,
+                'status' => $status,
+                'previous_status' => $this->order_status,
+            ];
 
-        $orderLogData = [
-            'order_id' => $this->id, 
-            'user_id' => user()->id,
-            'status' => $status,
-            'previous_status' => $this->order_status,
-        ];
+            $orderLog = new OrderLog($orderLogData);
+            $orderLog = OrderLogRepository::make()->save($orderLog);
+
+            if (!$orderLog) {
+                throw new RuntimeException("오더 상태 기록에 실패하였습니다.");
+            }
+        }
 
         $this->order_status = $status; 
-
-        $orderLog = new OrderLog($orderLogData);
-        $orderLog = OrderLogRepository::make()->save($orderLog);
-
-        if (!$orderLog) {
-            throw new RuntimeException("오더 상태 기록에 실패하였습니다.");
-        }
 
         $success = OrderRepository::make()->save($this);
         if (!$success) {

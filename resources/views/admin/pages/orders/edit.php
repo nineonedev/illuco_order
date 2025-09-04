@@ -129,6 +129,29 @@ use App\Domains\Product\Entities\Loupe;
                                     "value": "<?= $order->shipping_date ?? ''?>"
                                 }'
                             ></div>
+
+                            <div class="no-form-checkbox --md">
+                                <label for="use_remarks" class="no-form-checkbox-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        name="use_remarks" 
+                                        id="use_remarks" 
+                                        class="no-form-checkbox-input" 
+                                        value="1"
+                                        <?= $order->use_remarks ? 'checked' : '' ?>
+                                    >
+                                    <div class="no-form-checkbox-ripple">
+                                        <span class="no-form-checkbox-box">
+                                            <div class="no-form-checkbox-icon">
+                                                <i class="fa-solid fa-check"></i>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <span class="no-form-checkbox-text">EU 인증자번호 표시</span>
+                                </label>
+                                 <span class="no-form-control-space"></span>
+                            </div>
+
                         </div>
 
                         <div class="no-form-action">
@@ -252,34 +275,6 @@ use App\Domains\Product\Entities\Loupe;
                                                     <button type="button" class="no-btn-primary --xxs" data-history-method="put" data-history-action="<?= route('admin.order_histories.update', ['id' => $history->id]) ?>">수정</button>
                                                     <button type="button" class="no-btn-error --xxs" data-history-method="delete" data-history-action="<?= route('admin.order_histories.destroy', ['id' => $history->id]) ?>">삭제</button>
                                                 </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="no-order-history-list">
-                                <h3 class="no-order-update__title">상태 변경 내역</h3>
-                                <table class="no-page-index-table">
-                                    <thead>
-                                        <tr>
-                                            <th>변경자</th>
-                                            <th>이전 상태</th>
-                                            <th>변경 후 상태</th>
-                                            <!-- <th>사유/메모</th> -->
-                                            <th>변경일</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($orderLogs as $log): ?>
-                                            <tr>
-                                                <td><?= e($log->user->name ?? '-') ?></td>
-                                                <td><?= $log->previous_status ? __('system.order.status.' . $log->previous_status) : '-' ?></td>
-                                                <td><?= __('system.order.status.' . $log->status) ?></td>
-                                                <!-- <td><?= nl2br(e($log->message ?? '-')) ?></td> -->
-                                                <td><?= date('Y-m-d h:i A', strtotime($log->created_at)) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -500,6 +495,34 @@ use App\Domains\Product\Entities\Loupe;
                             </tbody>
                         </table>
                     </div>
+                </div>
+                
+            </section>
+            <section>
+                <div class="no-order-history-list">
+                    <h3 class="no-order-update__title">상태 변경 내역</h3>
+                    <table class="no-page-index-table">
+                        <thead>
+                            <tr>
+                                <th>변경자</th>
+                                <th>이전 상태</th>
+                                <th>변경 후 상태</th>
+                                <!-- <th>사유/메모</th> -->
+                                <th>변경일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($orderLogs as $log): ?>
+                                <tr>
+                                    <td><?= e($log->user->name ?? '-') ?></td>
+                                    <td><?= $log->previous_status ? __('system.order.status.' . $log->previous_status) : '-' ?></td>
+                                    <td><?= __('system.order.status.' . $log->status) ?></td>
+                                    <!-- <td><?= nl2br(e($log->message ?? '-')) ?></td> -->
+                                    <td><?= date('Y-m-d h:i A', strtotime($log->created_at)) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </div>

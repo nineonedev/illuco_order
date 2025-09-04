@@ -66,6 +66,7 @@ class App {
         const controllerName = document.body.dataset.controller;
         const actionName = document.body.dataset.action;
 
+
         if (!controllerName || !actionName) {
             console.warn(
                 "[App] data-controller 또는 data-action이 비어 있습니다."
@@ -83,6 +84,7 @@ class App {
         }
 
         const controller = new ControllerClass();
+        
 
         if (typeof controller[actionName] !== "function") {
             console.error(
@@ -134,6 +136,7 @@ class App {
         const openBtn = document.getElementById("drawer-open-btn");
         const closeBtn = document.getElementById("drawer-close-btn");
 
+        
         if (!menuBtn || !drawer || !openBtn || !closeBtn) return;
 
         // 화면 크기 확인 후, 1024px 이하일 경우 --shrink 클래스 제거

@@ -66,6 +66,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
     </table>
   </div>
 
+  
   <!-- Meta Table -->
   <div class="table-section">
     <small class="--tar">
@@ -112,10 +113,14 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
       </thead>
       <tbody>
         <?php $no = 1; ?>
-        <?php for ($i = 0; $i < 16; $i++): ?>
+        <?php for ($i = 0; $i < 16; $i++):  ?>
             <?php
+                $orgIndex = $i + 1; 
+
                 /** @var \App\Domains\Order\Entities\OrderItem|null $item */
                 $item = $items[$i] ?? null;
+                $unitKey = 'unit_price_'.$orgIndex;
+                $unitPrice = $item ? ($entity->{$unitKey} ?? $item->unit_price) : null;
 
                 if ($item) {
                     $product = $item->product;
@@ -126,7 +131,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                         e($product->description),
                         e($item->quantity),
                         'PC(S)',
-                        '$ ' . number_format($item->unit_price, 2),
+                        '$ ' . number_format($unitPrice, 2),
                         '$ ' . number_format($item->total_price, 2)
                     ];
                 } else {
@@ -194,3 +199,4 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
     </div>
   </div>
 </div>
+

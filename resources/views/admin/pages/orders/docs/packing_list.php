@@ -1,4 +1,7 @@
 <?php
+
+use App\Domains\Communication\Entities\SalesInfo;
+use App\Domains\Communication\Repositories\SalesInfoRepository;
 /**
  * @var \App\Domains\Order\Entities\OrderDocument $document
  */
@@ -159,7 +162,10 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                 </tfoot>
             </table>
         </div>
-
+        <?php 
+            $info = SalesInfoRepository::make()->query()->first(); 
+            $info = $info ?? SalesInfo::make();
+        ?>
         <!-- Footer -->
         <div class="packing-footer">
             <p class="packing-note">
@@ -171,9 +177,19 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
             </p>
         </div>
 
-        <div class="packing-sign">
-            <p>Supplied by</p>
-            <img src="<?= asset_path('img/meta/sign.png') ?>" alt="ILLUCO CO., LTD">
+        <div class="no-order-doc__bottom">
+            <footer class="no-order-doc__footer">
+                <span class="--full"><?= $info->company_name?></span>
+                <span class="--full"><?= $info->company_address?></span>
+                <span><?= $info->company_website?></span>
+                <span><?= $info->company_tel?></span>
+                <span><?= $info->company_fax?></span>
+                <span><?= $info->company_email?></span>
+            </footer>
+            <div class="commercial-sign">
+                <p>Supplied by</p>
+                <img src="<?= asset_path('img/meta/sign.png') ?>" alt="ILLUCO CO., LTD">
+            </div>
         </div>
 
         <div class="no-form-action">

@@ -1,4 +1,7 @@
 <?php
+
+use App\Domains\Communication\Entities\SalesInfo;
+use App\Domains\Communication\Repositories\SalesInfoRepository;
 /**
  * @var \App\Domains\Order\Entities\OrderDocument $document
  */
@@ -184,22 +187,34 @@ $grandTotal = $subTotal + $freightCharge;
         </table>
     </div>
 
+    <?php 
+        $info = SalesInfoRepository::make()->query()->first(); 
+        $info = $info ?? SalesInfo::make();
+    ?>
     <!-- Footer -->
     <div class="commercial-footer">
         <p>HS Code: <?= e($entity->hs_code) ?></p>
-        <p>DEV: <?= e($entity->dev) ?></p>
-        <p>LST: <?= e($entity->lst) ?></p>
-        <p>EIN: <?= e($entity->ein) ?></p>
+        <?php if ($order->use_remarks): ?>
+        <p class="no-order-doc__remarks">
+            <u>Remarks</u><br> 
+            <span><?= $info->remarks ?? '' ?></span>
+        </p>
+        <?php endif; ?>
     </div>
 
-    <!-- <div class="footer">
-        <p>ILLUCO Co., Ltd. 102-304 SK Ventium, #166 Gosan-ro, Gunpo-si, Gyeonggi-do, Korea</p>
-        <p>www.illuco.co.kr Tel. +82 31 429 8825 Fax. +82 31 429 8826 info@illuco.co.kr</p>
-    </div> -->
-
-    <div class="commercial-sign">
-        <p>Supplied by</p>
-        <img src="<?= asset_path('img/meta/sign.png') ?>" alt="ILLUCO CO., LTD">
+    <div class="no-order-doc__bottom">
+        <footer class="no-order-doc__footer">
+            <span class="--full"><?= $info->company_name?></span>
+            <span class="--full"><?= $info->company_address?></span>
+            <span><?= $info->company_website?></span>
+            <span><?= $info->company_tel?></span>
+            <span><?= $info->company_fax?></span>
+            <span><?= $info->company_email?></span>
+        </footer>
+        <div class="commercial-sign">
+            <p>Supplied by</p>
+            <img src="<?= asset_path('img/meta/sign.png') ?>" alt="ILLUCO CO., LTD">
+        </div>
     </div>
-
+    
 </div>

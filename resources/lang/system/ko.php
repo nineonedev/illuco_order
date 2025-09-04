@@ -22,6 +22,7 @@ return [
         'cart' => '장바구니',
         'role' => '권한',
         'category' => '카테고리',
+        'salesinfo' => '사이트 정보',
     ],
 
     // 권한

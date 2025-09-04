@@ -1,5 +1,39 @@
 @use '../abstracts' as *;
 
+.no-order-doc {
+  &__remarks {
+    margin-top: 0.8rem;
+    border: 2px solid var(--clr-gray-500);
+    padding: 0.4rem;
+
+    u {
+      text-decoration: underline;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.6rem;
+    align-items: center;
+    margin-top: 1.2rem;
+  }
+
+  &__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+
+    span {
+      display: inline-block;
+
+      &.--full {
+        width: 100%;
+      }
+    }
+  }
+}
+
 .document-container {
   overflow-x: auto;  
   padding: 0.2rem;

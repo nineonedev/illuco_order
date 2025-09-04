@@ -10,6 +10,7 @@ import ProductTemplateController from "../controllers/ProductTemplateController"
 import RoleController from "../controllers/RoleController";
 import OrderDocumentController from '../controllers/OrderDocumentController';
 import ClaimController from "../controllers/ClaimController";
+import SalesInfoController from "../controllers/SalesInfoController";
 
 export default {
     notice: NoticeController,
@@ -24,4 +25,5 @@ export default {
     category: CategoryController,
     orderDocument: OrderDocumentController,
     claim: ClaimController,
+    salesinfo: SalesInfoController
 };

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Order;
 
+use App\Domains\Communication\Entities\SalesInfo;
+use App\Domains\Communication\Repositories\SalesInfoRepository;
 use App\Domains\Order\Entities\Documents\CommercialInvoice;
 use App\Domains\Order\Entities\Documents\PackingList;
 use App\Domains\Order\Entities\Documents\ProductRequest;

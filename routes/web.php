@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Communication\SalesInfoController;
 use App\Http\Controllers\DealerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\Order\OrderDocumentController;
@@ -60,6 +61,13 @@ Route::middleware(['web'])->group(function(){
                 ->group(function() {
                     Route::get('aggregation', [AdminController::class, 'aggregateApi'])->name('aggregation');
             });
+
+            Route::prefix('salesinfo')
+                ->name('salesinfo')
+                ->group(function(){
+                    Route::get('/', [SalesInfoController::class, 'index'])->name('index');
+                    Route::post('/save', [SalesInfoController::class, 'save'])->name('save');
+                });
                 
 
             Route::prefix('me')

@@ -1,4 +1,9 @@
 <?php
+
+use App\Domains\Communication\Entities\SalesInfo;
+use App\Domains\Communication\Repositories\SalesInfoRepository;
+use App\Domains\User\Repositories\UserRepository;
+use Framework\Support\Facades\DB;
 /**
  * @var \App\Domains\Order\Entities\OrderDocument $document
  */
@@ -33,14 +38,14 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
   </div>
 
   <?php 
-    $buyerCompany = ''; 
+    $buyerCompany = user()->name; 
     $buyerAddress = ''; 
-    $buyerTel = ''; 
     $buyerAttn = ''; 
-    $buyerEmail = '';
+    $buyerTel = user()->phone ?? ''; 
+    $buyerEmail = user()->email ?? '';
     
     if (user()->isDealer()) {
-      $buyerCompany = user();
+      $buyerAddress = user()->delaer->address; 
     }
   ?>
 
@@ -48,7 +53,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
     <div class="buyer-section">
       <p><strong>Buyer</strong></p>
       <p>Company: <input type="text" name="buyer_name" value="<?= e($entity->buyer_name ?:  $order->customer->name) ?>"></p>
-      <p>Address: <input type="text" name="buyer_address" value="<?= e($entity->buyer_address ?: $order->customer->address) ?>"></p>
+      <p>Address: <input type="text" name="buyer_address" value="<?= e($entity->buyer_address ?: $buyerAddress) ?>"></p>
       <p>Tel.: <input type="text" name="buyer_tel" value="<?= e($entity->buyer_tel ?: $order->customer->phone) ?>"></p>
       <p>Attn.: <input type="text" name="buyer_attn" value="<?= e($entity->buyer_attn) ?>"></p>
       <p>Email: <input type="email" name="buyer_email" value="<?= e($entity->buyer_email ?: $order->customer->email) ?>"></p>
@@ -70,6 +75,12 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
     </table>
   </div>
 
+  
+  <?php 
+	$salespersonName  =  user()->name;
+	$salespersonTel   = user()->phone;
+	$salespersonEmail =  user()->email;
+  ?>
   <div class="table-section">
     <small class="--tar">
       <p><u>Currency : USD</u></p>
@@ -85,10 +96,10 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
         <th>Shipment by</th>
       </tr>
       <tr>
-        <td><input type="text" name="salesperson_name" value="<?= e($entity->salesperson_name ?: $order->orderer_name) ?>"></td>
+        <td><input type="text" name="salesperson_name" value="<?= e($entity->salesperson_name ?: $salespersonName) ?>"></td>
         <td>
-          <input type="text" name="salesperson_tel" value="<?= e($entity->salesperson_tel ?: $order->orderer_phone) ?>"><br>
-          <input type="email" name="salesperson_email" value="<?= e($entity->salesperson_email ?: $order->orderer_email) ?>">
+          <input type="text" name="salesperson_tel" value="<?= e($entity->salesperson_tel ?: $salespersonTel) ?>"><br>
+          <input type="email" name="salesperson_email" value="<?= e($entity->salesperson_email ?: $salespersonEmail) ?>">
         </td>
         <td><input type="text" name="estimated_date_of_delivery" value="<?= e($entity->estimated_date_of_delivery) ?>"></td>
         <td colspan="2"><input type="text" name="price_terms" value="<?= e($entity->price_terms) ?>"></td>
@@ -97,6 +108,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
       </tr>
     </table>
   </div>
+
 
   <div class="table-section">
     <table class="item-table">
@@ -114,8 +126,12 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
       </thead>
       <tbody>
         <?php $no = 1; ?>
-        <?php for ($i = 0; $i < 16; $i++): ?>
-          <?php $item = $items[$i] ?? null; ?>
+        <?php for ($i = 0; $i < 16; $i++):
+          $item = $items[$i] ?? null; 
+          $orgIndex = $i+1;  
+          $storedUnitPrice = $entity->get("unit_price_{$orgIndex}") ?? '';
+          $unitPrice = $storedUnitPrice ?? ($item ? $item->unit_price : '') ;
+        ?>
           <tr>
             <td><?= $item ? $no++ : '&nbsp;' ?></td>
             <td><?= $item ? e($item->product->name) : '&nbsp;' ?></td>
@@ -123,8 +139,14 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
             <td><?= $item ? e($item->product->description) : '&nbsp;' ?></td>
             <td class="right"><?= $item ? e($item->quantity) : '&nbsp;' ?></td>
             <td class="right">PC(S)</td>
-            <td class="right"><?= $item ? '$ ' . number_format($item->unit_price, 2) : '&nbsp;' ?></td>
-            <td class="right"><?= $item ? '$ ' . number_format($item->total_price, 2) : '&nbsp;' ?></td>
+            <td class="right">
+              $ <input type="number" 
+                      name="unit_price_<?=$i+1?>" 
+                      step="0.01" 
+                      value="<?= $unitPrice ?>" 
+                      class="--tar">
+            </td>
+            <td class="right"><?= $item ? '$ ' . number_format($storedUnitPrice ? $unitPrice : $item->total_price, 2) : '&nbsp;' ?></td>
           </tr>
         <?php endfor; ?>
       </tbody>
@@ -151,15 +173,19 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
     </table>
   </div>
 
+  <?php 
+    $info = SalesInfoRepository::make()->query()->first(); 
+    $info = $info ?? SalesInfo::make();
+  ?>
   <div class="bank">
     <p>HS Code: <input type="text" name="hs_code" value="<?= e($entity->hs_code) ?>"></p>
     <div class="bank-details">
       <p><strong>Bank Details</strong></p>
-      <p>Beneficiary: <input type="text" name="bank_beneficiary" value="<?= e($entity->bank_beneficiary) ?>"></p>
-      <p>Bank Name: <input type="text" name="bank_name" value="<?= e($entity->bank_name) ?>"></p>
-      <p>Bank Address: <input type="text" name="bank_address" value="<?= e($entity->bank_address) ?>"></p>
-      <p>Swift Code: <input type="text" name="bank_swift_code" value="<?= e($entity->bank_swift_code) ?>"></p>
-      <p>Account No.: <input type="text" name="bank_account_no" value="<?= e($entity->bank_account_no) ?>"></p>
+      <p>Beneficiary: <input type="text" name="bank_beneficiary" value="<?= e($info->beneficiary ?? '') ?>"></p>
+      <p>Bank Name: <input type="text" name="bank_name" value="<?= e($info->bank_name ?? '') ?>"></p>
+      <p>Bank Address: <input type="text" name="bank_address" value="<?= e($info->bank_address ?? '') ?>"></p>
+      <p>Swift Code: <input type="text" name="bank_swift_code" value="<?= e($info->swift_code ?? '') ?>"></p>
+      <p>Account No.: <input type="text" name="bank_account_no" value="<?= e($info->account_no ?? '') ?>"></p>
     </div>
   </div>
 

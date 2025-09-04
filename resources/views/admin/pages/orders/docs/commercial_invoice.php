@@ -1,4 +1,7 @@
 <?php
+
+use App\Domains\Communication\Entities\SalesInfo;
+use App\Domains\Communication\Repositories\SalesInfoRepository;
 /**
  * @var \App\Domains\Order\Entities\OrderDocument $document
  */
@@ -58,6 +61,7 @@ $grandTotal = $subTotal + $freightCharge;
             </table>
         </div>
 
+        
         <!-- BILL TO / SHIP TO -->
         <div class="commercial-between">
             <div class="commercial-block">
@@ -174,17 +178,37 @@ $grandTotal = $subTotal + $freightCharge;
             </table>
         </div>
 
+        
+        <?php 
+            $info = SalesInfoRepository::make()->query()->first(); 
+            $info = $info ?? SalesInfo::make();
+        ?>
+
         <!-- Footer -->
         <div class="commercial-footer">
             <p>HS Code: <input type="text" name="hs_code" value="<?= e($entity->hs_code) ?>"></p>
-            <p>DEV: <input type="text" name="dev" value="<?= e($entity->dev) ?>"></p>
-            <p>LST: <input type="text" name="lst" value="<?= e($entity->lst) ?>"></p>
-            <p>EIN: <input type="text" name="ein" value="<?= e($entity->ein) ?>"></p>
+                            
+            <?php if ($order->use_remarks): ?>
+            <p class="no-order-doc__remarks">
+                <u>Remarks</u><br> 
+                <span><?= $info->remarks ?? '' ?></span>
+            </p>
+            <?php endif; ?>
         </div>
 
-        <div class="commercial-sign">
-            <p>Supplied by</p>
-            <img src="<?= asset_path('img/meta/sign.png') ?>" alt="ILLUCO CO., LTD">
+        <div class="no-order-doc__bottom">
+            <footer class="no-order-doc__footer">
+                <span class="--full"><?= $info->company_name?></span>
+                <span class="--full"><?= $info->company_address?></span>
+                <span><?= $info->company_website?></span>
+                <span><?= $info->company_tel?></span>
+                <span><?= $info->company_fax?></span>
+                <span><?= $info->company_email?></span>
+            </footer>
+            <div class="commercial-sign">
+                <p>Supplied by</p>
+                <img src="<?= asset_path('img/meta/sign.png') ?>" alt="ILLUCO CO., LTD">
+            </div>
         </div>
 
         <div class="no-form-action">

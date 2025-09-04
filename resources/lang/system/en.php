@@ -23,6 +23,7 @@ return [
         'cart' => 'Cart',
         'role' => 'Role',
         'category' => 'Category',
+        'salesinfo' => 'Site Information',
     ],
 
     // 권한

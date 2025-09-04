@@ -222,6 +222,23 @@
                                 </a>
                             </li>
                         <?php endif; ?>
+                        <!-- 클레임 메뉴 -->
+                        <?php if (can('salesinfo.read')): ?>
+                            <li class="no-drawer-gnb-item <?= route_is('admin.salesinfo') ? '--active' : '' ?>">
+                                <a href="<?= route('admin.salesinfo.index') ?>" data-drawer-menu class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                                    <div class="no-drawer-gnb-link__icon">
+                                        <i class="fa-light fa-sitemap"></i>
+                                    </div>
+                                    <div class="no-drawer-gnb-link__text">
+                                        <span>사이트 정보</span>
+                                    </div>
+                                    <div data-tooltip-text>
+                                        <span>사이트 정보</span>
+                                        <span data-tooltip-arrow></span>
+                                    </div>
+                                </a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                     
                     <?php if (can('role.read')) : ?>
