@@ -13,6 +13,7 @@ class Dealer extends Entity
         'address',
         'description',
         'category_id',
+        'category_ids',
     ];
 
     protected array $casts = [

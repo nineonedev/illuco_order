@@ -68,17 +68,27 @@ class ProductTemplateController extends Controller
         return $this->render(null, $data, '성공적으로 로드되었습니다.');
     }
 
+
     public function index(Request $request)
     {
         $query = $this->repo()
             ->with([FileAttachment::class, 'category'])
             ->query();
         
-        $hasCategory = user()->isDealer() && user()->dealer->category_id;
+        $hasCategory = user()->isDealer() && user()->dealer->category_ids;
 
-        $categoryId = $hasCategory
-            ? user()->dealer->category_id 
-            : $request->query('category_id');
+        $categoryIds = $request->query('category_ids') ?? null;
+        $categoryIds = $categoryIds ? explode(',', $categoryIds) : [];
+            
+        $categoryIdsResult = []; 
+
+        if ($hasCategory) {
+            $categoryIdsResult = explode(',', user()->dealer->category_ids); 
+        } else {
+            $categoryIdsResult = $categoryIds; 
+        }
+
+        $categoryId = $request->query('category_id');
 
         // 제품명 검색
         $query->when(
@@ -107,10 +117,19 @@ class ProductTemplateController extends Controller
             })
         );
 
+        if ($hasCategory) {
+            $categoryId = $categoryIdsResult[0];
+        }
+        
         $query->when(
             $categoryId,
             fn($q) =>  $q->where('category_id', $categoryId)
         );
+
+        // $query->when(
+        //     $categoryIdsResult,
+        //     fn($q) =>  $q->whereIn('category_id', $categoryIdsResult)
+        // );
 
         // 정렬
         $sort = $request->query('sort');
@@ -160,7 +179,7 @@ class ProductTemplateController extends Controller
             ->orderByAsc('sort_order');
 
         if ($hasCategory) {
-            $categoryQuery->where('id', $categoryId);
+            $categoryQuery->whereIn('id', $categoryIdsResult);
         }
 
         $categories = $categoryQuery->get();

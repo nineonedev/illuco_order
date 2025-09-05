@@ -150,15 +150,23 @@ class DealerController extends Controller
                 'code'        => 'required|unique:dealers',
                 'address'     => 'nullable',
                 'description' => 'nullable',
-                'category_id' => 'nullable|integer',
+                'category_ids' => 'nullable',
             ]);
 
             $validator->validateOrFail();
             $dealerData = $validator->validated();
-
+            
             $dealer = new Dealer($dealerData);
+
+            if (!user()->isDealer()) {
+                $categoryIds = $dealerData['category_ids'] ?? [];
+                $categoryIds = $categoryIds 
+                    ?  implode(',', array_filter($categoryIds, fn($cateId) => $cateId !== ''))
+                    :  null;
+                $dealer->category_ids = $categoryIds; 
+            }
+
             $dealer->id = $user->id;
-            $dealer->category_id = $dealerData['category_id'] ?: null;
             $dealer = DealerRepository::make()->save($dealer);
 
             if (!$dealer) {
@@ -192,11 +200,15 @@ class DealerController extends Controller
 
             $dealerData = $request->body($user->type);
             $dealer = $user->{$user->type};
-
             $dealer = $dealer->fill($dealerData);
 
+
             if (!user()->isDealer()) {
-                $dealer->category_id = $dealerData['category_id'] ?: null;
+                $categoryIds = $dealerData['category_ids'] ?? [];
+                $categoryIds = $categoryIds 
+                    ?  implode(',', array_filter($categoryIds, fn($cateId) => $cateId !== ''))
+                    :  null;
+                $dealer->category_ids = $categoryIds; 
             }
 
             $dealer = DealerRepository::make()->save($dealer);

@@ -92,8 +92,8 @@
                         <?php
                             $props = [
                                 'label' => '제품군 선택',
-                                'name'  => 'dealer[category_id]',
-                                'value' => $dealer->dealer->category_id,
+                                'name'  => 'dealer[category_ids]',
+                                'value' => explode(',', $dealer->dealer->category_ids ?? ''),
                                 'options' => array_merge([['label' => '전체', 'value' => '']], array_map(
                                     fn($c) => ['label' => $c->label, 'value' => $c->id],
                                     $categories
@@ -102,7 +102,7 @@
                         ?>
                         <div 
                             class="no-form-field"
-                            data-view-type="select"
+                            data-view-type="multi-select"
                             data-view-props='<?= e(json_encode($props)) ?>'
                         ></div>
                         <?php endif; ?>

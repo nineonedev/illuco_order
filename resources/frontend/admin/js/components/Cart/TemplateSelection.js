@@ -140,12 +140,12 @@ export default class TemplateSelection extends View {
                     ${from}-${to} of ${total}
                 </div>
                 <div class="no-pagination__btn">
-                    <a href="#" class="no-btn-move ${!has_previous_page ? '--disabled' : ''}" data-move="prev">
+                    <button type="button" class="no-btn-move ${!has_previous_page ? '--disabled' : ''}" data-move="prev">
                         <i class="fa-duotone fa-light fa-chevron-left"></i>
-                    </a>
-                    <a href="#" class="no-btn-move ${!has_next_page ? '--disabled' : ''}" data-move="next">
+                    </button>
+                    <button type="button" class="no-btn-move ${!has_next_page ? '--disabled' : ''}" data-move="next">
                         <i class="fa-duotone fa-light fa-chevron-right"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         `;
@@ -251,8 +251,10 @@ export default class TemplateSelection extends View {
         });
     }
 
-    _handleMove(button, evt) {
+    _handleMove(form, evt) {
         evt.preventDefault();
+
+        const button = evt.currentTarget; 
 
         if (button.classList.contains('--disabled')) return;
 

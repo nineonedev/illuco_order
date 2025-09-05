@@ -32,7 +32,7 @@ export default class MultiSelectInput extends View {
             <div class="no-form-control --md">
                 <label for="${nodeId}" class="no-form-control-inner">
                     <span class="no-form-label">${label}</span>
-                    <select id="${nodeId}" name="${name}" data-ref="select" class="no-form-control-input" multiple>
+                    <select id="${nodeId}" name="${name}[]" data-ref="select" class="no-form-control-input" multiple>
                         ${
                             fallback
                                 ? `<option value="">-- 선택 --</option>`

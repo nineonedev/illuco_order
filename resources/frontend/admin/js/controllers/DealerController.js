@@ -4,6 +4,7 @@ import SelectInput from "../components/Inputs/SelectInput";
 import Modal from "../shared/Modal";
 import Loader from "../shared/Loader";
 import Ajax from "../core/Ajax";
+import MultiSelectInput from "../components/Inputs/MultiSelectInput";
 
 export default class DealerController extends Controller {
     form;
@@ -403,6 +404,10 @@ export default class DealerController extends Controller {
 
         document.querySelectorAll('[data-view-type="select"]').forEach((el) => {
             SelectInput.make(el).render();
+        });
+
+        document.querySelectorAll('[data-view-type="multi-select"]').forEach((el) => {
+            MultiSelectInput.make(el).render();
         });
     }
 }

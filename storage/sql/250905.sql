@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 호스트: db:3306
--- 생성 시간: 25-09-05 02:49
+-- 생성 시간: 25-09-05 11:17
 -- 서버 버전: 8.0.42
 -- PHP 버전: 8.2.27
 
@@ -189,26 +189,28 @@ CREATE TABLE `dealers` (
   `deleted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `category_id` bigint UNSIGNED DEFAULT NULL
+  `category_id` bigint UNSIGNED DEFAULT NULL,
+  `category_ids` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 테이블의 덤프 데이터 `dealers`
 --
 
-INSERT INTO `dealers` (`id`, `country`, `code`, `address`, `description`, `memo`, `use_default_memo`, `deleted_at`, `created_at`, `updated_at`, `category_id`) VALUES
-(9, 'FR', 'DF02', 'assdaasdsdasd', 'sd\r\nsd\r\n\r\nasd\r\nasd\r\n', NULL, 0, NULL, '2025-07-09 07:46:14', '2025-07-17 07:20:02', 2),
-(12, 'KR', 'JJ0231', 'sasd', 'sd\r\nsda\r\nsad\r\nasd\r\n', NULL, 0, NULL, '2025-07-10 06:22:29', '2025-07-10 06:22:29', NULL),
-(13, 'PT', 'DAM', 'sddasdas', 'asdasdsad', NULL, 0, NULL, '2025-07-11 05:53:49', '2025-07-14 01:35:06', NULL),
-(15, 'KR', 'asdasdsa', 'dsasdasas', 'asasdads', NULL, 0, NULL, '2025-07-11 06:00:46', '2025-07-11 06:00:46', NULL),
-(16, 'KR', 'sdsda', 'asd', 'adsasd', NULL, 0, NULL, '2025-07-11 06:01:06', '2025-07-11 06:01:06', 3),
-(19, 'JP', 'DA01', '', '', NULL, 0, NULL, '2025-08-06 01:19:03', '2025-08-06 01:19:03', NULL),
-(20, 'DE', 'DA0B', 'test', 'test', NULL, 0, NULL, '2025-08-06 01:19:44', '2025-08-06 01:19:44', 2),
-(21, 'IT', 'DAC08', 'ccv', 'ss', NULL, 0, NULL, '2025-08-06 01:51:24', '2025-08-06 02:00:03', NULL),
-(24, 'ID', 'DAF03', 'addressa12', 'descriptionasdas', NULL, 0, NULL, '2025-08-06 14:08:20', '2025-08-06 14:49:54', NULL),
-(25, 'KR', 'KR-ILL', 'test', '', NULL, 0, NULL, '2025-08-12 17:13:36', '2025-09-04 05:39:03', NULL),
-(27, 'KR', 'KR-INFO', '경기도 군포시 고산로 166 SK벤티움 102동 304호', '테스트', NULL, 0, NULL, '2025-08-16 13:42:24', '2025-08-16 13:42:24', 3),
-(29, 'JP', 'TM01', 'test address', 'test description', NULL, 0, NULL, '2025-09-05 01:50:29', '2025-09-05 01:50:29', NULL);
+INSERT INTO `dealers` (`id`, `country`, `code`, `address`, `description`, `memo`, `use_default_memo`, `deleted_at`, `created_at`, `updated_at`, `category_id`, `category_ids`) VALUES
+(9, 'FR', 'DF02', 'assdaasdsdasd', 'sd\r\nsd\r\n\r\nasd\r\nasd\r\n', NULL, 0, NULL, '2025-07-09 07:46:14', '2025-07-17 07:20:02', 2, NULL),
+(12, 'KR', 'JJ0231', 'sasd', 'sd\r\nsda\r\nsad\r\nasd\r\n', NULL, 0, NULL, '2025-07-10 06:22:29', '2025-07-10 06:22:29', NULL, NULL),
+(13, 'PT', 'DAM', 'sddasdas', 'asdasdsad', NULL, 0, NULL, '2025-07-11 05:53:49', '2025-07-14 01:35:06', NULL, NULL),
+(15, 'KR', 'asdasdsa', 'dsasdasas', 'asasdads', NULL, 0, NULL, '2025-07-11 06:00:46', '2025-07-11 06:00:46', NULL, NULL),
+(16, 'KR', 'sdsda', 'asd', 'adsasd', NULL, 0, NULL, '2025-07-11 06:01:06', '2025-07-11 06:01:06', 3, NULL),
+(19, 'JP', 'DA01', '', '', NULL, 0, NULL, '2025-08-06 01:19:03', '2025-08-06 01:19:03', NULL, NULL),
+(20, 'DE', 'DA0B', 'test', 'test', NULL, 0, NULL, '2025-08-06 01:19:44', '2025-08-06 01:19:44', 2, NULL),
+(21, 'IT', 'DAC08', 'ccv', 'ss', NULL, 0, NULL, '2025-08-06 01:51:24', '2025-08-06 02:00:03', NULL, NULL),
+(24, 'ID', 'DAF03', 'addressa12', 'descriptionasdas', NULL, 0, NULL, '2025-08-06 14:08:20', '2025-08-06 14:49:54', NULL, NULL),
+(25, 'KR', 'KR-ILL', 'test', '', NULL, 0, NULL, '2025-08-12 17:13:36', '2025-09-04 05:39:03', NULL, NULL),
+(27, 'KR', 'KR-INFO', '경기도 군포시 고산로 166 SK벤티움 102동 304호', '테스트', NULL, 0, NULL, '2025-08-16 13:42:24', '2025-08-16 13:42:24', 3, NULL),
+(29, 'JP', 'TM01', 'test address', 'test description', NULL, 0, NULL, '2025-09-05 01:50:29', '2025-09-05 10:26:21', NULL, '3,2'),
+(30, 'AU', 'FN', 'babc', 'test', NULL, 0, NULL, '2025-09-05 10:28:50', '2025-09-05 10:31:08', NULL, '11');
 
 -- --------------------------------------------------------
 
@@ -1373,7 +1375,8 @@ INSERT INTO `role_users` (`id`, `user_id`, `role_id`, `created_at`, `updated_at`
 (25, 27, 6, '2025-08-16 13:42:24', '2025-08-16 13:42:24'),
 (26, 28, 7, '2025-08-20 11:57:12', '2025-08-20 11:57:12'),
 (28, 26, 7, '2025-09-04 06:11:43', '2025-09-04 06:11:43'),
-(29, 29, 6, '2025-09-05 01:50:29', '2025-09-05 01:50:29');
+(29, 29, 6, '2025-09-05 01:50:29', '2025-09-05 01:50:29'),
+(30, 30, 6, '2025-09-05 10:28:50', '2025-09-05 10:28:50');
 
 -- --------------------------------------------------------
 
@@ -1482,7 +1485,16 @@ INSERT INTO `sessions` (`id`, `session_id`, `user_id`, `ip_address`, `user_agent
 (483, '5c3d9d42141bd8b80aa3d7d08099222dc05e3a7d', NULL, '172.23.0.1', NULL, '2025-09-04 13:07:39', 'a:0:{}', '2025-09-04 04:07:39', '2025-09-04 13:07:39'),
 (492, 'f48f6b7c9e092ef46d34181e970b64fee9c3427e', NULL, '172.23.0.1', NULL, '2025-09-04 17:03:33', 'a:0:{}', '2025-09-04 08:03:33', '2025-09-04 17:03:33'),
 (504, 'c29969ee2ad5e9477f7f0604a80fe41f1ac50595', NULL, '172.23.0.1', NULL, '2025-09-05 09:40:40', 'a:0:{}', '2025-09-05 00:40:40', '2025-09-05 09:40:40'),
-(515, '110e017f1a3ff9a64819149a29964fd0791b4a0e', 29, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-09-05 11:49:27', 'a:4:{s:11:\"_csrf_token\";s:64:\"cef10c64f268d93e73a2d62b6ac88856f331b62e4a2b2e29e612aa49c53a6562\";s:6:\"_input\";a:4:{s:11:\"_csrf_token\";s:64:\"cef10c64f268d93e73a2d62b6ac88856f331b62e4a2b2e29e612aa49c53a6562\";s:5:\"email\";s:14:\"tomas@test.com\";s:8:\"password\";s:8:\"test1234\";s:10:\"save_email\";s:1:\"1\";}s:10:\"_flash_new\";a:1:{i:0;s:6:\"_input\";}s:7:\"user_id\";i:29;}', '2025-09-05 02:49:14', '2025-09-05 11:49:27');
+(516, '7d2eecf40e0c7cb0165a415f2c279a54472026f7', NULL, '172.23.0.1', NULL, '2025-09-05 11:59:04', 'a:0:{}', '2025-09-05 02:59:04', '2025-09-05 11:59:04'),
+(520, '8e304997bae577c6a9985d107021c01704645e9f', NULL, '172.23.0.1', NULL, '2025-09-05 13:30:49', 'a:0:{}', '2025-09-05 04:30:49', '2025-09-05 13:30:49'),
+(528, '952b4855d904517caea2dee8173975a09bb0a88a', NULL, '172.23.0.1', NULL, '2025-09-05 15:42:56', 'a:0:{}', '2025-09-05 06:42:56', '2025-09-05 15:42:56'),
+(529, '4522adc3efaedfd0c68afeff58e3f9e22e1674e2', NULL, '172.23.0.1', NULL, '2025-09-05 16:19:28', 'a:0:{}', '2025-09-05 07:19:28', '2025-09-05 16:19:28'),
+(532, '756249d18018e6d73f140e464762dd9d17e69f86', NULL, '172.23.0.1', NULL, '2025-09-05 17:49:28', 'a:0:{}', '2025-09-05 08:49:28', '2025-09-05 17:49:28'),
+(534, 'dc63df1e669f409d720baf48480ed54856e7d443', NULL, '172.23.0.1', 'Mozilla/5.0 zgrab/0.x', '2025-09-05 19:02:30', 'a:0:{}', '2025-09-05 10:02:30', '2025-09-05 19:02:30'),
+(535, '5ed53bb0bc41f446ffb332f979777818193b96e9', NULL, '172.23.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.1', '2025-09-05 19:07:32', 'a:0:{}', '2025-09-05 10:07:32', '2025-09-05 19:07:32'),
+(540, 'f459820d1ad31184553465d254a0b2d328887459', NULL, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.46', '2025-09-05 19:44:17', 'a:0:{}', '2025-09-05 10:44:17', '2025-09-05 19:44:17'),
+(544, '4132f96ca725ea91564b66e204f97ae57a63208e', 18, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-09-05 20:00:39', 'a:2:{s:11:\"_csrf_token\";s:64:\"91f831cf515b3767d8f1c4be48e7fe0acd8213d15b1f5b4a4e8f7f8bcccb86cc\";s:7:\"user_id\";i:18;}', '2025-09-05 10:57:37', '2025-09-05 20:00:39'),
+(545, 'feb791ddfb8b5dc8b7864c1108f21d36073f3f9d', NULL, '172.23.0.1', NULL, '2025-09-05 20:07:31', 'a:0:{}', '2025-09-05 11:07:31', '2025-09-05 20:07:31');
 
 -- --------------------------------------------------------
 
@@ -1533,7 +1545,8 @@ INSERT INTO `users` (`id`, `name`, `type`, `email`, `phone`, `password`, `temp_p
 (26, 'JY', 'employee', 'jyc@illuco.co.kr', '010-8351-1180', '$2y$10$1XICoHfZVthzrEBhBNgYOeTcGrk43L8DR0LpP7nziwE37WsEjHXXu', NULL, NULL, 'U', NULL, 1, NULL, NULL, '2025-08-16 13:38:52', '2025-08-16 13:38:52'),
 (27, 'JYC', 'dealer', 'info@illuco.co.kr', '031-4288-825', '$2y$10$OsLGvyqko6Dvo0y/GVDf2.NCWgvCb.0/2tjSI8fz8tbnd0u9lZOhK', '', NULL, 'U', NULL, 1, NULL, NULL, '2025-08-16 13:42:24', '2025-09-04 23:53:32'),
 (28, 'Angela', 'employee', 'kms@illuco.co.kr', '010-8272-6232', '$2y$10$ijH5hJWj8Yb6eza8FGQPXuFdL9WePR4LQFNsqCyyCE.I/4g6aeeUS', NULL, NULL, 'U', NULL, 1, NULL, NULL, '2025-08-20 11:57:12', '2025-08-20 11:57:12'),
-(29, 'Tomas', 'dealer', 'tomas@test.com', '010-1231-2212', '$2y$10$j7NGU6ey4xSEE1QYU9.W7.urYQF6lha4gkYQaWef5d3ftIior.Xgm', NULL, NULL, 'U', NULL, 1, NULL, NULL, '2025-09-05 01:50:29', '2025-09-05 01:50:29');
+(29, 'Tomas', 'dealer', 'tomas@test.com', '010-1231-2212', '$2y$10$j7NGU6ey4xSEE1QYU9.W7.urYQF6lha4gkYQaWef5d3ftIior.Xgm', '', NULL, 'U', NULL, 0, NULL, NULL, '2025-09-05 01:50:29', '2025-09-05 10:26:21'),
+(30, 'fancy22', 'dealer', 'fancy@test.com', '010-2312-3123', '$2y$10$yb2PJ1MorGPApmBxnpA3cO3zglyN8qA0zQBnCsP8JUyhgAMjVEFnG', '', NULL, 'U', NULL, 0, NULL, NULL, '2025-09-05 10:28:50', '2025-09-05 10:31:08');
 
 --
 -- 덤프된 테이블의 인덱스
@@ -1946,7 +1959,7 @@ ALTER TABLE `role_permissions`
 -- 테이블의 AUTO_INCREMENT `role_users`
 --
 ALTER TABLE `role_users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- 테이블의 AUTO_INCREMENT `sales_info`
@@ -1964,13 +1977,13 @@ ALTER TABLE `serial_numbers`
 -- 테이블의 AUTO_INCREMENT `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=516;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=546;
 
 --
 -- 테이블의 AUTO_INCREMENT `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- 덤프된 테이블의 제약사항
