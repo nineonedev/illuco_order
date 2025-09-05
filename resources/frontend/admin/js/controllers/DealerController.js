@@ -291,7 +291,6 @@ export default class DealerController extends Controller {
                 if (this.tempHook) {
                     this.tempHook.innerHTML = `<p class="no-help">임시 비밀번호가 회수(무효화)되었습니다.</p>`;
                 }
-                alert("임시 비밀번호를 해제했습니다.");
             } else {
                 alert(res.message || "임시 비밀번호 해제에 실패했습니다.");
             }

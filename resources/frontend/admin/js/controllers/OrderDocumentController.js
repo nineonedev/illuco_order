@@ -86,9 +86,11 @@ export default class OrderController extends Controller {
         let heightLeft = imgHeight;
         let position = 0;
 
+        // 첫 페이지
         pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
 
+        // 나머지 페이지
         while (heightLeft > 0) {
             position -= pageHeight;
             pdf.addPage();
@@ -96,8 +98,24 @@ export default class OrderController extends Controller {
             heightLeft -= pageHeight;
         }
 
+        // ✅ 페이지 번호 추가
+        const pageCount = pdf.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(100);
+
+            // 페이지 오른쪽 하단에 "i / total" 표시
+            pdf.text(
+                `${i} / ${pageCount}`,
+                pageWidth - 20,   // X 좌표 (오른쪽 여백 20mm)
+                pageHeight - 10   // Y 좌표 (아래 여백 10mm)
+            );
+        }
+
         pdf.save(filename);
     }
+
 
     edit() {
         this._logger.info("index");

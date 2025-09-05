@@ -91,6 +91,47 @@ if (!function_exists('upload_path')) {
     }
 }
 
+// 절대 경로: 퍼블릭 업로드 루트 (실 서버 경로)
+// 예: /var/www/html/public/static/uploads
+if (!function_exists('uploads_root')) {
+    function uploads_root(): string {
+        // 가장 우선: 명시적 설정
+        $root = config('filesystem.uploads_root')
+             ?? config('path.uploads_root')
+             ?? (defined('BASE_PATH') ? (BASE_PATH . '/static/uploads') : null);
+
+        if (!$root) {
+            throw new RuntimeException('uploads_root() is not configured.');
+        }
+        return rtrim($root, '/');
+    }
+}
+
+// 퍼블릭 URL 베이스 (웹 경로)
+// 예: /static/uploads
+if (!function_exists('uploads_public_base')) {
+    function uploads_public_base(): string {
+        return rtrim(config('filesystem.uploads_public') ?? '/static/uploads', '/');
+    }
+}
+
+// 상대경로 -> 절대 파일시스템 경로
+// 예: producttemplate/a.jpg -> /var/www/html/public/static/uploads/producttemplate/a.jpg
+if (!function_exists('uploads_path')) {
+    function uploads_path(string $relative): string {
+        return uploads_root() . '/' . ltrim($relative, '/');
+    }
+}
+
+// 상대경로 -> 퍼블릭 URL
+// 예: producttemplate/a.jpg -> https://example.com/static/uploads/producttemplate/a.jpg
+if (!function_exists('uploads_url')) {
+    function uploads_url(string $relative): string {
+        return rtrim(config('app.url'), '/') . uploads_public_base() . '/' . ltrim($relative, '/');
+    }
+}
+
+
 if (!function_exists('optional')) {
     /**
      * 객체나 값이 null일 수 있는 상황에서 안전하게 접근하도록 도와주는 helper.

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Communication;
 
 use App\Domains\Communication\Entities\Claim;
+use App\Domains\Communication\Enums\ClaimStatus;
 use App\Domains\Communication\Repositories\ClaimRepository;
+use App\Domains\Order\Entities\Customer;
+use App\Domains\Order\Repositories\CustomerRepository;
+use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\Product\Repositories\ProductTemplateRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
@@ -212,6 +216,37 @@ class ClaimController extends Controller
         ]);
     }
 
+    public function edit(string $id)
+    {
+        $claim = $this->repo()->with([FileAttachment::class])->find($id);
+        if (!$claim) {
+            throw new RuntimeException("정보를 찾을 수 없습니다.");
+        }
+
+        $claim->setRelation(
+            FileAttachment::alias(),
+            FileAttachmentList::make($claim->fileattachment)
+        );
+
+        $template = ProductTemplateRepository::make()
+            ->query()
+            ->with(['fileattachment'])
+            ->where('model', $claim->product_model)
+            ->first();
+
+        $customer = CustomerRepository::make()
+            ->query()
+            ->where('name', '=', $claim->customer_name)
+            ->where('email', '=', $claim->customer_email)
+            ->first();
+
+        return $this->render('admin.pages.claims.edit', [
+            'claim' => $claim,
+            'template' => $template,
+            'customer' => $customer,
+        ]);
+    }
+
     public function store(Request $request)
     {
         return $this->runInTransaction(function () use ($request) {
@@ -294,20 +329,55 @@ class ClaimController extends Controller
     public function update(string $id, Request $request)
     {
         return $this->runInTransaction(function () use ($id, $request) {
-            $request->validateOrFail([
-                'status' => 'required|string',
-            ]);
-
-            $claim = $this->repo()->findOrFail($id);
-            $claim->status = $request->body('status');
-
-            if (!$this->repo()->save($claim)) {
-                throw new RuntimeException("클레임 상태 변경에 실패했습니다.");
+          
+            $claim = $this->repo()->with([FileAttachment::class])->find($id);
+            
+            if (!$claim) {
+                throw new RuntimeException("정보를 찾을 수 없습니다.");
             }
 
-            // 처리 완료될 경우 이메일!
+            if (!user()->isDealer()) {
+                $request->validateOrFail([
+                    'status' => 'required|string',
+                ]);
 
-            return $this->render(null, ['claim' => $claim], '상태가 성공적으로 변경되었습니다.');
+                $claim->status = $request->body('status');
+
+                if (!$this->repo()->save($claim)) {
+                    throw new RuntimeException("클레임 상태 변경에 실패했습니다.");
+                }
+
+                return $this->render(null, ['claim' => $claim], '상태가 성공적으로 변경되었습니다.');
+
+            } 
+
+            $data = $request->all();
+            if (isset($data['product'])) {
+                $data['product_name'] = $data['product']['name'];
+                $data['product_code'] = $data['product']['code'];
+                $data['product_model'] = $data['product']['model'];
+            }
+
+            
+            $claim->fill($data);
+
+
+            if ($claim->status !== ClaimStatus::RECEIVED) {
+                throw new RuntimeException("클레임 상태가 처리중이거나 완료일 경우 수정이 불가능합니다.");
+            }
+
+            if (!$this->repo()->save($claim)) {
+                throw new RuntimeException("클레임 변경에 실패했습니다.");
+            }
+
+            $this->fileRepo()->handleDelete($claim);
+            $this->fileRepo()->handleUpload($claim, $this->uploadConfig());
+
+            // 처리 완료될 경우 이메일!
+            return $this->render(null, [
+                'claim' => $claim]
+            , '성공적으로 수정되었습니다.');
+            
         });
     }
 

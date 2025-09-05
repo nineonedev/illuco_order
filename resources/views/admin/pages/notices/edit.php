@@ -151,6 +151,9 @@ use App\Domains\Communication\Enums\NoticeStatus;
                     <a href="<?=route('admin.notices.index')?>" data-action="cancel" class="no-btn-primary-outline --sm">
                         <span>취소</span>
                     </a>
+                     <button type="button" class="no-btn-error-outline --sm" data-action="delete">
+                        <span>삭제</span>
+                    </button>
                     <button type="submit" class="no-btn-primary --sm">
                         <span>저장</span>
                     </button>

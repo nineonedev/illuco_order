@@ -110,6 +110,7 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('/', [ClaimController::class, 'index'])->name('index');
                     Route::get('/create', [ClaimController::class, 'create'])->name('create');
+                    Route::get('/edit/{id}', [ClaimController::class, 'edit'])->name('edit');
                     Route::get('{id}', [ClaimController::class, 'show'])->name('show');
                     
                     Route::post('/', [ClaimController::class, 'store'])->name('store');

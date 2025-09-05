@@ -300,6 +300,15 @@
                                         </div>
                                     </a>
 
+                                    <?php if (user()->isDealer() && $claim->status === ClaimStatus::RECEIVED) :?>
+                                    <a href="<?= route('admin.claims.edit', ['id' => $claim->id]) ?>" data-item-action="delete" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
+                                        <div class="no-btn-action-ripple">
+                                            <i class="fa-light fa-pen-to-square"></i>
+                                            <span data-tooltip-text><span>수정</span><span data-tooltip-arrow></span></span>
+                                        </div>
+                                    </a>
+                                    <?php endif; ?>
+
                                     <?php if (can('claim.delete')): ?>
                                     <a href="<?= route('admin.claims.destroy', ['id' => $claim->id]) ?>" data-item-action="delete" class="no-btn-action" data-tooltip data-method="delete" data-confirm="정말 삭제하시겠습니까?">
                                         <div class="no-btn-action-ripple">

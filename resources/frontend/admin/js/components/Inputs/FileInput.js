@@ -31,7 +31,6 @@ export default class FileInput extends View {
         const {
             fallback,
             file_key,
-            path,
             name,
             original_name,
             label,
@@ -71,11 +70,11 @@ export default class FileInput extends View {
                 </label>
 
                 ${
-                    id && name && path
+                    id && name
                         ? `
                     <div class="no-form-file-preview">
                         <div class="no-form-file-preview__viewer">
-                            ${this._renderPreview(path, original_name, extension, upload_path)}
+                            ${this._renderPreview(original_name, extension, upload_path)}
                         </div>
                         <div class="no-form-checkbox --sm">
                             <label for="${deleteCheckboxId}" class="no-form-checkbox-pointer">
@@ -110,7 +109,7 @@ export default class FileInput extends View {
         `;
     }
 
-    _renderPreview(fileUrl, fileName, extension, resolvedUrl) {
+    _renderPreview(fileName, extension, resolvedUrl) {
         const ext = (extension || "").toLowerCase();
 
         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {

@@ -324,17 +324,45 @@ class FileAttachmentRepository extends Repository
         ));
     }
 
-    public function delete(Entity $entity): bool
-{
-        $disk = disk()->setRoot($entity->path);
-        $disk->load();
+    //     public function delete(Entity $entity): bool
+    // {
+    //         $disk = disk()->setRoot($entity->path);
+    //         $disk->load();
 
-        if (!$disk->has($entity->name)) {
-            return false;
+    //         if (!$disk->has($entity->name)) {
+    //             return false;
+    //         }
+
+    //         $disk->delete($entity->name);
+
+    //         return parent::delete($entity);
+    //     }
+    public function delete(Entity $entity): bool
+    {
+        // DB에 상대경로만 있다고 가정: producttemplate/abcd.jpg
+        $rel = $entity->upload_path ?? null;
+        if (!$rel) {
+            // 파일경로 자체가 없으면 DB만 삭제
+            return parent::delete($entity);
         }
 
-        $disk->delete($entity->name);
+        $abs   = uploads_path($rel);         // /var/www/.../static/uploads/producttemplate/abcd.jpg
+        $dir   = dirname($abs);              // .../producttemplate
+        $name  = basename($abs);             // abcd.jpg
+
+        if (!is_dir($dir)) {
+            // 디렉토리 자체가 없으면 파일도 없다고 보고 DB만 삭제
+            return parent::delete($entity);
+        }
+
+        $disk = disk()->setRoot($dir);       // ✅ 여기서 null이 절대 가지 않게 보장
+        $disk->load();
+
+        if ($disk->has($name)) {
+            $disk->delete($name);
+        }
 
         return parent::delete($entity);
     }
+
 }

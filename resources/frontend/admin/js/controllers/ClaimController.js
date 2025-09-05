@@ -113,6 +113,52 @@ export default class ClaimController extends Controller {
         updateDeleteButtonState();
     }
 
+    async edit(){
+        this._logger.info("edit");
+        this._prepare();
+        await this._loadAllData();
+
+        this.productZone = ProductZone.make('product-zone').render();
+        this.customerZone = CustomerZone.make('customer-zone').render(); 
+
+        const productSearchBtn = document.getElementById('search-product');
+        const customerSearchBtn = document.getElementById('search-customer');
+
+        if (!productSearchBtn){
+            console.error(`No found search button by Id: "search-product"`);
+            return; 
+        }
+        SearchButton.make(productSearchBtn, {
+            onClick: this._handleProductSearch.bind(this),
+        }).render();
+
+        if (!customerSearchBtn){
+            console.error(`No found search button by Id: "search-customer"`);
+            return; 
+        }
+        SearchButton.make(customerSearchBtn, {
+            onClick: this._handleCustomerSearch.bind(this),
+        }).render();
+
+
+        const refreshBtn = document.getElementById('refresh-btn'); 
+
+        if(refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                this.productZone.setState({template: {}});
+                this.customerZone.setState({customer: {}});
+            });
+        }
+
+        this._listen("fetch.customers", this._fetchAllCustomers.bind(this));
+        this._listen("fetch.templates", this._fetchAllTemplates.bind(this));
+
+        this._listen("pick.customer", this._pickCustomer.bind(this));
+        this._listen("pick.template", this._pickTemplate.bind(this));
+
+        this.form.addEventListener("submit", this._store.bind(this));
+    }
+
     async create() {
         this._logger.info("create");
         this._prepare();
@@ -220,9 +266,9 @@ export default class ClaimController extends Controller {
             return; 
         }
         
-        if(!confirm('클레임을 한 번 접수하면 이후 내용을 수정할 수 없습니다. 접수하시겠습니까?')) {
-            return;
-        }
+        // if(!confirm('클레임을 한 번 접수하면 이후 내용을 수정할 수 없습니다. 접수하시겠습니까?')) {
+        //     return;
+        // }
         
         try {
             submitter.disabled = true;

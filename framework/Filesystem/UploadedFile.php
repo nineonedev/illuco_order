@@ -13,6 +13,9 @@ class UploadedFile
     protected int $error; 
     protected ?string $newName = null; // 저장 후 파일명
     protected ?string $storagePath = null; // 실제 저장 디렉토리
+    
+    protected ?string $relativePath = null;
+
 
     public function __construct(
         string $path,
@@ -55,19 +58,31 @@ class UploadedFile
         }
 
         $fullPath = rtrim($destinationPath, DS) . DS . $newName;
-        $this->newName = $newName; // 실제 파일명만 저장
-        $this->storagePath = $destinationPath; // 디렉토리만 저장
+        $this->newName = $newName;
+        $this->storagePath = $destinationPath;
 
         if (!is_uploaded_file($this->path)) {
             throw new RuntimeException("The file is not valid uploaded file.");
         }
-
         if (!move_uploaded_file($this->path, $fullPath)) {
             throw new RuntimeException("Failed to move uploaded file.");
         }
 
+        $root   = uploads_root(); // 절대경로 보장
+        $dirRel = ltrim(str_replace(rtrim($root, DS), '', rtrim($this->storagePath, DS)), DS);
+        $this->relativePath = trim($dirRel . '/' . $this->newName, '/');
+
         return $fullPath;
     }
+
+    public function getRelativePath(): string
+    {
+        if (!$this->relativePath) {
+            throw new RuntimeException("File must be moved before accessing relative path.");
+        }
+        return $this->relativePath; // ex) producttemplate/abcd.jpg
+    }
+
 
     protected function generateSafeFileName(): string
     {
@@ -89,11 +104,8 @@ class UploadedFile
             'name'          => $this->newName,
             'mime_type'     => $this->mimeType,
             'size'          => $this->size,
-            'error'         => $this->error,
-            'path'          => $this->storagePath,
             'extension'     => $this->extension(),
-            'upload_path'   => $this->getUploadPath(),
-            'upload_url'    => $this->getUploadUrl(),
+            'upload_path'   => $this->getRelativePath(),
         ];
     }
 
@@ -143,7 +155,6 @@ class UploadedFile
 
     public function getUploadUrl(): string
     {
-        $path = $this->getUploadPath();
-        return request()->http()->origin() . $path;
+        return uploads_url($this->getRelativePath());
     }
 }
