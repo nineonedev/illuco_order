@@ -8,9 +8,10 @@ import NoticeController from "../controllers/NoticeController";
 import OrderController from "../controllers/OrderController";
 import ProductTemplateController from "../controllers/ProductTemplateController";
 import RoleController from "../controllers/RoleController";
-import OrderDocumentController from '../controllers/OrderDocumentController';
+import OrderDocumentController from "../controllers/OrderDocumentController";
 import ClaimController from "../controllers/ClaimController";
 import SalesInfoController from "../controllers/SalesInfoController";
+import DealerMemoController from "../controllers/DealerMemoController";
 
 export default {
     notice: NoticeController,
@@ -25,5 +26,6 @@ export default {
     category: CategoryController,
     orderDocument: OrderDocumentController,
     claim: ClaimController,
-    salesinfo: SalesInfoController
+    salesinfo: SalesInfoController,
+    dealerMemo: DealerMemoController,
 };

@@ -24,7 +24,6 @@
     padding: var(--button-padding-y) var(--button-padding-x);
     border: var(--button-border-width) solid transparent;
 
-    
     i {
         font-size: inherit;
     }
@@ -83,6 +82,13 @@ $color-types: (
             --button-font-size: 1.1rem;
         }
 
+        &.--min {
+            --button-font-size: 1.1rem;
+            --button-height: 2.8rem;
+            --button-padding-x: 1rem;
+            --button-padding-y: 0.2rem;
+            --button-min-width: 0;
+        }
     }
     .no-btn-#{"#{$type}"}-outline {
         @extend %btn;
@@ -111,6 +117,13 @@ $color-types: (
             --button-font-size: 1.1rem;
         }
 
+        &.--min {
+            --button-font-size: 1.1rem;
+            --button-height: 2.8rem;
+            --button-padding-x: 1rem;
+            --button-padding-y: 0.2rem;
+            --button-min-width: 0;
+        }
     }
 
     .no-link-#{"#{$type}"} {
@@ -134,7 +147,6 @@ $color-types: (
             --button-padding-x: 0.8rem;
             --button-font-size: 1.2rem;
         }
-
 
         &:hover {
             color: var(--clr-#{$type}-dark);

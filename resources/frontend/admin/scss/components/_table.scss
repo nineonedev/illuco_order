@@ -5,28 +5,32 @@
     width: 100%;
 }
 
-
 .no-page-index-table {
     table-layout: auto;
     width: 100%;
     min-width: 76.8rem;
 
-    @include mq(md){
+    @include mq(md) {
         min-width: 44rem;
     }
 
     &__thumb {
-        max-width: 12rem;
+        width: fluid(80, 120);
         border-radius: 0.4rem;
         overflow: hidden;
-        aspect-ratio: 16 / 10;
         position: relative;
+        padding-top: 62.5%;
+        height: 0;
 
         img {
             object-fit: cover;
             width: 100%;
             height: 100%;
             display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 
@@ -65,6 +69,7 @@
     &__action {
         display: flex;
         align-items: center;
+        gap: 0.4rem;
     }
 
     %cell {
@@ -78,19 +83,19 @@
         min-width: 6rem;
         max-width: 30rem;
     }
-    
 
-    th, td {
+    th,
+    td {
         @extend %cell;
 
         &.memo {
             white-space: wrap;
         }
-        
+
         &.sticky {
-            // --width-check: 6rem; 
+            // --width-check: 6rem;
             // --width-order-no: 20rem;
-            // --width-name: 10rem; 
+            // --width-name: 10rem;
 
             // position: sticky;
             // z-index: 3;
@@ -133,12 +138,12 @@
                 --background-color: var(--clr-sky-100);
                 --text-color: var(--clr-sky-700);
                 --border-color: var(--clr-sky-300);
-            } 
+            }
             &.--processing {
                 --background-color: var(--clr-amber-100);
                 --text-color: var(--clr-amber-700);
                 --border-color: var(--clr-amber-300);
-            } 
+            }
             &.--completed {
                 --background-color: var(--clr-green-100);
                 --text-color: var(--clr-green-700);
@@ -191,7 +196,6 @@
                 --border-color: var(--clr-purple-300);
             }
         }
-
     }
 
     thead {
@@ -213,18 +217,16 @@
                 background-color: var(--clr-table-loupe);
             }
         }
-
     }
     tbody {
         tr {
-            &.bg{
+            &.bg {
                 background-color: var(--clr-slate-50);
             }
         }
 
         td {
             font-weight: 400;
-            
         }
     }
 }
@@ -236,12 +238,12 @@
     .no-summary-table {
         width: 100%;
         border-collapse: collapse;
-         // 600px → 60rem
-        @include mq(md){
+        // 600px → 60rem
+        @include mq(md) {
             min-width: 76.8rem;
         }
 
-        @include mq(sm){
+        @include mq(sm) {
             min-width: 44rem;
         }
 

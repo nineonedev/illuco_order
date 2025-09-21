@@ -13,6 +13,43 @@
         <p>등록된 사용자의 주문을 대행 할 수 있습니다.</p>
     </div>
 
+    <?php if (!empty($dealerMemo) && trim((string)$dealerMemo->memo_general) !== ''): ?>
+    <section class="no-dealer-memo-inline --compact">
+        <header class="no-dealer-memo-inline__head">
+            <div class="no-dealer-memo-inline__title">
+                <i class="fa-regular fa-note-sticky"></i>
+                <span>대리점 메모</span>
+            </div>
+            <div class="no-dealer-memo-inline__right">
+                <?php if (!empty($dealerMemo->is_pinned_general)) : ?>
+                    <span class="no-dealer-memo-inline__badge --pinned" title="상단 고정됨">
+                        <i class="fa-solid fa-thumbtack"></i> 고정됨
+                    </span>
+                <?php endif; ?>
+                <span class="no-dealer-memo-inline__time">
+                    <i class="fa-regular fa-clock"></i>
+                    <?= date('Y-m-d H:i', strtotime($dealerMemo->updated_at ?? 'now')) ?>
+                </span>
+            </div>
+        </header>
+
+        <div class="no-dealer-memo-inline__body">
+            <div class="no-dealer-memo-inline__content">
+                <?= nl2br(e($dealerMemo->memo_general)) ?>
+            </div>
+        </div>
+    </section>
+    <?php else: ?>
+    <section class="no-dealer-memo-inline --empty">
+        <div class="no-dealer-memo-inline__empty">
+            <i class="fa-light fa-message-slash"></i>
+            <span>선택된 대리점의 일반 메모가 없습니다.</span>
+        </div>
+    </section>
+    <?php endif; ?>
+
+
+
     <div class="no-page-flex">
         <div id="template-hook"></div>
         <div id="cart-hook"></div>

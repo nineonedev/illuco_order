@@ -20,6 +20,7 @@ use App\Domains\Product\Repositories\CategoryRepository;
 use App\Domains\Product\Repositories\ProductRepository;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Enums\UserType;
+use App\Domains\User\Repositories\DealerMemoRepository;
 use App\Domains\User\Repositories\DealerRepository;
 use App\Domains\User\Repositories\UserRepository;
 use Framework\Http\Request;
@@ -817,11 +818,20 @@ class OrderController extends Controller
         }
 
         $order->forgetRelation('documents');
+
+        $dealerMemo = null;
+        if ($order->dealer_id) {
+            $dealerMemo = DealerMemoRepository::make()
+                ->query()
+                ->where('dealer_id', (int)$order->dealer_id)
+                ->first();
+        }
         
         return $this->render($view, [
             'order' => $order,
             'orderHistories' => $orderHistories,
             'orderLogs' => $orderLogs,
+            'dealerMemo' => $dealerMemo,
         ]);
     }
 

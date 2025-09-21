@@ -197,7 +197,7 @@ use App\Domains\Product\Entities\Loupe;
                                     </div>
                                     <span class="no-form-checkbox-text">처리 완료</span>
                                 </label>
-                                 <span class="no-form-control-space"></span>
+                                <span class="no-form-control-space"></span>
                             </div>
 
                             <div class="no-form-control --textarea">
@@ -216,8 +216,87 @@ use App\Domains\Product\Entities\Loupe;
                         </div>
                     </form>
                 </div>
-
             </section>
+
+
+            <?php if ($order->dealer_id): ?>
+            <!-- 대리점 메모 -->
+            <section class="no-dealer-memo">
+                <div class="no-page-head__between">
+                    <h2 class="no-dealer-memo__title">대리점 메모</h2>
+    
+                    <div class="no-dealer-memo__toolbar">
+                        <a class="no-btn-premium-outline --xs" href="<?= route('admin.dealer-memo.edit', ['id' => $order->dealer_id]) ?>">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                            <span>대리점 메모 관리</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="no-dealer-memo__grid">
+                    <!-- 일반 메모 -->
+                    <article class="memo-card">
+                        <header class="memo-card__head">
+                            <div class="memo-card__title">
+                                <i class="fa-regular fa-note-sticky"></i>
+                                <span>일반 메모</span>
+                            </div>
+                            <?php if (($dealerMemo->is_pinned_general ?? false)) : ?>
+                                <span class="memo-card__badge --pinned">
+                                    <i class="fa-solid fa-thumbtack"></i> 고정됨
+                                </span>
+                            <?php endif; ?>
+                        </header>
+
+                        <div class="memo-card__body">
+                            <div class="memo-card__content">
+                                <?= nl2br(e($dealerMemo->memo_general ?? '-')) ?>
+                            </div>
+                        </div>
+
+                        <footer class="memo-card__foot">
+                            <div class="memo-card__meta">
+                                <i class="fa-regular fa-clock"></i>
+                                <span>
+                                    <?= isset($dealerMemo->updated_at) ? date('Y-m-d H:i', strtotime($dealerMemo->updated_at)) : '-' ?>
+                                </span>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <!-- 생산팀 메모 -->
+                    <article class="memo-card">
+                        <header class="memo-card__head">
+                            <div class="memo-card__title">
+                                <i class="fa-solid fa-industry"></i>
+                                <span>생산팀 메모</span>
+                            </div>
+                            <?php if (($dealerMemo->is_pinned_prod ?? false)) : ?>
+                                <span class="memo-card__badge --pinned">
+                                    <i class="fa-solid fa-thumbtack"></i> 고정됨
+                                </span>
+                            <?php endif; ?>
+                        </header>
+
+                        <div class="memo-card__body">
+                            <div class="memo-card__content">
+                                <?= nl2br(e($dealerMemo->memo_production ?? '-')) ?>
+                            </div>
+                        </div>
+
+                        <footer class="memo-card__foot">
+                            <div class="memo-card__meta">
+                                <i class="fa-regular fa-clock"></i>
+                                <span>
+                                    <?= isset($dealerMemo->updated_at) ? date('Y-m-d H:i', strtotime($dealerMemo->updated_at)) : '-' ?>
+                                </span>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+            </section>
+            <?php endif; ?>
+
 
             <section>
                 <div class="no-section-container">

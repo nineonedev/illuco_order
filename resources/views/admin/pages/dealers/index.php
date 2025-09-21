@@ -203,7 +203,7 @@
                                 </div>
                             </td>
                             <?php endif; ?>
-                            <td><?= e($dealer->name ?? '-') ?></td>
+                            <td><a href="<?=route('admin.dealers.edit', ['id' => $dealer->id])?>" class="--underline"><?= e($dealer->name ?? '-') ?></a></td>
                             <td><?= lang('system.countries.' . e($dealer->dealer->country)) ?></td>
                             <td><?= e($dealer->dealer->code ?? '-') ?></td>
                             <td><?= e($dealer->phone ?? '-') ?></td>
@@ -211,6 +211,9 @@
                             <td><?= date('Y-m-d h:i A', strtotime($dealer->created_at ?? 'now')) ?></td>
                             <td class="no-table-action">
                                 <div class="no-page-index-table__action">
+                                    <a href="<?= route('admin.dealer-memo.edit', ['id' => $dealer->dealer->id])?>" class="no-btn-primary-outline --xxs --min">
+                                        <span>메모</span>
+                                    </a>
                                     <a href="<?= route('admin.dealers.edit', ['id' => $dealer->id]) ?>" class="no-btn-action" data-tooltip>
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-pen-to-square"></i>
