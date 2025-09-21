@@ -57,6 +57,65 @@ use App\Domains\Product\Entities\ProductTemplate;
                         <span class="no-form-control-space"></span>
                     </div>
 
+                    <!-- 🔢 시리얼번호 규칙(모델약어/특수약자/리비전) -->
+                    <div class="no-form-divider --lg">
+                        <h3 class="no-heading-xs">시리얼번호 규칙</h3>
+                        <p class="no-text-secondary no-mt-4">
+                            모델약어 - 특수약자 - 연도 - 연속번호 - 리비전 (예: <code>DSNNN25000003A</code>)<br>
+                            연도/연속번호는 자동 부여됩니다.
+                        </p>
+                    </div>
+
+                    <!-- 모델 약어 -->
+                    <div class="no-form-control --md">
+                        <label for="serial_abbr" class="no-form-control-inner">
+                            <input 
+                                type="text" 
+                                name="serial_abbr" 
+                                id="serial_abbr" 
+                                class="no-form-control-input" 
+                                placeholder="예: DS"
+                                maxlength="8"
+                            >
+                            <fieldset class="no-form-control-label">
+                                <legend class="no-form-control-text">모델 약어</legend>
+                            </fieldset>
+                        </label>
+                        <span class="no-form-control-space"></span>
+                    </div>
+
+                    <!-- 특수약자 (A~Z) -->
+                    <?php
+                        $alphabet = array_map(fn($c) => ['label' => $c, 'value' => $c], range('A', 'Z'));
+                        array_unshift($alphabet, ['label' => '선택', 'value' => '']);
+                        $specialProps = [
+                            'label' => '특수약자',
+                            'name'  => 'serial_special',
+                            'value' => '',
+                            'options' => $alphabet
+                        ];
+                    ?>
+                    <div
+                        class="no-form-field"
+                        data-view-type="select"
+                        data-view-props='<?= e(json_encode($specialProps)) ?>'
+                    ></div>
+
+                    <!-- 리비전 (A~Z) -->
+                    <?php
+                        $revisionProps = [
+                            'label' => '리비전',
+                            'name'  => 'serial_revision',
+                            'value' => '',
+                            'options' => $alphabet
+                        ];
+                    ?>
+                    <div
+                        class="no-form-field"
+                        data-view-type="select"
+                        data-view-props='<?= e(json_encode($revisionProps)) ?>'
+                    ></div>
+
                     <div class="no-form-control --md">
                         <label for="price" class="no-form-control-inner">
                             <input 
@@ -108,6 +167,7 @@ use App\Domains\Product\Entities\ProductTemplate;
                         </label>
                         <span class="no-form-control-space"></span>
                     </div>
+
 
                     <div class="no-form-control --textarea">
                         <label for="description" class="no-form-control-inner">

@@ -18,6 +18,7 @@ use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Repositories\CategoryRepository;
 use App\Domains\Product\Repositories\ProductRepository;
+use App\Domains\Product\Repositories\ProductSerialRepository;
 use App\Domains\User\Entities\User;
 use App\Domains\User\Enums\UserType;
 use App\Domains\User\Repositories\DealerMemoRepository;
@@ -37,6 +38,45 @@ use RuntimeException;
 
 class OrderController extends Controller
 {
+    public function serial(Request $request)
+    {
+        $input = trim((string)$request->query('serial', ''));
+
+        // 입력 없으면 빈 화면 렌더
+        if ($input === '') {
+            return $this->render('admin.pages.orders.serial', [
+                'serial'   => null,
+                'siblings' => [],
+                'query'    => $request->query(),
+            ]);
+        }
+
+        // 단건 조회 (대리점이면 자신의 주문만)
+        $query = ProductSerialRepository::make()
+            ->with([
+                'product.template',
+                'orderItem.order' => ['customer', 'user.dealer'],
+            ])
+            ->query()
+            ->where('serial_number', $input);
+
+
+        if (user()->isDealer()) {
+            $dealerId = user()->dealer->id ?? null;
+            if ($dealerId) {
+                $query->whereHas('orderItem.order.customer', fn($cq) => $cq->where('dealer_id', $dealerId));
+            }
+        }
+
+        $serial = $query->first();
+
+        return $this->render('admin.pages.orders.serial', [
+            'serial'   => $serial,
+            'query'    => $request->query(),
+        ]);
+    }
+
+
     public function index(Request $request)
     {
         $query = OrderRepository::make()->with([

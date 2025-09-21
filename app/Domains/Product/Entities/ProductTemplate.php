@@ -15,6 +15,9 @@ class ProductTemplate extends Entity
         'price',
         'sort_order',
         'description',
+        'serial_abbr',
+        'serial_special',
+        'serial_revision',
     ];
 
     protected array $casts = [

@@ -90,6 +90,10 @@ Rel::setConfig([
         Rel::hasOne('headlight', Headlight::class, 'id'),
         Rel::hasMany('serials', ProductSerial::class, 'product_id'),
     ],
+    ProductSerial::class => [
+        Rel::belongsTo('product', Product::class, 'product_id'),
+        Rel::belongsTo('orderItem', OrderItem::class, 'order_item_id'),
+    ],
     Loupe::class => [
         Rel::belongsTo('product', Product::class, 'id'),
     ],

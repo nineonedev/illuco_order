@@ -140,6 +140,13 @@ if (!function_exists('route_name')) {
     }
 }
 
+if (!function_exists('route_is_exact')) {
+    function route_is_exact(string $name): bool
+    {
+        return route_name() === $name;
+    }
+}
+
 if (!function_exists('route_is')) {
     /**
      * 현재 라우트 이름이 특정 prefix로 시작하는지 검사

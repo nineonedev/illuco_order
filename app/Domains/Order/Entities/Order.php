@@ -189,7 +189,8 @@ class Order extends Entity
     public function generateProductSerialNumbers(): void
     {
         if (!$this->getRelation('items')) {
-            $this->load(['items.product']);
+            // ✅ 템플릿의 약어/특수약자/리비전 사용을 위해 template까지 로드
+            $this->load(['items.product.template']);
         }
 
         $items = $this->items ?? [];
@@ -216,12 +217,15 @@ class Order extends Entity
                 continue;
             }
 
-            // prefix 계산 (제품코드 + 특수코드 + 연도 2자리)
-            $special = $item->special_code ?? null; // 없으면 NNN
-            $special = $special ?: 'NNN';
-            $year    = date('y');
-            $prefix  = $product->code . $special . $year;
-            $rev     = 'A'; // 필요시 규칙에 따라 변경
+            // ✅ 템플릿의 시리얼 규칙(모델약어/특수약자/리비전) 반영
+            $template = $product->template ?? null;
+            $abbr     = strtoupper(trim($template->serial_abbr ?? '')) ?: ($product->code ?? '');
+            $special  = strtoupper(trim($template->serial_special ?? '')) ?: 'NNN';
+            $rev      = strtoupper(trim($template->serial_revision ?? '')) ?: 'A';
+
+            // prefix = 모델약어 + 특수약자 + 연도(YY)
+            $year   = date('y');
+            $prefix = $abbr . $special . $year;
 
             // prefix별 현재 최대 시퀀스를 한 번만 조회
             if (!array_key_exists($prefix, $seqCursor)) {
@@ -288,7 +292,6 @@ class Order extends Entity
             } // for need
         } // foreach items
     }
-
 
 
 

@@ -248,6 +248,7 @@ Route::middleware(['web'])->group(function(){
                     Route::get('/', [OrderController::class, 'index'])->name('index');
                     Route::get('edit/{orderNo}', [OrderController::class, 'edit'])->name('edit');
                     Route::get('export', [OrderController::class, 'export'])->name('export');
+                    Route::get('serial', [OrderController::class, 'serial'])->name('serial');
                     Route::get('{orderNo}', [OrderController::class, 'show'])->name('show');
 
 

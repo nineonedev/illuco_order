@@ -34,7 +34,14 @@
                     <ul class="no-drawer-gnb">
                         <!-- 주문 목록 메뉴 -->
                         <?php if (can('order.read')): ?>
-                            <li class="no-drawer-gnb-item <?= route_is('admin.orders') ? '--active' : '' ?>">
+                            <li class="no-drawer-gnb-item <?= 
+                                    route_is_exact('admin.orders.index') || 
+                                    route_is_exact('admin.orders.edit') ||  
+                                    route_is_exact('admin.order_documents.print') ||
+                                    route_is_exact('admin.order_documents.edit') ||
+                                    route_is_exact('admin.order_documents.download') || 
+                                    route_is_exact('admin.order_documents.show') 
+                                    ? '--active' : '' ?>">
                                 <a href="<?= route('admin.orders.index') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                     <div class="no-drawer-gnb-link__icon">
                                         <i class="fa-light fa-receipt"></i>
@@ -43,7 +50,7 @@
                                         <span>주문 목록</span>
                                     </div>
                                     <div data-tooltip-text>
-                                        <span>주문 목록</span>
+                                    <span>주문 목록</span>
                                         <span data-tooltip-arrow></span>
                                     </div>
                                 </a>
@@ -80,6 +87,21 @@
                                     </div>
                                     <div data-tooltip-text>
                                         <span>주문</span>
+                                        <span data-tooltip-arrow></span>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="no-drawer-gnb-item <?= route_is_exact('admin.orders.serial') ? '--active' : '' ?>">
+                                <a href="<?= route('admin.orders.serial') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                                    <div class="no-drawer-gnb-link__icon">
+                                        <i class="fa-brands fa-product-hunt"></i>
+                                    </div>
+                                    <div class="no-drawer-gnb-link__text">
+                                        <span>시리얼번호 조회</span>
+                                    </div>
+                                    <div data-tooltip-text>
+                                        <span>시리얼번호 조회</span>
                                         <span data-tooltip-arrow></span>
                                     </div>
                                 </a>
