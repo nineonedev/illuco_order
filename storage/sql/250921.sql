@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 호스트: db:3306
--- 생성 시간: 25-09-21 10:08
+-- 생성 시간: 25-09-21 12:54
 -- 서버 버전: 8.0.43
 -- PHP 버전: 8.2.27
 
@@ -66,14 +66,6 @@ CREATE TABLE `cart_items` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- 테이블의 덤프 데이터 `cart_items`
---
-
-INSERT INTO `cart_items` (`id`, `cart_id`, `product_id`, `quantity`, `set_group_id`, `set_group_sort`, `is_main_item`, `selected`, `created_at`, `updated_at`) VALUES
-(74, 11, 74, 1, NULL, NULL, 1, 1, '2025-08-19 17:10:17', '2025-08-19 17:10:17'),
-(75, 11, 75, 3, NULL, NULL, 1, 1, '2025-08-19 17:10:30', '2025-08-19 17:10:30');
 
 -- --------------------------------------------------------
 
@@ -228,6 +220,14 @@ CREATE TABLE `dealer_memos` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- 테이블의 덤프 데이터 `dealer_memos`
+--
+
+INSERT INTO `dealer_memos` (`dealer_id`, `memo_general`, `memo_production`, `is_pinned_general`, `is_pinned_prod`, `updated_by`, `created_at`, `updated_at`) VALUES
+(25, 'memo test', 'memomeo prod', 0, 1, 18, '2025-09-21 10:49:17', '2025-09-21 10:49:17'),
+(30, NULL, NULL, 0, 0, 18, '2025-09-21 10:46:02', '2025-09-21 10:46:02');
 
 -- --------------------------------------------------------
 
@@ -478,7 +478,9 @@ INSERT INTO `orders` (`id`, `user_id`, `customer_id`, `dealer_id`, `orderer_name
 (29, 18, 8, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', '2025-08-13', '2025-08-04', '2025-08-02', NULL, 'CST-2025-00001', 'preparing', 5770.00, 'test', NULL, '2025-08-12 20:25:51', '2025-08-12 20:26:18', 0),
 (30, 18, 13, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00002', 'preparing', 2805.00, '', NULL, '2025-08-13 08:45:09', '2025-08-26 00:40:30', 0),
 (31, 18, 13, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00003', 'preparing', 1610.00, '请查看形式发票（PI），并请告知是否一切无误。\n\n为了赶上您所指定的日期，我们将开始准备发货。', NULL, '2025-08-13 15:59:05', '2025-08-20 11:50:08', 0),
-(32, 25, 12, 25, 'Lucy  ', 'yjl@illuco.co.kr', '010-9219-8739', NULL, NULL, NULL, NULL, 'KR-ILL-2025-00001', 'preparing', 1350.00, '', NULL, '2025-08-20 12:02:21', '2025-09-04 08:11:23', 1);
+(32, 25, 12, 25, 'Lucy  ', 'yjl@illuco.co.kr', '010-9219-8739', NULL, NULL, NULL, NULL, 'KR-ILL-2025-00001', 'preparing', 1350.00, '', NULL, '2025-08-20 12:02:21', '2025-09-04 08:11:23', 1),
+(33, 18, 12, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00004', 'preparing', 1700.00, 'test', NULL, '2025-09-21 11:45:53', '2025-09-21 11:46:15', 0),
+(34, 18, 13, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00005', 'preparing', 5350.00, 'a lot of them.', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:51', 0);
 
 -- --------------------------------------------------------
 
@@ -517,7 +519,15 @@ INSERT INTO `order_documents` (`id`, `order_id`, `user_id`, `document_no`, `type
 (93, 32, 25, 'KR-ILL-2025-00001', 'proforma_invoice', NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
 (94, 32, 25, 'KR-ILL-2025-00002', 'product_request', NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
 (95, 32, 25, 'KR-ILL-2025-00003', 'packing_list', NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
-(96, 32, 25, 'KR-ILL-2025-00004', 'commercial_invoice', NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21');
+(96, 32, 25, 'KR-ILL-2025-00004', 'commercial_invoice', NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
+(97, 33, 18, 'CST-2025-00013', 'proforma_invoice', NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
+(98, 33, 18, 'CST-2025-00014', 'product_request', NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
+(99, 33, 18, 'CST-2025-00015', 'packing_list', NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
+(100, 33, 18, 'CST-2025-00016', 'commercial_invoice', NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
+(101, 34, 18, 'CST-2025-00017', 'proforma_invoice', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(102, 34, 18, 'CST-2025-00018', 'product_request', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(103, 34, 18, 'CST-2025-00019', 'packing_list', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(104, 34, 18, 'CST-2025-00020', 'commercial_invoice', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
 
 -- --------------------------------------------------------
 
@@ -563,7 +573,9 @@ INSERT INTO `order_document_commercial_invoices` (`id`, `bill_to_name`, `bill_to
 (84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-12 20:25:51', '2025-08-12 20:25:51'),
 (88, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 08:45:09', '2025-08-13 08:45:09'),
 (92, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05'),
-(96, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21');
+(96, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
+(100, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
+(104, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
 
 -- --------------------------------------------------------
 
@@ -610,7 +622,9 @@ INSERT INTO `order_document_packing_lists` (`id`, `bill_to_name`, `bill_to_addre
 (83, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-12 20:25:51', '2025-08-12 20:25:51'),
 (87, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 08:45:09', '2025-08-13 08:45:09'),
 (91, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05'),
-(95, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21');
+(95, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
+(99, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
+(103, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
 
 -- --------------------------------------------------------
 
@@ -670,7 +684,9 @@ INSERT INTO `order_document_product_requests` (`id`, `country`, `customer_name`,
 (82, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-12 20:25:51', '2025-08-12 20:25:51', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (86, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 08:45:09', '2025-08-13 08:45:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (90, '러시아', 'victor', '2025-08-19', NULL, 'ILLUCO Korea', NULL, '1', '20', '40*40*40', '3', '20', '', '', '', '', '', '', '', '', '', '', '메롱\r\n', '2025-08-13 15:59:05', '2025-08-19 18:02:26', '1', '3', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
-(94, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(94, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(98, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(102, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -734,7 +750,9 @@ INSERT INTO `order_document_proforma_invoices` (`id`, `document_no`, `purchase_o
 (81, 'CST-2025-00001', '', NULL, '2025-08-19', '고객A-A', '', '010-2312-3122', '', 'aaacustomer@test.com', NULL, NULL, 'ILLUCO Korea', '010-1231-2312', 'illucokorea@gmail.com', '', '', '', '', '', 0.00, '', '', '', '', '', '', NULL, '2025-08-12 20:25:51', '2025-08-19 17:33:22', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (85, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 08:45:09', '2025-08-13 08:45:09', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (89, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(93, 'KR-ILL-2025-00001', '', NULL, '2025-09-04', 'pil', '', '131-5151-5623', '', 'yij@kflsi.fdd', NULL, NULL, 'ILLUCO Korea', '010-1231-2312', 'illucokorea@gmail.com', '', '', '', '', '', 0.00, '', '', '', '', '', 'test', 1250.00, '2025-08-20 12:02:21', '2025-09-04 06:16:29', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00);
+(93, 'KR-ILL-2025-00001', '', NULL, '2025-09-04', 'pil', '', '131-5151-5623', '', 'yij@kflsi.fdd', NULL, NULL, 'ILLUCO Korea', '010-1231-2312', 'illucokorea@gmail.com', '', '', '', '', '', 0.00, '', '', '', '', '', 'test', 1250.00, '2025-08-20 12:02:21', '2025-09-04 06:16:29', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00),
+(97, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(101, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -799,7 +817,11 @@ INSERT INTO `order_items` (`id`, `set_group_id`, `set_group_sort`, `is_main_item
 (48, '5e937fdc-d7b2-4a86-8b13-0e91db94de9d', 0, 0, 30, 69, 2, NULL, 30.00, 60.00, NULL, '2025-08-13 08:45:09', '2025-08-13 08:45:09'),
 (49, NULL, NULL, 1, 31, 71, 1, NULL, 260.00, 260.00, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05'),
 (50, NULL, NULL, 1, 31, 70, 1, NULL, 1350.00, 1350.00, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05'),
-(51, NULL, NULL, 1, 32, 76, 1, NULL, 1350.00, 1350.00, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21');
+(51, NULL, NULL, 1, 32, 76, 1, NULL, 1350.00, 1350.00, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
+(52, NULL, NULL, 1, 33, 77, 2, NULL, 850.00, 1700.00, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
+(53, NULL, NULL, 1, 34, 78, 1, NULL, 850.00, 850.00, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(54, NULL, NULL, 1, 34, 75, 3, NULL, 1150.00, 3450.00, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(55, NULL, NULL, 1, 34, 74, 1, NULL, 1050.00, 1050.00, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
 
 -- --------------------------------------------------------
 
@@ -836,7 +858,10 @@ INSERT INTO `order_logs` (`id`, `order_id`, `user_id`, `previous_status`, `statu
 (37, 32, 7, 'preparing', 'preparing', NULL, '2025-09-04 08:11:12', '2025-09-04 08:11:12'),
 (38, 32, 7, 'preparing', 'preparing', NULL, '2025-09-04 08:11:17', '2025-09-04 08:11:17'),
 (39, 32, 7, 'preparing', 'preparing', NULL, '2025-09-04 08:11:23', '2025-09-04 08:11:23'),
-(40, 32, 7, 'preparing', 'preparing', NULL, '2025-09-04 08:14:44', '2025-09-04 08:14:44');
+(40, 32, 7, 'preparing', 'preparing', NULL, '2025-09-04 08:14:44', '2025-09-04 08:14:44'),
+(41, 33, 18, 'new', 'preparing', NULL, '2025-09-21 11:46:15', '2025-09-21 11:46:15'),
+(42, 34, 18, 'new', 'preparing', NULL, '2025-09-21 11:52:51', '2025-09-21 11:52:51'),
+(43, 34, 18, 'preparing', 'preparing', NULL, '2025-09-21 11:52:57', '2025-09-21 11:52:57');
 
 -- --------------------------------------------------------
 
@@ -954,7 +979,9 @@ INSERT INTO `products` (`id`, `template_id`, `name`, `serial_number`, `type`, `c
 (71, 62, 'Mirrorless Camera Adapter', NULL, '', 'MIRRORLESS_ADAPTER', 'Mirrorless Camera Adapter', 260.00, '미러리스 카메라 어댑터', NULL, '2025-08-13 13:47:38', '2025-08-13 13:47:38'),
 (74, 30, 'IHL-1000 - wired', NULL, '', 'IHL-1000', 'IHL-1000 - wired', 1050.00, '유선 헤드라이트, UV 필터 포함', NULL, '2025-08-19 17:10:17', '2025-08-19 17:10:17'),
 (75, 31, 'IHL-2000 - wireless', NULL, '', 'IHL-2000', 'IHL-2000 - wireless', 1150.00, '무선 헤드라이트, 교체식 배터리', NULL, '2025-08-19 17:10:30', '2025-08-19 17:10:30'),
-(76, 17, 'Galilean Loupes', NULL, 'loupe', 'ITL-1025G', 'ITL-1025G', 1350.00, 'TTL 갈릴레안 루페 2.5x 계열', NULL, '2025-08-20 12:02:18', '2025-08-20 12:02:18');
+(76, 17, 'Galilean Loupes', NULL, 'loupe', 'ITL-1025G', 'ITL-1025G', 1350.00, 'TTL 갈릴레안 루페 2.5x 계열', NULL, '2025-08-20 12:02:18', '2025-08-20 12:02:18'),
+(77, 53, 'IDS 3100', NULL, '', 'DS', 'IDS-3100', 850.00, '우드램프(365/395/405nm)', NULL, '2025-09-21 11:45:43', '2025-09-21 11:45:43'),
+(78, 53, 'IDS 3100', NULL, '', 'DS', 'IDS-3100', 850.00, '우드램프(365/395/405nm)', NULL, '2025-09-21 11:51:40', '2025-09-21 11:51:40');
 
 -- --------------------------------------------------------
 
@@ -1073,7 +1100,14 @@ INSERT INTO `product_serials` (`id`, `product_id`, `serial_number`, `status`, `o
 (93, 76, 'ITL-1025GNNN25000003A', 'sold', 51, '2025-08-25 23:23:10', '2025-08-25 23:23:10'),
 (94, 68, 'IAL-1040NNN25000001A', 'sold', 47, '2025-08-26 00:40:30', '2025-08-26 00:40:30'),
 (99, 69, 'PR-LEN-30NNN25000005A', 'sold', 48, '2025-08-26 00:40:30', '2025-08-26 00:40:30'),
-(100, 69, 'PR-LEN-30NNN25000006A', 'sold', 48, '2025-08-26 00:40:30', '2025-08-26 00:40:30');
+(100, 69, 'PR-LEN-30NNN25000006A', 'sold', 48, '2025-08-26 00:40:30', '2025-08-26 00:40:30'),
+(103, 77, 'DSNNN25000003A', 'sold', 52, '2025-09-21 11:46:15', '2025-09-21 11:46:15'),
+(104, 77, 'DSNNN25000004A', 'sold', 52, '2025-09-21 11:46:15', '2025-09-21 11:46:15'),
+(105, 78, 'DSU25000001B', 'sold', 53, '2025-09-21 11:52:51', '2025-09-21 11:52:51'),
+(106, 75, 'IHL-2000NNN25000001A', 'sold', 54, '2025-09-21 11:52:51', '2025-09-21 11:52:51'),
+(107, 75, 'IHL-2000NNN25000002A', 'sold', 54, '2025-09-21 11:52:51', '2025-09-21 11:52:51'),
+(108, 75, 'IHL-2000NNN25000003A', 'sold', 54, '2025-09-21 11:52:51', '2025-09-21 11:52:51'),
+(110, 74, 'IHL-1000NNN25000002A', 'sold', 55, '2025-09-21 11:52:51', '2025-09-21 11:52:51');
 
 -- --------------------------------------------------------
 
@@ -1092,77 +1126,80 @@ CREATE TABLE `product_templates` (
   `description` text,
   `deleted_at` datetime DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `serial_abbr` varchar(16) DEFAULT NULL COMMENT '시리얼: 모델 약어',
+  `serial_special` varchar(3) NOT NULL DEFAULT 'NNN' COMMENT '시리얼: 특수약자(1~3자)',
+  `serial_revision` char(1) NOT NULL DEFAULT 'A' COMMENT '시리얼: 기본 리비전(A~Z)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- 테이블의 덤프 데이터 `product_templates`
 --
 
-INSERT INTO `product_templates` (`id`, `category_id`, `name`, `code`, `model`, `price`, `sort_order`, `description`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(16, 2, 'Ergo X', 'IAL-1040', 'IAL-1040', 2745.00, 1, '인체공학 각도형 TTL 루페(Ergo X), 장시간 착용에 최적화', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(17, 2, 'Galilean Loupes', 'ITL-1025G', 'ITL-1025G', 1350.00, 2, 'TTL 갈릴레안 루페 2.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(18, 2, 'Galilean Loupes', 'ITL-1030G', 'ITL-1030G', 1350.00, 3, 'TTL 갈릴레안 루페 3.0x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(19, 2, 'Galilean Loupes', 'ITL-1035G', 'ITL-1035G', 1350.00, 4, 'TTL 갈릴레안 루페 3.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(20, 2, 'Prismatic', 'ITL-1040P', 'ITL-1040P', 1350.00, 5, 'TTL 프리즘 루페 4.0x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(21, 2, 'Prismatic', 'ITL-1045P', 'ITL-1045P', 1350.00, 6, 'TTL 프리즘 루페 4.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(22, 2, 'Prismatic', 'ITL-1055P', 'ITL-1055P', 1350.00, 7, 'TTL 프리즘 루페 5.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(23, 2, 'Prismatic', 'ITL-1065P', 'ITL-1065P', 1350.00, 8, 'TTL 프리즘 루페 6.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(24, 2, 'Flip-Up Loupes', 'IFL-1030G', 'IFL-1030G', 605.00, 9, '플립업 갈릴레안 루페', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(25, 2, 'Goggle - Rimless', 'GOGGLE_RIMLESS', 'Goggle - Rimless', 0.00, 10, '루페/헤드라이트용 고글 프레임(림리스)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:29:44'),
-(26, 2, 'Goggle - Rimmed', 'GOGGLE_RIMMED', 'Goggle - Rimmed', 0.00, 11, '루페/헤드라이트용 고글 프레임(림 있음)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:29:47'),
-(30, 1, 'IHL-1000 - wired', 'IHL-1000', 'IHL-1000 - wired', 1050.00, 15, '유선 헤드라이트, UV 필터 포함', NULL, '2025-08-12 10:06:09', '2025-08-12 10:58:54'),
-(31, 1, 'IHL-2000 - wireless', 'IHL-2000', 'IHL-2000 - wireless', 1150.00, 16, '무선 헤드라이트, 교체식 배터리', NULL, '2025-08-12 10:06:09', '2025-08-12 10:58:35'),
-(32, 1, 'Additional Battery for Wired Headlight', 'BATTERY_WIRED_HEADLIGHT', 'Battery for IHL-1000', 365.00, 17, '유선 헤드라이트 전용 예비 배터리', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:44'),
-(33, 1, 'Additional Battery for Wireless Headlight', 'BATTERY_WIRELESS_HEADLIGHT', 'Battery for IHL-2000', 150.00, 18, '무선 헤드라이트 추가 배터리', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:47'),
-(34, 1, 'Headband', 'HEADBAND', 'Headband', 210.00, 19, '헤드라이트 전용 헤드밴드', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:51'),
-(35, 1, 'Frame for Headlights', 'FRAME_FOR_HEADLIGHTS', 'Frame for Headlight', 180.00, 20, '헤드라이트 장착용 프레임(헤드라이트 미포함)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:53'),
-(36, 1, 'Universal Adapter', 'UNIVERSAL_ADAPTER', 'Universal Adapter', 45.00, 21, '헤드라이트 범용 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:54'),
-(37, 1, 'Clamp Adapter', 'CLAMP_ADAPTER', 'Clamp Type Adapter', 50.00, 22, '헤드라이트 클램프형 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:56'),
-(38, 1, 'Belt Clip for Wired Headlight', 'BELT_CLIP_WIRED', 'Belt Clip', 25.00, 23, '유선 헤드라이트 배터리 클립', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:58'),
-(39, 2, 'Extension Cable', 'EXTENSION_CABLE', 'Extension Cable', 0.00, 24, '연장 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:16'),
-(40, 2, 'Headstrap for Metal Frame', 'HEADSTRAP_METAL', 'Headstrap for Metal Frame', 0.00, 25, '메탈 프레임용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:17'),
-(41, 2, 'Headstrap for Goggle', 'HEADSTRAP_GOGGLE', 'Headstrap for Goggle', 0.00, 26, '고글용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:19'),
-(42, 2, 'Side Shield for Metal Frame', 'SIDE_SHIELD_METAL', 'Side Shield for Metal Frame', 13.99, 27, '메탈 프레임용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:20'),
-(43, 2, 'Side Shield for Goggle', 'SIDE_SHIELD_GOGGLE', 'Side Shield for Goggle', 13.99, 28, '고글용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:21'),
-(44, 2, 'Cleaning Kit', 'CLEANING_KIT_HEADLIGHT', 'H-Cleaning-Kit ', 0.00, 29, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:23'),
-(45, 2, 'Screwdriver', 'SCREWDRIVER', 'Screwdriver', 0.00, 30, '소형 드라이버(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:24'),
-(46, 2, 'Nose Pad', 'NOSE_PAD', 'Nose Pad', 0.00, 31, '코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:26'),
-(47, 2, 'U Shaped Nose Pad', 'U_SHAPED_NOSE_PAD', 'U-Shaped Nose Pad', 0.00, 32, 'U자형 코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:27'),
-(48, 2, 'UV Filter', 'UV_FILTER', 'UV Filter', 0.00, 33, 'UV 필터(별도 판매가 미확인, 본체 동봉)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:28'),
-(49, 11, 'DENTAL MIRROR', 'IDM-P', 'IDM-P', 155.00, 34, '치과 포토 미러(포토 미러 계열)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(50, 11, 'DENTAL MIRROR', 'IDM-M', 'IDM-M', 85.00, 35, '치과 구강 미러(핸들 포함, 5팩 기준)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09'),
-(51, 3, 'IDS-1100C', 'DS', 'IDS-1100C', 950.00, 36, '더마토스코프 1100, 10배/25mm 렌즈', NULL, '2025-08-12 10:06:09', '2025-08-12 10:53:38'),
-(52, 3, 'IDS-1000', 'DS', 'IDS-1000', 650.00, 37, '더마토스코프 1000(단종/가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:55:19'),
-(53, 3, 'IDS 3100', 'DS', 'IDS-3100', 850.00, 38, '우드램프(365/395/405nm)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:54:32'),
-(54, 3, 'Compact Universal Clamp', 'COMPACT_UNIVERSAL_CLAMP', 'Universal Phone Clamp', 65.00, 39, '스마트폰 고정 클램프(IDS-1100/1000+ 호환)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:26'),
-(55, 3, '8mm Small Contact Plate', 'CONTACT_PLATE_8MM', '8mm Small Contact Plate', 0.00, 40, '8mm 소형 콘택트 플레이트(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:37'),
-(56, 3, 'Belt Clip Leather Pouch', 'LEATHER_POUCH', 'Leather Pouch w/ Belt Clip', 30.00, 41, '레더 파우치(벨트클립 포함)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:39'),
-(57, 3, 'Sleeve with Lanyard (1100)', 'SLEEVE_1100', 'Sleeve with Lanyard (1100)', 26.00, 42, '실리콘 슬리브+랜야드(IDS-1100)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:40'),
-(58, 3, 'Sleeve with Lanyard (1000)', 'SLEEVE_1000', 'Sleeve with Lanyard (1000)', 26.00, 43, '실리콘 슬리브+랜야드(IDS-1000)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:41'),
-(59, 3, 'Replacement Battery (1100)', 'REPL_BATT_1100', 'Replacement Battery (1100)', 75.00, 44, 'IDS-1100/1100C 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:42'),
-(60, 3, 'Replacement Battery (1000)', 'REPL_BATT_1000', 'Replacement Battery (1000)', 40.00, 45, 'IDS-1000 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:43'),
-(61, 3, 'Replacement Battery (3100)', 'REPL_BATT_3100', 'Replacement Battery (3100)', 160.00, 46, 'IDS-3100 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:46'),
-(62, 3, 'Mirrorless Camera Adapter', 'MIRRORLESS_ADAPTER', 'Mirrorless Camera Adapter', 260.00, 47, '미러리스 카메라 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:47'),
-(63, 3, 'Protective Glass (1100)', 'PROTECTIVE_GLASS_1100', 'Protective Glass (1100)', 150.00, 48, 'IDS-1100/1100C 보호유리(호환 렌즈)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:50'),
-(64, 3, 'Protective Glass (1000)', 'PROTECTIVE_GLASS_1000', 'Protective Glass (1000)', 0.00, 49, 'IDS-1000 보호유리(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:51'),
-(65, 3, 'USB Cable', 'USB_CABLE', 'USB Cable', 0.00, 50, 'USB 충전 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:53'),
-(66, 3, 'Magnet USB charging Cable for 1100C', 'MAGNET_USB_CABLE_1100C', 'Magnet USB Cable (1100C)', 0.00, 51, '마그넷 USB 충전 케이블(1100C)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:54'),
-(67, 3, 'Cleaning Kit', 'CLEANING_KIT_DERMATO', 'Cleaning-Kit-D', 0.00, 52, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:56'),
-(68, 2, 'Frame 1 - Black', 'FRAME1_BLACK', 'Frame 1 (Black)', 0.00, 1, 'Frame 1 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:48'),
-(69, 2, 'Frame 1 - Coffee', 'FRAME1_COFFEE', 'Frame 1 (Coffee)', 0.00, 2, 'Frame 1 - 커피 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:49'),
-(70, 2, 'Frame 1 - Green', 'FRAME1_GREEN', 'Frame 1 (Green)', 0.00, 3, 'Frame 1 - 그린 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:51'),
-(71, 2, 'Frame 1 - Red', 'FRAME1_RED', 'Frame 1 (Red)', 0.00, 4, 'Frame 1 - 레드 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:52'),
-(72, 2, 'Frame 1 - Blue', 'FRAME1_BLUE', 'Frame 1 (Blue)', 0.00, 5, 'Frame 1 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:54'),
-(73, 2, 'Frame 2 - Silver', 'FRAME2_SILVER', 'Frame 2 (Silver)', 0.00, 6, 'Frame 2 - 실버 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:56'),
-(74, 2, 'Frame 2 - Blue', 'FRAME2_BLUE', 'Frame 2 (Blue)', 0.00, 7, 'Frame 2 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:58'),
-(76, 2, 'Frame 4 - Brown', 'FRAME4_BROWN', 'Frame 4 (Brown)', 0.00, 9, 'Frame 4 - 브라운 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:59'),
-(77, 2, 'Frame 4 - Black', 'FRAME4_BLACK', 'Frame 4 (Black)', 0.00, 10, 'Frame 4 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:30:00'),
-(78, 2, 'Frame 4 - Orange', 'FRAME4_ORANGE', 'Frame 4 (Orange)', 0.00, 11, 'Frame 4 - 오렌지 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:30:01'),
-(79, 3, 'IDS-1100', 'DS', 'IDS-1100', 950.00, 36, 'IDS-1100', NULL, '2025-08-12 10:56:17', '2025-08-12 10:56:35'),
-(80, 3, 'IDS-1000 Plus', 'DS', 'IDS-1000-PLUS', 1000.00, 37, 'IDS-1000 Plus', NULL, '2025-08-12 10:57:26', '2025-08-12 10:57:26'),
-(81, 2, '처방렌즈', 'PR-LEN-30', 'PR-LENS-30', 30.00, 0, '', NULL, '2025-08-12 20:24:16', '2025-09-04 12:32:29'),
-(82, 3, '9100 Camera', '9100cam', 'Dermaview', 1000.00, 0, 'Camera for 9100', NULL, '2025-08-16 13:52:06', '2025-09-05 01:33:37');
+INSERT INTO `product_templates` (`id`, `category_id`, `name`, `code`, `model`, `price`, `sort_order`, `description`, `deleted_at`, `created_at`, `updated_at`, `serial_abbr`, `serial_special`, `serial_revision`) VALUES
+(16, 2, 'Ergo X', 'IAL-1040', 'IAL-1040', 2745.00, 1, '인체공학 각도형 TTL 루페(Ergo X), 장시간 착용에 최적화', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(17, 2, 'Galilean Loupes', 'ITL-1025G', 'ITL-1025G', 1350.00, 2, 'TTL 갈릴레안 루페 2.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(18, 2, 'Galilean Loupes', 'ITL-1030G', 'ITL-1030G', 1350.00, 3, 'TTL 갈릴레안 루페 3.0x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(19, 2, 'Galilean Loupes', 'ITL-1035G', 'ITL-1035G', 1350.00, 4, 'TTL 갈릴레안 루페 3.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(20, 2, 'Prismatic', 'ITL-1040P', 'ITL-1040P', 1350.00, 5, 'TTL 프리즘 루페 4.0x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(21, 2, 'Prismatic', 'ITL-1045P', 'ITL-1045P', 1350.00, 6, 'TTL 프리즘 루페 4.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(22, 2, 'Prismatic', 'ITL-1055P', 'ITL-1055P', 1350.00, 7, 'TTL 프리즘 루페 5.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(23, 2, 'Prismatic', 'ITL-1065P', 'ITL-1065P', 1350.00, 8, 'TTL 프리즘 루페 6.5x 계열', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(24, 2, 'Flip-Up Loupes', 'IFL-1030G', 'IFL-1030G', 605.00, 9, '플립업 갈릴레안 루페', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(25, 2, 'Goggle - Rimless', 'GOGGLE_RIMLESS', 'Goggle - Rimless', 0.00, 10, '루페/헤드라이트용 고글 프레임(림리스)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:29:44', NULL, 'NNN', 'A'),
+(26, 2, 'Goggle - Rimmed', 'GOGGLE_RIMMED', 'Goggle - Rimmed', 0.00, 11, '루페/헤드라이트용 고글 프레임(림 있음)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:29:47', NULL, 'NNN', 'A'),
+(30, 1, 'IHL-1000 - wired', 'IHL-1000', 'IHL-1000 - wired', 1050.00, 15, '유선 헤드라이트, UV 필터 포함', NULL, '2025-08-12 10:06:09', '2025-08-12 10:58:54', NULL, 'NNN', 'A'),
+(31, 1, 'IHL-2000 - wireless', 'IHL-2000', 'IHL-2000 - wireless', 1150.00, 16, '무선 헤드라이트, 교체식 배터리', NULL, '2025-08-12 10:06:09', '2025-08-12 10:58:35', NULL, 'NNN', 'A'),
+(32, 1, 'Additional Battery for Wired Headlight', 'BATTERY_WIRED_HEADLIGHT', 'Battery for IHL-1000', 365.00, 17, '유선 헤드라이트 전용 예비 배터리', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:44', NULL, 'NNN', 'A'),
+(33, 1, 'Additional Battery for Wireless Headlight', 'BATTERY_WIRELESS_HEADLIGHT', 'Battery for IHL-2000', 150.00, 18, '무선 헤드라이트 추가 배터리', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:47', NULL, 'NNN', 'A'),
+(34, 1, 'Headband', 'HEADBAND', 'Headband', 210.00, 19, '헤드라이트 전용 헤드밴드', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:51', NULL, 'NNN', 'A'),
+(35, 1, 'Frame for Headlights', 'FRAME_FOR_HEADLIGHTS', 'Frame for Headlight', 180.00, 20, '헤드라이트 장착용 프레임(헤드라이트 미포함)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:53', NULL, 'NNN', 'A'),
+(36, 1, 'Universal Adapter', 'UNIVERSAL_ADAPTER', 'Universal Adapter', 45.00, 21, '헤드라이트 범용 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:54', NULL, 'NNN', 'A'),
+(37, 1, 'Clamp Adapter', 'CLAMP_ADAPTER', 'Clamp Type Adapter', 50.00, 22, '헤드라이트 클램프형 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:56', NULL, 'NNN', 'A'),
+(38, 1, 'Belt Clip for Wired Headlight', 'BELT_CLIP_WIRED', 'Belt Clip', 25.00, 23, '유선 헤드라이트 배터리 클립', NULL, '2025-08-12 10:06:09', '2025-09-04 12:30:58', NULL, 'NNN', 'A'),
+(39, 2, 'Extension Cable', 'EXTENSION_CABLE', 'Extension Cable', 0.00, 24, '연장 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:16', NULL, 'NNN', 'A'),
+(40, 2, 'Headstrap for Metal Frame', 'HEADSTRAP_METAL', 'Headstrap for Metal Frame', 0.00, 25, '메탈 프레임용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:17', NULL, 'NNN', 'A'),
+(41, 2, 'Headstrap for Goggle', 'HEADSTRAP_GOGGLE', 'Headstrap for Goggle', 0.00, 26, '고글용 헤드스트랩', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:19', NULL, 'NNN', 'A'),
+(42, 2, 'Side Shield for Metal Frame', 'SIDE_SHIELD_METAL', 'Side Shield for Metal Frame', 13.99, 27, '메탈 프레임용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:20', NULL, 'NNN', 'A'),
+(43, 2, 'Side Shield for Goggle', 'SIDE_SHIELD_GOGGLE', 'Side Shield for Goggle', 13.99, 28, '고글용 사이드 실드(유사품 참고가)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:21', NULL, 'NNN', 'A'),
+(44, 2, 'Cleaning Kit', 'CLEANING_KIT_HEADLIGHT', 'H-Cleaning-Kit ', 0.00, 29, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:23', NULL, 'NNN', 'A'),
+(45, 2, 'Screwdriver', 'SCREWDRIVER', 'Screwdriver', 0.00, 30, '소형 드라이버(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:24', NULL, 'NNN', 'A'),
+(46, 2, 'Nose Pad', 'NOSE_PAD', 'Nose Pad', 0.00, 31, '코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:26', NULL, 'NNN', 'A'),
+(47, 2, 'U Shaped Nose Pad', 'U_SHAPED_NOSE_PAD', 'U-Shaped Nose Pad', 0.00, 32, 'U자형 코패드(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:27', NULL, 'NNN', 'A'),
+(48, 2, 'UV Filter', 'UV_FILTER', 'UV Filter', 0.00, 33, 'UV 필터(별도 판매가 미확인, 본체 동봉)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:32:28', NULL, 'NNN', 'A'),
+(49, 11, 'DENTAL MIRROR', 'IDM-P', 'IDM-P', 155.00, 34, '치과 포토 미러(포토 미러 계열)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(50, 11, 'DENTAL MIRROR', 'IDM-M', 'IDM-M', 85.00, 35, '치과 구강 미러(핸들 포함, 5팩 기준)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:06:09', NULL, 'NNN', 'A'),
+(51, 3, 'IDS-1100C', 'DS', 'IDS-1100C', 950.00, 36, '더마토스코프 1100, 10배/25mm 렌즈', NULL, '2025-08-12 10:06:09', '2025-08-12 10:53:38', NULL, 'NNN', 'A'),
+(52, 3, 'IDS-1000', 'DS', 'IDS-1000', 650.00, 37, '더마토스코프 1000(단종/가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-08-12 10:55:19', NULL, 'NNN', 'A'),
+(53, 3, 'IDS 3100', 'DS', 'IDS-3100', 850.00, 38, '우드램프(365/395/405nm)', NULL, '2025-08-12 10:06:09', '2025-09-21 11:44:30', 'DS', 'U', 'B'),
+(54, 3, 'Compact Universal Clamp', 'COMPACT_UNIVERSAL_CLAMP', 'Universal Phone Clamp', 65.00, 39, '스마트폰 고정 클램프(IDS-1100/1000+ 호환)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:26', NULL, 'NNN', 'A'),
+(55, 3, '8mm Small Contact Plate', 'CONTACT_PLATE_8MM', '8mm Small Contact Plate', 0.00, 40, '8mm 소형 콘택트 플레이트(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:37', NULL, 'NNN', 'A'),
+(56, 3, 'Belt Clip Leather Pouch', 'LEATHER_POUCH', 'Leather Pouch w/ Belt Clip', 30.00, 41, '레더 파우치(벨트클립 포함)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:39', NULL, 'NNN', 'A'),
+(57, 3, 'Sleeve with Lanyard (1100)', 'SLEEVE_1100', 'Sleeve with Lanyard (1100)', 26.00, 42, '실리콘 슬리브+랜야드(IDS-1100)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:40', NULL, 'NNN', 'A'),
+(58, 3, 'Sleeve with Lanyard (1000)', 'SLEEVE_1000', 'Sleeve with Lanyard (1000)', 26.00, 43, '실리콘 슬리브+랜야드(IDS-1000)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:41', NULL, 'NNN', 'A'),
+(59, 3, 'Replacement Battery (1100)', 'REPL_BATT_1100', 'Replacement Battery (1100)', 75.00, 44, 'IDS-1100/1100C 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:42', NULL, 'NNN', 'A'),
+(60, 3, 'Replacement Battery (1000)', 'REPL_BATT_1000', 'Replacement Battery (1000)', 40.00, 45, 'IDS-1000 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:43', NULL, 'NNN', 'A'),
+(61, 3, 'Replacement Battery (3100)', 'REPL_BATT_3100', 'Replacement Battery (3100)', 160.00, 46, 'IDS-3100 교체 배터리(해외가 참고)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:46', NULL, 'NNN', 'A'),
+(62, 3, 'Mirrorless Camera Adapter', 'MIRRORLESS_ADAPTER', 'Mirrorless Camera Adapter', 260.00, 47, '미러리스 카메라 어댑터', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:47', NULL, 'NNN', 'A'),
+(63, 3, 'Protective Glass (1100)', 'PROTECTIVE_GLASS_1100', 'Protective Glass (1100)', 150.00, 48, 'IDS-1100/1100C 보호유리(호환 렌즈)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:50', NULL, 'NNN', 'A'),
+(64, 3, 'Protective Glass (1000)', 'PROTECTIVE_GLASS_1000', 'Protective Glass (1000)', 0.00, 49, 'IDS-1000 보호유리(가격 미확인)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:51', NULL, 'NNN', 'A'),
+(65, 3, 'USB Cable', 'USB_CABLE', 'USB Cable', 0.00, 50, 'USB 충전 케이블(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:53', NULL, 'NNN', 'A'),
+(66, 3, 'Magnet USB charging Cable for 1100C', 'MAGNET_USB_CABLE_1100C', 'Magnet USB Cable (1100C)', 0.00, 51, '마그넷 USB 충전 케이블(1100C)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:54', NULL, 'NNN', 'A'),
+(67, 3, 'Cleaning Kit', 'CLEANING_KIT_DERMATO', 'Cleaning-Kit-D', 0.00, 52, '클리닝 키트(가격 미공개)', NULL, '2025-08-12 10:06:09', '2025-09-04 12:28:56', NULL, 'NNN', 'A'),
+(68, 2, 'Frame 1 - Black', 'FRAME1_BLACK', 'Frame 1 (Black)', 0.00, 1, 'Frame 1 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:48', NULL, 'NNN', 'A'),
+(69, 2, 'Frame 1 - Coffee', 'FRAME1_COFFEE', 'Frame 1 (Coffee)', 0.00, 2, 'Frame 1 - 커피 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:49', NULL, 'NNN', 'A'),
+(70, 2, 'Frame 1 - Green', 'FRAME1_GREEN', 'Frame 1 (Green)', 0.00, 3, 'Frame 1 - 그린 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:51', NULL, 'NNN', 'A'),
+(71, 2, 'Frame 1 - Red', 'FRAME1_RED', 'Frame 1 (Red)', 0.00, 4, 'Frame 1 - 레드 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:52', NULL, 'NNN', 'A'),
+(72, 2, 'Frame 1 - Blue', 'FRAME1_BLUE', 'Frame 1 (Blue)', 0.00, 5, 'Frame 1 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:54', NULL, 'NNN', 'A'),
+(73, 2, 'Frame 2 - Silver', 'FRAME2_SILVER', 'Frame 2 (Silver)', 0.00, 6, 'Frame 2 - 실버 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:56', NULL, 'NNN', 'A'),
+(74, 2, 'Frame 2 - Blue', 'FRAME2_BLUE', 'Frame 2 (Blue)', 0.00, 7, 'Frame 2 - 블루 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:58', NULL, 'NNN', 'A'),
+(76, 2, 'Frame 4 - Brown', 'FRAME4_BROWN', 'Frame 4 (Brown)', 0.00, 9, 'Frame 4 - 브라운 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:29:59', NULL, 'NNN', 'A'),
+(77, 2, 'Frame 4 - Black', 'FRAME4_BLACK', 'Frame 4 (Black)', 0.00, 10, 'Frame 4 - 블랙 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:30:00', NULL, 'NNN', 'A'),
+(78, 2, 'Frame 4 - Orange', 'FRAME4_ORANGE', 'Frame 4 (Orange)', 0.00, 11, 'Frame 4 - 오렌지 색상', NULL, '2025-08-12 10:50:22', '2025-09-04 12:30:01', NULL, 'NNN', 'A'),
+(79, 3, 'IDS-1100', 'DS', 'IDS-1100', 950.00, 36, 'IDS-1100', NULL, '2025-08-12 10:56:17', '2025-08-12 10:56:35', NULL, 'NNN', 'A'),
+(80, 3, 'IDS-1000 Plus', 'DS', 'IDS-1000-PLUS', 1000.00, 37, 'IDS-1000 Plus', NULL, '2025-08-12 10:57:26', '2025-08-12 10:57:26', NULL, 'NNN', 'A'),
+(81, 2, '처방렌즈', 'PR-LEN-30', 'PR-LENS-30', 30.00, 0, '', NULL, '2025-08-12 20:24:16', '2025-09-04 12:32:29', NULL, 'NNN', 'A'),
+(82, 3, '9100 Camera', '9100cam', 'Dermaview', 1000.00, 0, 'Camera for 9100', NULL, '2025-08-16 13:52:06', '2025-09-05 01:33:37', NULL, 'NNN', 'A');
 
 -- --------------------------------------------------------
 
@@ -1507,13 +1544,9 @@ INSERT INTO `sessions` (`id`, `session_id`, `user_id`, `ip_address`, `user_agent
 (528, '952b4855d904517caea2dee8173975a09bb0a88a', NULL, '172.23.0.1', NULL, '2025-09-05 15:42:56', 'a:0:{}', '2025-09-05 06:42:56', '2025-09-05 15:42:56'),
 (529, '4522adc3efaedfd0c68afeff58e3f9e22e1674e2', NULL, '172.23.0.1', NULL, '2025-09-05 16:19:28', 'a:0:{}', '2025-09-05 07:19:28', '2025-09-05 16:19:28'),
 (532, '756249d18018e6d73f140e464762dd9d17e69f86', NULL, '172.23.0.1', NULL, '2025-09-05 17:49:28', 'a:0:{}', '2025-09-05 08:49:28', '2025-09-05 17:49:28'),
-(534, 'dc63df1e669f409d720baf48480ed54856e7d443', NULL, '172.23.0.1', 'Mozilla/5.0 zgrab/0.x', '2025-09-05 19:02:30', 'a:0:{}', '2025-09-05 10:02:30', '2025-09-05 19:02:30'),
-(535, '5ed53bb0bc41f446ffb332f979777818193b96e9', NULL, '172.23.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.1', '2025-09-05 19:07:32', 'a:0:{}', '2025-09-05 10:07:32', '2025-09-05 19:07:32'),
-(540, 'f459820d1ad31184553465d254a0b2d328887459', NULL, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.46', '2025-09-05 19:44:17', 'a:0:{}', '2025-09-05 10:44:17', '2025-09-05 19:44:17'),
-(544, '4132f96ca725ea91564b66e204f97ae57a63208e', 18, '172.23.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-09-05 20:00:39', 'a:2:{s:11:\"_csrf_token\";s:64:\"91f831cf515b3767d8f1c4be48e7fe0acd8213d15b1f5b4a4e8f7f8bcccb86cc\";s:7:\"user_id\";i:18;}', '2025-09-05 10:57:37', '2025-09-05 20:00:39'),
 (545, 'feb791ddfb8b5dc8b7864c1108f21d36073f3f9d', NULL, '172.23.0.1', NULL, '2025-09-05 20:07:31', 'a:0:{}', '2025-09-05 11:07:31', '2025-09-05 20:07:31'),
-(548, '4d5682aa68b8dc3fbf73fd0a2e4ecfb07d143076', 18, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-14 21:12:52', 'a:2:{s:11:\"_csrf_token\";s:64:\"e10b4cbad6324909ac066e1953f6da20bc69ebca54eb93d5158a564bc2e24461\";s:7:\"user_id\";i:18;}', '2025-09-14 10:22:58', '2025-09-14 21:12:52'),
-(550, '57944cd7c929c054f25e3449f38404c99f1687cd', 18, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15', '2025-09-21 18:58:45', 'a:2:{s:11:\"_csrf_token\";s:64:\"aed1eba7b8424d3fdb09f91644ef5c7964135cd1853e44d2d708a1d2f10963ac\";s:7:\"user_id\";i:18;}', '2025-09-21 00:50:25', '2025-09-21 18:58:45');
+(552, 'edf040383ce29f9fca008e05654986900436d788', 25, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15', '2025-09-21 20:17:04', 'a:2:{s:11:\"_csrf_token\";s:64:\"720f826d51bc18fe4c6cf6c35bcf1d4670f7d039b4b2dc67cd6cd0f8f215d387\";s:7:\"user_id\";i:25;}', '2025-09-21 11:04:23', '2025-09-21 20:17:04'),
+(554, 'c4addc6f08f1f32d1ca5f53f148153f952f221d4', 18, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 21:51:23', 'a:2:{s:11:\"_csrf_token\";s:64:\"0e86620e5595123e4024304b83c2f9d236b4b71493c3631a3ffb1793720501a8\";s:7:\"user_id\";i:18;}', '2025-09-21 11:26:13', '2025-09-21 21:51:23');
 
 -- --------------------------------------------------------
 
@@ -1560,7 +1593,7 @@ INSERT INTO `users` (`id`, `name`, `type`, `email`, `phone`, `password`, `temp_p
 (22, '나인원랩스', 'employee', 'nineonelabs@gmail.com', '029549153', '$2y$10$IoJx20rKd0NvXspdQ9LCbeCFZumJPRMJvqkIYPKd9IuhqAsQWgHla', NULL, NULL, 'U', NULL, 0, NULL, NULL, '2025-08-06 03:25:50', '2025-08-06 03:26:54'),
 (23, '장민', 'employee', '3mirabo2909@gmail.com', '010-8712-6123', '$2y$10$p/XeHWild/boiMRFzAUEQu3HfDPgUVv/HmiwrAuxp5RMvckpjeEsq', NULL, NULL, 'U', NULL, 0, NULL, NULL, '2025-08-06 14:04:31', '2025-08-06 14:04:59'),
 (24, '대리점 FF  ', 'dealer', 'dealer-f@gmail.com', '010-3123-1221', '$2y$10$KBAgT.9VRLcuEndh.LDtg.xYyI5uOJ8LbL21m0u38UhMoAtHL3PXK', NULL, NULL, 'U', NULL, 0, NULL, NULL, '2025-08-06 14:08:20', '2025-08-06 14:49:54'),
-(25, 'Lucy   ', 'dealer', 'yjl@illuco.co.kr', '010-9219-8739', '$2y$10$ofo5z51qZZLgV1Sw9RYBeuOwKxwzgtYhhbxx./cEW1HxsTk3BL7YO', NULL, NULL, 'U', NULL, 0, NULL, NULL, '2025-08-12 17:13:36', '2025-09-04 05:39:03'),
+(25, 'Lucy   ', 'dealer', 'yjl@illuco.co.kr', '010-9219-8739', '$2y$10$ofo5z51qZZLgV1Sw9RYBeuOwKxwzgtYhhbxx./cEW1HxsTk3BL7YO', '', NULL, 'U', NULL, 0, NULL, NULL, '2025-08-12 17:13:36', '2025-09-21 11:04:23'),
 (26, 'JY', 'employee', 'jyc@illuco.co.kr', '010-8351-1180', '$2y$10$1XICoHfZVthzrEBhBNgYOeTcGrk43L8DR0LpP7nziwE37WsEjHXXu', NULL, NULL, 'U', NULL, 1, NULL, NULL, '2025-08-16 13:38:52', '2025-08-16 13:38:52'),
 (27, 'JYC', 'dealer', 'info@illuco.co.kr', '031-4288-825', '$2y$10$OsLGvyqko6Dvo0y/GVDf2.NCWgvCb.0/2tjSI8fz8tbnd0u9lZOhK', '', NULL, 'U', NULL, 1, NULL, NULL, '2025-08-16 13:42:24', '2025-09-04 23:53:32'),
 (28, 'Angela', 'employee', 'kms@illuco.co.kr', '010-8272-6232', '$2y$10$ijH5hJWj8Yb6eza8FGQPXuFdL9WePR4LQFNsqCyyCE.I/4g6aeeUS', NULL, NULL, 'U', NULL, 1, NULL, NULL, '2025-08-20 11:57:12', '2025-08-20 11:57:12'),
@@ -1768,7 +1801,8 @@ ALTER TABLE `product_serials`
 --
 ALTER TABLE `product_templates`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_product_templates_category_id` (`category_id`);
+  ADD KEY `fk_product_templates_category_id` (`category_id`),
+  ADD KEY `idx_serial_abbr_special` (`serial_abbr`,`serial_special`);
 
 --
 -- 테이블의 인덱스 `remember_tokens`
@@ -1840,7 +1874,7 @@ ALTER TABLE `carts`
 -- 테이블의 AUTO_INCREMENT `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- 테이블의 AUTO_INCREMENT `claims`
@@ -1882,31 +1916,31 @@ ALTER TABLE `notifications`
 -- 테이블의 AUTO_INCREMENT `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_documents`
 --
 ALTER TABLE `order_documents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_document_commercial_invoices`
 --
 ALTER TABLE `order_document_commercial_invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_document_packing_lists`
 --
 ALTER TABLE `order_document_packing_lists`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_document_product_requests`
 --
 ALTER TABLE `order_document_product_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_histories`
@@ -1918,13 +1952,13 @@ ALTER TABLE `order_histories`
 -- 테이블의 AUTO_INCREMENT `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_logs`
 --
 ALTER TABLE `order_logs`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- 테이블의 AUTO_INCREMENT `password_reset_tokens`
@@ -1942,7 +1976,7 @@ ALTER TABLE `permissions`
 -- 테이블의 AUTO_INCREMENT `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- 테이블의 AUTO_INCREMENT `product_categories`
@@ -1954,7 +1988,7 @@ ALTER TABLE `product_categories`
 -- 테이블의 AUTO_INCREMENT `product_serials`
 --
 ALTER TABLE `product_serials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '고유 ID', AUTO_INCREMENT=101;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '고유 ID', AUTO_INCREMENT=111;
 
 --
 -- 테이블의 AUTO_INCREMENT `product_templates`
@@ -2002,7 +2036,7 @@ ALTER TABLE `serial_numbers`
 -- 테이블의 AUTO_INCREMENT `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=551;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=555;
 
 --
 -- 테이블의 AUTO_INCREMENT `users`
