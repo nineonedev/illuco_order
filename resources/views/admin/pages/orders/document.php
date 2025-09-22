@@ -20,7 +20,7 @@ use App\Domains\Order\Enums\OrderStatus;
 
         <!-- START CONTENT -->
         <div>
-            <?= include_view('admin.pages.orders.docs.'.$document->type, ['document' => $document]) ?>
+            <?= include_view('admin.pages.orders.docs.'.$document->type, ['document' => $document, 'dealerMemo' => $dealerMemo]) ?>
         </div>
 
         <!-- END CONTENT -->

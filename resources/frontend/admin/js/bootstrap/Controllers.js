@@ -12,6 +12,7 @@ import OrderDocumentController from "../controllers/OrderDocumentController";
 import ClaimController from "../controllers/ClaimController";
 import SalesInfoController from "../controllers/SalesInfoController";
 import DealerMemoController from "../controllers/DealerMemoController";
+import DealerPriceController from "../controllers/DealerPriceController";
 
 export default {
     notice: NoticeController,
@@ -28,4 +29,5 @@ export default {
     claim: ClaimController,
     salesinfo: SalesInfoController,
     dealerMemo: DealerMemoController,
+    dealerPrice: DealerPriceController,
 };

@@ -24,6 +24,8 @@ use App\Domains\Product\Entities\ProductSerial;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\User\Entities\Dealer;
+use App\Domains\User\Entities\DealerMemo;
+use App\Domains\User\Entities\DealerPrice;
 use App\Domains\User\Entities\User;
 use Framework\Database\ORM\Rel;
 
@@ -55,7 +57,12 @@ Rel::setConfig([
         Rel::belongsTo('user', User::class, 'id'),
         Rel::hasMany('orderHistories', OrderHistory::class, 'dealer_id'),
     ],
-
+    DealerMemo::class => [
+        Rel::belongsTo('dealer', Dealer::class, 'dealer_id'),
+    ],
+    DealerPrice::class => [
+        Rel::belongsTo('template', ProductTemplate::class, 'product_template_id'),
+    ],
     // ===================================================================
     // Communication
     // ===================================================================

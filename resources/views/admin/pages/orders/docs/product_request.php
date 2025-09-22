@@ -133,9 +133,13 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                 </table>
             </div>
 
+            <?php
+                // 메모 우선순위: 문서 메모 > 주문 메모
+                $noteText = $entity->note ?: ($dealerMemo ? $dealerMemo->memo_production : '');
+            ?>
             <div class="lh-note">
                 <label for="note">메모:</label>
-                <textarea name="note" id="note" rows="6"><?= e($entity->note) ?></textarea>
+                <textarea name="note" id="note" rows="6"> <?= $noteText ?></textarea>
             </div>
         </div>
 

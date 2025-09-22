@@ -214,6 +214,9 @@
                                     <a href="<?= route('admin.dealer-memo.edit', ['id' => $dealer->dealer->id])?>" class="no-btn-primary-outline --xxs --min">
                                         <span>메모</span>
                                     </a>
+                                    <a href="<?= route('admin.dealer-price.edit', ['id' => $dealer->dealer->id])?>" class="no-btn-primary-outline --xxs --min">
+                                        <span>단가설정</span>
+                                    </a>
                                     <a href="<?= route('admin.dealers.edit', ['id' => $dealer->id]) ?>" class="no-btn-action" data-tooltip>
                                         <div class="no-btn-action-ripple">
                                             <i class="fa-light fa-pen-to-square"></i>

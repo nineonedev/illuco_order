@@ -2,15 +2,14 @@ import Logger from "../supports/Logger";
 
 export default class View {
     static hookCount = 0;
-    static elementCount = 0; 
-    static SEL_HOST_CREATED = 'data-view-created';
-    static SEL_HOST_HYDRATED = 'data-view-hydrated';
-    static SEL_HAS_PROPS = 'data-view-props';
-    static SEL_HAS_TYPE = 'data-view-type';
-    static SEL_HAS_STATE = 'data-view-state';
+    static elementCount = 0;
+    static SEL_HOST_CREATED = "data-view-created";
+    static SEL_HOST_HYDRATED = "data-view-hydrated";
+    static SEL_HAS_PROPS = "data-view-props";
+    static SEL_HAS_TYPE = "data-view-type";
+    static SEL_HAS_STATE = "data-view-state";
 
-    
-    constructor(hookId, props = {}, boot = true){
+    constructor(hookId, props = {}, boot = true) {
         this._hookId = hookId;
         this._hostEl = null;
         this._el = null;
@@ -18,9 +17,9 @@ export default class View {
         this._type = null;
 
         this._hostCreated = false;
-        this._booted = false; 
-        this._hydrated = false; 
-        
+        this._booted = false;
+        this._hydrated = false;
+
         this._oldProps = props;
         this._props = {};
         this._oldState = {};
@@ -35,75 +34,72 @@ export default class View {
 
         this._mounted = false;
         this._mountedCallbacks = [];
-        
+
         if (boot) {
             this._boot();
         }
     }
 
-    _boot(){
+    _boot() {
         if (this._booted) return;
 
         this._setup();
         this._register();
         this._configureHookAndHost(this._hookId);
         this._hydrateIfNeeded();
-        this._booted = true; 
-        
+        this._booted = true;
+
         this._afterBoot();
     }
 
-    _afterBoot(){}
+    _afterBoot() {}
 
-    _setup(){
-        this._computed = {...this._computed, ...this._defineComputed()};
+    _setup() {
+        this._computed = { ...this._computed, ...this._defineComputed() };
     }
-    
-    _register(){
+
+    _register() {
         this._logger = Logger.make(this.constructor.name);
     }
 
-    setHookId(hookId){
+    setHookId(hookId) {
         this._configureHookAndHost(hookId);
-        return this; 
+        return this;
     }
 
-    _configureHookAndHost(hookId){
+    _configureHookAndHost(hookId) {
         let insertHookId;
         let hostEl;
 
-        if (hookId instanceof HTMLElement){
-
+        if (hookId instanceof HTMLElement) {
             const element = hookId;
-            
+
             insertHookId = this._generateHookId();
-            const hostElement = document.createElement('div');
-            hostElement.setAttribute('id', insertHookId);
+            const hostElement = document.createElement("div");
+            hostElement.setAttribute("id", insertHookId);
             hostElement.setAttribute(View.SEL_HOST_CREATED, true);
 
             [...element.attributes].forEach((attr) => {
-                if (attr.name === 'id') {
-                    insertHookId = attr.value; 
+                if (attr.name === "id") {
+                    insertHookId = attr.value;
                 }
                 hostElement.setAttribute(attr.name, attr.value);
             });
-            
+
             element.replaceWith(hostElement);
             hostElement.appendChild(element);
 
             this._el = element;
             this._hostCreated = true;
             hostEl = hostElement;
-            
-
         } else {
             insertHookId = hookId;
             hostEl = document.getElementById(insertHookId);
             this._hostCreated = false;
-                
+
             if (!hostEl) {
                 console.log(this);
-                throw new Error(`No found Hook Id: ${insertHookId}`)
+                throw new Error(`No found Hook Id: ${insertHookId}`);
             }
         }
 
@@ -111,11 +107,11 @@ export default class View {
         this._hostEl = hostEl;
     }
 
-    _defineProps(){
+    _defineProps() {
         return {};
     }
 
-    _defineState(){
+    _defineState() {
         return {};
     }
 
@@ -128,30 +124,32 @@ export default class View {
         // };
     }
 
-    _hydrateIfNeeded(){
-        const element = this._hostEl; 
-        
-        const isHydrated = element.hasAttribute(View.SEL_HAS_TYPE)
-            || element.hasAttribute(View.SEL_HAS_PROPS)
-            || element.hasAttribute(View.SEL_HAS_STATE);
-        
+    _hydrateIfNeeded() {
+        const element = this._hostEl;
+
+        const isHydrated =
+            element.hasAttribute(View.SEL_HAS_TYPE) ||
+            element.hasAttribute(View.SEL_HAS_PROPS) ||
+            element.hasAttribute(View.SEL_HAS_STATE);
+
         if (isHydrated) {
-            this._hydrated = true; 
+            this._hydrated = true;
         } else {
-            this._hydrated = false; 
+            this._hydrated = false;
         }
 
-        const elementProps = element.getAttribute(View.SEL_HAS_PROPS) || '{}';
-        const elementState = element.getAttribute(View.SEL_HAS_STATE) || '{}';
+        const elementProps = element.getAttribute(View.SEL_HAS_PROPS) || "{}";
+        const elementState = element.getAttribute(View.SEL_HAS_STATE) || "{}";
 
-        let props = {}, state = {};
+        let props = {},
+            state = {};
         try {
-            props = JSON.parse(elementProps || '{}');
+            props = JSON.parse(elementProps || "{}");
         } catch (e) {
             console.warn("Invalid props JSON in hydration:", elementProps);
         }
         try {
-            state = JSON.parse(elementState || '{}');
+            state = JSON.parse(elementState || "{}");
         } catch (e) {
             console.warn("Invalid state JSON in hydration:", elementState);
         }
@@ -160,24 +158,24 @@ export default class View {
         this._syncState(state);
     }
 
-    _syncProps(props = {}){
-        this._props = {...this._defineProps(), ...this._oldProps, ...props};
+    _syncProps(props = {}) {
+        this._props = { ...this._defineProps(), ...this._oldProps, ...props };
     }
 
-    _syncState(state = {}){
-        this._oldState = {...this._defineState(), ...state};
-        this._state = {...this._oldState};
+    _syncState(state = {}) {
+        this._oldState = { ...this._defineState(), ...state };
+        this._state = { ...this._oldState };
     }
 
-    get children(){
+    get children() {
         return this._children;
     }
 
-    get props(){
+    get props() {
         return this._props;
     }
 
-    get state(){
+    get state() {
         return this._state;
     }
 
@@ -208,13 +206,12 @@ export default class View {
         return this._slots;
     }
 
-    
-    render(){
+    render() {
         this._render();
-        return this; 
+        return this;
     }
 
-    _render(){
+    _render() {
         if (!this._booted) {
             this._boot();
         }
@@ -224,19 +221,18 @@ export default class View {
         this._fireMounted();
     }
 
-    _renderElement(){
+    _renderElement() {
         const html = this._template();
         let content;
 
         if (html instanceof HTMLElement) {
             content = html;
         } else {
-            const template = document.createElement('template')
+            const template = document.createElement("template");
             template.innerHTML = html.trim();
             content = template.content.firstElementChild;
-
         }
-        
+
         if (!this._el) {
             this._hostEl.appendChild(content);
         } else {
@@ -244,20 +240,20 @@ export default class View {
         }
 
         this._el = content;
-        this._el.setAttribute('id', this._id);
+        this._el.setAttribute("id", this._id);
     }
 
-    _fireBindings(){
+    _fireBindings() {
         this._bindRefs();
         this._bindSlots();
         this._bindEvents();
     }
 
-    fresh(){
-        this.setState({...this._oldState});
+    fresh() {
+        this.setState({ ...this._oldState });
     }
 
-    setState(newState = {}, shouldRender = true){
+    setState(newState = {}, shouldRender = true) {
         let hasChanged = false;
 
         Object.keys(newState).forEach((key) => {
@@ -301,7 +297,6 @@ export default class View {
                 this._refs[refName] = node;
             }
         });
-        
     }
 
     watch(key, callback) {
@@ -311,17 +306,15 @@ export default class View {
         this._watchers[key].push(callback);
         return this;
     }
-    
-    _bindEvents(){
 
-    }
+    _bindEvents() {}
 
     _bindSlots() {
         this._slots = {};
-        const slotNodes = this.qsAll('[data-slot]');
+        const slotNodes = this.qsAll("[data-slot]");
 
         slotNodes.forEach((node) => {
-            const name = node.getAttribute('data-slot') || 'default';
+            const name = node.getAttribute("data-slot") || "default";
             this._slots[name] = node;
         });
     }
@@ -341,11 +334,14 @@ export default class View {
     }
 
     on(selector, eventName, callback, strict = false) {
-        const el = selector instanceof HTMLElement ? selector : this.qs(selector);
+        const el =
+            selector instanceof HTMLElement ? selector : this.qs(selector);
 
         if (!el) {
             if (strict) {
-                throw new Error(`Event binding failed: '${eventName}' on '${selector}'`);
+                throw new Error(
+                    `Event binding failed: '${eventName}' on '${selector}'`
+                );
             }
             return;
         }
@@ -354,16 +350,18 @@ export default class View {
     }
 
     off(selector, eventName, callback) {
-        const el = selector instanceof HTMLElement ? selector : this.qs(selector);
+        const el =
+            selector instanceof HTMLElement ? selector : this.qs(selector);
         if (!el) return;
 
         el.removeEventListener(eventName, callback);
     }
 
     mountTo(target) {
-        const el = target instanceof HTMLElement
-            ? target
-            : document.querySelector(target);
+        const el =
+            target instanceof HTMLElement
+                ? target
+                : document.querySelector(target);
 
         if (!el) {
             throw new Error("Mount target not found");
@@ -373,7 +371,7 @@ export default class View {
         return this;
     }
 
-    remove(){
+    remove() {
         if (this._el && this._el.parentNode) {
             this._el.remove();
         }
@@ -390,7 +388,7 @@ export default class View {
             }
         });
         this._children = [];
-        
+
         this.remove();
         this._refs = {};
         this._props = {};
@@ -399,19 +397,20 @@ export default class View {
         this._slots = {};
         this._computed = {};
         this._computedCache = {};
-        this._el = null; 
-        this._hostEl = null;  
+        this._el = null;
+        this._hostEl = null;
         this._mounted = false;
         this._mountedCallbacks = [];
     }
 
-
-    _dispatch(name, detail = {}){
+    _dispatch(name, detail = {}) {
         const event = new CustomEvent(`@${name}`, {
             detail,
             bubbles: true,
             cancelable: true,
         });
+
+        console.log(event);
 
         document.body.dispatchEvent(event);
     }
@@ -424,33 +423,32 @@ export default class View {
             try {
                 cb.call(this);
             } catch (e) {
-                console.warn('Error in onMounted callback:', e);
+                console.warn("Error in onMounted callback:", e);
             }
         }
 
         this._mountedCallbacks = [];
     }
 
-
     onMounted(callback) {
-        if (typeof callback === 'function') {
+        if (typeof callback === "function") {
             this._mountedCallbacks.push(callback);
         }
     }
 
-    _template(){
-        return `<div></div>`
+    _template() {
+        return `<div></div>`;
     }
 
-    _generateHookId(){
+    _generateHookId() {
         return `view-hook-${View.hookCount++}`;
     }
-    
-    _generateElementId(){
+
+    _generateElementId() {
         return `view-element-${View.elementCount++}`;
     }
 
-    static make(hookId, props = {}, boot = true){
-        return new this(hookId, props, boot)
+    static make(hookId, props = {}, boot = true) {
+        return new this(hookId, props, boot);
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Communication\ClaimController;
 use App\Http\Controllers\Communication\NoticeController;
 use App\Http\Controllers\DealerMemoController;
+use App\Http\Controllers\DealerPriceController;
 use App\Http\Controllers\Order\CartController;
 use App\Http\Controllers\Order\CartItemController;
 use App\Http\Controllers\Order\CustomerController;
@@ -141,6 +142,14 @@ Route::middleware(['web'])->group(function(){
                 ->group(function(){
                     Route::get('{id}/edit', [DealerMemoController::class, 'edit'])->name('edit');
                     Route::post('{id}', [DealerMemoController::class, 'save'])->name('save'); 
+                });
+
+            Route::prefix('dealer-price')
+                ->name('dealer-price.')
+                ->group(function(){
+                    Route::get('{id}/edit', [DealerPriceController::class, 'edit'])->name('edit');
+                    Route::post('{id}', [DealerPriceController::class, 'save'])->name('save'); 
+                    Route::delete('{id}', [DealerPriceController::class, 'destroy'])->name('destroy'); 
                 });
 
             Route::prefix('dealers')

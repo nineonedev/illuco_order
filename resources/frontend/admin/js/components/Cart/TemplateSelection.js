@@ -3,21 +3,21 @@ import Helper from "../../supports/Helper";
 import SelectInput from "../Inputs/SelectInput";
 
 export default class TemplateSelection extends View {
-    _defineProps(){
+    _defineProps() {
         return {
             paginator: {},
             categories: [],
             query: {
-                category_id: '',
-                search: '',
-                sort: 'latest'
+                category_id: "",
+                search: "",
+                sort: "latest",
             },
         };
     }
 
-    _defineState(){
+    _defineState() {
         return {
-            ...this._props
+            ...this._props,
         };
     }
 
@@ -52,7 +52,7 @@ export default class TemplateSelection extends View {
                                     id="query" 
                                     class="no-form-search-input" 
                                     placeholder="제품명, 모델명, 코드, 설명" 
-                                    value="${query.search || ''}"
+                                    value="${query.search || ""}"
                                 />
                             </div>
                         </div>
@@ -74,7 +74,7 @@ export default class TemplateSelection extends View {
                             </tr>
                         </thead>
                         <tbody>
-                            ${data.map(this._renderItem).join('')}
+                            ${data.map(this._renderItem).join("")}
                         </tbody>
                     </table>
                 </div>
@@ -84,33 +84,36 @@ export default class TemplateSelection extends View {
         `;
     }
 
-    _render(){
+    _render() {
         super._render();
 
-        this.form = this.qs('#search-form');
+        this.form = this.qs("#search-form");
 
         SelectInput.make(this.refs.sort, {
             label: "정렬",
-            name: 'sort',
-            value: this._state.query.sort || '',
+            name: "sort",
+            value: this._state.query.sort || "",
             options: [
                 { label: "최신순", value: "latest" },
-                { label: "오래된순", value: "oldest" }
+                { label: "오래된순", value: "oldest" },
             ],
         }).render();
 
-        const options = this.state.categories.length > 1 ? [{ label: '전체', value: '' }] : [];
+        const options =
+            this.state.categories.length > 1
+                ? [{ label: "전체", value: "" }]
+                : [];
 
         SelectInput.make(this.refs.category, {
-            label: '제품군 선택',
-            name: 'category_id',
-            value: this._state.query.category_id || '',
+            label: "제품군 선택",
+            name: "category_id",
+            value: this._state.query.category_id || "",
             options: [
                 ...options,
-                ...this._state.categories.map(c => ({
+                ...this._state.categories.map((c) => ({
                     label: c.label,
-                    value: c.id
-                }))
+                    value: c.id,
+                })),
             ],
         }).render();
     }
@@ -123,7 +126,7 @@ export default class TemplateSelection extends View {
             has_previous_page = false,
             has_next_page = false,
             current_page = 1,
-            per_page = 15
+            per_page = 15,
         } = paginator;
 
         return `
@@ -131,19 +134,29 @@ export default class TemplateSelection extends View {
                 <p class="no-pagination__text">Rows per page:</p>
                 <div class="no-pagination__input">
                     <select name="perpage" class="no-pagination__select">
-                        ${[15, 25, 50, 75, 100].map(v => `
-                            <option value="${v}" ${v == per_page ? 'selected' : ''}>${v}</option>
-                        `).join('')}
+                        ${[15, 25, 50, 75, 100]
+                            .map(
+                                (v) => `
+                            <option value="${v}" ${
+                                    v == per_page ? "selected" : ""
+                                }>${v}</option>
+                        `
+                            )
+                            .join("")}
                     </select>
                 </div>
                 <div class="no-pagination__text">
                     ${from}-${to} of ${total}
                 </div>
                 <div class="no-pagination__btn">
-                    <button type="button" class="no-btn-move ${!has_previous_page ? '--disabled' : ''}" data-move="prev">
+                    <button type="button" class="no-btn-move ${
+                        !has_previous_page ? "--disabled" : ""
+                    }" data-move="prev">
                         <i class="fa-duotone fa-light fa-chevron-left"></i>
                     </button>
-                    <button type="button" class="no-btn-move ${!has_next_page ? '--disabled' : ''}" data-move="next">
+                    <button type="button" class="no-btn-move ${
+                        !has_next_page ? "--disabled" : ""
+                    }" data-move="next">
                         <i class="fa-duotone fa-light fa-chevron-right"></i>
                     </button>
                 </div>
@@ -152,21 +165,29 @@ export default class TemplateSelection extends View {
     }
 
     _renderItem({ id, fileattachment, name, model, code, price } = {}) {
-        const mainImage = fileattachment.find(file => file.file_key === 'main_image');
-        
+        const mainImage = fileattachment.find(
+            (file) => file.file_key === "main_image"
+        );
+
         return `
             <tr>
                 <td>
-                    ${mainImage ? `
+                    ${
+                        mainImage
+                            ? `
                         <div class="no-page-index-table__thumb">
-                            <img width="80" src="${mainImage.upload_path}" alt="${model || name}"/>
+                            <img width="80" src="${
+                                mainImage.upload_path
+                            }" alt="${model || name}"/>
                         </div>
-                    ` : `-` }
+                    `
+                            : `-`
+                    }
                 </td>
                 <td><span>${name}</span></td>
-                <td><span>${model || '-'}</span></td>
-                <td><span>${code || '-'}</span></td>
-                <td><span>${price || '-'}</span></td>
+                <td><span>${model || "-"}</span></td>
+                <td><span>${code || "-"}</span></td>
+                <td><span>${price || "-"}</span></td>
                 <td>
                     <div class="no-prod-attr-list__action">
                         <button 
@@ -182,9 +203,9 @@ export default class TemplateSelection extends View {
     }
 
     _bindEvents() {
-        const buttons = this.qsAll('button[data-row-id]');
-        buttons.forEach(btn => {
-            this.on(btn, 'click', this._handleClick.bind(this));
+        const buttons = this.qsAll("button[data-row-id]");
+        buttons.forEach((btn) => {
+            this.on(btn, "click", this._handleClick.bind(this));
         });
 
         // const searchInput = this.qs('#query');
@@ -193,44 +214,44 @@ export default class TemplateSelection extends View {
         // }
 
         if (this.form) {
-            this.on(this.form, 'submit', (e) => {
-                e.preventDefault(); 
+            this.on(this.form, "submit", (e) => {
+                e.preventDefault();
                 this._handleSearch(this.form, e);
             });
         }
 
-        const moveButtons = this.qsAll('.no-btn-move');
-        moveButtons.forEach(btn => {
-            this.on(btn, 'click', this._handleMove.bind(this));
+        const moveButtons = this.qsAll(".no-btn-move");
+        moveButtons.forEach((btn) => {
+            this.on(btn, "click", this._handleMove.bind(this));
         });
 
-        const perPageSelect = this.qs('.no-pagination__select');
+        const perPageSelect = this.qs(".no-pagination__select");
         if (perPageSelect) {
-            this.on(perPageSelect, 'change', this._handlePerPage.bind(this));
+            this.on(perPageSelect, "change", this._handlePerPage.bind(this));
         }
 
-        const resetButton = this.qs('#btn-reset');
+        const resetButton = this.qs("#btn-reset");
         if (resetButton) {
-            this.on(resetButton, 'click', this._handleReset.bind(this));
+            this.on(resetButton, "click", this._handleReset.bind(this));
         }
-        
-        const submitBtn = this.qs('#btn-submit');
+
+        const submitBtn = this.qs("#btn-submit");
         if (submitBtn) {
-            this.on(submitBtn, 'click', this._handleSearch.bind(this));
+            this.on(submitBtn, "click", this._handleSearch.bind(this));
         }
     }
 
-    _handleReset(){
+    _handleReset() {
         const params = new URLSearchParams({
             perpage: this._state.paginator.per_page || 15,
-            page: 1, 
-            category_id: '', 
-            search: '',
-            sort: 'latest',
+            page: 1,
+            category_id: "",
+            search: "",
+            sort: "latest",
         });
 
-        this._dispatch('fetch.templates', {
-            query: params.toString()
+        this._dispatch("fetch.templates", {
+            query: params.toString(),
         });
     }
 
@@ -245,35 +266,36 @@ export default class TemplateSelection extends View {
                 params.append(key, value);
             }
         }
-        
-        this._dispatch('fetch.templates', {
-            query: params.toString()
+
+        this._dispatch("fetch.templates", {
+            query: params.toString(),
         });
     }
 
     _handleMove(form, evt) {
         evt.preventDefault();
 
-        const button = evt.currentTarget; 
+        const button = evt.currentTarget;
 
-        if (button.classList.contains('--disabled')) return;
+        if (button.classList.contains("--disabled")) return;
 
-        const move = button.getAttribute('data-move');
+        const move = button.getAttribute("data-move");
         let page = parseInt(this._state.paginator.current_page || 1);
 
-        if (move === 'prev') page -= 1;
-        if (move === 'next') page += 1;
+        if (move === "prev") page -= 1;
+        if (move === "next") page += 1;
 
         const params = new URLSearchParams();
 
-        if (this._state.search) params.append('search', this._state.search);
-        if (this._state.category_id) params.append('category_id', this._state.category_id);
-        if (this._state.sort) params.append('sort', this._state.sort);
-        if (this._state.perpage) params.append('perpage', this._state.perpage);
-        params.append('page', page);
+        if (this._state.search) params.append("search", this._state.search);
+        if (this._state.category_id)
+            params.append("category_id", this._state.category_id);
+        if (this._state.sort) params.append("sort", this._state.sort);
+        if (this._state.perpage) params.append("perpage", this._state.perpage);
+        params.append("page", page);
 
-        this._dispatch('fetch.templates', {
-            query: params.toString()
+        this._dispatch("fetch.templates", {
+            query: params.toString(),
         });
     }
 
@@ -282,20 +304,23 @@ export default class TemplateSelection extends View {
 
         const params = new URLSearchParams();
 
-        if (this._state.search) params.append('search', this._state.search);
-        if (this._state.category_id) params.append('category_id', this._state.category_id);
-        if (this._state.sort) params.append('sort', this._state.sort);
-        params.append('perpage', perpage);
-        params.append('page', 1);
+        if (this._state.search) params.append("search", this._state.search);
+        if (this._state.category_id)
+            params.append("category_id", this._state.category_id);
+        if (this._state.sort) params.append("sort", this._state.sort);
+        params.append("perpage", perpage);
+        params.append("page", 1);
 
-        this._dispatch('fetch.templates', {
-            query: params.toString()
+        this._dispatch("fetch.templates", {
+            query: params.toString(),
         });
     }
 
     _handleClick(form, evt) {
-        const id = evt.currentTarget.getAttribute('data-row-id');
-        const template = this._state.paginator.data.find(item => item.id === +id);
-        this._dispatch('pick.template', { template });
+        const id = evt.currentTarget.getAttribute("data-row-id");
+        const template = this._state.paginator.data.find(
+            (item) => item.id === +id
+        );
+        this._dispatch("pick.template", { template });
     }
 }

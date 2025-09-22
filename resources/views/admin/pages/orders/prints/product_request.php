@@ -153,8 +153,11 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
             </table>
         </div>
 
+        <?php
+            $noteText = $entity->note ?: ($dealerMemo ? $dealerMemo->memo_production : '');
+        ?>
         <div class="lh-note">
-            <?= nl2br(e($entity->note)) ?>
+            <?= $noteText ?>
         </div>
     </div>
 </div>

@@ -10,6 +10,7 @@ use App\Domains\Order\Entities\Documents\ProductRequest;
 use App\Domains\Order\Entities\Documents\ProformaInvoice;
 use App\Domains\Order\Entities\OrderItem;
 use App\Domains\Order\Repositories\OrderDocumentRepository;
+use App\Domains\User\Repositories\DealerMemoRepository;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use Exception;
@@ -42,8 +43,17 @@ class OrderDocumentController extends Controller
         $document->order->forgetRelation('items');
         $document->order->setRelation('items', $orderItems);
 
+        $dealerMemo = null;
+        if ($document->order->dealer_id) {
+            $dealerMemo = DealerMemoRepository::make()
+                ->query()
+                ->where('dealer_id', (int)$document->order->dealer_id)
+                ->first();
+        }
+
         return $this->render('admin.pages.orders.print', [
             'document' => $document,
+            'dealerMemo' => $dealerMemo,
         ]);
     }
 
@@ -70,8 +80,17 @@ class OrderDocumentController extends Controller
         $document->order->forgetRelation('items');
         $document->order->setRelation('items', $orderItems);
 
+        $dealerMemo = null;
+        if ($document->order->dealer_id) {
+            $dealerMemo = DealerMemoRepository::make()
+                ->query()
+                ->where('dealer_id', (int)$document->order->dealer_id)
+                ->first();
+        }
+
         return $this->render('admin.pages.orders.document', [
             'document' => $document,
+            'dealerMemo' => $dealerMemo,
         ]);
     }
 

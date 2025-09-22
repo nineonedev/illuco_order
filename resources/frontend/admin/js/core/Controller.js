@@ -1,19 +1,21 @@
-import Ajax from './Ajax';
+import Ajax from "./Ajax";
 import Logger from "../supports/Logger";
 
 export default class Controller {
-    constructor(){
+    constructor() {
         this._logger = new Logger(this.constructor.name);
         this._ajax = new Ajax();
     }
 
     _listen(eventName, callback) {
-        if (!eventName || typeof callback !== 'function') {
+        if (!eventName || typeof callback !== "function") {
             this._logger.warn(`Invalid listen() parameters`, `@${eventName}`);
             return;
         }
 
         document.body.addEventListener(`@${eventName}`, (event) => {
+            console.log(callback, event.detail);
+
             callback(event.detail, event);
         });
         this._logger.success(`Listening globally to '@${eventName}'`);
@@ -29,10 +31,9 @@ export default class Controller {
         try {
             e.submitter.disabled = true;
             const result = await callback(data, action);
-            return result; 
-
-        } catch(error) {
-            this._logger.error('요청 처리 중 오류 발생', error);
+            return result;
+        } catch (error) {
+            this._logger.error("요청 처리 중 오류 발생", error);
         } finally {
             e.submitter.disabled = false;
         }
