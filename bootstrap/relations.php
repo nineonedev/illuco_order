@@ -56,6 +56,7 @@ Rel::setConfig([
     Dealer::class => [
         Rel::belongsTo('user', User::class, 'id'),
         Rel::hasMany('orderHistories', OrderHistory::class, 'dealer_id'),
+        Rel::hasMany('prices', DealerPrice::class, 'dealer_id'),
     ],
     DealerMemo::class => [
         Rel::belongsTo('dealer', Dealer::class, 'dealer_id'),

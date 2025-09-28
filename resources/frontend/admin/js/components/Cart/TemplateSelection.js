@@ -272,27 +272,37 @@ export default class TemplateSelection extends View {
         });
     }
 
+    // 교체용
     _handleMove(form, evt) {
         evt.preventDefault();
 
         const button = evt.currentTarget;
-
         if (button.classList.contains("--disabled")) return;
 
-        const move = button.getAttribute("data-move");
-        let page = parseInt(this._state.paginator.current_page || 1);
+        const move = button.getAttribute("data-move"); // 'prev' | 'next'
+        let page = Number(this._state.paginator?.current_page || 1);
 
-        if (move === "prev") page -= 1;
+        if (move === "prev") page = Math.max(1, page - 1);
         if (move === "next") page += 1;
 
         const params = new URLSearchParams();
 
-        if (this._state.search) params.append("search", this._state.search);
-        if (this._state.category_id)
-            params.append("category_id", this._state.category_id);
-        if (this._state.sort) params.append("sort", this._state.sort);
-        if (this._state.perpage) params.append("perpage", this._state.perpage);
-        params.append("page", page);
+        // 현재 검색 조건 유지
+        const q = this._state.query || {};
+        if (q.search) params.set("search", q.search);
+        if (q.category_id) params.set("category_id", q.category_id);
+        if (q.sort) params.set("sort", q.sort);
+
+        // perpage는 선택 값(없으면 paginator의 per_page) 유지
+        const perSelect = this.qs(".no-pagination__select");
+        const perpage =
+            (perSelect && perSelect.value) ||
+            this._state.paginator?.per_page ||
+            15;
+        params.set("perpage", String(perpage));
+
+        // 이동할 페이지
+        params.set("page", String(page));
 
         this._dispatch("fetch.templates", {
             query: params.toString(),
@@ -300,16 +310,17 @@ export default class TemplateSelection extends View {
     }
 
     _handlePerPage(select, evt) {
-        const perpage = select.value;
+        const perpage = evt.currentTarget.value;
 
         const params = new URLSearchParams();
+        const q = this._state.query || {};
 
-        if (this._state.search) params.append("search", this._state.search);
-        if (this._state.category_id)
-            params.append("category_id", this._state.category_id);
-        if (this._state.sort) params.append("sort", this._state.sort);
-        params.append("perpage", perpage);
-        params.append("page", 1);
+        if (q.search) params.set("search", q.search);
+        if (q.category_id) params.set("category_id", q.category_id);
+        if (q.sort) params.set("sort", q.sort);
+
+        params.set("perpage", perpage);
+        params.set("page", "1");
 
         this._dispatch("fetch.templates", {
             query: params.toString(),

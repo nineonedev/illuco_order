@@ -106,35 +106,197 @@
             }
         }
     }
-
 }
 
-
 .no-page-search-form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.6rem;
-  margin-bottom: 1.6rem;    
-  padding: 0.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-bottom: 1.6rem;
+    padding: 0.2rem;
 
-  > div {
-    flex: 1 1 auto;
-    min-width: 18rem;
+    > div {
+        flex: 1 1 auto;
+        min-width: 18rem;
 
-    @include mq(md){
-        width: 100%;
+        @include mq(md) {
+            width: 100%;
+        }
     }
-  }
 
-  @include mq(md){
-    flex-direction: column;
-    gap: 1.2rem;
-  }
+    @include mq(md) {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
 }
 
 .no-page-search-form__actions {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.8rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+}
+
+// 컴포넌트: Dealer Price Header
+// - 한 개 클래스(.dealer-price-header) 기반 BEM
+// - 반응형: >=768px 그리드 2열
+// - 다크/라이트 컬러 변수 대응 (없으면 fallback)
+
+.dealer-price-header {
+    // ---- Design tokens (fallback) ----
+    --dp-surface: var(--surface, #fff);
+    --dp-border: var(--border, #e9ecef);
+    --dp-text: var(--text, #1f2937);
+    --dp-muted: var(--muted, #6b7280);
+
+    background: var(--dp-surface);
+    color: var(--dp-text);
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--dp-border);
+
+    display: grid;
+    row-gap: 12px;
+
+    // ============ Title ============
+    &__title {
+        display: flex;
+        align-items: center;
+        min-height: 36px;
+    }
+
+    &__h1 {
+        font-size: clamp(18px, 2.2vw, 22px);
+        line-height: 1.2;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+
+    // ============ Meta (dealer name/code) ============
+    &__meta {
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        column-gap: 24px;
+        row-gap: 8px;
+
+        @media (min-width: 768px) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    &__item {
+        display: grid;
+        grid-template-columns: 80px 1fr; // label / value
+        align-items: center;
+        min-height: 28px;
+
+        @media (min-width: 768px) {
+            min-height: 30px;
+        }
+    }
+
+    &__label {
+        color: var(--dp-muted);
+        font-size: 12px;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: 0.02em;
+    }
+
+    &__value {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.25;
+        // 너무 길면 말줄임
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        // 아이콘 느낌의 점 장식(옵션)
+        position: relative;
+        padding-left: 8px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.3;
+            transform: translateY(-50%);
+        }
+    }
+
+    // ============ 상태 클래스 ============
+    &.is-loading {
+        // 스켈레톤 효과 (선택)
+        .dealer-price-header__h1,
+        .dealer-price-header__label,
+        .dealer-price-header__value {
+            color: transparent;
+            background: linear-gradient(
+                90deg,
+                #f2f3f5 25%,
+                #e9ebee 37%,
+                #f2f3f5 63%
+            );
+            background-size: 400% 100%;
+            animation: dp-skeleton 1.2s ease-in-out infinite;
+            border-radius: 6px;
+        }
+
+        .dealer-price-header__h1 {
+            height: 20px;
+        }
+        .dealer-price-header__label {
+            height: 10px;
+        }
+        .dealer-price-header__value {
+            height: 14px;
+        }
+    }
+}
+
+@keyframes dp-skeleton {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.no-heading-self {
+    margin-bottom: 1.6rem;
+}
+
+.no-img-label {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    @include mq(md) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    &__image {
+        aspect-ratio: 16/10;
+        max-width: 8rem;
+        width: 100%;
+        border-radius: 0.4rem;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
 }

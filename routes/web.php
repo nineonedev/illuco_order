@@ -146,10 +146,11 @@ Route::middleware(['web'])->group(function(){
 
             Route::prefix('dealer-price')
                 ->name('dealer-price.')
-                ->group(function(){
-                    Route::get('{id}/edit', [DealerPriceController::class, 'edit'])->name('edit');
-                    Route::post('{id}', [DealerPriceController::class, 'save'])->name('save'); 
-                    Route::delete('{id}', [DealerPriceController::class, 'destroy'])->name('destroy'); 
+                ->group(function () {
+                    Route::get('{id}/edit', [DealerPriceController::class, 'edit'])->name('edit');         // 페이지 진입
+                    Route::post('{id}',       [DealerPriceController::class, 'store'])->name('store');      // 신규 추가 (#create-price)
+                    Route::put('{id}',         [DealerPriceController::class, 'update'])->name('update');    // 행 저장 (JS: Ajax.put)
+                    Route::delete('{id}',      [DealerPriceController::class, 'destroy'])->name('destroy');  // 행 삭제 (JS: Ajax.delete)
                 });
 
             Route::prefix('dealers')

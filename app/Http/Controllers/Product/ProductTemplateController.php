@@ -10,6 +10,7 @@ use App\Domains\Product\Repositories\ProductTemplateRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
 use App\Domains\System\Supports\FileAttachmentList;
+use App\Domains\User\Repositories\DealerPriceRepository;
 use App\Http\Requests\Product\SaveProductTemplateRequest;
 use Framework\Database\ORM\Traits\SoftDeletes;
 use Framework\Http\Request;
@@ -118,7 +119,7 @@ class ProductTemplateController extends Controller
         );
 
         if ($hasCategory) {
-            $categoryId = $categoryIdsResult[0];
+            $query->whereIn('category_id', $categoryIdsResult);
         }
         
         $query->when(
@@ -126,6 +127,14 @@ class ProductTemplateController extends Controller
             fn($q) =>  $q->where('category_id', $categoryId)
         );
 
+        $excepts = $request->query('excepts');
+        if ($excepts) {
+            // "1,2,3" -> [1,2,3]
+            $exceptIds = array_filter(array_map('intval', explode(',', $excepts)));
+            if (!empty($exceptIds)) {
+                $query->whereNotIn('id', $exceptIds);
+            }
+        }
         // $query->when(
         //     $categoryIdsResult,
         //     fn($q) =>  $q->whereIn('category_id', $categoryIdsResult)
@@ -184,12 +193,26 @@ class ProductTemplateController extends Controller
 
         $categories = $categoryQuery->get();
 
+        $prices = []; 
+        if (user()->isDealer()) {
+            $prices = DealerPriceRepository::make()
+                ->with(['template'])
+                ->query()
+                ->where('dealer_id', user()->dealer->id)
+                ->get();
+            
+            foreach ($prices as &$price) {
+                $price = $price->toArray();
+            }
+        }
+
         return $this->render('admin.pages.products.templates.index', [
             'templates'   => $templates,
             'query'       => $request->query(),
             'categories'  => request()->expectsJson() ? array_map(fn($c) => $c->toArray(), $categories) : $categories,
             'isDealer' => user()->isDealer(),
             'category_id' => $categoryId,
+            'prices' => $prices,
         ]);
     }
 

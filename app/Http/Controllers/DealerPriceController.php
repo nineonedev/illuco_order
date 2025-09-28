@@ -16,152 +16,109 @@ use RuntimeException;
 
 class DealerPriceController extends Controller
 {
-    /**
-     * GET /dealer-price/{id}
-     * - {id}: users.id (딜러 유저 ID)
-     * - user -> dealer -> id 로 따라가서 해당 딜러의 개별 제품 단가 목록 조회
-     */
     public function edit(string $id)
     {
-        // 1) 유저 + 딜러 프로필 로드
-        $user = UserRepository::make()
-            ->with([UserType::DEALER])
-            ->find($id);
-
-        if (!$user) {
-            throw new RuntimeException('해당 사용자가 존재하지 않습니다.');
-        }
-
+        $user = UserRepository::make()->with([UserType::DEALER])->find($id);
+        if (!$user) throw new RuntimeException('해당 사용자가 존재하지 않습니다.');
         $dealer = $user->{UserType::DEALER} ?? null;
-        if (!$dealer) {
-            throw new RuntimeException('딜러가 아닌 사용자입니다.');
-        }
-
-        $dealerId = (int) $dealer->id;
-
-        // 2) 제품 템플릿 전체 + 해당 딜러의 가격 맵
-        $templates = ProductTemplateRepository::make()
-            ->query()
-            ->orderBy('sort_order', 'DESC')
-            ->orderBy('created_at', 'DESC')
-            ->get();
+        if (!$dealer) throw new RuntimeException('딜러가 아닌 사용자입니다.');
 
         $prices = DealerPriceRepository::make()
             ->with(['template.fileattachment'])
-            ->query()
-            ->where('dealer_id', $dealerId)
-            ->get();
+            ->query()->where('dealer_id', (int)$dealer->id)->get();
 
         return $this->render('admin.pages.dealers.price', [
-            'dealer'    => $user,
-            'templates' => $templates,
+            'dealer'  => $user,
             'prices'  => $prices,
         ]);
     }
 
-    /**
-     * POST /dealer-price/{id}
-     * - {id}: users.id (딜러 유저 ID)
-     *
-     * 바디(두 형태 모두 지원):
-     *  1) 일괄 저장:
-     *     items: [
-     *       { product_template_id: int, price: number, is_active: bool },
-     *       ...
-     *     ]
-     *  2) 단일 저장:
-     *     product_template_id: int
-     *     price: number
-     *     is_active: bool
-     */
-    public function save(Request $request, string $id)
+    /** 신규 추가 (상단 폼: POST /dealer-price/{dealer}) */
+    public function store(Request $request, string $id)
     {
-        // 기본 스키마(배열 or 단일)
-        $isBulk = is_array($request->body('items'));
+        Validator::make($request->all(), [
+            'product_template_id' => 'required|integer',
+            'price'               => 'required',
+            'is_active'           => 'nullable|boolean',
+        ])->validateOrFail();
 
-        $rules = $isBulk
-            ? [
-                'items'                       => 'required|array',
-                'items.*.product_template_id' => 'required|integer',
-                'items.*.price'               => 'required|min:0',
-                'items.*.is_active'           => 'nullable|boolean',
-            ]
-            : [
-                'product_template_id' => 'required|integer',
-                'price'               => 'required|min:0',
-                'is_active'           => 'nullable|boolean',
-            ];
-
-        Validator::make($request->all(), $rules)->validateOrFail();
-
-        return $this->runInTransaction(function () use ($request, $id, $isBulk) {
-            // 1) 유저 + 딜러 프로필 로드
-            $user = UserRepository::make()
-                ->with([UserType::DEALER])
-                ->find($id);
-
-            if (!$user) {
-                throw new RuntimeException('해당 사용자가 존재하지 않습니다.');
-            }
-
+        return $this->runInTransaction(function () use ($request, $id) {
+            $user = UserRepository::make()->with([UserType::DEALER])->find($id);
+            if (!$user) throw new RuntimeException('해당 사용자가 존재하지 않습니다.');
             $dealer = $user->{UserType::DEALER} ?? null;
-            if (!$dealer) {
-                throw new RuntimeException('딜러가 아닌 사용자입니다.');
-            }
+            if (!$dealer) throw new RuntimeException('딜러가 아닌 사용자입니다.');
+            $id = (int)$dealer->id;
 
-            $dealerId = (int) $dealer->id;
+            $tplId    = (int)$request->body('product_template_id');
+            $price    = (float)$request->body('price');
+            $isActive = (int)($request->body('is_active', 0) ? 1 : 0);
 
-            // 업서트 헬퍼
-            $upsert = function (int $templateId, $price, bool $isActive) use ($dealerId) {
-                /** @var DealerPrice|null $model */
-                $model = DealerPriceRepository::make()
-                    ->query()
-                    ->where('dealer_id', $dealerId)
-                    ->where('product_template_id', $templateId)
-                    ->first();
+            // upsert
+            $repo  = DealerPriceRepository::make();
+            $model = $repo->query()
+                ->where('dealer_id', $id)
+                ->where('product_template_id', $tplId)
+                ->first();
 
-                if ($model) {
-                    $model->price     = $price;
-                    $model->is_active = $isActive;
-                } else {
-                    $model = new DealerPrice([
-                        'dealer_id'           => $dealerId,
-                        'product_template_id' => $templateId,
-                        'price'               => $price,
-                        'is_active'           => $isActive,
-                    ]);
-                }
-
-                $saved = DealerPriceRepository::make()->save($model);
-                if (!$saved) {
-                    throw new RuntimeException("가격 저장에 실패했습니다. (template_id: {$templateId})");
-                }
-
-                return $model;
-            };
-
-            $savedRows = [];
-
-            if ($isBulk) {
-                foreach ((array)$request->body('items') as $row) {
-                    $templateId = (int)$row['product_template_id'];
-                    $price      = (float)$row['price'];
-                    $isActive   = (bool)($row['is_active'] ?? false);
-
-                    $savedRows[] = $upsert($templateId, $price, $isActive)->toArray();
-                }
+            if ($model) {
+                $model->price = $price;
+                $model->is_active = $isActive;
             } else {
-                $templateId = (int)$request->body('product_template_id');
-                $price      = (float)$request->body('price');
-                $isActive   = (bool)$request->body('is_active', false);
-
-                $savedRows[] = $upsert($templateId, $price, $isActive)->toArray();
+                $model = new DealerPrice([
+                    'dealer_id' => $id,
+                    'product_template_id' => $tplId,
+                    'price' => $price,
+                    'is_active' => $isActive,
+                ]);
             }
 
-            return $this->render(null, [
-                'dealer_id' => $dealerId,
-                'saved'     => $savedRows,
-            ], '정상적으로 저장되었습니다.');
+            $repo->save($model);
+
+            return $this->render(null, ['id' => $model->id], '대리점 단가가 저장되었습니다.');
+        });
+    }
+
+    /** 행 저장 (PUT /dealer-price/{price}) */
+    public function update(Request $request, string $id)
+    {
+        // 부분 업데이트 허용
+        Validator::make($request->all(), [
+            'price'               => 'required',
+            'is_active'           => 'boolean',
+        ])->validateOrFail();
+
+        return $this->runInTransaction(function () use ($request, $id) {
+            $repo  = DealerPriceRepository::make();
+            /** @var DealerPrice $model */
+            $model = $repo->findOrFail($id);
+
+            if ($request->has('price')) {
+                $model->price = (float)$request->body('price');
+            }
+            if ($request->has('is_active')) {
+                $model->is_active = (int)($request->body('is_active') ? 1 : 0);
+            }
+
+            if ($request->has('product_template_id')) {
+                $model->product_template_id = (int)$request->body('product_template_id');
+            }
+
+            $repo->save($model);
+
+            return $this->render(null, ['id' => $model->id], '저장되었습니다.');
+        });
+    }
+
+    /** 행 삭제 (DELETE /dealer-price/{price}) */
+    public function destroy(string $id)
+    {
+        return $this->runInTransaction(function () use ($id) {
+            $repo  = DealerPriceRepository::make();
+            $model = $repo->findOrFail($id);
+            if (!$repo->delete($model)) {
+                throw new RuntimeException('삭제에 실패했습니다.');
+            }
+            return $this->render(null, [], '삭제되었습니다.');
         });
     }
 }

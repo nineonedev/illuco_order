@@ -38,7 +38,6 @@
     }
 }
 
-
 .no-form-table-inner {
     overflow-y: auto;
 
@@ -46,11 +45,11 @@
         width: 100%;
         border-collapse: collapse;
         border: 1px solid var(--clr-input-border);
-        
-        @include mq(md){
+
+        @include mq(md) {
             min-width: 76.8rem;
         }
-        @include mq(sm){
+        @include mq(sm) {
             min-width: 44rem;
         }
 
@@ -77,8 +76,7 @@
     }
 }
 
-
-.no-status-card{
+.no-status-card {
     display: flex;
     align-items: center;
 
@@ -225,6 +223,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.8rem;
+
+    span {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+        overflow: hidden;
+    }
 }
 
 .choices[data-type*="select-one"] .choices__input {
@@ -763,7 +769,7 @@
             font-weight: 400;
             margin-left: calc(var(--ripple-size) / 2);
 
-            &.--title{
+            &.--title {
                 font-size: 1.6rem;
                 font-weight: 500;
             }
@@ -933,7 +939,7 @@
     width: 100%;
     @extend %form-control;
 
-    &.--full{
+    &.--full {
         max-width: none;
     }
 

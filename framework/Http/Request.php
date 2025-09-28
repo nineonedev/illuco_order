@@ -156,8 +156,10 @@ class Request {
 
     public function has(string $key): bool
     {
-        return (bool) ($this->body($key) || $this->query($key));
+        // 값이 '0', 0, false 여도 "존재"하면 true가 되도록 null 비교로 체크
+        return $this->body($key) !== null || $this->query($key) !== null;
     }
+
 
     public function only(array $keys): array
     {

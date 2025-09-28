@@ -96,6 +96,24 @@ class Builder
         return $this->get(); // 기존 `get()` 메서드로 결과 조회
     }
 
+    public function whereNotIn(string $column, array $values): self
+    {
+        // 비어있으면 조건을 추가하지 않음 (Laravel과 동일한 UX)
+        if (empty($values)) {
+            return $this;
+        }
+
+        $this->wheres[] = [
+            'type' => 'notIn',
+            'column' => $column,
+            'values' => $values,
+            'boolean' => 'and',
+        ];
+
+        return $this;
+    }
+
+
     public function bulkDelete(array $ids, string $primaryKey = 'id'): int
     {
         if (empty($ids)) {
@@ -131,6 +149,10 @@ class Builder
             if ($where['type'] === 'basic') {
                 $bindings[] = $where['value'];
             } elseif ($where['type'] === 'in') {
+                foreach ($where['values'] as $val) {
+                    $bindings[] = $val;
+                }
+            } elseif ($where['type'] === 'notIn') { // ← 추가
                 foreach ($where['values'] as $val) {
                     $bindings[] = $val;
                 }
@@ -558,7 +580,7 @@ class Builder
         return $this;
     }
 
-        public function whereHas(string $relation, Closure $callback): self
+    public function whereHas(string $relation, Closure $callback): self
     {
         return $this->whereHasTyped($relation, $callback, 'and', false);
     }
@@ -584,6 +606,10 @@ class Builder
         // 💡 이 Builder는 EntityQueryBuilder이므로 repository를 통해 엔티티를 직접 추론 가능
         if (!property_exists($this, 'repository')) {
             throw new \RuntimeException("EntityQueryBuilder must have repository property.");
+        }
+        
+        if (!($this instanceof EntityQueryBuilder)) {
+            throw new \RuntimeException("whereHas*()는 EntityQueryBuilder에서만 사용 가능합니다.");
         }
 
         /** @var class-string<Entity> $entityClass */

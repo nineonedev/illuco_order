@@ -63,6 +63,10 @@ class MysqlGrammar extends Grammar
                     $in = implode(', ', array_fill(0, count($where['values']), '?'));
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$in})";
                     $bindings = array_merge($bindings, $where['values']);
+                } elseif ($where['type'] === 'notIn') {
+                    $in = implode(', ', array_fill(0, count($where['values']), '?'));
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " NOT IN ({$in})";
+                    $bindings = array_merge($bindings, $where['values']);
                 } elseif ($where['type'] === 'exists') {
                     [$subSql, $subBindings] = $this->compileSelect($where['query']);
                     $parts[] = "{$boolean}EXISTS ({$subSql})";
@@ -225,6 +229,10 @@ class MysqlGrammar extends Grammar
                     $placeholders = implode(', ', array_fill(0, count($where['values']), '?'));
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$placeholders})";
                     $bindings = array_merge($bindings, $where['values']);
+                } elseif ($where['type'] === 'notIn') {
+                    $placeholders = implode(', ', array_fill(0, count($where['values']), '?'));
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " NOT IN ({$placeholders})";
+                    $bindings = array_merge($bindings, $where['values']);
                 } elseif ($where['type'] === 'null') {
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IS NULL";
                 } elseif ($where['type'] === 'notNull') {
@@ -269,6 +277,10 @@ class MysqlGrammar extends Grammar
                 } elseif ($where['type'] === 'in') {
                     $in = implode(', ', array_fill(0, count($where['values']), '?'));
                     $parts[] = "{$boolean}" . $this->wrap($where['column']) . " IN ({$in})";
+                    $bindings = array_merge($bindings, $where['values']);
+                } elseif ($where['type'] === 'notIn') {
+                    $in = implode(', ', array_fill(0, count($where['values']), '?'));
+                    $parts[] = "{$boolean}" . $this->wrap($where['column']) . " NOT IN ({$in})";
                     $bindings = array_merge($bindings, $where['values']);
                 } elseif ($where['type'] === 'raw') {
                     $parts[] = "{$boolean}{$where['sql']}";

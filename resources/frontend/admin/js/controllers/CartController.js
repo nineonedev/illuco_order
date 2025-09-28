@@ -43,8 +43,7 @@ export default class CartController extends Controller {
         this._listen("order.create", this._createOrder.bind(this));
     }
 
-    static findSubProductByModel(model){
-        
+    static findSubProductByModel(model) {
         for (const category in this.attributes) {
             const specs = this.attributes[category];
 
@@ -52,9 +51,9 @@ export default class CartController extends Controller {
                 if (modelName === model) {
                     return {
                         model: modelName,
-                        category: category, 
+                        category: category,
                         attributes: specs[modelName],
-                    }
+                    };
                 }
             }
         }
@@ -66,7 +65,7 @@ export default class CartController extends Controller {
         return this.labels[type] ?? null;
     }
 
-    static findSetGroupItemByModel (model) {
+    static findSetGroupItemByModel(model) {
         for (const modelName in this.setGroupItems) {
             if (modelName === model) {
                 return this.setGroupItems[modelName];
@@ -80,23 +79,24 @@ export default class CartController extends Controller {
         this.loader.show();
 
         try {
-            const [
-                attrResult,
-                setGroupItemsResult,
-                labelResult,
-            ] = await Promise.all([
-                new Ajax(true).get("/admin/product-templates/attributes"),
-                new Ajax(true).get('/admin/product-templates/set-group-items'),
-                new Ajax(true).get('/admin/product-templates/labels')
-            ]);
+            const [attrResult, setGroupItemsResult, labelResult] =
+                await Promise.all([
+                    new Ajax(true).get("/admin/product-templates/attributes"),
+                    new Ajax(true).get(
+                        "/admin/product-templates/set-group-items"
+                    ),
+                    new Ajax(true).get("/admin/product-templates/labels"),
+                ]);
 
             CartController.attributes = attrResult.data;
-            CartController.setGroupItems = setGroupItemsResult.data; 
-            CartController.labels = labelResult.data; 
+            CartController.setGroupItems = setGroupItemsResult.data;
+            CartController.labels = labelResult.data;
 
             this._logger.success("속성 로드 결과", CartController.attributes);
-            this._logger.success("세트 로드 결과", CartController.setGroupItems);
-
+            this._logger.success(
+                "세트 로드 결과",
+                CartController.setGroupItems
+            );
         } catch (err) {
             alert(err.message);
         } finally {
@@ -106,8 +106,13 @@ export default class CartController extends Controller {
 
     async _createOrder({ ids, totalAmount, memo, button }) {
         this._logger.info(ids, button);
-        
-        if (!confirm("최종 오더를 접수하면 이후 오더 수정이 불가합니다. 진행하시겠습니까?")) return; 
+
+        if (
+            !confirm(
+                "최종 오더를 접수하면 이후 오더 수정이 불가합니다. 진행하시겠습니까?"
+            )
+        )
+            return;
 
         const customer = this.cart.getCustomer();
 
@@ -195,9 +200,11 @@ export default class CartController extends Controller {
 
             const cartitem = result.data.cartitem;
             console.log(cartitem);
-            
-            this._pickTemplate({ template: cartitem.product.template, cartitem: cartitem});
 
+            this._pickTemplate({
+                template: cartitem.product.template,
+                cartitem: cartitem,
+            });
         } catch (err) {
             // 에러 처리
             this._logger.error(err);
@@ -214,27 +221,22 @@ export default class CartController extends Controller {
 
         try {
             this.loader.show();
-            const result = await new Ajax(true).put(
-                `/admin/cartitems`,
-                data
-            );
+            const result = await new Ajax(true).put(`/admin/cartitems`, data);
             this._logger.success("장바구니 변경", result);
 
             const cartitems = result.data.cartitems;
 
             console.log(cartitems);
-            
-            
-            cartitems.forEach(item => {
+
+            cartitems.forEach((item) => {
                 this.cart.updateCartItem(item.id, {
                     ...item,
                 });
             });
-            
         } finally {
             this.loader.hide();
         }
-    } 
+    }
 
     async _updateCartItem({ id, data, view, button }) {
         this._logger.info(id, data);
@@ -283,7 +285,6 @@ export default class CartController extends Controller {
             const result = await new Ajax(false).post("/admin/cart", data);
             this._logger.success("장바구니 추가", result.data.cartitem);
             this.cart.addCartItem(result.data.cartitem);
-            
         } finally {
             this.loader.hide();
             button.setState({ disabled: false });
@@ -291,7 +292,7 @@ export default class CartController extends Controller {
     }
 
     async _pickTemplate({ template, cartitem = {} }, evt) {
-        this.form.setState({ template, cartitem});
+        this.form.setState({ template, cartitem });
         this.modal.setState({
             open: false,
             content: "",
@@ -326,17 +327,16 @@ export default class CartController extends Controller {
                 return;
             }
 
-            const { customers, query, dealers, countries} = result.data;
+            const { customers, query, dealers, countries } = result.data;
 
             console.log(result.data);
-            
 
             if (this.modal.state.open) {
                 this.modal.setState({
                     open: false,
                     content: "",
                     header: "",
-                })
+                });
             }
 
             this.modal.setState({
@@ -362,6 +362,7 @@ export default class CartController extends Controller {
         if (query) {
             url += `?` + query;
         }
+        console.log(button, query, evt);
 
         try {
             if (button) {
@@ -381,7 +382,7 @@ export default class CartController extends Controller {
                     open: false,
                     content: "",
                     header: "",
-                })
+                });
             }
 
             this.modal.setState({
@@ -398,7 +399,7 @@ export default class CartController extends Controller {
                 button.setState({ disabled: false });
             }
 
-            this.loader.hide(); 
+            this.loader.hide();
         }
     }
 

@@ -3,6 +3,7 @@
 namespace Framework\Database\Query;
 
 use Framework\Database\ORM\Entities\Entity;
+use Framework\Database\ORM\Rel;
 use Framework\Database\ORM\Relations\Pivot;
 use Framework\Database\ORM\Repositories\Repository;
 
@@ -134,4 +135,49 @@ class EntityQueryBuilder extends Builder
         return $this->whereIn($primaryKey, $ids)->delete();
     }
 
+    public function whereHas(string $relation, \Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'and', false);
+    }
+
+    public function orWhereHas(string $relation, \Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'or', false);
+    }
+
+    public function whereDoesntHave(string $relation, \Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'and', true);
+    }
+
+    public function orWhereDoesntHave(string $relation, \Closure $callback): self
+    {
+        return $this->whereHasTyped($relation, $callback, 'or', true);
+    }
+
+    protected function whereHasTyped(string $relation, \Closure $callback, string $boolean, bool $not): self
+    {
+        /** @var class-string<Entity> $entityClass */
+        $entityClass = $this->repository::entityClass();
+        $entity = new $entityClass();
+
+        $relationObj = Rel::getRelation($entity, $relation);
+        if (!$relationObj) {
+            throw new \RuntimeException("Relation [{$relation}] is not defined on entity [{$entityClass}].");
+        }
+
+        $relatedQuery = $relationObj->getRelatedQuery();
+        $callback($relatedQuery);
+
+        // 관계 제약을 현재 쿼리에 추가 (EXISTS / NOT EXISTS)
+        $relationObj->addExistsConstraints($relatedQuery, $this);
+
+        $this->wheres[] = [
+            'type'    => $not ? 'notExists' : 'exists',
+            'query'   => $relatedQuery,
+            'boolean' => $boolean,
+        ];
+
+        return $this;
+    }
 }
