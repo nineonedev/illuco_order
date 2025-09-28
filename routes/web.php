@@ -12,6 +12,8 @@ use App\Http\Controllers\Communication\ClaimController;
 use App\Http\Controllers\Communication\NoticeController;
 use App\Http\Controllers\DealerMemoController;
 use App\Http\Controllers\DealerPriceController;
+use App\Http\Controllers\LoupeFrameColorController;
+use App\Http\Controllers\LoupeSettingController;
 use App\Http\Controllers\Order\CartController;
 use App\Http\Controllers\Order\CartItemController;
 use App\Http\Controllers\Order\CustomerController;
@@ -21,8 +23,19 @@ use App\Http\Controllers\Order\OrderItemController;
 use App\Http\Controllers\Product\ProductTemplateController;
 use Framework\Support\Facades\Route;
 
-Route::middleware(['web'])->group(function(){
+// return [
+//     [
+//         'prefix' => '',
+//         'name' => '' ,
+//         'middleware' => [],
+//         'action' => [AdminController::class, 'index'],
+//         'group' => [
+//             ['method' => 'GET', 'path' => 'signin', ]
+//         ],
+//     ]
+// ];
 
+Route::middleware(['web'])->group(function(){
     // ============================================================================================================
     // home 
     // ============================================================================================================
@@ -45,43 +58,43 @@ Route::middleware(['web'])->group(function(){
     // ============================================================================================================
     // admin 
     // ============================================================================================================
-    Route::prefix('admin')
-        ->name('admin')
-        ->middleware(['auth'])
-        ->group(function(){
+    Route::prefix('admin')->name('admin')->middleware(['auth'])->group(function(){
             
             Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
             
             Route::get('guide', [AdminController::class, 'guide'])->name('guide');
             Route::get('test', [AdminController::class, 'test'])->name('test');
             Route::get('seting', [AdminController::class, 'setting'])->name('setting'); 
-            
             Route::post('upload', [AdminController::class, 'upload'])->name('upload'); 
             
-            Route::prefix('dashboard')
-                ->name('dashboard')
-                ->group(function() {
+            Route::prefix('dashboard')->name('dashboard')->group(function() {
                     Route::get('aggregation', [AdminController::class, 'aggregateApi'])->name('aggregation');
             });
 
-            Route::prefix('salesinfo')
-                ->name('salesinfo')
-                ->group(function(){
+            Route::prefix('loupe-setting')->name('loupe-setting')->group(function(){
+                    Route::get('/', [LoupeSettingController::class, 'index'])->name('index');
+                    Route::post('/', [LoupeSettingController::class, 'store'])->name('store');
+                });
+
+            Route::prefix('loupe-frame-colors')->name('loupe-frame-colors.')->group(function () {
+                Route::get('/',        [LoupeFrameColorController::class, 'index'])->name('index');
+                Route::post('/',       [LoupeFrameColorController::class, 'store'])->name('store');
+                Route::put('{id}',     [LoupeFrameColorController::class, 'update'])->name('update');
+                Route::delete('{id}',  [LoupeFrameColorController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::prefix('salesinfo')->name('salesinfo')->group(function(){
                     Route::get('/', [SalesInfoController::class, 'index'])->name('index');
                     Route::post('/save', [SalesInfoController::class, 'save'])->name('save');
                 });
                 
 
-            Route::prefix('me')
-                ->name('me')
-                ->group(function(){
+            Route::prefix('me')->name('me')->group(function(){
                     Route::get('/', [AuthController::class, 'edit'])->name('edit');
                     Route::patch('/', [AuthController::class, 'update'])->name('update');
                 });
             
-            Route::prefix('roles')
-                ->name('roles')
-                ->group(function(){
+            Route::prefix('roles')->name('roles')->group(function(){
                     Route::get('/', [RoleController::class, 'index'])->name('index');
                     Route::get('/create', [RoleController::class, 'create'])->name('create');
                     Route::get('/edit/{id}', [RoleController::class, 'edit'])->name('edit');
@@ -92,9 +105,7 @@ Route::middleware(['web'])->group(function(){
                 });
 
 
-            Route::prefix('notices')
-                ->name('notices')
-                ->group(function(){
+            Route::prefix('notices')->name('notices')->group(function(){
                     Route::get('/', [NoticeController::class, 'index'])->name('index');
                     Route::get('create', [NoticeController::class, 'create'])->name('create');
                     Route::get('edit/{id}', [NoticeController::class, 'edit'])->name('edit');
@@ -107,9 +118,7 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [NoticeController::class, 'destroy'])->name('destroy');
                 });
 
-            Route::prefix('claims')
-                ->name('claims')
-                ->group(function(){
+            Route::prefix('claims')->name('claims')->group(function(){
                     Route::get('/', [ClaimController::class, 'index'])->name('index');
                     Route::get('/create', [ClaimController::class, 'create'])->name('create');
                     Route::get('/edit/{id}', [ClaimController::class, 'edit'])->name('edit');
@@ -122,9 +131,7 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [ClaimController::class, 'destroy'])->name('destroy');
                 });
 
-            Route::prefix('customers')
-                ->name('customers')
-                ->group(function(){
+            Route::prefix('customers')->name('customers')->group(function(){
                     Route::get('/', [CustomerController::class, 'index'])->name('index');
                     Route::get('/create', [CustomerController::class, 'create'])->name('create');
                     Route::get('{id}/edit', [CustomerController::class, 'edit'])->name('edit');
@@ -137,25 +144,19 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [CustomerController::class, 'destroy'])->name('destroy');
                 });
 
-            Route::prefix('dealer-memo')
-                ->name('dealer-memo.')
-                ->group(function(){
+            Route::prefix('dealer-memo')->name('dealer-memo.')->group(function(){
                     Route::get('{id}/edit', [DealerMemoController::class, 'edit'])->name('edit');
                     Route::post('{id}', [DealerMemoController::class, 'save'])->name('save'); 
                 });
 
-            Route::prefix('dealer-price')
-                ->name('dealer-price.')
-                ->group(function () {
+            Route::prefix('dealer-price')->name('dealer-price')->group(function () {
                     Route::get('{id}/edit', [DealerPriceController::class, 'edit'])->name('edit');         // 페이지 진입
                     Route::post('{id}',       [DealerPriceController::class, 'store'])->name('store');      // 신규 추가 (#create-price)
                     Route::put('{id}',         [DealerPriceController::class, 'update'])->name('update');    // 행 저장 (JS: Ajax.put)
                     Route::delete('{id}',      [DealerPriceController::class, 'destroy'])->name('destroy');  // 행 삭제 (JS: Ajax.delete)
                 });
 
-            Route::prefix('dealers')
-                ->name('dealers.')
-                ->group(function () {
+            Route::prefix('dealers')->name('dealers.')->group(function () {
                     // 목록/생성/수정 화면
                     Route::get('/',            [DealerController::class, 'index'])->name('index');
                     Route::get('/create',      [DealerController::class, 'create'])->name('create');
@@ -181,9 +182,7 @@ Route::middleware(['web'])->group(function(){
 
 
 
-            Route::prefix('employees')
-                ->name('employees')
-                ->group(function(){
+            Route::prefix('employees')->name('employees')->group(function(){
                     Route::get('/', [EmployeeController::class, 'index'])->name('index');
                     Route::get('/create', [EmployeeController::class, 'create'])->name('create');
                     Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
@@ -195,9 +194,7 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [EmployeeController::class, 'destroy'])->name('destroy');
                 });
     
-            Route::prefix('product-templates')
-                ->name('product_templates')
-                ->group(function(){
+            Route::prefix('product-templates')->name('product_templates')->group(function(){
                     Route::get('/', [ProductTemplateController::class, 'index'])->name('index');
                     Route::get('/create', [ProductTemplateController::class, 'create'])->name('create');
                     Route::get('/options', [ProductTemplateController::class, 'options'])->name('options');
@@ -214,35 +211,29 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('bulk-delete', [ProductTemplateController::class, 'destroyMany'])->name('destroyMany');
                     Route::delete('{id}', [ProductTemplateController::class, 'destroy'])->name('destroy');
                 });
+
+            Route::prefix('loupe-settings')->name('loupe-settings.')->group(function () {
+                Route::get('/',        [LoupeSettingController::class, 'index'])->name('index');
+                Route::post('/',       [LoupeSettingController::class, 'store'])->name('store');
+                Route::put('{id}',     [LoupeSettingController::class, 'update'])->name('update');
+                Route::delete('{id}',  [LoupeSettingController::class, 'destroy'])->name('destroy');
+            });
+
             
-            Route::prefix('product-categories')
-                ->name('product_categories')
-                ->group(function(){
+            Route::prefix('product-categories')->name('product_categories')->group(function(){
                     Route::get('/', [CategoryController::class, 'index'])->name('index');
                     Route::post('/', [CategoryController::class, 'store'])->name('store');
                     Route::put('{id}', [CategoryController::class, 'update'])->name('update');
                     Route::delete('{id}', [CategoryController::class, 'destroy'])->name('destroy');
                 });
 
-            // Route::prefix('product-options')
-            //     ->name('product_options')
-            //     ->group(function(){
-            //         Route::post('/', [ProductOptionController::class, 'store'])->name('store');
-            //         Route::put('{id}', [ProductOptionController::class, 'update'])->name('update');
-            //         Route::delete('{id}', [ProductOptionController::class, 'destroy'])->name('destroy');
-            //     });
-
             // carts
-            Route::prefix('cart')
-                ->name('cart')
-                ->group(function(){
+            Route::prefix('cart')->name('cart')->group(function(){
                     Route::get('/', [CartController::class, 'index'])->name('index');
                     Route::post('/', [CartController::class, 'store'])->name('store');
                 });
 
-            Route::prefix('cartitems')
-            ->name('cartitems')
-            ->group(function(){
+            Route::prefix('cartitems')->name('cartitems')->group(function(){
                 Route::get('{id}', [CartItemController::class, 'show'])->name('show');
                 Route::put('/', [CartItemController::class, 'updateMany'])->name('updateMany');
                 Route::put('{id}', [CartItemController::class, 'update'])->name('update');
@@ -252,9 +243,7 @@ Route::middleware(['web'])->group(function(){
             });
 
             // orders
-            Route::prefix('orders')
-                ->name('orders')
-                ->group(function(){
+            Route::prefix('orders')->name('orders')->group(function(){
                     Route::get('/', [OrderController::class, 'index'])->name('index');
                     Route::get('edit/{orderNo}', [OrderController::class, 'edit'])->name('edit');
                     Route::get('export', [OrderController::class, 'export'])->name('export');
@@ -274,15 +263,11 @@ Route::middleware(['web'])->group(function(){
 
                 });
 
-            Route::prefix('orderitems')
-                ->name('orderitems')
-                ->group(function(){
+            Route::prefix('orderitems')->name('orderitems')->group(function(){
                     Route::delete('{id}', [OrderItemController::class, 'destroy'])->name('destroy');
                 });
 
-            Route::prefix('order-documents')
-                ->name('order_documents')
-                ->group(function(){
+            Route::prefix('order-documents')->name('order_documents')->group(function(){
                     Route::get('print/{documentNo}', [OrderDocumentController::class, 'print'])->name('print');
                     Route::get('edit/{documentNo}', [OrderDocumentController::class, 'edit'])->name('edit');
                     Route::get('download/{documentNo}', [OrderDocumentController::class, 'download'])->name('download');
@@ -291,9 +276,7 @@ Route::middleware(['web'])->group(function(){
                 });
 
             // order-document-histories
-            Route::prefix('order-histories')
-                ->name('order_histories')
-                ->group(function(){
+            Route::prefix('order-histories')->name('order_histories')->group(function(){
                     Route::get('{orderId}', [OrderHistoryController::class, 'index'])->name('index');
                     Route::post('/', [OrderHistoryController::class, 'store'])->name('store');
 
@@ -309,8 +292,5 @@ Route::middleware(['web'])->group(function(){
             //         Route::put('{id}', [ProductValueController::class, 'update'])->name('update');
             //         Route::delete('{id}', [ProductValueController::class, 'destroy'])->name('destroy');
             //     });
-
-
         });
-
 });

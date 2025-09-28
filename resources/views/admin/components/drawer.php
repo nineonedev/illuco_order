@@ -106,6 +106,21 @@
                                     </div>
                                 </a>
                             </li>
+
+                            <li class="no-drawer-gnb-item <?= route_is_exact('admin.loupe-setting.index') ? '--active' : '' ?>">
+                                <a href="<?= route('admin.loupe-setting.index') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                                    <div class="no-drawer-gnb-link__icon">
+                                        <i class="fa-solid fa-microscope"></i>
+                                    </div>
+                                    <div class="no-drawer-gnb-link__text">
+                                        <span>루페 세팅창</span>
+                                    </div>
+                                    <div data-tooltip-text>
+                                        <span>루페 세팅창</span>
+                                        <span data-tooltip-arrow></span>
+                                    </div>
+                                </a>
+                            </li>
                         <?php endif; ?>
                     </ul>
 

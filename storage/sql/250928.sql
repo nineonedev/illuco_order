@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 호스트: db:3306
--- 생성 시간: 25-09-28 01:05
+-- 생성 시간: 25-09-28 13:50
 -- 서버 버전: 8.0.43
 -- PHP 버전: 8.2.27
 
@@ -46,7 +46,8 @@ INSERT INTO `carts` (`id`, `customer_id`, `created_at`, `updated_at`) VALUES
 (8, 10, '2025-08-06 14:39:24', '2025-08-06 14:39:24'),
 (9, 11, '2025-08-12 17:44:40', '2025-08-12 17:44:40'),
 (10, 12, '2025-08-12 17:47:02', '2025-08-12 17:47:02'),
-(11, 13, '2025-08-13 08:42:56', '2025-08-13 08:42:56');
+(11, 13, '2025-08-13 08:42:56', '2025-08-13 08:42:56'),
+(12, 15, '2025-09-28 06:52:04', '2025-09-28 06:52:04');
 
 -- --------------------------------------------------------
 
@@ -162,7 +163,8 @@ INSERT INTO `customers` (`id`, `user_id`, `dealer_id`, `name`, `country`, `phone
 (11, 18, NULL, 'Laura Lee', 'US', '123-5675-998777', 'laura.lee@illuco.com', 27, '', '', NULL, '2025-08-12 17:27:15', '2025-08-12 17:27:15'),
 (12, 25, 25, 'pil', 'US', '131-5151-5623', 'yij@kflsi.fdd', 34, '', '', NULL, '2025-08-12 17:44:24', '2025-08-12 17:44:24'),
 (13, 18, NULL, 'victor', 'RU', '010-3374-3675', 'victor33@gmail.com', 33, '11 arbat st. moscow', '', NULL, '2025-08-13 08:37:28', '2025-08-13 08:37:43'),
-(14, 29, 29, 'Karl Robinson', 'IT', '010-2312-3122', 'robinson@test.com', 43, 'tst ro', 'test desc', NULL, '2025-09-05 02:33:02', '2025-09-05 02:33:02');
+(14, 29, 29, 'Karl Robinson', 'IT', '010-2312-3122', 'robinson@test.com', 43, 'tst ro', 'test desc', NULL, '2025-09-05 02:33:02', '2025-09-05 02:33:02'),
+(15, 30, 30, 'JJ008', 'KR', '010-3123-1221', 'jj@jj.com', 32, 'test jj address', 'test jj description', NULL, '2025-09-28 06:51:57', '2025-09-28 06:51:57');
 
 -- --------------------------------------------------------
 
@@ -202,7 +204,7 @@ INSERT INTO `dealers` (`id`, `country`, `code`, `address`, `description`, `memo`
 (25, 'KR', 'KR-ILL', 'test', '', NULL, 0, NULL, '2025-08-12 17:13:36', '2025-09-04 05:39:03', NULL, NULL),
 (27, 'KR', 'KR-INFO', '경기도 군포시 고산로 166 SK벤티움 102동 304호', '테스트', NULL, 0, NULL, '2025-08-16 13:42:24', '2025-08-16 13:42:24', 3, NULL),
 (29, 'JP', 'TM01', 'test address', 'test description', NULL, 0, NULL, '2025-09-05 01:50:29', '2025-09-05 10:26:21', NULL, '3,2'),
-(30, 'AU', 'FN', 'babc', 'test', NULL, 0, NULL, '2025-09-05 10:28:50', '2025-09-05 10:31:08', NULL, '11');
+(30, 'AU', 'FN', 'babc', 'test', NULL, 0, NULL, '2025-09-05 10:28:50', '2025-09-28 06:29:36', NULL, '11,2');
 
 -- --------------------------------------------------------
 
@@ -251,7 +253,7 @@ CREATE TABLE `dealer_prices` (
 
 INSERT INTO `dealer_prices` (`id`, `dealer_id`, `product_template_id`, `price`, `is_active`, `created_at`, `updated_at`) VALUES
 (1, 30, 58, 45.00, 1, '2025-09-22 13:36:41', '2025-09-22 13:36:41'),
-(2, 30, 66, 14.00, 1, '2025-09-28 01:02:54', '2025-09-28 01:02:54'),
+(2, 30, 66, 15.00, 1, '2025-09-28 01:02:54', '2025-09-28 01:02:54'),
 (3, 30, 16, 3025.33, 1, '2025-09-28 01:04:41', '2025-09-28 01:04:41');
 
 -- --------------------------------------------------------
@@ -370,6 +372,47 @@ INSERT INTO `file_attachments` (`id`, `file_attachable_type`, `file_attachable_i
 (112, 'producttemplate', 81, 'lens_05.jpg', '0dd6c47dc94baf9b0740e32039cd613c.jpg', 'image/jpeg', 337980, NULL, 'jpg', '/static/uploads/producttemplate/0dd6c47dc94baf9b0740e32039cd613c.jpg', NULL, 'main_image', 0, '2025-09-05 01:30:03', '2025-09-05 01:30:03'),
 (113, 'producttemplate', 82, 'IDS9100front.webp', '00c0fd6d7825dcf36102717fbc43a30d.webp', 'image/webp', 40230, NULL, 'webp', '/static/uploads/producttemplate/00c0fd6d7825dcf36102717fbc43a30d.webp', NULL, 'main_image', 0, '2025-09-05 01:33:37', '2025-09-05 01:33:37'),
 (114, 'claim', 31, 'Compact Universal Clamp.jpg', '8f5d087473e1ff139dcad94532b49f9c.jpg', 'image/jpeg', 691960, NULL, 'jpg', '/static/uploads/claim/8f5d087473e1ff139dcad94532b49f9c.jpg', NULL, 'attach_1', 0, '2025-09-05 02:46:56', '2025-09-05 02:46:56');
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `loupe_frame_colors`
+--
+
+CREATE TABLE `loupe_frame_colors` (
+  `id` int UNSIGNED NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `code` varchar(30) NOT NULL,
+  `hex` char(7) NOT NULL DEFAULT '#000000',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `sort_order` int NOT NULL DEFAULT '0',
+  `meta` json DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- 테이블 구조 `loupe_settings`
+--
+
+CREATE TABLE `loupe_settings` (
+  `id` bigint UNSIGNED NOT NULL,
+  `template_id` bigint UNSIGNED NOT NULL,
+  `vd_min` decimal(5,2) DEFAULT NULL,
+  `vd_max` decimal(5,2) DEFAULT NULL,
+  `fd_right_min` decimal(5,1) DEFAULT NULL,
+  `fd_right_max` decimal(5,1) DEFAULT NULL,
+  `fd_left_min` decimal(5,1) DEFAULT NULL,
+  `fd_left_max` decimal(5,1) DEFAULT NULL,
+  `fd_total_distance` decimal(5,1) DEFAULT NULL,
+  `wd_min` decimal(5,2) DEFAULT NULL,
+  `wd_max` decimal(5,2) DEFAULT NULL,
+  `frame_color` json DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -505,7 +548,8 @@ INSERT INTO `orders` (`id`, `user_id`, `customer_id`, `dealer_id`, `orderer_name
 (31, 18, 13, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00003', 'preparing', 1610.00, '请查看形式发票（PI），并请告知是否一切无误。\n\n为了赶上您所指定的日期，我们将开始准备发货。', NULL, '2025-08-13 15:59:05', '2025-08-20 11:50:08', 0),
 (32, 25, 12, 25, 'Lucy  ', 'yjl@illuco.co.kr', '010-9219-8739', NULL, NULL, NULL, NULL, 'KR-ILL-2025-00001', 'preparing', 1350.00, '', NULL, '2025-08-20 12:02:21', '2025-09-04 08:11:23', 1),
 (33, 18, 12, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00004', 'preparing', 1700.00, 'test', NULL, '2025-09-21 11:45:53', '2025-09-21 11:46:15', 0),
-(34, 18, 13, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00005', 'preparing', 5350.00, 'a lot of them.', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:51', 0);
+(34, 18, 13, NULL, 'ILLUCO Korea', 'illucokorea@gmail.com', '010-1231-2312', NULL, NULL, NULL, NULL, 'CST-2025-00005', 'preparing', 5350.00, 'a lot of them.', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:51', 0),
+(35, 30, 15, 30, 'fancy22', 'fancy@test.com', '010-2312-3123', NULL, NULL, NULL, NULL, 'FN-2025-00001', 'new', 3310.33, 'test', NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08', 0);
 
 -- --------------------------------------------------------
 
@@ -552,7 +596,11 @@ INSERT INTO `order_documents` (`id`, `order_id`, `user_id`, `document_no`, `type
 (101, 34, 18, 'CST-2025-00017', 'proforma_invoice', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
 (102, 34, 18, 'CST-2025-00018', 'product_request', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
 (103, 34, 18, 'CST-2025-00019', 'packing_list', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
-(104, 34, 18, 'CST-2025-00020', 'commercial_invoice', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
+(104, 34, 18, 'CST-2025-00020', 'commercial_invoice', NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(105, 35, 30, 'FN-2025-00001', 'proforma_invoice', NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08'),
+(106, 35, 30, 'FN-2025-00002', 'product_request', NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08'),
+(107, 35, 30, 'FN-2025-00003', 'packing_list', NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08'),
+(108, 35, 30, 'FN-2025-00004', 'commercial_invoice', NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08');
 
 -- --------------------------------------------------------
 
@@ -600,7 +648,8 @@ INSERT INTO `order_document_commercial_invoices` (`id`, `bill_to_name`, `bill_to
 (92, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05'),
 (96, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
 (100, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
-(104, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
+(104, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(108, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08');
 
 -- --------------------------------------------------------
 
@@ -649,7 +698,8 @@ INSERT INTO `order_document_packing_lists` (`id`, `bill_to_name`, `bill_to_addre
 (91, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05'),
 (95, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21'),
 (99, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
-(103, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
+(103, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(107, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08');
 
 -- --------------------------------------------------------
 
@@ -711,7 +761,8 @@ INSERT INTO `order_document_product_requests` (`id`, `country`, `customer_name`,
 (90, '러시아', 'victor', '2025-08-19', NULL, 'ILLUCO Korea', NULL, '1', '20', '40*40*40', '3', '20', '', '', '', '', '', '', '', '', '', '', '메롱\r\n', '2025-08-13 15:59:05', '2025-08-19 18:02:26', '1', '3', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (94, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-20 12:02:21', '2025-08-20 12:02:21', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (98, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(102, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(102, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(106, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -777,7 +828,8 @@ INSERT INTO `order_document_proforma_invoices` (`id`, `document_no`, `purchase_o
 (89, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 15:59:05', '2025-08-13 15:59:05', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (93, 'KR-ILL-2025-00001', '', NULL, '2025-09-04', 'pil', '', '131-5151-5623', '', 'yij@kflsi.fdd', NULL, NULL, 'ILLUCO Korea', '010-1231-2312', 'illucokorea@gmail.com', '', '', '', '', '', 0.00, '', '', '', '', '', 'test', 1250.00, '2025-08-20 12:02:21', '2025-09-04 06:16:29', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00),
 (97, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(101, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(101, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(105, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -846,7 +898,10 @@ INSERT INTO `order_items` (`id`, `set_group_id`, `set_group_sort`, `is_main_item
 (52, NULL, NULL, 1, 33, 77, 2, NULL, 850.00, 1700.00, NULL, '2025-09-21 11:45:53', '2025-09-21 11:45:53'),
 (53, NULL, NULL, 1, 34, 78, 1, NULL, 850.00, 850.00, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
 (54, NULL, NULL, 1, 34, 75, 3, NULL, 1150.00, 3450.00, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
-(55, NULL, NULL, 1, 34, 74, 1, NULL, 1050.00, 1050.00, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29');
+(55, NULL, NULL, 1, 34, 74, 1, NULL, 1050.00, 1050.00, NULL, '2025-09-21 11:52:29', '2025-09-21 11:52:29'),
+(56, NULL, NULL, 1, 35, 81, 3, NULL, 85.00, 255.00, NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08'),
+(57, 'c2916ea5-43bd-46f3-a0be-e82e6752e43b', NULL, 1, 35, 79, 1, NULL, 3025.33, 3025.33, NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08'),
+(58, 'c2916ea5-43bd-46f3-a0be-e82e6752e43b', 0, 0, 35, 80, 1, NULL, 30.00, 30.00, NULL, '2025-09-28 06:53:08', '2025-09-28 06:53:08');
 
 -- --------------------------------------------------------
 
@@ -1006,7 +1061,10 @@ INSERT INTO `products` (`id`, `template_id`, `name`, `serial_number`, `type`, `c
 (75, 31, 'IHL-2000 - wireless', NULL, '', 'IHL-2000', 'IHL-2000 - wireless', 1150.00, '무선 헤드라이트, 교체식 배터리', NULL, '2025-08-19 17:10:30', '2025-08-19 17:10:30'),
 (76, 17, 'Galilean Loupes', NULL, 'loupe', 'ITL-1025G', 'ITL-1025G', 1350.00, 'TTL 갈릴레안 루페 2.5x 계열', NULL, '2025-08-20 12:02:18', '2025-08-20 12:02:18'),
 (77, 53, 'IDS 3100', NULL, '', 'DS', 'IDS-3100', 850.00, '우드램프(365/395/405nm)', NULL, '2025-09-21 11:45:43', '2025-09-21 11:45:43'),
-(78, 53, 'IDS 3100', NULL, '', 'DS', 'IDS-3100', 850.00, '우드램프(365/395/405nm)', NULL, '2025-09-21 11:51:40', '2025-09-21 11:51:40');
+(78, 53, 'IDS 3100', NULL, '', 'DS', 'IDS-3100', 850.00, '우드램프(365/395/405nm)', NULL, '2025-09-21 11:51:40', '2025-09-21 11:51:40'),
+(79, 16, 'Ergo X', NULL, 'loupe', 'IAL-1040', 'IAL-1040', 3025.33, '인체공학 각도형 TTL 루페(Ergo X), 장시간 착용에 최적화', NULL, '2025-09-28 06:52:04', '2025-09-28 06:52:04'),
+(80, 81, '처방렌즈', NULL, NULL, 'PR-LEN-30', 'PR-LENS-30', 30.00, '처방렌즈', NULL, '2025-09-28 06:52:04', '2025-09-28 06:52:04'),
+(81, 50, 'DENTAL MIRROR', NULL, '', 'IDM-M', 'IDM-M', 85.00, '치과 구강 미러(핸들 포함, 5팩 기준)', NULL, '2025-09-28 06:52:50', '2025-09-28 06:52:50');
 
 -- --------------------------------------------------------
 
@@ -1088,7 +1146,8 @@ INSERT INTO `product_loupes` (`id`, `type`, `engraving_text`, `frame_type`, `wor
 (64, 'custom-made', NULL, 'frame2', 49.0, 1.00, 0.00, 0.00, 1.00, 20, 30, 1.00, 2.00, 27.0, 29.0, 56.0, 24.0, 'include', '2025-08-12 20:25:22', '2025-08-12 20:25:22'),
 (68, 'custom-made', NULL, 'frame4', 65.0, 0.25, 0.25, 0.25, 0.50, 100, 30, 0.00, 0.00, 32.0, 33.0, 65.0, 20.0, 'ignore', '2025-08-13 08:42:56', '2025-08-13 08:42:56'),
 (70, 'ready-made', NULL, 'frame1', 40.0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-13 13:47:29', '2025-08-13 13:47:29'),
-(76, 'custom-made', '12323123', 'frame1', 45.0, 0.00, 0.00, 0.00, 0.00, 0, 0, 0.00, 0.00, 30.0, 30.0, 60.0, 17.0, 'ignore', '2025-08-20 12:02:18', '2025-08-20 12:02:18');
+(76, 'custom-made', '12323123', 'frame1', 45.0, 0.00, 0.00, 0.00, 0.00, 0, 0, 0.00, 0.00, 30.0, 30.0, 60.0, 17.0, 'ignore', '2025-08-20 12:02:18', '2025-08-20 12:02:18'),
+(79, 'ready-made', '홍길동', 'frame4', 46.0, 2.00, 1.00, 0.00, -1.00, 30, 15, 2.00, 4.00, 28.0, 30.0, 58.0, 24.0, 'include', '2025-09-28 06:52:04', '2025-09-28 06:52:04');
 
 -- --------------------------------------------------------
 
@@ -1570,9 +1629,8 @@ INSERT INTO `sessions` (`id`, `session_id`, `user_id`, `ip_address`, `user_agent
 (529, '4522adc3efaedfd0c68afeff58e3f9e22e1674e2', NULL, '172.23.0.1', NULL, '2025-09-05 16:19:28', 'a:0:{}', '2025-09-05 07:19:28', '2025-09-05 16:19:28'),
 (532, '756249d18018e6d73f140e464762dd9d17e69f86', NULL, '172.23.0.1', NULL, '2025-09-05 17:49:28', 'a:0:{}', '2025-09-05 08:49:28', '2025-09-05 17:49:28'),
 (545, 'feb791ddfb8b5dc8b7864c1108f21d36073f3f9d', NULL, '172.23.0.1', NULL, '2025-09-05 20:07:31', 'a:0:{}', '2025-09-05 11:07:31', '2025-09-05 20:07:31'),
-(554, 'c4addc6f08f1f32d1ca5f53f148153f952f221d4', 18, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-21 21:51:23', 'a:2:{s:11:\"_csrf_token\";s:64:\"0e86620e5595123e4024304b83c2f9d236b4b71493c3631a3ffb1793720501a8\";s:7:\"user_id\";i:18;}', '2025-09-21 11:26:13', '2025-09-21 21:51:23'),
 (556, 'e3bbf83309f935a1c3faf580e6979811ec16b65d', NULL, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-25 22:15:33', 'a:1:{s:11:\"_csrf_token\";s:64:\"196609ecf8046be312cdc99cfa3acd7a6cdacc3db950c2ba7844ef83eaadb265\";}', '2025-09-22 12:13:50', '2025-09-25 22:15:33'),
-(558, '2557bfc890aebc107911511941662d64ad331a16', 18, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 10:05:13', 'a:2:{s:11:\"_csrf_token\";s:64:\"0d753ed19d669d573530c375db70b681dc92d9b91a5e0f748433287623464011\";s:7:\"user_id\";i:18;}', '2025-09-28 00:40:04', '2025-09-28 10:05:13');
+(568, '2419465fd2e1def8fdf4c13dac09c8961407687c', 7, '192.168.65.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36', '2025-09-28 22:45:07', 'a:4:{s:11:\"_csrf_token\";s:64:\"d396489979dbdfa9a9a5ebde5553e66bec674606956c9a2e0aeb922127adedb4\";s:6:\"_input\";a:4:{s:11:\"_csrf_token\";s:64:\"d396489979dbdfa9a9a5ebde5553e66bec674606956c9a2e0aeb922127adedb4\";s:5:\"email\";s:21:\"illucokorea@gmail.com\";s:8:\"password\";s:8:\"test1234\";s:10:\"save_email\";s:1:\"1\";}s:10:\"_flash_new\";a:1:{i:0;s:6:\"_input\";}s:7:\"user_id\";i:7;}', '2025-09-28 07:56:05', '2025-09-28 22:45:07');
 
 -- --------------------------------------------------------
 
@@ -1692,6 +1750,20 @@ ALTER TABLE `dealer_prices`
 ALTER TABLE `file_attachments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_file_attachments_file_attachable_type_file_attachable_id` (`file_attachable_type`,`file_attachable_id`);
+
+--
+-- 테이블의 인덱스 `loupe_frame_colors`
+--
+ALTER TABLE `loupe_frame_colors`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_loupe_frame_colors_code` (`code`);
+
+--
+-- 테이블의 인덱스 `loupe_settings`
+--
+ALTER TABLE `loupe_settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_loupe_settings_template` (`template_id`);
 
 --
 -- 테이블의 인덱스 `migrations`
@@ -1903,13 +1975,13 @@ ALTER TABLE `users`
 -- 테이블의 AUTO_INCREMENT `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- 테이블의 AUTO_INCREMENT `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- 테이블의 AUTO_INCREMENT `claims`
@@ -1921,7 +1993,7 @@ ALTER TABLE `claims`
 -- 테이블의 AUTO_INCREMENT `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- 테이블의 AUTO_INCREMENT `dealer_prices`
@@ -1934,6 +2006,18 @@ ALTER TABLE `dealer_prices`
 --
 ALTER TABLE `file_attachments`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+
+--
+-- 테이블의 AUTO_INCREMENT `loupe_frame_colors`
+--
+ALTER TABLE `loupe_frame_colors`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- 테이블의 AUTO_INCREMENT `loupe_settings`
+--
+ALTER TABLE `loupe_settings`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- 테이블의 AUTO_INCREMENT `migrations`
@@ -1957,31 +2041,31 @@ ALTER TABLE `notifications`
 -- 테이블의 AUTO_INCREMENT `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_documents`
 --
 ALTER TABLE `order_documents`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_document_commercial_invoices`
 --
 ALTER TABLE `order_document_commercial_invoices`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_document_packing_lists`
 --
 ALTER TABLE `order_document_packing_lists`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_document_product_requests`
 --
 ALTER TABLE `order_document_product_requests`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_histories`
@@ -1993,7 +2077,7 @@ ALTER TABLE `order_histories`
 -- 테이블의 AUTO_INCREMENT `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- 테이블의 AUTO_INCREMENT `order_logs`
@@ -2017,7 +2101,7 @@ ALTER TABLE `permissions`
 -- 테이블의 AUTO_INCREMENT `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- 테이블의 AUTO_INCREMENT `product_categories`
@@ -2077,7 +2161,7 @@ ALTER TABLE `serial_numbers`
 -- 테이블의 AUTO_INCREMENT `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=559;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=569;
 
 --
 -- 테이블의 AUTO_INCREMENT `users`
@@ -2135,6 +2219,12 @@ ALTER TABLE `dealer_memos`
 ALTER TABLE `dealer_prices`
   ADD CONSTRAINT `fk_dealer_prices_dealers` FOREIGN KEY (`dealer_id`) REFERENCES `dealers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_dealer_prices_product_templates` FOREIGN KEY (`product_template_id`) REFERENCES `product_templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 테이블의 제약사항 `loupe_settings`
+--
+ALTER TABLE `loupe_settings`
+  ADD CONSTRAINT `fk_loupe_settings_template` FOREIGN KEY (`template_id`) REFERENCES `product_templates` (`id`) ON DELETE CASCADE;
 
 --
 -- 테이블의 제약사항 `notices`
