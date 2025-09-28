@@ -105,7 +105,7 @@ use App\Domains\Order\Enums\OrderStatus;
                                     <th>이미지</th>
                                     <th>제품명</th>
                                     <th>모델명</th>
-                                    <th>코드</th>
+                                    <th>가격</th>
                                     <th>옵션</th>
                                     <th>수량</th>
                                 </tr>
@@ -126,7 +126,7 @@ use App\Domains\Order\Enums\OrderStatus;
                                     </td>
                                     <td><?= e($product->name) ?></td>
                                     <td><?= e($product->model) ?></td>
-                                    <td><?= e($product->code) ?></td>
+                                    <td><?= '$' . e($product->price) ?></td>
                                     <td>
                                         <div class="no-order-option-tags">
                                             <?php if ($sub) : ?>
@@ -160,7 +160,7 @@ use App\Domains\Order\Enums\OrderStatus;
                                         </td>
                                         <td><?= e($setProduct->name) ?></td>
                                         <td><?= e($setProduct->model) ?></td>
-                                        <td><?= e($setProduct->code) ?></td>
+                                        <td><?= '$'.e($setProduct->price) ?></td>
                                         <td>
                                             <div class="no-order-option-tags">
                                                 <?php if ($setSub) : ?>

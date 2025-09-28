@@ -362,8 +362,6 @@ export default class CartController extends Controller {
         if (query) {
             url += `?` + query;
         }
-        console.log(button, query, evt);
-
         try {
             if (button) {
                 button.setState({ disabled: true });
@@ -375,7 +373,7 @@ export default class CartController extends Controller {
 
             if (!success) return;
 
-            const { templates, categories, query } = data;
+            const { templates, categories, query, prices } = data;
 
             if (this.modal.state.open) {
                 this.modal.setState({
@@ -389,7 +387,7 @@ export default class CartController extends Controller {
                 header: "제품 검색",
                 content: TemplateSelection.make(
                     null,
-                    { paginator: templates, categories, query: query },
+                    { paginator: templates, categories, query, prices },
                     false
                 ),
                 open: true,

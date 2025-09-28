@@ -7,6 +7,7 @@ export default class TemplateSelection extends View {
         return {
             paginator: {},
             categories: [],
+            prices: [],
             query: {
                 category_id: "",
                 search: "",
@@ -24,6 +25,8 @@ export default class TemplateSelection extends View {
     _template() {
         const { paginator, query } = this._state;
         const { data } = paginator;
+
+        console.log(this._state.prices);
 
         return `
             <div>
@@ -332,6 +335,19 @@ export default class TemplateSelection extends View {
         const template = this._state.paginator.data.find(
             (item) => item.id === +id
         );
+
+        // 제품별 단가별 금액 변경
+        const dealerPrice = this._state.prices.find(
+            (price) => price.product_template_id === template.id
+        );
+
+        if (dealerPrice) {
+            console.log(
+                `단가 변경됨. 기존: ${template.price} -> 대리점: ${dealerPrice.price}`
+            );
+            template.price = dealerPrice.price;
+        }
+
         this._dispatch("pick.template", { template });
     }
 }

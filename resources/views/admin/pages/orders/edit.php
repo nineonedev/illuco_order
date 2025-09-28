@@ -467,7 +467,7 @@ use App\Domains\Product\Entities\Loupe;
                                     <th>이미지</th>
                                     <th>제품명</th>
                                     <th>모델명</th>
-                                    <th>코드</th>
+                                    <th>가격</th>
                                     <th>시리얼번호</th>
                                     <th>옵션</th>
                                     <th>수량</th>
@@ -494,7 +494,7 @@ use App\Domains\Product\Entities\Loupe;
                                     </td>
                                     <td><?= e($product->name) ?></td>
                                     <td><?= e($product->model) ?></td>
-                                    <td><?= e($product->code) ?></td>
+                                    <td><?= '$'. e($product->price) ?></td>
                                     <td><?= $serials ?></td>
                                     <td>
                                         <div class="no-order-option-tags">
@@ -548,7 +548,7 @@ use App\Domains\Product\Entities\Loupe;
                                         </td>
                                         <td><?= e($setProduct->name) ?></td>
                                         <td><?= e($setProduct->model) ?></td>
-                                        <td><?= e($setProduct->code) ?></td>
+                                        <td><?= '$'.e($setProduct->price) ?></td>
                                         <td><?= $serials ?></td>
                                         <td>
                                             <div class="no-order-option-tags">
