@@ -214,21 +214,26 @@ Route::middleware(['web'])->group(function(){
                     Route::delete('{id}', [ProductTemplateController::class, 'destroy'])->name('destroy');
                 });
 
-            Route::prefix('loupe-settings')->name('loupe-settings.')->group(function () {
-                Route::get('/',        [LoupeSettingController::class, 'index'])->name('index');
-                Route::post('/',       [LoupeSettingController::class, 'store'])->name('store');
-                Route::put('{id}',     [LoupeSettingController::class, 'update'])->name('update');
-                Route::delete('{id}',  [LoupeSettingController::class, 'destroy'])->name('destroy');
+            // 루페 세팅
+            Route::prefix('loupe-settings')->name('loupe_settings')->group(function () {
+                Route::get('/',       [LoupeSettingController::class, 'index'])->name('index');    // 목록
+                Route::get('/create',       [LoupeSettingController::class, 'create'])->name('create');    // 생성
+                Route::get('{id}/edit', [LoupeSettingController::class, 'edit'])->name('edit');    // 수정
+
+                Route::post('/',      [LoupeSettingController::class, 'store'])->name('store');    // 생성
+                Route::put('{id}',    [LoupeSettingController::class, 'update'])->name('update');  // 수정
+                Route::delete('{id}', [LoupeSettingController::class, 'destroy'])->name('destroy');// 삭제
             });
-            
-            Route::prefix('loupe-frame-colors')
-                ->name('loupe-frame-colors.')
-                ->group(function () {
-                    Route::get('/',       [LoupeFrameColorController::class, 'index'])->name('index');   // 목록 + 행별 수정폼
-                    Route::post('/',      [LoupeFrameColorController::class, 'store'])->name('store');   // 신규 추가
-                    Route::put('{id}',    [LoupeFrameColorController::class, 'update'])->name('update'); // 행 저장
-                    Route::delete('{id}', [LoupeFrameColorController::class, 'destroy'])->name('destroy'); // 행 삭제
-                });
+
+            // 루페 프레임 컬러
+            Route::prefix('loupe-frame-colors')->name('loupe_frame_colors')->group(function () {
+                Route::get('/',       [LoupeFrameColorController::class, 'index'])->name('index');   // 목록 + 행 수정
+                
+                Route::post('/',      [LoupeFrameColorController::class, 'store'])->name('store');   // 신규 추가
+                Route::put('{id}',    [LoupeFrameColorController::class, 'update'])->name('update'); // 행 저장
+                Route::delete('{id}', [LoupeFrameColorController::class, 'destroy'])->name('destroy');// 행 삭제
+            });
+
 
             
             Route::prefix('product-categories')->name('product_categories')->group(function(){

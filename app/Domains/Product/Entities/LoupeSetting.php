@@ -26,16 +26,14 @@ class LoupeSetting extends Entity
         'vd_min',
         'vd_max',
 
-        'fd_right_min',
-        'fd_right_max',
-        'fd_left_min',
-        'fd_left_max',
-        'fd_total_distance',
+        'pd_right_min',
+        'pd_right_max',
+        'pd_left_min',
+        'pd_left_max',
+        'pd_total_distance',
 
         'wd_min',
         'wd_max',
-
-        'frame_color',
 
         'created_at',
         'updated_at',
@@ -54,11 +52,11 @@ class LoupeSetting extends Entity
         'vd_min'          => 'decimal',
         'vd_max'          => 'decimal',
 
-        'fd_right_min'    => 'decimal',
-        'fd_right_max'    => 'decimal',
-        'fd_left_min'     => 'decimal',
-        'fd_left_max'     => 'decimal',
-        'fd_total_distance'=> 'decimal',
+        'pd_right_min'    => 'decimal',
+        'pd_right_max'    => 'decimal',
+        'pd_left_min'     => 'decimal',
+        'pd_left_max'     => 'decimal',
+        'pd_total_distance'=> 'decimal',
 
         'wd_min'          => 'decimal',
         'wd_max'          => 'decimal',
@@ -105,14 +103,14 @@ class LoupeSetting extends Entity
     {
         return [
             'right' => [
-                'min' => $this->fd_right_min !== null ? (float)$this->fd_right_min : null,
-                'max' => $this->fd_right_max !== null ? (float)$this->fd_right_max : null,
+                'min' => $this->pd_right_min !== null ? (float)$this->pd_right_min : null,
+                'max' => $this->pd_right_max !== null ? (float)$this->pd_right_max : null,
             ],
             'left' => [
-                'min' => $this->fd_left_min !== null ? (float)$this->fd_left_min : null,
-                'max' => $this->fd_left_max !== null ? (float)$this->fd_left_max : null,
+                'min' => $this->pd_left_min !== null ? (float)$this->pd_left_min : null,
+                'max' => $this->pd_left_max !== null ? (float)$this->pd_left_max : null,
             ],
-            'total' => $this->fd_total_distance !== null ? (float)$this->fd_total_distance : null,
+            'total' => $this->pd_total_distance !== null ? (float)$this->pd_total_distance : null,
         ];
     }
 

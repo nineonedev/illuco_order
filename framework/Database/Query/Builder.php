@@ -600,6 +600,34 @@ class Builder
         return $this->whereHasTyped($relation, $callback, 'or', true);
     }
 
+    // public function joinRelation(string $relation, string $alias = null, string $type = 'left'): self
+    // {
+    //     if (!property_exists($this, 'repository')) {
+    //         throw new \RuntimeException("EntityQueryBuilder must have repository property.");
+    //     }
+
+    //     $entityClass = $this->repository::entityClass();
+    //     $entity = new $entityClass;
+
+    //     $rel = \Framework\Database\ORM\Rel::getRelation($entity, $relation);
+    //     if (!$rel) {
+    //         throw new \RuntimeException("Relation [{$relation}] is not defined on [{$entityClass}].");
+    //     }
+
+    //     // 아주 단순화: belongsTo라고 가정
+    //     $relatedTable = $rel->getRelatedTable();     // 예: product_templates
+    //     $foreignKey   = $rel->getForeignKeyName();   // 예: template_id (부모에 있는 FK)
+    //     $ownerKey     = $rel->getOwnerKeyName();     // 예: id (연관쪽 PK)
+
+    //     $table = $this->getTable();                  // 예: loupe_settings
+    //     $as    = $alias ? " as {$alias}" : '';
+
+    //     // join 실행
+    //     $this->{$type.'Join'}("{$relatedTable}{$as}", "{$table}.{$foreignKey}", '=', ($alias ?: $relatedTable).".{$ownerKey}");
+
+    //     return $this;
+    // }
+
 
     protected function whereHasTyped(string $relation, Closure $callback, string $boolean, bool $not): self
     {

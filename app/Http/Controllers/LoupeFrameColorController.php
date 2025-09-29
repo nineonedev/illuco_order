@@ -22,7 +22,7 @@ class LoupeFrameColorController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
-        return $this->render('admin.pages.loupe-frame-colors.index', [
+        return $this->render('admin.pages.loupe-settings.frame-colors', [
             'colors' => $colors,
         ]);
     }
