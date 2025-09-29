@@ -69,6 +69,116 @@ class ProductTemplateController extends Controller
         return $this->render(null, $data, '성공적으로 로드되었습니다.');
     }
 
+    public function loupes(Request $request)
+    {
+        // 1) loupe 카테고리 조회
+        $loupeCategory = CategoryRepository::make()
+            ->query()
+            ->where('slug', 'loupe')
+            ->first();
+
+        // 2) 기본 쿼리 (항상 파일첨부/카테고리 eager load)
+        $query = $this->repo()
+            ->with([FileAttachment::class, 'category'])
+            ->query();
+
+        // loupe 카테고리가 존재하면 해당 id로 강제 필터링,
+        // 없으면 결과가 비도록 존재하지 않을 값(-1)로 필터링
+        if ($loupeCategory) {
+            $query->where('category_id', $loupeCategory->id);
+        } else {
+            $query->where('category_id', -1);
+        }
+
+        // 3) 검색 필터 (index와 동일)
+        $query->when(
+            $name = $request->query('name'),
+            fn($q) => $q->where('name', 'like', "%{$name}%")
+        );
+
+        $query->when(
+            $code = $request->query('code'),
+            fn($q) => $q->where('code', 'like', "%{$code}%")
+        );
+
+        $query->when(
+            $model = $request->query('model'),
+            fn($q) => $q->where('model', 'like', "%{$model}%")
+        );
+
+        $query->when(
+            $search = $request->query('search'),
+            fn($q) => $q->where(function ($qq) use ($search) {
+                $qq->where('code', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('model', 'like', "%{$search}%");
+            })
+        );
+
+        // 4) excepts(제외 id들) 지원 (index와 동일)
+        if ($excepts = $request->query('excepts')) {
+            $exceptIds = array_filter(array_map('intval', explode(',', $excepts)));
+            if (!empty($exceptIds)) {
+                $query->whereNotIn('id', $exceptIds);
+            }
+        }
+
+        // 5) 정렬 (index와 동일)
+        $sort = $request->query('sort');
+        if ($sort) {
+            switch ($sort) {
+                case 'latest':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'oldest':
+                    $query->orderByAsc('created_at');
+                    break;
+                case 'name_asc':
+                    $query->orderBy('name');
+                    break;
+                case 'name_desc':
+                    $query->orderByDesc('name');
+                    break;
+                case 'created_at_asc':
+                    $query->orderBy('created_at');
+                    break;
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'sort_order_asc':
+                    $query->orderBy('sort_order');
+                    break;
+                case 'sort_order_desc':
+                    $query->orderByDesc('sort_order');
+                    break;
+                default:
+                    $query->orderByDesc('created_at');
+                    break;
+            }
+        } else {
+            $query->orderByDesc('sort_order')->orderByDesc('created_at');
+        }
+
+        // 6) 페이지네이션
+        $perPage   = $request->query('perpage', 15);
+        $page      = $request->query('page', 1);
+        $paginator = $query->paginate($perPage, $page);
+        $templates = $request->expectsJson() ? $paginator->toArray() : $paginator;
+
+        // 7) 뷰 렌더 (isDealer, prices, category_ids 로직 제거)
+        //    categories는 loupe만 단일로 내려줌(필요 시 셀렉트에 쓰일 수 있음)
+        $categories = $loupeCategory ? [$loupeCategory] : [];
+
+        return $this->render('admin.pages.products.templates.index', [
+            'templates'  => $templates,
+            'query'      => $request->query(),
+            'categories' => $request->expectsJson()
+                ? array_map(fn($c) => $c->toArray(), $categories)
+                : $categories,
+            'category_id' => $loupeCategory ? $loupeCategory->id : null,
+        ]);
+    }
+
 
     public function index(Request $request)
     {

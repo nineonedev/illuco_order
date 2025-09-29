@@ -202,6 +202,8 @@ Route::middleware(['web'])->group(function(){
                     Route::get('/labels', [ProductTemplateController::class, 'labels'])->name('labels');
                     Route::get('/set-group-items', [ProductTemplateController::class, 'setGroupItems'])->name('setGroupItems');
 
+                    Route::get('loupes', [ProductTemplateController::class, 'loupes'])->name('loupes');
+
                     Route::get('{id}/edit', [ProductTemplateController::class, 'edit'])->name('edit');
                     Route::get('{id}', [ProductTemplateController::class, 'show'])->name('show');
                     
@@ -218,6 +220,15 @@ Route::middleware(['web'])->group(function(){
                 Route::put('{id}',     [LoupeSettingController::class, 'update'])->name('update');
                 Route::delete('{id}',  [LoupeSettingController::class, 'destroy'])->name('destroy');
             });
+            
+            Route::prefix('loupe-frame-colors')
+                ->name('loupe-frame-colors.')
+                ->group(function () {
+                    Route::get('/',       [LoupeFrameColorController::class, 'index'])->name('index');   // 목록 + 행별 수정폼
+                    Route::post('/',      [LoupeFrameColorController::class, 'store'])->name('store');   // 신규 추가
+                    Route::put('{id}',    [LoupeFrameColorController::class, 'update'])->name('update'); // 행 저장
+                    Route::delete('{id}', [LoupeFrameColorController::class, 'destroy'])->name('destroy'); // 행 삭제
+                });
 
             
             Route::prefix('product-categories')->name('product_categories')->group(function(){

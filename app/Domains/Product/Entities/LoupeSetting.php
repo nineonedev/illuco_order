@@ -62,8 +62,6 @@ class LoupeSetting extends Entity
 
         'wd_min'          => 'decimal',
         'wd_max'          => 'decimal',
-
-        'frame_color'     => 'json',   // 또는 'array' (프레임워크 캐스터 명에 맞춰 선택)
     ];
 
     /**
@@ -128,25 +126,7 @@ class LoupeSetting extends Entity
             'working_distance' => $this->getWorkingDistanceRange(), // {min, max}
             'vd'               => $this->getVertexDistanceRange(),  // {min, max} (필요 시 사용)
             'fd'               => $this->getPdSpec(),               // {right:{min,max}, left:{min,max}, total}
-            'frame_colors'     => $this->getFrameColorIds(),        // [1,2,3] (ID 배열)
         ];
-    }
-
-    /**
-     * frame_color 컬러 ID 배열(JSON) 접근자
-     * @return array<int,int>
-     */
-    public function getFrameColorIds(): array
-    {
-        $val = $this->frame_color;
-        if (is_string($val)) {
-            $decoded = json_decode($val, true);
-            return is_array($decoded) ? array_values($decoded) : [];
-        }
-        if (is_array($val)) {
-            return array_values($val);
-        }
-        return [];
     }
 
     /**

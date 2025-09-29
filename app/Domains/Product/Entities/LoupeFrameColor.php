@@ -25,7 +25,7 @@ class LoupeFrameColor extends Entity
         'id'         => 'int',
         'is_active'  => 'bool',
         'sort_order' => 'int',
-        'meta'       => 'json',
+        'meta'       => 'array',
     ];
 
     public static function repositoryClass(): string

@@ -19,62 +19,60 @@ class LoupeSettingController extends Controller
     public function index()
     {
         $settings  = LoupeSettingRepository::make()
+            ->with(['template.fileattachment', 'frameColors'])
             ->query()
             ->orderBy('id', 'DESC')
-            ->get();
-
-        $templates = ProductTemplateRepository::make()
-            ->query()
-            ->orderBy('sort_order', 'DESC')
-            ->orderBy('created_at', 'DESC')
             ->get();
 
         $colors    = LoupeFrameColorRepository::make()->listActiveOrdered();
 
         return $this->render('admin.pages.loupe-setting.index', [
-            'settings'  => $settings,
-            'templates' => $templates,
-            'colors'    => $colors,
+            'settings'  => array_map(fn($s) => $s->toArray(), $settings),
+            'colors'    => array_map(fn($c) => $c->toArray(), $colors)
         ]);
     }
 
     /** 생성 (POST /loupe-settings) */
     public function store(Request $request)
     {
-        // 들어오는 페이로드 전처리(별칭/타입 통일)
+        // 1) 들어오는 페이로드 정리 (fd_* → pd_* 등 통일)
         $payload = $this->normalizePayload($request);
 
+        // 2) 기본 검증
         Validator::make($payload, [
-            'template_id'       => 'required|integer',
-            'vd_min'            => 'nullable|numeric',
-            'vd_max'            => 'nullable|numeric',
+            'template_id'       => 'required|number',
 
-            'pd_right_min'      => 'nullable|numeric',
-            'pd_right_max'      => 'nullable|numeric',
-            'pd_left_min'       => 'nullable|numeric',
-            'pd_left_max'       => 'nullable|numeric',
-            'pd_total_distance' => 'nullable|numeric',
+            'vd_min'            => 'nullable|number',
+            'vd_max'            => 'nullable|number',
 
-            'wd_min'            => 'nullable|numeric',
-            'wd_max'            => 'nullable|numeric',
+            'pd_right_min'      => 'nullable|number',
+            'pd_right_max'      => 'nullable|number',
+            'pd_left_min'       => 'nullable|number',
+            'pd_left_max'       => 'nullable|number',
+            'pd_total_distance' => 'nullable|number',
+
+            'wd_min'            => 'nullable|number',
+            'wd_max'            => 'nullable|number',
 
             'frame_color_ids'   => 'nullable|array',
-            'frame_color_ids.*' => 'integer',
+            // 필요 시 세부 검증을 지원하면 아래 열어도 됨
+            // 'frame_color_ids.*' => 'integer',
         ])->validateOrFail();
 
         return $this->runInTransaction(function () use ($payload) {
-            // template_id 중복 방지 (template별 1개 세팅 가정)
+            // 3) 동일 template_id 중복 방지
             $dup = LoupeSettingRepository::make()
                 ->query()
-                ->where('template_id', (int)$payload['template_id'])
+                ->where('template_id', (int) $payload['template_id'])
                 ->first();
 
             if ($dup) {
-                throw new RuntimeException('해당 제품 템플릿의 설정이 이미 존재합니다.');
+                throw new RuntimeException('해당 제품의 설정이 이미 존재합니다.');
             }
 
+            // 4) 본문 저장 (다대다 컬러는 이후 sync)
             $model = new LoupeSetting([
-                'template_id'       => (int)$payload['template_id'],
+                'template_id'       => (int) $payload['template_id'],
 
                 'vd_min'            => $this->numOrNull($payload['vd_min'] ?? null),
                 'vd_max'            => $this->numOrNull($payload['vd_max'] ?? null),
@@ -87,14 +85,38 @@ class LoupeSettingController extends Controller
 
                 'wd_min'            => $this->numOrNull($payload['wd_min'] ?? null),
                 'wd_max'            => $this->numOrNull($payload['wd_max'] ?? null),
-
-                // Entity에서 json 캐스트라고 가정
-                'frame_color_ids'   => $payload['frame_color_ids'] ?? [],
             ]);
 
             if (!LoupeSettingRepository::make()->save($model)) {
                 throw new RuntimeException('저장에 실패했습니다.');
             }
+
+            // 5) 다대다: 프레임 컬러 sync
+            $ids = $payload['frame_color_ids'] ?? [];
+            if (is_string($ids)) {
+                // "1,2,3" 형태 허용
+                $ids = array_map('trim', explode(',', $ids));
+            }
+            // 정수 ID만 정제
+            $ids = array_values(array_unique(array_filter(array_map('intval', (array) $ids), static function ($v) {
+                return $v > 0;
+            })));
+
+            //유효한 ID만 추려서 sync
+            $validIds = [];
+            if ($ids) {
+                $valid = LoupeFrameColorRepository::make()
+                    ->query()
+                    ->whereIn('id', $ids)
+                    ->get();
+
+                foreach ($valid as $v) {
+                    $validIds[] = (int) $v->id;
+                }
+            }
+
+            // 관계명은 엔티티의 다대다 메서드명에 맞추세요 (예: frameColors)
+            $model->frameColors()->sync($validIds);
 
             return $this->render(null, ['id' => $model->id], '저장되었습니다.');
         });

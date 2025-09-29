@@ -1,0 +1,165 @@
+@use '../abstracts' as *;
+
+/* 루페 세팅 레이아웃 유지 + 소폭 강화 */
+.loupe-setting {
+  &__form { max-width: 1024px; }
+  &__tpl  { margin-bottom: .5rem; }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    margin-bottom: .5rem;
+
+    &.--one { grid-template-columns: 1fr; }
+  }
+
+  &__range {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: .5rem;
+
+    .no-form-base-input.--xs,
+    input[type="number"].no-form-base-input.--xs {
+      padding: .45rem .7rem;
+      height: 36px;       /* ↑ 살짝 키워서 조작성 향상 */
+      min-width: 92px;
+    }
+  }
+
+  &__sep { font-size: .85rem; color: var(--no-text-weak, #6b7280); }
+
+  &__chips {
+    display: flex; flex-wrap: wrap; gap: .625rem;
+    margin-top: .25rem;
+
+    /* 긴 목록 대비 스크롤 강화 + 스크롤바 스타일 */
+    &.--compact {
+      max-height: 168px;
+      overflow: auto;
+      padding-right: .25rem;
+
+      &::-webkit-scrollbar { width: 8px; height: 8px; }
+      &::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--no-text-weak, #6b7280) 30%, transparent);
+        border-radius: 9999px;
+      }
+      &::-webkit-scrollbar-track { background: transparent; }
+    }
+  }
+}
+
+/* ============================
+   Chip (라벨+인풋) 고도화
+   ============================ */
+
+.loupe-chip {
+  /* theme 변수(없으면 fallback) */
+  --chip-bg:           var(--no-surface, #fff);
+  --chip-text:         var(--no-text, #111827);
+  --chip-muted:        var(--no-text-weak, #6b7280);
+  --chip-border:       var(--no-border, #e5e7eb);
+  --chip-hover:        #d1d5db;
+  --chip-focus:        var(--no-primary, #2563eb);
+  --chip-checked-bg:   color-mix(in srgb, var(--chip-focus) 8%, #fff);
+  --chip-checked-ring: color-mix(in srgb, var(--chip-focus) 20%, transparent);
+
+  /* 선택 색상 표현 (옵션): 라벨/버튼/칩에 style="--chip-color:#HEX" 넣으면 swatch에 반영됨 */
+  --chip-color:        #cfd4db;
+
+  position: relative;
+  display: inline-block;
+
+  /* 접근성: display:none 대신 시각적으로만 숨김 */
+  input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;           /* 클릭 히트박스 전체로 확대 */
+    cursor: pointer;
+    margin: 0;
+  }
+
+  &__color-box {
+    width: 1.175rem;
+    height: 1.175rem;
+    @include flex-center(); 
+    border-radius: 0.1rem;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  &__btn {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    padding: 0.8rem 1.6rem;
+    border: 1px solid var(--chip-border);
+    border-radius: 9999px;
+    background: var(--chip-bg);
+    color: var(--chip-text);
+      /* 14px 정도 */
+    font-weight: 500;
+    min-height: 3.8rem;     /* 클릭/터치 영역 ↑ */
+    line-height: 1;
+    user-select: none;
+    transition:
+      border-color .15s ease,
+      box-shadow .15s ease,
+      background-color .15s ease,
+      transform .02s ease;
+
+  }
+
+  &__text {
+    font-size: 1.2rem; 
+  }
+
+  /* 색상 점(swatch) — 변수 있으면 해당 색 사용 */
+  &__swatch {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--chip-color);
+    border: 1px solid rgba(0,0,0,.06);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+  }
+
+  /* Hover / Active */
+  &:hover .loupe-chip__btn {
+    border-color: var(--chip-hover);
+    box-shadow: 0 1px 0 rgba(0,0,0,.02);
+  }
+  &:active .loupe-chip__btn { transform: translateY(1px); }
+
+  /* Focus(키보드 접근 시) */
+  &:focus-within .loupe-chip__btn {
+    outline: none;
+    border-color: var(--chip-focus);
+    box-shadow: 0 0 0 3px var(--chip-checked-ring);
+  }
+
+  /* Checked */
+  input:checked + .loupe-chip__btn {
+    background: var(--chip-checked-bg);
+    border-color: var(--chip-focus);
+    box-shadow: 0 0 0 3px var(--chip-checked-ring);
+  }
+
+  /* Disabled */
+  input:disabled + .loupe-chip__btn {
+    opacity: .55; cursor: not-allowed;
+  }
+
+  /* 크기 옵션 */
+  &.--sm .loupe-chip__btn { padding: .4rem .65rem; min-height: 32px; font-size: .82rem; }
+  &.--lg .loupe-chip__btn { padding: .6rem .95rem; min-height: 42px; font-size: .95rem; }
+}
+
+/* 이미지 placeholder 유지 */
+.no-img-label__image.--placeholder {
+  width: 60px; height: 60px; background: #f3f4f6; border-radius: 6px;
+}
+
+/* 모바일에서 폼 그리드 1열 */
+@media (max-width: 640px) {
+  .loupe-setting__grid { grid-template-columns: 1fr !important; }
+}

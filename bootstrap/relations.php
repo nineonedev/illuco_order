@@ -27,6 +27,8 @@ use App\Domains\User\Entities\Dealer;
 use App\Domains\User\Entities\DealerMemo;
 use App\Domains\User\Entities\DealerPrice;
 use App\Domains\User\Entities\User;
+use App\Domains\Product\Entities\LoupeSetting;
+use App\Domains\Product\Entities\LoupeFrameColor;
 use Framework\Database\ORM\Rel;
 
 Rel::setConfig([
@@ -107,6 +109,25 @@ Rel::setConfig([
     ],
     Headlight::class => [
         Rel::belongsTo('product', Product::class, 'id'),
+    ],
+    LoupeSetting::class => [
+        Rel::belongsTo('template', ProductTemplate::class, 'template_id'),
+        Rel::belongsToMany(
+            'frameColors',
+            LoupeFrameColor::class,
+            'loupe_setting_frame_color',
+            'setting_id',
+            'color_id'
+        ),
+    ],
+    LoupeFrameColor::class => [
+        Rel::belongsToMany(
+            'settings',
+            LoupeSetting::class,
+            'loupe_setting_frame_color',
+            'color_id',
+            'setting_id'
+        ),
     ],
     Customer::class => [
         Rel::hasOne('cart', Cart::class, 'customer_id'),

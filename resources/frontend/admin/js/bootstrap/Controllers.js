@@ -13,6 +13,7 @@ import ClaimController from "../controllers/ClaimController";
 import SalesInfoController from "../controllers/SalesInfoController";
 import DealerMemoController from "../controllers/DealerMemoController";
 import DealerPriceController from "../controllers/DealerPriceController";
+import LoupeSettingController from "../controllers/LoupeSettingController";
 
 export default {
     notice: NoticeController,
@@ -30,4 +31,5 @@ export default {
     salesinfo: SalesInfoController,
     dealerMemo: DealerMemoController,
     dealerPrice: DealerPriceController,
+    loupeSetting: LoupeSettingController,
 };

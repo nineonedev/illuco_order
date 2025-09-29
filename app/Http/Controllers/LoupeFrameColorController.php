@@ -34,7 +34,8 @@ class LoupeFrameColorController extends Controller
 
         Validator::make($data, [
             'name'       => 'required|string',
-            'code'       => ['required', 'string', 'regex:/^#?[0-9A-Fa-f]{6}$/'],
+            'hex'        => 'nullable|string',
+            'code'       => 'required|string',
             'is_active'  => 'nullable|boolean',
             'sort_order' => 'nullable|integer',
         ])->validateOrFail();
@@ -42,7 +43,8 @@ class LoupeFrameColorController extends Controller
         return $this->runInTransaction(function () use ($data) {
             $model = new LoupeFrameColor([
                 'name'       => trim((string)$data['name']),
-                'code'       => $this->normalizeHex((string)$data['code']),
+                'code'       => (string)$data['code'],
+                'hex'       => $this->normalizeHex((string)$data['hex']),
                 'is_active'  => (int) (!empty($data['is_active'])),
                 'sort_order' => isset($data['sort_order']) ? (int)$data['sort_order'] : 0,
             ]);
@@ -63,7 +65,8 @@ class LoupeFrameColorController extends Controller
         // 실제 들어온 필드만 골라서 검증
         $rules = [
             'name'       => 'string',
-            'code'       => ['string', 'regex:/^#?[0-9A-Fa-f]{6}$/'],
+            'code'       => 'string',
+            'hex'        => 'string',
             'is_active'  => 'boolean',
             'sort_order' => 'integer',
         ];
@@ -85,7 +88,10 @@ class LoupeFrameColorController extends Controller
                 $model->name = trim((string)$data['name']);
             }
             if (array_key_exists('code', $data)) {
-                $model->code = $this->normalizeHex((string)$data['code']);
+                $model->code = trim((string)$data['code']);
+            }
+            if (array_key_exists('hex', $data)) {
+                $model->hex = $this->normalizeHex((string)$data['hex']);
             }
             if (array_key_exists('is_active', $data)) {
                 $model->is_active = (int) (!empty($data['is_active']));
