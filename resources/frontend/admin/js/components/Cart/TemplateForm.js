@@ -1,4 +1,5 @@
 import CartController from "../../controllers/CartController";
+import OrderOriginalController from "../../controllers/OrderOriginalController";
 import View from "../../core/View";
 import Button from "../../shared/Button";
 import Helper from "../../supports/Helper";
@@ -29,6 +30,8 @@ export default class TemplateForm extends View {
         return {
             template: {},
             cartitem: {},
+            useCart: true, 
+            useWrapper: true,
         };
     }
 
@@ -53,13 +56,14 @@ export default class TemplateForm extends View {
             `;
         }
 
-        const { template, quantity } = this._state;
+        const { template, quantity, useWrapper } = this._state;
         const { id, price } = template;
 
         return `
             <div>
-                <form method="post" data-ref="form"  enctype="multipart/form-data">
+                ${useWrapper ? `<form method="post" data-ref="form"  enctype="multipart/form-data">` : ''}
                     <input type="hidden" name="product[template_id]" value="${id}"/>
+                    <input type="type" name="product[type]" value="" />
                     <hr class="no-hr --xl">
 
                     <fieldset class="no-form-section">
@@ -83,7 +87,7 @@ export default class TemplateForm extends View {
                     </fieldset>
                     
                     <div class="no-form-action" id="${this._submitHookId}"></div>
-                </form>
+                ${useWrapper ? `</form>` : ''}
             </div>
         `;
     }
@@ -114,55 +118,6 @@ export default class TemplateForm extends View {
 
         if (Helper.isEmptyObject(template)) return;
 
-        // const { code, description, fileattachment, price, model, name } =
-        //     template;
-
-        // const nameInput = InputFactory.make("text")
-        //     .make(this._tempHookId, {
-        //         label: "이름",
-        //         name: "product[name]",
-        //         value: name,
-        //         readOnly: true,
-        //     })
-        //     .render();
-
-        // const textInput = InputFactory.make("text")
-        //     .make(this._tempHookId, {
-        //         label: "코드",
-        //         name: "product[code]",
-        //         value: code,
-        //         readOnly: true,
-        //     })
-        //     .render();
-
-        // const modelInput = InputFactory.make("text")
-        //     .make(this._tempHookId, {
-        //         label: "모델명",
-        //         name: "product[model]",
-        //         value: model,
-        //         readOnly: true,
-        //     })
-        //     .render();
-
-        // const priceInput = InputFactory.make("number")
-        //     .make(this._tempHookId, {
-        //         label: "단가(USD)",
-        //         name: "product[price]",
-        //         value: price,
-        //         readOnly: true,
-        //     })
-        //     .render();
-
-        // const descriptionInput = InputFactory.make("longText")
-        //     .make(this._tempHookId, {
-        //         label: "설명",
-        //         name: "product[description]",
-        //         rows: "4",
-        //         value: description,
-        //         readOnly: true,
-        //     })
-        //     .render();
-
         const counterInput = InputFactory.make("counter")
             .make(this._tempHookId, {
                 label: "발주 수량",
@@ -183,18 +138,20 @@ export default class TemplateForm extends View {
             .render();
 
         this._inputs.push(
-            // nameInput,
-            // textInput,
-            // modelInput,
-            // priceInput,
-            // descriptionInput,
             counterInput
         );
     }
 
+    _getInfo(){
+        const contollerClass = this._state.useCart ? CartController : OrderOriginalController; 
+        const info = contollerClass.findSubProductByModel(this._state.template.model);
+        return info;
+    }
+
     _renderSubProduct() {
         const cartItem = this._state.cartitem;
-        const info = CartController.findSubProductByModel(this._state.template.model);
+
+        const info = this._getInfo();
 
         this._logger.success(info);
         if (!info) return;
@@ -219,16 +176,21 @@ export default class TemplateForm extends View {
         if (productData) {
             Object.assign(data, {product: productData});
         }
-
+        
         switch (info.category) {
             case 'loupe': 
-                this._productForm = LoupeForm.make(this._attrHookId, data).render();
+                this._productForm = LoupeForm.make(this._attrHookId, {...data, onFetchLens: this._fetchLens.bind(this)}).render();
                     break; 
             case 'headlight':
                 this._productForm = HeadlightForm.make(this._attrHookId, data).render();
         }
 
         this._typeInput.setState({value: info.category});
+    }
+
+    _fetchLens(){
+        const controllerClass = this._state.useCart ? CartController : OrderOriginalController;
+        return controllerClass.findSetGroupItemByModel(LoupeForm.PRECISON_LENS);
     }
 
     _handleQuantity(count, disabled = false) {
@@ -261,7 +223,7 @@ export default class TemplateForm extends View {
 
         this._submitBtn = Button.make(this._submitHookId, {
             className: "no-btn-primary --sm",
-            label: "장바구니에 추가",
+            label: this._state.useCart ? '장바구니에 추가' : '제품 추가',
         }).render();
     }
 
@@ -297,7 +259,11 @@ export default class TemplateForm extends View {
     _bindEvents() {
         if (!this.hasTemplate()) return;
 
-        this.on(this.refs.form, "submit", (view, e) => {
+        const useWrapper = this._state.useWrapper;
+
+        const form = useWrapper ? this.refs.form : this._el.closest('form');
+
+        this.on(form, "submit", (view, e) => {
             e.preventDefault();
 
             const fd = new FormData(e.target);
@@ -313,7 +279,7 @@ export default class TemplateForm extends View {
 
             console.log("success to validation...");
 
-            this._dispatch("add.cart", {
+            this._dispatch(useWrapper ? 'add.cart' : 'add.original', {
                 data: fd,
                 view: this,
                 button: this._submitBtn,

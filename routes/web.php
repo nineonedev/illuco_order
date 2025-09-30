@@ -70,19 +70,7 @@ Route::middleware(['web'])->group(function(){
             Route::prefix('dashboard')->name('dashboard')->group(function() {
                     Route::get('aggregation', [AdminController::class, 'aggregateApi'])->name('aggregation');
             });
-
-            Route::prefix('loupe-setting')->name('loupe-setting')->group(function(){
-                    Route::get('/', [LoupeSettingController::class, 'index'])->name('index');
-                    Route::post('/', [LoupeSettingController::class, 'store'])->name('store');
-                });
-
-            Route::prefix('loupe-frame-colors')->name('loupe-frame-colors.')->group(function () {
-                Route::get('/',        [LoupeFrameColorController::class, 'index'])->name('index');
-                Route::post('/',       [LoupeFrameColorController::class, 'store'])->name('store');
-                Route::put('{id}',     [LoupeFrameColorController::class, 'update'])->name('update');
-                Route::delete('{id}',  [LoupeFrameColorController::class, 'destroy'])->name('destroy');
-            });
-
+            
             Route::prefix('salesinfo')->name('salesinfo')->group(function(){
                     Route::get('/', [SalesInfoController::class, 'index'])->name('index');
                     Route::post('/save', [SalesInfoController::class, 'save'])->name('save');
@@ -234,8 +222,6 @@ Route::middleware(['web'])->group(function(){
                 Route::delete('{id}', [LoupeFrameColorController::class, 'destroy'])->name('destroy');// 행 삭제
             });
 
-
-            
             Route::prefix('product-categories')->name('product_categories')->group(function(){
                     Route::get('/', [CategoryController::class, 'index'])->name('index');
                     Route::post('/', [CategoryController::class, 'store'])->name('store');
@@ -264,6 +250,10 @@ Route::middleware(['web'])->group(function(){
                     Route::get('edit/{orderNo}', [OrderController::class, 'edit'])->name('edit');
                     Route::get('export', [OrderController::class, 'export'])->name('export');
                     Route::get('serial', [OrderController::class, 'serial'])->name('serial');
+
+                    // 기존 오더 수정
+                    Route::get('edit/{orderNo}/original', [OrderController::class, 'editOriginal'])
+                        ->name('edit_original');
                     Route::get('{orderNo}', [OrderController::class, 'show'])->name('show');
 
 
@@ -272,6 +262,11 @@ Route::middleware(['web'])->group(function(){
                     Route::post('/restore/{orderItemId}', [OrderController::class, 'restoreItem'])->name('restore_item');
                     
                     Route::put('/cancel/{orderNo}', [OrderController::class, 'cancel'])->name('cancel');
+
+                    // 기존 오더 수정 -> 업데이트
+                    Route::put('original/{orderNo}', [OrderController::class, 'updateOriginal'])
+                        ->name('update_original');
+
                     Route::put('{id}', [OrderController::class, 'update'])->name('update');
                     
                     Route::delete('bulk-delete', [OrderController::class, 'destroyMany'])->name('destroyMany');
@@ -280,6 +275,8 @@ Route::middleware(['web'])->group(function(){
                 });
 
             Route::prefix('orderitems')->name('orderitems')->group(function(){
+                    Route::post('/', [OrderItemController::class, 'store'])->name('store');
+                    Route::put('{id}', [OrderItemController::class, 'update'])->name('update');
                     Route::delete('{id}', [OrderItemController::class, 'destroy'])->name('destroy');
                 });
 

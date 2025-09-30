@@ -107,8 +107,8 @@
                                 </a>
                             </li>
 
-                            <li class="no-drawer-gnb-item <?= route_is_exact('admin.loupe-setting.index') ? '--active' : '' ?>">
-                                <a href="<?= route('admin.loupe-setting.index') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
+                            <li class="no-drawer-gnb-item <?= route_is_exact('admin.loupe_settings.index') ||  route_is_exact('admin.loupe_frame_colors.index')   ? '--active' : '' ?>">
+                                <a href="<?= route('admin.loupe_settings.index') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                     <div class="no-drawer-gnb-link__icon">
                                         <i class="fa-solid fa-microscope"></i>
                                     </div>

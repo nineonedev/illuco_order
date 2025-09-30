@@ -1,3 +1,4 @@
+
 <?php if ($paginator) : ?>
 
 <div class="no-pagination">

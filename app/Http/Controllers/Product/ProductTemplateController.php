@@ -6,6 +6,7 @@ use App\Domains\Product\Entities\Headlight;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\ProductTemplate;
 use App\Domains\Product\Repositories\CategoryRepository;
+use App\Domains\Product\Repositories\LoupeSettingRepository;
 use App\Domains\Product\Repositories\ProductTemplateRepository;
 use App\Domains\System\Entities\FileAttachment;
 use App\Domains\System\Repositories\FileAttachmentRepository;
@@ -16,6 +17,7 @@ use Framework\Database\ORM\Traits\SoftDeletes;
 use Framework\Http\Request;
 use Framework\Routing\Controller;
 use RuntimeException;
+
 
 class ProductTemplateController extends Controller
 {
@@ -30,17 +32,167 @@ class ProductTemplateController extends Controller
         return FileAttachmentRepository::make();
     }
 
-    public function attributes()
+    public function attributes(Request $request)
     {
+        // 1) loupe: 루페 세팅 + 프레임 컬러 기반으로 구성
+        $settings = LoupeSettingRepository::make()
+            ->with(['template', 'frameColors'])
+            ->query()
+            ->get();
+
+        $loupe = [];
+        foreach ($settings as $setting) {
+            $template = $setting->template ?? null;
+
+            // 키는 예시처럼 모델코드(예: ITL-1025G)로 사용: template->code 우선
+            $key = $template->model ?? $template->code ?? null;
+            if (!$key) {
+                continue;
+            }
+
+            // working_distance: WD(cm) 범위
+            $wdMin = is_numeric($setting->wd_min) ? (float)$setting->wd_min : null;
+            $wdMax = is_numeric($setting->wd_max) ? (float)$setting->wd_max : null;
+            $workingDistance = null;
+            if ($wdMin !== null && $wdMax !== null) {
+                $workingDistance = [
+                    'label' => sprintf('%s~%scm', rtrim(rtrim(number_format($wdMin, 1), '0'), '.'), rtrim(rtrim(number_format($wdMax, 1), '0'), '.')),
+                    'min'   => (float)$wdMin,
+                    'max'   => (float)$wdMax,
+                ];
+            }
+
+            // [ADD] PD/VD 스펙 구성 (mm 단위 라벨)
+            $pdRight = null;
+            if (is_numeric($setting->pd_right_min) && is_numeric($setting->pd_right_max)) {
+                $rMin = (float)$setting->pd_right_min;
+                $rMax = (float)$setting->pd_right_max;
+                $pdRight = [
+                    'label' => sprintf('%s~%smm',
+                        rtrim(rtrim(number_format($rMin, 1), '0'), '.'),
+                        rtrim(rtrim(number_format($rMax, 1), '0'), '.')
+                    ),
+                    'min' => $rMin,
+                    'max' => $rMax,
+                ];
+            }
+
+
+            $pdLeft = null;
+            if (is_numeric($setting->pd_left_min) && is_numeric($setting->pd_left_max)) {
+                $lMin = (float)$setting->pd_left_min;
+                $lMax = (float)$setting->pd_left_max;
+                $pdLeft = [
+                    'label' => sprintf('%s~%smm',
+                        rtrim(rtrim(number_format($lMin, 1), '0'), '.'),
+                        rtrim(rtrim(number_format($lMax, 1), '0'), '.')
+                    ),
+                    'min' => $lMin,
+                    'max' => $lMax,
+                ];
+            }
+
+            $pdTotal = null;
+            if ($pdRight && $pdLeft) {
+                $tMin = (float)$pdRight['min'] + (float)$pdLeft['min'];
+                $tMax = (float)$pdRight['max'] + (float)$pdLeft['max'];
+                $fmt = function ($n) { return rtrim(rtrim(number_format($n, 1), '0'), '.'); };
+                $pdTotal = [
+                    'label' => sprintf('%s~%smm', $fmt($tMin), $fmt($tMax)),
+                    'min'   => $tMin,
+                    'max'   => $tMax,
+                ];
+            } elseif (is_numeric($setting->pd_total_distance)) {
+                // 우/좌 범위가 없고 단일 권장값만 있으면 추천값으로 내려줌
+                $v   = (float)$setting->pd_total_distance;
+                $fmt = rtrim(rtrim(number_format($v, 1), '0'), '.');
+                $pdTotal = [
+                    'label'       => sprintf('%smm', $fmt),
+                    'recommended' => $v,
+                ];
+            }
+
+            $vertexDistance = null;
+            if (is_numeric($setting->vd_min) && is_numeric($setting->vd_max)) {
+                $vdMin = (float)$setting->vd_min;
+                $vdMax = (float)$setting->vd_max;
+                $vertexDistance = [
+                    'label'     => sprintf('%s~%smm',
+                        rtrim(rtrim(number_format($vdMin, 1), '0'), '.'),
+                        rtrim(rtrim(number_format($vdMax, 1), '0'), '.')
+                    ),
+                    'min'       => $vdMin,
+                    'max'       => $vdMax,
+                    'exclusive' => true, // VD는 (min,max) 배타 범위로 사용
+                ];
+            }
+
+            // frame_type: 세팅에 연결된 활성 컬러를 [label, value] 로 변환
+            // value는 color.code (없으면 id 문자열로 대체)
+            $frameTypes = [];
+            $colors = $setting->frameColors ?? [];
+            foreach ($colors as $c) {
+                if (isset($c->is_active) && (int)$c->is_active !== 1) {
+                    continue; // 비활성 색상은 제외
+                }
+                $label = $c->name ?? '';
+                $value = $c->code ?? (string)($c->id ?? '');
+                
+                if ($label && $value) {
+                    $frameTypes[] = ['label' => $label, 'value' => $value, 'hex' => $c->hex ?? ''];
+                }
+            }
+            if (empty($frameTypes)) {
+                $frameTypes = null; // 예시 포맷에 맞춰 컬러 없으면 null 허용
+            }
+
+            $loupe[$key] = [
+                'frame_type'       => $frameTypes,
+                'working_distance' => $workingDistance,
+                'vertex_distance'  => $vertexDistance,
+                'pd_left'          => $pdLeft,
+                'pd_right'         => $pdRight,
+                'pd_total'         => $pdTotal, 
+            ];
+        }
+
+        // 2) headlight: 기존 상수에서 예시 포맷으로 가볍게 맞춤 (없으면 null)
+        $headlight = [];
+        if (is_array(Headlight::MODEL_SPECS ?? null)) {
+            foreach (Headlight::MODEL_SPECS as $modelCode => $spec) {
+                $colors = $spec['wireless_colors'] ?? $spec['WIRELESS_COLORS'] ?? null;
+                if (is_array($colors)) {
+                    // 원소가 string 혹은 ['value','label'] 혼재 가능성 고려
+                    $colors = array_map(function ($item) {
+                        if (is_array($item)) {
+                            return [
+                                'value' => $item['value'] ?? ($item['code'] ?? ''),
+                                'label' => $item['label'] ?? ($item['name'] ?? ($item['value'] ?? '')),
+                            ];
+                        }
+                        return ['value' => (string)$item, 'label' => (string)$item];
+                    }, $colors);
+                } else {
+                    $colors = null;
+                }
+                $headlight[$modelCode] = ['wireless_colors' => $colors];
+            }
+        } else {
+            $headlight = null;
+        }
+
+        // 3) countries 그대로
+        $countries = __('system.countries');
 
         $data = [
-            'loupe' => Loupe::MODEL_SPECS,
-            'headlight' => Headlight::MODEL_SPECS,
-            'countries' => __('system.countries'),
+            'loupe'     => $loupe,
+            'headlight' => $headlight,
+            'countries' => $countries,
         ];
-        
+
         return $this->render(null, $data, '성공적으로 로드되었습니다.');
     }
+
 
     public function labels()
     {

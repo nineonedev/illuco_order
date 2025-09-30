@@ -14,6 +14,8 @@ import SalesInfoController from "../controllers/SalesInfoController";
 import DealerMemoController from "../controllers/DealerMemoController";
 import DealerPriceController from "../controllers/DealerPriceController";
 import LoupeSettingController from "../controllers/LoupeSettingController";
+import LoupeFrameColorController from "../controllers/LoupeFrameColorController";
+import OrderOriginalController from "../controllers/OrderOriginalController";
 
 export default {
     notice: NoticeController,
@@ -32,4 +34,6 @@ export default {
     dealerMemo: DealerMemoController,
     dealerPrice: DealerPriceController,
     loupeSetting: LoupeSettingController,
+    loupeFrameColor: LoupeFrameColorController,
+    orderOriginal: OrderOriginalController,
 };

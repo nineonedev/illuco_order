@@ -17,6 +17,7 @@ use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\Product\Entities\Loupe;
 use App\Domains\Product\Entities\Product;
 use App\Domains\Product\Repositories\CategoryRepository;
+use App\Domains\Product\Repositories\LoupeFrameColorRepository;
 use App\Domains\Product\Repositories\ProductRepository;
 use App\Domains\Product\Repositories\ProductSerialRepository;
 use App\Domains\User\Entities\User;
@@ -28,6 +29,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Routing\Controller;
 use Framework\Support\Str;
+use Framework\Validation\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -711,6 +713,12 @@ class OrderController extends Controller
                     : '-';
 
                 $product->load(['serials']);
+
+                $frameColorName = '-';
+                if ($loupe && ($code = ($loupe->frame_type ?? null))) {
+                    $fc = LoupeFrameColorRepository::make()->query()->where('code', '=', $code)->first();
+                    if ($fc) { $frameColorName = $fc->name; }
+                }
                 
                 $rowData = [
                     $order->order_no,
@@ -740,7 +748,7 @@ class OrderController extends Controller
                     $loupe ? $loupe->os_add : '-',
                     $loupe ? (Loupe::LABELS["add_option_" . $loupe->add_option] ?? '-') : '-',
                     $item->sets ? count($item->sets) : 0,
-                    $loupe ? $loupe->frame_type : '-',
+                    $frameColorName,
                     '-', // Flip-up Color
                     $loupe ? $loupe->working_distance : '-',
                     $pd_right,
@@ -1103,5 +1111,70 @@ class OrderController extends Controller
         return $cartItem;
     }
 
+
+    public function editOriginal(Request $request, string $orderNo)
+    {
+        // 주문 + 연관 로드
+        $order = OrderRepository::make()
+            ->with([
+                'documents',
+                'customer',
+                'user.dealer',
+                'items.product.template.fileattachment',
+            ])
+            ->query()
+            ->where('order_no', $orderNo)
+            ->firstOrFail();
+
+        
+        foreach ($order->items as $item) {
+            $type = $item->product->type;
+            if ($item->product->type) {
+                $item->product->load([$type]);
+            }
+        };
+        
+        // 아이템 세트 그룹화
+        $groupedItems = OrderItem::groupBySet($order->items);
+        $order->replaceRelation('items', $groupedItems);
+
+
+        foreach ($order->documents as $document) {
+            $subType = $document->type;
+            $document->load([$subType]); 
+            $subDocument = $document->{$subType};
+
+            if ($subDocument) {
+                $subDocument->setRelation('document', $document);
+                $order->setRelation($subType, $subDocument);
+            }
+        }
+
+        $order->forgetRelation('documents');
+
+        // 대리점 셀렉트용
+        $dealers = UserRepository::make()
+            ->query()
+            ->with(['dealer'])
+            ->where('type', UserType::DEALER)
+            ->orderBy('name')
+            ->get();
+
+        $dealerMemo = null;
+        if ($order->dealer_id) {
+            $dealerMemo = DealerMemoRepository::make()
+                ->query()
+                ->where('dealer_id', (int)$order->dealer_id)
+                ->first();
+        }
+
+        // 뷰 렌더 (ProductTemplateController의 render 스타일 준용)
+        return $this->render('admin.pages.orders.edit-original', [
+            'order'   => $order,
+            'dealers' => $dealers,
+            'query'   => $request->query(),
+            'dealerMemo' => $dealerMemo,
+        ]);
+    }
 
 }

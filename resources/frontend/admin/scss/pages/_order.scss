@@ -514,3 +514,161 @@
         }
     }
 }
+
+
+.no-order-options{
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+.no-order-options__block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+
+
+/* ===== Head Information (주문자/대리점/고객 카드) ===== */
+/* 1rem = 10px 기준으로 넉넉한 스케일 적용 */
+.no-head-information {
+  display: grid;
+  /* 너무 좁아지지 않도록 각 카드 최소 28rem(280px) 확보 */
+  grid-template-columns: repeat(3, minmax(28rem, 1fr));
+  gap: 2rem; /* 20px */
+  margin-top: 2rem;
+
+  /* <= 1000px: 2열 */
+  @media (max-width: 100rem) {
+    grid-template-columns: repeat(2, minmax(28rem, 1fr));
+  }
+  /* <= 640px: 1열 */
+  @media (max-width: 64rem) {
+    grid-template-columns: 1fr;
+    gap: 1.6rem; /* 16px */
+  }
+
+  &__block {
+    position: relative;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1.4rem;            /* 14px */
+    padding: 2rem;                    /* 20px */
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+    line-height: 1.6;
+
+    /* 상단 강조 라인 */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: .4rem;                  /* 4px */
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      border-top-left-radius: 1.4rem;
+      border-top-right-radius: 1.4rem;
+    }
+  }
+
+  &__title {
+    display: block;
+    font-weight: 700;
+    font-size: 1.6rem;                /* 16px */
+    color: #0f172a;
+    margin: .6rem 0 1.4rem;           /* 위 6px, 아래 14px */
+    letter-spacing: .01em;
+  }
+
+  /* 카드 내부의 라벨/값 행 */
+  &__block dl {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: .8rem 0;                 /* 위아래 8px */
+    border-top: 1px dashed #eef2f7;
+
+    dt {
+      color: #64748b;
+      font-size: 1.2rem;              /* 13px */
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+    dd {
+      color: #111827;
+      font-size: 1.4rem;              /* 15px */
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    /* 모바일: 세로 배치로 바꾸고 가독성 유지 */
+    @media (max-width: 64rem) {
+      grid-template-columns: 1fr;
+      dt { margin-bottom: .3rem; }
+    }
+  }
+
+  /* .no-head-information__comp 래퍼가 있을 때도 그리드 균형 유지 */
+  &__comp {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 1.6rem;
+    @media (max-width: 64rem) { grid-template-columns: 1fr; }
+  }
+}
+
+/* ===== Head Information Callout (오더 메모) ===== */
+.no-head-information__call {
+  margin-top: 2rem;
+  background: #f0f7ff;
+  border: 1px solid #dbeafe;
+  border-left: .6rem solid #3b82f6;  /* 6px */
+  border-radius: 1.2rem;             /* 12px */
+  padding: 1.6rem 2rem;              /* 16px 20px */
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;                        /* 12px */
+
+  &-title {
+    font-weight: 800;
+    color: #1d4ed8;
+    font-size: 1.5rem;                /* 15px */
+    margin-top: .2rem;
+    flex: 0 0 auto;
+    letter-spacing: .01em;
+  }
+
+  .no-head-information__content {
+    color: #111827;
+    font-size: 1.5rem;                /* 15px */
+    line-height: 1.7;
+    word-break: break-word;
+  }
+
+  @media (max-width: 64rem) {
+    padding: 1.4rem 1.6rem;
+    gap: 1rem;
+  }
+}
+
+
+.no-order-hooks{ 
+    display: flex;
+    gap: fluid(32, 48) fluid(12, 24);
+    flex-wrap: wrap;
+    
+    @include mq(lg){
+        flex-direction: column;
+    }
+
+    > div {
+        width: calc(50% - fluid(6, 12));
+       
+        &.--full {
+            width: 100%;
+        }
+        
+        @include mq(lg){
+            width: 100%;
+        }
+    }
+
+}

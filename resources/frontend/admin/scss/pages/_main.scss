@@ -34,6 +34,10 @@
     padding-bottom: 12rem;
     overflow-x: auto;
 
+    @include mq(md){
+        overflow-x: initial;
+    }
+
     .no-section-container {
         display: flex;
         flex-direction: column;
@@ -544,4 +548,35 @@
 .no-heading-xxs {
     font-size: fluid(14, 16);
     font-weight: 600;
+}
+
+
+.no-page-split {
+    margin: 1.6rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.6rem;
+
+    &__block {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.8rem;
+    }
+
+    @include mq(md) {
+        flex-direction: column;
+        grid-area: 1.6rem;
+        margin: 2.4rem 0;
+    }
+}
+
+.no-base-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 4.8rem;
+}
+.no-mt-6 {
+    margin-top: 0.6rem;
 }

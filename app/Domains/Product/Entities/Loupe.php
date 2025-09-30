@@ -2,6 +2,7 @@
 
 namespace App\Domains\Product\Entities;
 
+use App\Domains\Product\Repositories\LoupeFrameColorRepository;
 use App\Domains\Product\Repositories\LoupeRepository;
 use Framework\Database\ORM\Entities\Entity;
 
@@ -217,47 +218,130 @@ class Loupe extends Entity
         return LoupeRepository::class;
     }
 
+    // Loupe 클래스 내부에 추가/수정
+
+    public static function renderTable(string $type, array $attributes): string
+    {
+        // custom-made 가 아니면 테이블 없음
+        if (($attributes['type'] ?? '') !== 'custom-made') {
+            return '';
+        }
+
+        $html = '<div class="no-order-options__block">';
+        // ---------- 첫 번째: 시력정보 테이블 ----------
+        $html .= '
+            <table class="no-order-option-table ">
+                <thead>
+                    <tr>
+                        <th scope="col"><span class="--blind">Eye</span></th>
+                        <th scope="col">SPH</th>
+                        <th scope="col">CYL</th>
+                        <th scope="col">Axis</th>
+                        <th scope="col">Add</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">OD</th>
+                        <td>' . e($attributes['od_sph'] ?? '-') . '</td>
+                        <td>' . e($attributes['od_cyl'] ?? '-') . '</td>
+                        <td>' . e($attributes['od_axis'] ?? '-') . '</td>
+                        <td>' . e($attributes['od_add'] ?? '-') . '</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">OS</th>
+                        <td>' . e($attributes['os_sph'] ?? '-') . '</td>
+                        <td>' . e($attributes['os_cyl'] ?? '-') . '</td>
+                        <td>' . e($attributes['os_axis'] ?? '-') . '</td>
+                        <td>' . e($attributes['os_add'] ?? '-') . '</td>
+                    </tr>
+                </tbody>
+            </table>
+        ';
+
+        // ---------- 두 번째: 계산 요약 테이블 ----------
+        $fmtSigned = function ($v, int $dec = 2) {
+            if ($v === null || $v === '') return '-';
+            $v = (float)$v;
+            return sprintf('%+.' . $dec . 'f', $v);
+        };
+        $fmtAxis = function ($v) {
+            if ($v === null || $v === '') return '-';
+            return (string) intval($v) . '°';
+        };
+
+        // 입력값
+        $odS = isset($attributes['od_sph']) ? (float)$attributes['od_sph'] : null;
+        $odC = isset($attributes['od_cyl']) ? (float)$attributes['od_cyl'] : null;
+        $odA = isset($attributes['od_axis']) ? (int)$attributes['od_axis'] : null;
+        $odAdd = isset($attributes['od_add']) ? (float)$attributes['od_add'] : null;
+
+        $osS = isset($attributes['os_sph']) ? (float)$attributes['os_sph'] : null;
+        $osC = isset($attributes['os_cyl']) ? (float)$attributes['os_cyl'] : null;
+        $osA = isset($attributes['os_axis']) ? (int)$attributes['os_axis'] : null;
+        $osAdd = isset($attributes['os_add']) ? (float)$attributes['os_add'] : null;
+
+        $opt = $attributes['add_option'] ?? null; // ignore | include | zero_diopter
+
+        // 모렌즈(기본식)
+        $molOd = ['s' => $odS, 'c' => $odC, 'a' => $odA, 'add' => null];
+        $molOs = ['s' => $osS, 'c' => $osC, 'a' => $osA, 'add' => null];
+        if ($opt === 'zero_diopter') {
+            $molOd = ['s' => 0, 'c' => 0, 'a' => 0, 'add' => null];
+            $molOs = ['s' => 0, 'c' => 0, 'a' => 0, 'add' => null];
+        }
+
+        // 자렌즈(기본식: S + ADD)
+        $jarOd = ['s' => ($odS !== null && $odAdd !== null) ? $odS + $odAdd : null, 'c' => $odC, 'a' => $odA, 'add' => null];
+        $jarOs = ['s' => ($osS !== null && $osAdd !== null) ? $osS + $osAdd : null, 'c' => $osC, 'a' => $osA, 'add' => null];
+
+        $html .= '
+            <table class="no-order-option-table no-order-option-table--summary ">
+                <thead>
+                    <tr>
+                        <th>렌즈</th>
+                        <th colspan="4">OD, R</th>
+                        <th colspan="4">OS, L</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>S</th><th>C</th><th>A</th><th>ADD</th>
+                        <th>S</th><th>C</th><th>A</th><th>ADD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">처방전</th>
+                        <td>'.$fmtSigned($odS).'</td><td>'.$fmtSigned($odC).'</td><td>'.$fmtAxis($odA).'</td><td>'.$fmtSigned($odAdd).'</td>
+                        <td>'.$fmtSigned($osS).'</td><td>'.$fmtSigned($osC).'</td><td>'.$fmtAxis($osA).'</td><td>'.$fmtSigned($osAdd).'</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">모렌즈</th>
+                        <td>'.$fmtSigned($molOd["s"]).'</td><td>'.$fmtSigned($molOd["c"]).'</td><td>'.$fmtAxis($molOd["a"]).'</td><td>–</td>
+                        <td>'.$fmtSigned($molOs["s"]).'</td><td>'.$fmtSigned($molOs["c"]).'</td><td>'.$fmtAxis($molOs["a"]).'</td><td>–</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">자렌즈</th>
+                        <td>'.$fmtSigned($jarOd["s"]).'</td><td>'.$fmtSigned($jarOd["c"]).'</td><td>'.$fmtAxis($jarOd["a"]).'</td><td>–</td>
+                        <td>'.$fmtSigned($jarOs["s"]).'</td><td>'.$fmtSigned($jarOs["c"]).'</td><td>'.$fmtAxis($jarOs["a"]).'</td><td>–</td>
+                    </tr>
+                </tbody>
+            </table>
+        ';
+        
+        $html .= '</div>';
+
+        return $html;
+    }
+
     public static function renderTag(string $type, array $attributes): string
     {
         $html = '';
 
-        // custom-made 일 때만 시력 정보 테이블 출력
-        if (($attributes['type'] ?? '') === 'custom-made') {
-            $html .= '
-                <table class="no-order-option-table">
-                    <thead>
-                        <tr>
-                            <th scope="col"><span class="--blind">Eye</span></th>
-                            <th scope="col">SPH</th>
-                            <th scope="col">CYL</th>
-                            <th scope="col">Axis</th>
-                            <th scope="col">Add</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">OD</th>
-                            <td>' . e($attributes['od_sph'] ?? '-') . '</td>
-                            <td>' . e($attributes['od_cyl'] ?? '-') . '</td>
-                            <td>' . e($attributes['od_axis'] ?? '-') . '</td>
-                            <td>' . e($attributes['od_add'] ?? '-') . '</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">OS</th>
-                            <td>' . e($attributes['os_sph'] ?? '-') . '</td>
-                            <td>' . e($attributes['os_cyl'] ?? '-') . '</td>
-                            <td>' . e($attributes['os_axis'] ?? '-') . '</td>
-                            <td>' . e($attributes['os_add'] ?? '-') . '</td>
-                        </tr>
-                    </tbody>
-                </table>
-            ';
-        }
-
-        // 공통 제외 필드
+        // 공통 제외 필드(시력값은 태그에서 제외)
         $exclude = ['id', 'od_sph', 'os_sph', 'od_cyl', 'os_cyl', 'od_axis', 'os_axis', 'od_add', 'os_add'];
 
-        // ready-made 이면 시력 관련 필드도 제외
+        // ready-made 이면 시력 관련 필드도 태그에서 제외
         if (($attributes['type'] ?? '') === 'ready-made') {
             $exclude = array_merge($exclude, [
                 'pd_right', 'pd_left', 'pd_total',
@@ -265,16 +349,21 @@ class Loupe extends Entity
             ]);
         }
 
-        // 나머지 옵션들 출력
         foreach ($attributes as $field => $value) {
             if (in_array($field, $exclude, true)) {
                 continue;
             }
-
-            if (!$value) continue;
+            if ($value === null || $value === '') continue;
 
             if ($field === 'add_option') {
-                $value = self::LABELS["add_option_".$value] ?? '-';
+                $value = self::LABELS['add_option_'.$value] ?? '-';
+            }
+
+            if ($field === 'frame_type') {
+                $frameColor = LoupeFrameColorRepository::make()->query()->where('code', '=', $value)->first();
+                if ($frameColor) {
+                    $value = $frameColor->name; 
+                }
             }
 
             $html .= '
@@ -287,5 +376,6 @@ class Loupe extends Entity
 
         return $html;
     }
+
 
 }

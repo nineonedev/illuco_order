@@ -26,6 +26,7 @@ export default class OrderController extends Controller {
         });
     }
 
+
     index(){
         this._prepare(); 
         this._handleListDelete();

@@ -16,40 +16,9 @@ use App\Domains\Product\Entities\Loupe;
 <div class="no-page-container">
 
     <div class="no-page-row">
-        <div class="no-page-head">
+        <div class="no-page-head__between">
             <h1 class="no-heading-sm">주문 정보</h1>
         </div>
-
-        <!-- <div class="no-base-tab-container">
-            <ul class="no-base-tabs">
-                <li class="no-base-tab">
-                    <button class="no-base-tab-btn">
-                        <span>수정</span>
-                        <span class="no-base-tab-badge">0</span>
-                    </button>
-                </li>
-                <li class="no-base-tab">
-                    <button class="no-base-tab-btn">
-                        <span>문서</span>
-                    </button>
-                </li>
-                <li class="no-base-tab">
-                    <button class="no-base-tab-btn">
-                        <span>상세정보</span>
-                    </button>
-                </li>
-                <li class="no-base-tab">
-                    <button class="no-base-tab-btn">
-                        <span>히스토리</span>
-                    </button>
-                </li>
-                <li class="no-base-tab">
-                    <button class="no-base-tab-btn">
-                        <span>미수금</span>
-                    </button>
-                </li>
-            </ul>
-        </div> -->
 
         <div class="no-section-container">
             <!-- 수정 -->
@@ -432,6 +401,10 @@ use App\Domains\Product\Entities\Loupe;
                     </div>
                 </div>
 
+                <div class="no-order-lens-table">
+                    
+                </div>
+
                 <!-- 2. 메모 및 집계 -->
                 <div class="no-order-memo">
                     <h2 class="no-order-memo__title">메모 및 집계</h2>
@@ -452,7 +425,13 @@ use App\Domains\Product\Entities\Loupe;
                     <div class="no-flex-between no-heading-margin">
                         <h2 class="no-order-restore__title">주문 제품 목록</h2>
                         
-                        <div>
+                        <div class="no-flex">
+                            <a
+                                href="<?= route('admin.orders.edit_original', ['orderNo' => $order->order_no]) ?>"
+                                class="no-btn-premium-outline"
+                            >
+                                기존오더 수정
+                            </a>
                             <form method="post" action="<?= route('admin.orders.restore_all', ['orderId' => $order->id]) ?>" id="restore-form">
                                 <?= csrf_field() ?>
                                 <button type="submit" class="no-btn-success">전체 다시 장바구니에 담기</button>
@@ -497,21 +476,31 @@ use App\Domains\Product\Entities\Loupe;
                                     <td><?= '$'. e($product->price) ?></td>
                                     <td><?= $serials ?></td>
                                     <td>
-                                        <div class="no-order-option-tags">
+                                        <div class="no-order-options">
                                             <?php if ($sub) : ?>
-                                                <?php 
-                                                $subClass = null; 
+                                                <?php
+                                                $subClass = null;
 
                                                 switch ($type) {
                                                     case Loupe::alias():
                                                         $subClass = Loupe::class;
-                                                        break; 
+                                                        break;
                                                     case Headlight::alias():
-                                                        $subClass = Headlight::class; 
-                                                        break; 
-                                                } 
+                                                        $subClass = Headlight::class;
+                                                        break;
+                                                }
 
-                                                echo $subClass::renderTag($type, $sub->getAttributes());
+                                                if ($subClass) {
+                                                    // ① 테이블(시력정보 + 계산요약)
+                                                    echo '<div class="no-order-option-table">';
+                                                    echo $subClass::renderTable($type, $sub->getAttributes());
+                                                    echo  '</div>';
+
+                                                    // ② 나머지 옵션 태그
+                                                    echo '<div class="no-order-option-tags">';
+                                                    echo $subClass::renderTag($type, $sub->getAttributes());
+                                                    echo  '</div>';
+                                                }
                                                 ?>
                                             <?php endif; ?>
                                         </div>

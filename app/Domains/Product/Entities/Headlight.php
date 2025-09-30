@@ -75,4 +75,9 @@ class Headlight extends Entity
 
         return $html;
     }
+
+    public static function renderTable(string $type, array $attributes): string
+    {
+        return ''; 
+    }
 }

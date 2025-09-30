@@ -92,6 +92,9 @@ class DealerController extends Controller
         $page = $request->query('page', 1);
         $dealers = $query->paginate($perpage, $page);
 
+        $paginator = $query->paginate($perpage, $page);
+        $dealers = $request->expectsJson() ? $paginator->toArray() : $paginator;
+
         return $this->render('admin.pages.dealers.index', [
             'dealers'   => $dealers,
             'query'     => $request->query(),

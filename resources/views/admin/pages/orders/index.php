@@ -1,6 +1,7 @@
 <?php
 
 use App\Domains\Product\Entities\Loupe;
+use App\Domains\Product\Repositories\LoupeFrameColorRepository;
 
 ?>
 
@@ -434,7 +435,14 @@ use App\Domains\Product\Entities\Loupe;
                                     <td><?= $loupe ? e(Loupe::LABELS["add_option_".$loupe->add_option] ?? '-') : '-' ?></td>
                                     
                                     <td><?= $item->sets ? count($item->sets) : 0 ?></td>
-                                    <td><?= $loupe ? e($loupe->frame_type ?? '-') : '-' ?></td>
+                                    <?php 
+                                        $frameColorName = '-'; // ★ 추가
+                                        if ($loupe && ($code = ($loupe->frame_type ?? null))) {
+                                            $fc = LoupeFrameColorRepository::make()->query()->where('code', '=', $code)->first();
+                                            if ($fc) { $frameColorName = $fc->name; }
+                                        }
+                                    ?>
+                                    <td><?= $loupe ? e($frameColorName ?? '-') : '-' ?></td>
                                     <td>-</td>
                                     <td><?= $loupe ? e($loupe->working_distance ?? '-') : '-' ?></td>
                                     <td><?= $pd_right ?></td>

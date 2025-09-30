@@ -92,6 +92,9 @@ export default class CartController extends Controller {
             CartController.setGroupItems = setGroupItemsResult.data;
             CartController.labels = labelResult.data;
 
+            console.log(attrResult, setGroupItemsResult, labelResult);
+            
+
             this._logger.success("속성 로드 결과", CartController.attributes);
             this._logger.success(
                 "세트 로드 결과",

@@ -8,6 +8,8 @@ export default class Template extends View {
         return {
             template: {},
             cartitem: {},
+            useCart: true, 
+            useWrapper: false,
             onSubmit: () => {}
         }
     }
@@ -66,6 +68,8 @@ export default class Template extends View {
         TemplateForm.make(this.refs.group, {
             template: this._state.template,
             cartitem: this._state.cartitem,
+            useCart: this._state.useCart,
+            useWrapper: this._state.useWrapper
         }).render();
     }
 }

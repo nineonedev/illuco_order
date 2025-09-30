@@ -41,12 +41,26 @@ class LoupeFrameColorController extends Controller
         ])->validateOrFail();
 
         return $this->runInTransaction(function () use ($data) {
+            $name = trim((string) $data['name']);
+            $code = $this->normalizeCode($data['code']);
+
+            // --- 중복 검사: 동일 name 또는 code 존재 시 에러 ---
+            $dupName = LoupeFrameColorRepository::make()->query()->where('name', $name)->first();
+            if ($dupName) {
+                throw new RuntimeException('이미 존재하는 이름입니다.');
+            }
+            $dupCode = LoupeFrameColorRepository::make()->query()->where('code', '=', $code)->get();
+
+            if ($dupCode) {
+                throw new RuntimeException('이미 존재하는 코드입니다.');
+            }
+
             $model = new LoupeFrameColor([
-                'name'       => trim((string)$data['name']),
-                'code'       => (string)$data['code'],
-                'hex'       => $this->normalizeHex((string)$data['hex']),
-                'is_active'  => (int) (!empty($data['is_active'])),
-                'sort_order' => isset($data['sort_order']) ? (int)$data['sort_order'] : 0,
+                'name'       => $name,
+                'code'       => $code,
+                'hex'        => $this->normalizeHex((string) ($data['hex'] ?? '')),
+                'is_active'  => isset($data['is_active']) ? (int) $data['is_active'] : 0,
+                'sort_order' => isset($data['sort_order']) ? (int) $data['sort_order'] : 0,
             ]);
 
             if (!LoupeFrameColorRepository::make()->save($model)) {
@@ -84,20 +98,41 @@ class LoupeFrameColorController extends Controller
             /** @var LoupeFrameColor $model */
             $model = LoupeFrameColorRepository::make()->findOrFail($id);
 
+            // name 변경 시 중복 확인
             if (array_key_exists('name', $data)) {
-                $model->name = trim((string)$data['name']);
+                $nextName = trim((string) $data['name']);
+                $dupModel = LoupeFrameColorRepository::make()->query()
+                    ->where('name', '=', $nextName)
+                    ->first();
+
+                if ($dupModel && $dupModel->id != $id) {
+                    throw new RuntimeException('이미 존재하는 이름입니다.');
+                }
+                $model->name = $nextName;
             }
+
+            // code 변경 허용 시(현재 UI에서는 disabled이지만 서버는 대비)
             if (array_key_exists('code', $data)) {
-                $model->code = trim((string)$data['code']);
+                $nextCode = $this->normalizeCode((string) $data['code']);
+                $dupCode = LoupeFrameColorRepository::make()->query()
+                    ->where('code', $nextCode)
+                    ->get();
+                if ($dupCode) {
+                    throw new RuntimeException('이미 존재하는 코드입니다.');
+                }
+                $model->code = $nextCode;
             }
+
             if (array_key_exists('hex', $data)) {
-                $model->hex = $this->normalizeHex((string)$data['hex']);
+                $model->hex = $this->normalizeHex((string) $data['hex']);
             }
             if (array_key_exists('is_active', $data)) {
                 $model->is_active = (int) (!empty($data['is_active']));
+            } else {
+                $model->is_active = 0;
             }
             if (array_key_exists('sort_order', $data)) {
-                $model->sort_order = (int)$data['sort_order'];
+                $model->sort_order = (int) $data['sort_order'];
             }
 
             if (!LoupeFrameColorRepository::make()->save($model)) {
@@ -112,10 +147,9 @@ class LoupeFrameColorController extends Controller
     public function destroy(string $id)
     {
         return $this->runInTransaction(function () use ($id) {
-            $repo  = LoupeFrameColorRepository::make();
-            $model = $repo->findOrFail($id);
+            $model = LoupeFrameColorRepository::make()->findOrFail($id);
 
-            if (!$repo->delete($model)) {
+            if (!LoupeFrameColorRepository::make()->delete($model)) {
                 throw new RuntimeException('삭제에 실패했습니다.');
             }
 
@@ -131,5 +165,15 @@ class LoupeFrameColorController extends Controller
         $c = ltrim(trim($code), '#');
         $c = strtoupper($c);
         return '#' . $c;
+    }
+
+    /** 공백 포함한 code를 저장 안전한 형태로 변환: 모든 공백→'_' , 연속 '_' 축약, 앞뒤 '_' 제거 */
+    private function normalizeCode(string $code): string
+    {
+        $c = trim($code);
+        $c = preg_replace('/\s+/', '_', $c ?? '');   // space→underscore
+        $c = preg_replace('/_+/', '_', $c);          // collapse multiple _
+        $c = trim($c, '_');                          // trim edge _
+        return $c;
     }
 }

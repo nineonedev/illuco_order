@@ -117,32 +117,38 @@
             ],
             ];
         ?>
-        <div
-            class="no-form-field"
-            data-view-type="select"
-            data-view-props='<?= e(json_encode($sortProps)) ?>'
-        ></div>
+            <div
+                class="no-form-field"
+                data-view-type="select"
+                data-view-props='<?= e(json_encode($sortProps)) ?>'
+            ></div>
 
-        <!-- 검색 버튼 -->
-        <div class="no-page-index-link">
-            <button type="submit" class="no-btn-primary --sm">검색</button>
-        </div>
+            <!-- 검색 버튼 -->
+            <div class="no-page-index-link">
+                <button type="submit" class="no-btn-primary --sm">검색</button>
+            </div>
         </div>
 
         <!-- 우측 링크 -->
-        <div class="no-page-index-link">
-        <a href="<?= route('admin.loupe_settings.index') ?>" class="no-btn-success --sm"><span>필터 초기화</span></a>
-        </div>
-    </div>
+        <div class="no-page-split">
+            <div class="no-page-split__block">
+                <a href="<?= route('admin.loupe_settings.create') ?>" class="no-btn-primary --sm">
+                    <i class="fa-light fa-circle-plus"></i><span>루페 세팅 추가</span>
+                </a>
+                <a href="<?= route('admin.loupe_frame_colors.index') ?>" class="no-btn-premium-outline --sm" style="margin-left:8px;">
+                    <i class="fa-light fa-palette"></i><span>루페 프레임 컬러 관리</span>
+                </a>
+            </div>
 
-    <!-- ===== 액션 버튼 (필터와 표 사이) ===== -->
-    <div class="no-page-index-link" style="margin: 12px 0 18px;">
-        <a href="<?= route('admin.loupe_settings.create') ?>" class="no-btn-primary --sm">
-        <i class="fa-light fa-circle-plus" style="margin-right:6px;"></i><span>루페 세팅 추가</span>
-        </a>
-        <a href="<?= route('admin.loupe-frame-colors.index') ?>" class="no-btn-premium-outline --sm" style="margin-left:8px;">
-        <i class="fa-light fa-palette" style="margin-right:6px;"></i><span>루페 프레임 컬러 관리</span>
-        </a>
+            <div class="no-page-split__block">
+                <a href="<?= route('admin.loupe_settings.index') ?>" class="no-btn-success --sm"><span>필터 초기화</span></a>
+                <?php if (can('product.delete')): ?>
+                <button id="select-delete-btn" class="no-btn-error --sm" type="button" disabled>
+                    <span>선택삭제</span>
+                </button>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
     <!-- ===== 목록 테이블 ===== -->
@@ -150,6 +156,20 @@
         <table class="no-page-index-table">
         <thead class="center">
             <tr>
+                <?php if (can('product.delete')): ?>
+                <th class="no-table-check">
+                    <div class="no-form-checkbox --xs">
+                        <label for="chk-all" class="no-form-checkbox-pointer">
+                            <input type="checkbox" id="chk-all" class="no-form-checkbox-input">
+                            <div class="no-form-checkbox-ripple">
+                                <span class="no-form-checkbox-box">
+                                    <div class="no-form-checkbox-icon"><i class="fa-solid fa-check"></i></div>
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+                </th>
+                <?php endif; ?>
                 <th style="width:20%;">제품</th>
                 <th style="width:11%;">WD (cm)</th>
                 <th style="width:11%;">VD (mm)</th>
@@ -164,6 +184,21 @@
             <?php if (!empty($settings)): ?>
             <?php foreach ($settings->items() as $s): ?>
                 <tr class="no-table-hover">
+                    <?php if (can('product.delete')): ?>
+                    <td class="no-table-check">
+                        <div class="no-form-checkbox --xs">
+                            <label for="setting<?= $s->id ?>" class="no-form-checkbox-pointer">
+                                <input type="checkbox" name="checked_ids[]" id="setting<?= $s->id ?>" value="<?= $s->id ?>" class="no-form-checkbox-input">
+                                <div class="no-form-checkbox-ripple">
+                                    <span class="no-form-checkbox-box">
+                                        <div class="no-form-checkbox-icon"><i class="fa-solid fa-check"></i></div>
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    </td>
+                    <?php endif; ?>
+
                     <!-- 제품 -->
                     <td>
                         <div class="no-flex --middle --col-lg" style="gap:10px;">
@@ -279,8 +314,8 @@
         </table>
     </div>
 
-    <?php if (isset($paginator)): ?>
-        <?= include_view('admin.components.pagination', ['paginator' => $paginator]) ?>
+    <?php if (isset($settings)): ?>
+        <?= include_view('admin.components.pagination', ['paginator' => $settings]) ?>
     <?php endif; ?>
     </div>
 </form>

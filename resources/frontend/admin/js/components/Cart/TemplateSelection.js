@@ -26,7 +26,6 @@ export default class TemplateSelection extends View {
         const { paginator, query } = this._state;
         const { data } = paginator;
 
-        console.log(this._state.prices);
 
         return `
             <div>
@@ -89,8 +88,10 @@ export default class TemplateSelection extends View {
 
     _render() {
         super._render();
-
+        
+        
         this.form = this.qs("#search-form");
+        console.log(this.form);
 
         SelectInput.make(this.refs.sort, {
             label: "정렬",
@@ -210,12 +211,7 @@ export default class TemplateSelection extends View {
         buttons.forEach((btn) => {
             this.on(btn, "click", this._handleClick.bind(this));
         });
-
-        // const searchInput = this.qs('#query');
-        // if (searchInput) {
-        //     this.on(searchInput, 'input', Helper.debounce(this._handleSearch.bind(this), 500));
-        // }
-
+        
         if (this.form) {
             this.on(this.form, "submit", (e) => {
                 e.preventDefault();

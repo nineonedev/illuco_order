@@ -254,3 +254,223 @@
         padding: 0.8rem 1rem 1rem 1rem;
     }
 }
+
+
+/* ===============================
+   Loupe Color Cards (lc-*)
+   독립 네임스페이스: 기존 no-* 과 충돌 없음
+   =============================== */
+
+.lc-desc {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.lc-cards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  @media (min-width: 560px) {
+    gap: 14px;
+  }
+}
+
+.lc-card {
+  --chip: #999999;
+
+  background: #fff;
+  border: 1px solid #e6e8eb;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .05);
+  transition: box-shadow .2s ease, border-color .2s ease, transform .05s ease;
+
+  &:hover { border-color: #d9dde2; box-shadow: 0 4px 18px rgba(16,24,40,.08); }
+  &:active { transform: translateY(1px); }
+
+  &__form { display: block; }
+  &__inner {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    row-gap: 12px;
+    padding: 14px;
+  }
+
+  /* Header */
+  &__header {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .lc-chip {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--chip);
+    border: 1px solid rgba(16,24,40,.08);
+    box-shadow: inset 0 0 0 4px rgba(255,255,255,.65);
+  }
+
+  .lc-title { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .lc-name  { font-size: 14px; line-height: 1.25; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lc-meta  { font-size: 11px; color: #6b7280; }
+
+  .lc-status { display: flex; align-items: center; justify-content: flex-end; }
+
+  /* Body */
+  &__body { }
+  .lc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+
+    @media (min-width: 560px) {
+      grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+  }
+
+  .lc-field { }
+  .lc-field__wrap { position: relative; display: block; }
+  .lc-input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 13px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+
+    &:disabled {
+        background: #f9fafb;    // 더 흐린 회색
+        border-color: #e5e7eb;
+        color: #9ca3af;
+        cursor: not-allowed;
+        opacity: .75;
+    }
+
+    &:read-only {
+        background: #fdfdfd;    // 거의 흰색, 차이를 살짝 줌
+        border-color: #e5e7eb;
+        color: #374151;         // 텍스트는 정상 색상
+        cursor: default;        // 마우스 커서는 기본
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+    }
+  }
+  .lc-input--color {
+    padding: 0 6px;
+  }
+
+  .lc-label {
+    position: absolute;
+    left: 10px;
+    top: -8px;
+    background: #fff;
+    padding: 0 6px;
+    font-size: 11px;
+    color: #6b7280;
+    border: 1px solid #eef0f3;
+    border-radius: 8px;
+  }
+
+  /* Actions */
+  .lc-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 8px;
+    border-top: 1px dashed #eceff3;
+  }
+}
+
+/* Switch */
+.lc-switch {
+  --h: 20px; --w: 38px; --knob: 14px;
+  position: relative; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;
+
+  input { display: none; }
+
+  &__slider {
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    background: #e5e7eb;
+    border-radius: var(--h);
+    transition: background .2s ease;
+    box-shadow: inset 0 0 0 1px rgba(16,24,40,.06);
+
+    &::after {
+      content: "";
+      position: absolute; top: 50%; left: 3px;
+      width: var(--knob); height: var(--knob);
+      transform: translateY(-50%);
+      background: #fff; border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(16,24,40,.2);
+      transition: left .2s ease;
+    }
+  }
+
+  input:checked + .lc-switch__slider { background: #2563eb; }
+  input:checked + .lc-switch__slider::after { left: calc(var(--w) - var(--knob) - 3px); }
+
+  &__label { font-size: 12px; color: #374151; }
+}
+
+/* Buttons (로컬 스타일) */
+.lc-btn {
+  --c: #111827;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid transparent;
+  font-size: 12px; font-weight: 600; line-height: 1; cursor: pointer; text-decoration: none;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
+
+  &--xs { height: 28px; padding: 0 10px; font-size: 12px; }
+
+  &--primary {
+    background: #2563eb; color: #fff; border-color: #2563eb;
+    &:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    &:active { background: #1e40af; }
+  }
+
+  &--danger-ol {
+    background: #fff; color: #dc2626; border-color: #f1d5d5;
+    &:hover { background: #fff5f5; border-color: #f3baba; }
+    &:active { background: #ffe8e8; }
+  }
+}
+
+/* Empty */
+.lc-empty {
+  padding: 24px;
+  border: 1px dashed #e5e7eb;
+  border-radius: 12px;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* 반응형 보완 */
+@media (max-width: 420px) {
+  .lc-card .lc-actions {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #fff 40%);
+    padding-top: 10px;
+  }
+}
+
+/* (선택) 넓은 화면에서 카드 2열로 보고 싶다면 주석 해제
+@media (min-width: 980px) {
+  .lc-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+*/

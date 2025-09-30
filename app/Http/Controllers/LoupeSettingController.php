@@ -172,8 +172,6 @@ class LoupeSettingController extends Controller
             
             $model = new LoupeSetting($data);
 
-            dd($data,$model);
-
             $this->repo()->save($model);
 
             // 프레임 컬러 sync
