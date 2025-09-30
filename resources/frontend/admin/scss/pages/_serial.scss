@@ -1,0 +1,174 @@
+/* =============== Product Spec Card =============== */
+.spec-card {
+    --spec-bg: #fff;
+    --spec-fg: #0f172a;
+    --spec-muted: #64748b;
+    --spec-border: #e2e8f0;
+    --spec-accent: #2563eb;
+    --spec-badge: #eff6ff;
+
+    background: var(--spec-bg);
+    color: var(--spec-fg);
+    border: 1px solid var(--spec-border);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+    overflow: hidden;
+
+    &__header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--spec-border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        &::before {
+            content: "";
+            width: 6px;
+            height: 22px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, var(--spec-accent), #60a5fa);
+            flex: none;
+        }
+    }
+
+    &__title {
+        font-size: clamp(16px, 2.2vw, 18px);
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+
+    &__body {
+        padding: 16px;
+        display: grid;
+        gap: 16px;
+    }
+
+    &__row {
+        display: grid;
+        gap: 16px;
+    }
+
+    /* 두 개의 표를 옆으로: 넓으면 2열, 좁으면 1열 */
+    &__tables {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 860px) {
+        &__tables {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+}
+
+/* =============== Spec Table =============== */
+.spec-table {
+    border: 1px solid var(--spec-border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+
+    &__title {
+        font-weight: 700;
+        color: var(--spec-muted);
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--spec-border);
+        background: #f8fafc;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+    thead th {
+        text-align: center;
+        font-weight: 700;
+        color: var(--spec-muted);
+        padding: 10px 8px;
+        background: #fbfdff;
+        border-bottom: 1px solid var(--spec-border);
+    }
+    tbody th {
+        text-align: left;
+        font-weight: 700;
+        color: var(--spec-fg);
+        padding: 10px 10px;
+        border-bottom: 1px solid #f1f5f9;
+        white-space: nowrap;
+    }
+    td {
+        text-align: center;
+        padding: 10px 8px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* 가독성 보정 */
+    .u-mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+            "Liberation Mono", monospace;
+    }
+    .u-deg::after {
+        content: "°";
+    }
+    .u-sign {
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* 스크롤 (작은 화면) */
+    @media (max-width: 640px) {
+        table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+}
+
+/* =============== Tags =============== */
+.spec-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    &__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--spec-badge);
+        color: var(--spec-fg);
+        border: 1px solid #dbeafe;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    &__label {
+        color: var(--spec-muted);
+        font-weight: 600;
+    }
+    &__value {
+        color: var(--spec-accent);
+    }
+}
+
+/* 다크 모드 옵션 (있으면) */
+.dark .spec-card {
+    --spec-bg: #0b1220;
+    --spec-fg: #e5e7eb;
+    --spec-muted: #94a3b8;
+    --spec-border: #1f2a44;
+    --spec-badge: rgba(37, 99, 235, 0.12);
+
+    background: linear-gradient(180deg, #0b1220, #0c1527);
+    .spec-table {
+        background: transparent;
+    }
+    .spec-table thead th {
+        background: rgba(37, 99, 235, 0.08);
+    }
+    .spec-table tbody th,
+    .spec-table td {
+        border-bottom-color: rgba(148, 163, 184, 0.14);
+    }
+}

@@ -73,11 +73,41 @@ class Order extends Entity
     }
 
     /**
-     * 주문 상태가 'preparing' 또는 'shipped'일 경우 수정 불가
+     * 편집 가능 여부
+     * 허용: NEW, CONFIRMED, PREPARING
+     * 금지: SHIPPED, COMPLETED, CANCELED 또는 소프트삭제 상태
+     */
+    public function isEditable(): bool
+    {
+        if (method_exists($this, 'trashed') && $this->trashed()) {
+            return false;
+        }
+
+        return in_array($this->order_status, [
+            OrderStatus::NEW,
+            OrderStatus::CONFIRMED,
+            OrderStatus::PREPARING,
+        ], true);
+    }
+
+    /**
+     * 출하/완료/취소 등으로 주문이 ‘잠금’ 상태인지
+     */
+    public function isLocked(): bool
+    {
+        return in_array($this->order_status, [
+            OrderStatus::SHIPPED,
+            OrderStatus::COMPLETED,
+            OrderStatus::CANCELED,
+        ], true);
+    }
+
+    /**
+     * (선택) 기존 호환: 최종 확정(잠금) 여부를 isLocked() 의미로 매핑
      */
     public function isFinalized(): bool
     {
-        return !in_array($this->order_status, [OrderStatus::NEW, OrderStatus::CONFIRMED]);
+        return $this->isLocked();
     }
 
     /**

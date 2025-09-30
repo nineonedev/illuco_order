@@ -218,268 +218,67 @@ class OrderItemController extends Controller
         ];
     }
 
-    // public function store(Request $request): array
-    // {
-    //     $result = $this->runInTransaction(function() use ($request) {
-    //         $payload = $request->all(); 
-    //         $order_id = $payload['order_id'] ?? null; 
-
-    //         $order = OrderRepository::make()->findOrFail($order_id);
-
-    //         // 기본 변수 추출
-    //         $productData = $payload['product'] ?? [];
-    //         $quantity    = $payload['quantity'] ?? 1;
-    //         $sets = $payload['sets'] ?? [];
-
-
-    //         // 제품 생성
-    //         $type = $productData['type'] ?? null; 
-    //         $product = new Product(array_merge($productData, [
-    //             'template_id' => $productData['template_id'],
-    //             'name' => $productData['name'],
-    //             'type' => $productData['type'],
-    //             'code' => $productData['code'],
-    //             'model' => $productData['model'],
-    //             'price' => $productData['price'],
-    //             'description' => $productData['description'] ?? null,
-    //         ]));
-            
-    //         $product = ProductRepository::make()->save($product);
-
-    //         if (!$product) {
-    //             throw new RuntimeException("제품 생성에 실패하였습니다."); 
-    //         }
-    //         $product->load(['template.fileattachment']);
-
-    //         // 서브 제품 생성
-            
-    //         if ($type) {
-    //             /** @var \Framework\Database\ORM\Entities\Entity|null $subProductClass */
-    //             $subProductClass = null;
-    //             $subProductData = $payload[$type];
-
-    //             switch ($type) {
-    //                 case Loupe::alias():
-    //                     $subProductClass = Loupe::class; 
-
-    //                     $useEngraving = $subProductData['use_engraving'] ?? false;
-                        
-    //                     if (!$useEngraving) {
-    //                         $subProductData['engraving_text'] = null;
-    //                     } else {
-    //                         $quantity = 1; 
-    //                     }
-
-    //                     break; 
-    //                 case Headlight::alias():
-    //                     $subProductClass = Headlight::class;
-
-    //                     $useEngraving = $subProductData['use_engraving'] ?? false;
-                        
-    //                     if (!$useEngraving) {
-    //                         $subProductData['engraving_text'] = null;
-    //                     } else {
-    //                         $quantity = 1; 
-    //                     }
-
-    //                     break; 
-    //             }
-
-    //             if ($subProductClass) {
-    //                 $subProductData = array_merge($subProductData, ['id' => $product->id]);
-    //                 $subProductEntity = new $subProductClass($subProductData);
-                    
-    //                 /** @var \Framework\Database\ORM\Repositories\Repository $repo */
-    //                 $repo = $subProductClass::repositoryClass()::make();
-
-    //                 $subProduct = $repo->save($subProductEntity);
-
-    //                 if (!$subProduct) {
-    //                     throw new RuntimeException("제품 확장에 실패하였습니다.");
-    //                 }
-
-    //                 $product->setRelation($type, $subProduct);
-    //             }
-    //         }
-
-
-    //         $setGroupId = $sets ? Str::uuid() : null; 
-
-    //         // 카트 아이템 생성
-    //         $orderItemData = array_merge([
-    //             'order_id'        => $order->id,
-    //             'product_id'     => $product->id,
-    //             'quantity'       => $quantity,
-    //         ], [
-    //             'set_group_id' => $setGroupId,
-    //             'is_main_item' => true,
-    //         ]);
-            
-    //         $orderItem = new OrderItem($orderItemData);
-    //         $orderItem = OrderItemRepository::make()->save($orderItem);
-    //         $orderItem->setRelation('product', $product);
-
-    //         if (!$orderItem) {
-    //             logger()->error("주문 아이템 추가 실패", [
-    //                 'order_id'     => $order->id,
-    //                 'product_id'  => $product->id,
-    //                 'quantity'    => $quantity,
-    //             ]);
-
-    //             throw new RuntimeException("주문 아이템 추가에 실패하였습니다.");
-    //         }
-
-    //         if ($sets) { 
-    //             $setGroupProducts = []; 
-
-    //             foreach ($sets as $index => $data) {
-    //                 $setGroupProduct = new Product($data['product'] ?? []); 
-    //                 $setGroupProduct = ProductRepository::make()->save($setGroupProduct);
-    //                 $quantity = $data['quantity'] ?? 1;
-    //                 $setGroupProduct->load(['template.fileattachment']);
-
-    //                 if (!$setGroupProduct) {
-    //                     throw new RuntimeException("세트 생성에 실패하였습니다.");
-    //                 }
-
-    //                 $subOrderItemData = [
-    //                     'order_id' => $order_id,
-    //                     'product_id' => $setGroupProduct->id,
-    //                     'quantity' => $quantity,
-    //                     'is_main_item' => false, 
-    //                     'set_group_id' => $setGroupId, 
-    //                     'set_group_sort' => $index,
-    //                 ];
-
-                    
-    //                 $subOrderItem = new OrderItem($subOrderItemData);
-    //                 $subOrderItem = OrderItemRepository::make()->save($subOrderItem);
-
-    //                 if (!$subOrderItem) {
-    //                     throw new RuntimeException("주문 아이템 추가에 실패하였습니다.");
-    //                 }
-
-    //                 $subOrderItem->setRelation('product', $setGroupProduct);
-    //                 $setGroupProducts[] = $subOrderItem;
-    //             }
-
-    //             usort($setGroupProducts, function ($a, $b) {
-    //                 return ($a->set_group_sort ?? 0) <=> ($b->set_group_sort ?? 0);
-    //             });
-
-    //             $orderItem->setRelation('sets', $setGroupProducts);
-    //         } else {
-    //             $orderItem->setRelation('sets', []);
-    //         }
-
-    //         return [
-    //             'message' => '기존 오더에 추가되었습니다.',
-    //             'data' => [
-    //                 'orderitem' => $orderItem->toArray(),
-    //             ],
-    //         ];
-    //     });
-
-    //     return $result->toResponse(); 
-    // }
-
-
-    public function update(string $orderItemId, Request $request)
+    public function update(string $id, Request $request)
     {
-        return $this->runInTransaction(function () use ($orderItemId, $request) {
+        return $this->runInTransaction(function () use ($id, $request) {
 
-            // 1) 대상 아이템 + 주문
             /** @var \App\Domains\Order\Entities\OrderItem $item */
             $item = OrderItemRepository::make()
                 ->with(['order'])
-                ->findOrFail($orderItemId);
+                ->findOrFail($id);
 
             $order = $item->order;
-            if (method_exists($order, 'isFinalized') && $order->isFinalized()) {
-                throw new RuntimeException('이미 진행된 주문은 수정할 수 없습니다.');
+
+            // ✅ 편집 가능 상태 확인 (NEW/CONFIRMED/PREPARING 허용)
+            if (method_exists($order, 'isEditable') && !$order->isEditable()) {
+                throw new RuntimeException('출하/완료된 주문은 수정할 수 없습니다.');
             }
 
-            // 2) 입력 검증 (단일 아이템 갱신)
+            // 1) 유효성: 수량만 갱신
             $request->validateOrFail([
-                'quantity'       => 'required|integer|min:1|max:9999',
-                'unit_price'     => 'nullable|integer|min:0',
-                'set_group_id'   => 'nullable|string|maxLength:64',
-                'set_group_sort' => 'nullable|integer|min:0|max:9999',
-                'is_main_item'   => 'nullable|boolean',
+                'quantity' => 'required|integer|min:1|max:10000',
             ]);
 
-            $quantity     = (int)$request->body('quantity');
-            $unitPriceIn  = $request->body('unit_price');
-            $setGroupId   = $request->body('set_group_id');
-            $setGroupSort = $request->body('set_group_sort');
-            $isMain       = $request->body('is_main_item');
+            $oldQty = (int)$item->quantity;
+            $newQty = (int)$request->body('quantity');
 
-            // 3) 적용
-            $item->quantity       = $quantity;
-            // unit_price 미지정 시 기존 값 유지
-            if ($unitPriceIn !== null && $unitPriceIn !== '') {
-                $item->unit_price = (int)$unitPriceIn;
-            }
-            $item->total_price    = (int)$item->unit_price * (int)$item->quantity;
+            if ($oldQty === $newQty) {
+                // 변화 없으면 합계만 보정 후 반환
+                $item->total_price = (float)$item->unit_price * (int)$item->quantity;
+                OrderItemRepository::make()->save($item);
+                $this->recalcOrderTotal($order);
 
-            if ($setGroupId !== null && $setGroupId !== '') {
-                $item->set_group_id = $setGroupId;
+                return $this->render(null, [
+                    'item'  => $item->toArray(),
+                    'order' => $order->toArray(),
+                ], '변경 사항이 없습니다.');
             }
-            if ($setGroupSort !== null && $setGroupSort !== '') {
-                $item->set_group_sort = (int)$setGroupSort;
-            }
-            if ($isMain !== null) {
-                $item->is_main_item = $isMain ? 1 : 0;
-            }
+
+            // 2) 메인 아이템 합계 재계산
+            $item->quantity    = $newQty;
+            $item->total_price = (float)$item->unit_price * $newQty;
 
             $saved = OrderItemRepository::make()->save($item);
             if (!$saved) {
                 throw new RuntimeException('주문 아이템 수정에 실패하였습니다.');
             }
 
+            // 3) 메인 아이템이면, 같은 set_group_id의 세트 아이템들도 수량/합계 동기화
+            if ((int)$item->is_main_item === 1 && $item->set_group_id) {
+                $this->syncSetGroupByMainQuantity($item, $oldQty, $newQty);
+            }
+
             // 4) 주문 합계 재계산
             $this->recalcOrderTotal($order);
 
-            return $this->render(null, [
-                'item'  => $item->toArray(),
-                'order' => $order->toArray(),
-            ], '주문 아이템이 수정되었습니다.');
-        });
-    }
-
-    public function destroy(string $orderItemId, Request $request)
-    {
-        return $this->runInTransaction(function () use ($orderItemId) {
-            // 1. 주문 아이템 조회
-            $orderItem = OrderItemRepository::make()
-                ->with(['order'])
-                ->find($orderItemId);
-
-            if (!$orderItem) {
-                throw new RuntimeException("주문 아이템을 찾을 수 없습니다.");
-            }
-
-            // 2. 연관된 CartItem 삭제
-            $cartItem = CartItemRepository::make()
-                ->query()
-                ->where('product_id', $orderItem->product_id)
-                ->where('cart_id', $orderItem->order->cart_id)
-                ->first();
-
-            if ($cartItem) {
-                CartItemRepository::make()->delete($cartItem);
-            }
-
-            // 3. 주문 아이템 삭제
-            $deleted = OrderItemRepository::make()->delete($orderItem);
-            if (!$deleted) {
-                throw new RuntimeException("주문 아이템 삭제 중 문제가 발생하였습니다.");
-            }
-
-            // 4. 주문 합계 재계산 (삭제 후)
-            $this->recalcOrderTotal($orderItem->order);
-
-            return $this->render(null, [], "주문 아이템이 삭제되었습니다.");
+            return $this->render(
+                null,
+                [
+                    'item'  => $item->toArray(),
+                    'order' => $order->toArray(),
+                ],
+                '주문 아이템이 수정되었습니다.'
+            );
         });
     }
 
@@ -491,11 +290,120 @@ class OrderItemController extends Controller
             ->where('order_id', $order->id)
             ->get();
 
-        $total = array_reduce($items, function ($acc, $it) {
-            return $acc + (int)($it->total_price ?? 0);
-        }, 0);
+        $total = 0.0;
+
+        foreach ($items as $it) {
+            $calc = (float)$it->unit_price * (int)$it->quantity;
+            if ((float)$it->total_price !== $calc) {
+                $it->total_price = $calc;
+                OrderItemRepository::make()->save($it);
+            }
+            $total += $calc;
+        }
 
         $order->total_amount = $total;
         OrderRepository::make()->save($order);
     }
+
+
+    public function destroy(string $id, Request $request)
+    {
+        return $this->runInTransaction(function () use ($id) {
+
+            /** @var \App\Domains\Order\Entities\OrderItem $orderItem */
+            $orderItem = OrderItemRepository::make()
+                ->with(['order'])
+                ->findOrFail($id);
+
+            $order = $orderItem->order;
+
+            // ✅ 편집 가능 상태 확인 (NEW/CONFIRMED/PREPARING 허용)
+            if (method_exists($order, 'isEditable') && !$order->isEditable()) {
+                throw new RuntimeException('출하/완료된 주문은 수정할 수 없습니다.');
+            }
+
+            // 삭제 대상 목록 만들기: 메인 아이템이면 동일 set_group_id의 세트 아이템들까지 포함
+            $itemsToDelete = [$orderItem];
+
+            if ((int)$orderItem->is_main_item === 1 && $orderItem->set_group_id) {
+                $children = OrderItemRepository::make()
+                    ->query()
+                    ->where('order_id', $orderItem->order_id)
+                    ->where('set_group_id', $orderItem->set_group_id)
+                    ->where('is_main_item', 0)
+                    ->get();
+
+                if (!empty($children)) {
+                    // 배열 병합
+                    foreach ($children as $child) {
+                        $itemsToDelete[] = $child;
+                    }
+                }
+            }
+
+            // 관련 CartItem 삭제 + OrderItem 삭제
+            foreach ($itemsToDelete as $it) {
+                // 연관된 CartItem 제거 (존재 시)
+                if (!empty($order->cart_id)) {
+                    $cartItem = CartItemRepository::make()
+                        ->query()
+                        ->where('product_id', $it->product_id)
+                        ->where('cart_id', $order->cart_id)
+                        ->first();
+
+                    if ($cartItem) {
+                        CartItemRepository::make()->delete($cartItem);
+                    }
+                }
+
+                // 주문 아이템 삭제
+                $deleted = OrderItemRepository::make()->delete($it);
+                if (!$deleted) {
+                    throw new RuntimeException("주문 아이템 삭제 중 문제가 발생하였습니다. (ID: {$it->id})");
+                }
+            }
+
+            // 주문 합계 재계산 (삭제 후)
+            $this->recalcOrderTotal($order);
+
+            return $this->render(null, [], "주문 아이템이 삭제되었습니다.");
+        });
+    }
+
+
+    /**
+     * 메인 아이템 수량 변경에 따라 같은 set_group_id의 세트 아이템 수량/합계를 동기화
+     *
+     * @param \App\Domains\Order\Entities\OrderItem $mainItem  변경된 메인 아이템
+     * @param int $oldMainQty  변경 전 메인 수량
+     * @param int $newMainQty  변경 후 메인 수량
+     */
+    private function syncSetGroupByMainQuantity(OrderItem $mainItem, int $oldMainQty, int $newMainQty): void
+    {
+        if ($oldMainQty <= 0 || !$mainItem->set_group_id) {
+            return;
+        }
+
+        $children = OrderItemRepository::make()
+            ->query()
+            ->where('order_id', $mainItem->order_id)
+            ->where('set_group_id', $mainItem->set_group_id)
+            ->where('is_main_item', 0)
+            ->get();
+
+        foreach ($children as $child) {
+            // 세트 기본수량 역산 (정수 보정)
+            $basePerMain = (int)floor(((int)$child->quantity) / $oldMainQty);
+            if ($basePerMain < 1) {
+                $basePerMain = 1; // 안전장치
+            }
+
+            $newChildQty      = $basePerMain * $newMainQty;
+            $child->quantity  = $newChildQty;
+            $child->total_price = (float)$child->unit_price * $newChildQty;
+
+            OrderItemRepository::make()->save($child);
+        }
+    }
+
 }

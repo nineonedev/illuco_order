@@ -130,7 +130,20 @@ use App\Domains\Product\Entities\Loupe;
             <div >
                 <div class="no-flex-between no-heading-margin">
                     <h2 class="no-order-restore__title">주문 제품 목록</h2>
+                    <span>총 주문 금액 <b class="no-order-total"><?= $order->total_amount ?> USD</b></span>
                 </div>
+
+                <?php foreach ($order->items as $item) : ?>
+                    <form   
+                        id="item-form-<?=$item->id?>"
+                        action="<?= route('admin.orderitems.update', ['id' => $item->id]) ?>"
+                        method="post"
+                    >
+                        <?= csrf_field() ?>
+                        <?= put_field() ?>
+                        <input type="hidden" name="id" value="<?= $item->id ?>">
+                    </form>
+                <?php endforeach; ?>
 
                 <div class="no-page-index-table-outer">
                     <table class="no-page-index-table">
@@ -198,26 +211,45 @@ use App\Domains\Product\Entities\Loupe;
                                         <?php endif; ?>
                                     </div>
                                 </td>
-                                <td><?= $item->quantity ?></td>
+                                <td>
+                                    <input 
+                                        form="item-form-<?=$item->id?>" 
+                                        class="no-normal-form" 
+                                        type="number" 
+                                        name="quantity" 
+                                        value="<?= $item->quantity ?>" 
+                                        step="1" 
+                                        min="1" 
+                                        max="10000"
+                                    >
+                                </td>
                                 <td>
                                     <div class="no-prod-attr-list__action">
-                                        <button 
-                                            type="button" 
-                                            data-action="update"
-                                            class="no-btn-primary-outline"
-                                        >
-                                            <span>수정</span>
-                                        </button>
-                                        <button 
-                                            type="button" 
-                                            data-action="delete"
-                                            class="no-btn-error-outline"
-                                        >
-                                            <span>삭제</span>
-                                        </button>
+
+                                    <button
+                                        type="submit"
+                                        form="item-form-<?= (int)$item->id ?>"
+                                        class="no-btn-primary-outline"
+                                        formaction=<?= route('admin.orderitems.update', ['id' => $item->id]) ?>
+                                        title="이 행만 업데이트"
+                                    >수정</button>
+                                    <button
+                                        type="submit"
+                                        form="item-form-<?= (int)$item->id ?>"
+                                        formaction="<?= route('admin.orderitems.destroy', ['id' => $item->id]) ?>"
+                                        formmethod="post"
+                                        name="_method" 
+                                        value="DELETE" 
+                                        class="no-btn-error-outline"
+                                        title="이 행만 삭제"
+                                    >삭제</button>
+
                                     </div>
+
                                 </td>
                             </tr>
+
+                            <!-- Set Product -->
                             <?php if (!empty($item->sets)) : ?>
                                 <?php foreach ($item->sets as $setItem): 
                                     $setProduct = $setItem->product;

@@ -19,6 +19,15 @@
     // padding-bottom: 12.8rem;
 }
 
+.no-normal-form {
+    border-radius: 0.2rem;
+    border: 1px solid var(--clr-table-border);
+
+    &:focus {
+        border-color: var(--clr-primary-main);
+    }
+}
+
 .no-form-hr {
     margin: 1.6rem 0;
     width: 100%;

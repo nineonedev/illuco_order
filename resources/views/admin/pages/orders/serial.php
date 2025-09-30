@@ -1,6 +1,7 @@
 <?php
 
 use App\Domains\Product\Entities\ProductSerial;
+use App\Domains\Product\Entities\Loupe; // ⬅️ 루페 렌더용 추가
 
 ?>
 
@@ -94,6 +95,154 @@ use App\Domains\Product\Entities\ProductSerial;
                         </div>
                     </section>
 
+                    <?php
+                    // =====================[ 루페 전용 출력 ]=====================
+                    // 제품 타입이 루페고 서브엔티티가 있으면 시력정보/모렌즈/자렌즈 + 옵션 태그 출력
+                    $type = $product->type ?? null;
+                    if ($type) {
+                        $product->load([$type]);
+                    }
+                    $sub  = $type ? ($product->{$type} ?? null) : null;
+
+                    $fmtSigned = function ($v, int $dec = 2) {
+                        if ($v === null || $v === '' || $v === '-') return '-';
+                        return sprintf('%+.' . $dec . 'f', (float)$v);
+                    };
+                    $fmtAxis = function ($v) {
+                        if ($v === null || $v === '' || $v === '-') return '-';
+                        return (string)intval($v);
+                    };
+
+                    if ($type === \App\Domains\Product\Entities\Loupe::alias() && $sub):
+                    $a = $sub->getAttributes();
+                    $odS = $a['od_sph'] ?? null; $odC = $a['od_cyl'] ?? null; $odA = $a['od_axis'] ?? null; $odAdd = $a['od_add'] ?? null;
+                    $osS = $a['os_sph'] ?? null; $osC = $a['os_cyl'] ?? null; $osA = $a['os_axis'] ?? null; $osAdd = $a['os_add'] ?? null;
+
+                    // 모렌즈/자렌즈 계산 (요약)
+                    $opt = $a['add_option'] ?? null; // include|ignore|zero_diopter
+                    $molOdS = ($opt === 'zero_diopter') ? 0 : $odS;  $molOsS = ($opt === 'zero_diopter') ? 0 : $osS;
+                    $jarOdS = ($odS !== null && $odAdd !== null) ? (float)$odS + (float)$odAdd : null;
+                    $jarOsS = ($osS !== null && $osAdd !== null) ? (float)$osS + (float)$osAdd : null;
+                    ?>
+                    <section class="spec-card" aria-label="루페 시력정보 및 렌즈 계산 요약">
+                        <header class="spec-card__header">
+                            <h3 class="spec-card__title">루페 시력정보 & 렌즈 계산 요약</h3>
+                        </header>
+
+                        <div class="spec-card__body">
+
+                            <div class="spec-card__tables">
+                            <!-- 처방전 표 -->
+                            <div class="spec-table">
+                                <div class="spec-table__title">처방전 (Prescription)</div>
+                                <table aria-label="처방전 수치">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>SPH</th>
+                                    <th>CYL</th>
+                                    <th>Axis</th>
+                                    <th>ADD</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">OD</th>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odS)) ?></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odC)) ?></td>
+                                    <td class="u-mono"><?= e($fmtAxis($odA)) ?><span class="u-deg"></span></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odAdd)) ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">OS</th>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($osS)) ?></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($osC)) ?></td>
+                                    <td class="u-mono"><?= e($fmtAxis($osA)) ?><span class="u-deg"></span></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($osAdd)) ?></td>
+                                </tr>
+                                </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 렌즈 계산 요약 -->
+                            <div class="spec-table">
+                                <div class="spec-table__title">렌즈 계산 요약</div>
+                                <table aria-label="렌즈 계산 요약">
+                                <thead>
+                                <tr>
+                                    <th>렌즈</th>
+                                    <th>OD · S</th><th>OD · C</th><th>OD · A</th><th>OD · ADD</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">처방전</th>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odS)) ?></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odC)) ?></td>
+                                    <td class="u-mono"><?= e($fmtAxis($odA)) ?><span class="u-deg"></span></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odAdd)) ?></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">모렌즈</th>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($molOdS)) ?></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odC)) ?></td>
+                                    <td class="u-mono"><?= e($fmtAxis($odA)) ?><span class="u-deg"></span></td>
+                                    <td>–</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">자렌즈</th>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($jarOdS)) ?></td>
+                                    <td class="u-mono u-sign"><?= e($fmtSigned($odC)) ?></td>
+                                    <td class="u-mono"><?= e($fmtAxis($odA)) ?><span class="u-deg"></span></td>
+                                    <td>–</td>
+                                </tr>
+                                </tbody>
+                                </table>
+                            </div>
+                            </div>
+
+                            <!-- 옵션 태그 -->
+                            <div class="spec-card__row">
+                            <div class="spec-tags">
+                                <?php
+                                // 재사용 가능한 태그 렌더 (필요 없는 필드는 걸러냄)
+                                $labels = \App\Domains\Product\Entities\Loupe::LABELS;
+                                $map = [
+                                'type' => '루페 종류',
+                                'frame_type' => '프레임 종류',
+                                'working_distance' => '작업 거리 (mm)',
+                                'pd_right' => '우안 동공거리 (PD Right)',
+                                'pd_left'  => '좌안 동공거리 (PD Left)',
+                                'pd_total' => '총 동공거리 (PD Total)',
+                                'vertex_distance' => '정점거리 (mm)',
+                                'add_option' => '추가 옵션',
+                                'engraving_text' => '각인',
+                                ];
+
+                                $exclude = ['od_sph','os_sph','od_cyl','os_cyl','od_axis','os_axis','od_add','os_add','id'];
+                                foreach ($map as $key => $label):
+                                if (in_array($key, $exclude, true)) continue;
+                                $val = $a[$key] ?? null; if ($val === null || $val === '') continue;
+
+                                // 라벨 매핑(가능하면)
+                                if ($key === 'add_option')      { $val = $labels['add_option_'.$val] ?? $val; }
+                                if ($key === 'frame_type')      { /* 필요 시 코드→이름 변환 로직 연결 */ }
+                                ?>
+                                <span class="spec-tags__item">
+                                    <span class="spec-tags__label"><?= e($map[$key]) ?></span>
+                                    <span class="spec-tags__value"><?= e($val) ?></span>
+                                </span>
+                                <?php endforeach; ?>
+                            </div>
+                            </div>
+
+                        </div>
+                        </section>
+                    <?php
+                    // ====================[ / 루페 전용 출력 끝 ]==================
+                    endif;
+                    ?>
+
                     <section class="no-order-summary">
                         <h3 class="no-order-summary__title">주문 정보</h3>
                         <div class="no-order-summary__grid">
@@ -128,7 +277,8 @@ use App\Domains\Product\Entities\ProductSerial;
                     </section>
 
                     <?php if (!empty($siblings ?? [])) : ?>
-                    <!-- <section>
+                    <!--
+                    <section>
                         <h3 class="no-order-update__title">동일 Prefix 시리얼(최근)</h3>
                         <div class="no-page-index-table-outer">
                             <table class="no-page-index-table">
@@ -150,7 +300,8 @@ use App\Domains\Product\Entities\ProductSerial;
                                 </tbody>
                             </table>
                         </div>
-                    </section> -->
+                    </section>
+                    -->
                     <?php endif; ?>
                 </div>
 
