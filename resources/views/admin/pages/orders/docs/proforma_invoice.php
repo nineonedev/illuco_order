@@ -129,8 +129,8 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
         <?php for ($i = 0; $i < 16; $i++):
           $item = $items[$i] ?? null; 
           $orgIndex = $i+1;  
-          $storedUnitPrice = $entity->get("unit_price_{$orgIndex}") ?? '';
-          $unitPrice = $storedUnitPrice ?? ($item ? $item->unit_price : '') ;
+          $storedUnitPrice = (float) $entity->get("unit_price_{$orgIndex}") ?? '';
+          $unitPrice = $storedUnitPrice > 0 ? $storedUnitPrice :  ($item ? $item->unit_price : '') ;
         ?>
           <tr>
             <td><?= $item ? $no++ : '&nbsp;' ?></td>

@@ -13,6 +13,7 @@
         <p>등록된 사용자의 주문을 대행 할 수 있습니다.</p>
     </div>
 
+    <?php if (user()->isDealer()): ?>
     <?php if (!empty($dealerMemo) && trim((string)$dealerMemo->memo_general) !== ''): ?>
     <section class="no-dealer-memo-inline --compact">
         <header class="no-dealer-memo-inline__head">
@@ -43,11 +44,11 @@
     <section class="no-dealer-memo-inline --empty">
         <div class="no-dealer-memo-inline__empty">
             <i class="fa-light fa-message-slash"></i>
-            <span>선택된 대리점의 일반 메모가 없습니다.</span>
+            <span>메모가 없습니다.</span>
         </div>
     </section>
     <?php endif; ?>
-
+    <?php endif; ?>
 
 
     <div class="no-page-flex">

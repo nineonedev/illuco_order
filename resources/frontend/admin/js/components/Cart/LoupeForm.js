@@ -369,8 +369,8 @@ export default class LoupeForm extends View {
             : null
         ),
 
-        "loupe[od_sph]": { min: -20, max: 20, step: 0.25 },
-        "loupe[os_sph]": { min: -20, max: 20, step: 0.25 },
+        "loupe[od_sph]": { min: -15, max: 15, step: 0.25 },
+        "loupe[os_sph]": { min: -15, max: 15, step: 0.25 },
         "loupe[od_cyl]": { min: -10, max: 0, step: 0.25 },
         "loupe[os_cyl]": { min: -10, max: 0, step: 0.25 },
         "loupe[od_axis]": { min: 0, max: 180 },
@@ -558,31 +558,10 @@ export default class LoupeForm extends View {
         const osAxis = getVal("loupe[os_axis]");
         const osAdd = getVal("loupe[os_add]");
 
-        const odSum = odSph + odCyl;
-        const osSum = osSph + osCyl;
 
         const errors = [];
 
-        const violated = odSum < -10 || odSum > 6 || osSum < -10 || osSum > 6;
-        if (violated && !this._warnedSumOnce) {
-            this._warnedSumOnce = true;
-            alert("SPH + CYL 합이 -10 ~ +6 범위를 벗어나 제작이 불가합니다.");
-        }
-
-        if (odSum < -10 || odSum > 6) {
-            errors.push(
-                `OD (오른쪽 눈) SPH + CYL 합이 -10 ~ +6 범위를 벗어났습니다. 현재 ${odSum.toFixed(
-                    2
-                )}`
-            );
-        }
-        if (osSum < -10 || osSum > 6) {
-            errors.push(
-                `OS (왼쪽 눈) SPH + CYL 합이 -10 ~ +6 범위를 벗어났습니다. 현재 ${osSum.toFixed(
-                    2
-                )}`
-            );
-        }
+       
         if (odAxis < 0 || odAxis > 180) {
             errors.push(`OD axis 값은 0~180 사이여야 합니다.`);
         }
@@ -600,8 +579,8 @@ export default class LoupeForm extends View {
         }
 
         let count = 0;
-        if (odSph + odCyl !== 0) count += 1;
-        if (osSph + osCyl !== 0) count += 1;
+        if (odSph !== 0 || odCyl !== 0) count += 1;
+        if (osSph !== 0 || osCyl !== 0) count += 1;
 
         this._lensCount = count;
         this._renderAdditionalProducts();

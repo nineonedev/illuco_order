@@ -185,7 +185,12 @@ use App\Domains\Communication\Enums\ClaimStatus;// 실제 네임스페이스에 
                 <a href="<?= route('admin.claims.index') ?>" data-action="cancel" class="no-btn-primary-outline --sm">
                     <span>취소</span>
                 </a>
-                <button type="button" class="no-btn-error-outline --sm" data-action="delete">
+                <button 
+                    type="button" 
+                    class="no-btn-error-outline --sm" 
+                    id="delete-btn" 
+                    data-action="<?= route('admin.claims.destroy', ['id' => $claim->id])?>" 
+                    data-id="<?=$claim->id?>">
                     <span>삭제</span>
                 </button>
                 <button type="submit" class="no-btn-primary --sm">

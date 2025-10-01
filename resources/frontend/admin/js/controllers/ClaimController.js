@@ -142,12 +142,17 @@ export default class ClaimController extends Controller {
 
 
         const refreshBtn = document.getElementById('refresh-btn'); 
+        const deleteBtn = document.getElementById('delete-btn'); 
 
         if(refreshBtn) {
             refreshBtn.addEventListener('click', () => {
                 this.productZone.setState({template: {}});
                 this.customerZone.setState({customer: {}});
             });
+        }
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', this._destroy.bind(this));
         }
 
         this._listen("fetch.customers", this._fetchAllCustomers.bind(this));
@@ -158,7 +163,6 @@ export default class ClaimController extends Controller {
 
         this.form.addEventListener("submit", this._store.bind(this));
     }
-
     async create() {
         this._logger.info("create");
         this._prepare();
