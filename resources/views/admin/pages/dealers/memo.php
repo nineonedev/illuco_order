@@ -6,13 +6,24 @@
 <?php section('content') ?>
 <div class="no-form-container">
     <div class="no-page-row">
-        <div class="no-page-head">
-            <h1 class="no-heading-sm">대리점 메모</h1>
-            <div class="no-text-xs no-text-muted" style="margin-top:6px;">
-                <p class="no-body-lg">대리점: <strong><?= e($dealer->name ?? '') ?></strong></p>
-                <p>코드: <?= e($dealer->dealer->code ?? '') ?></p>
+        <div class="dealer-price-header" data-component="dealer-price-header">
+            <div class="dealer-price-header__title">
+                <h1 class="dealer-price-header__h1">대리점 메모</h1>
             </div>
+
+            <dl class="dealer-price-header__meta">
+                <div class="dealer-price-header__item">
+                <dt class="dealer-price-header__label">대리점</dt>
+                <dd class="dealer-price-header__value"><?= e($dealer->name ?? '') ?></dd>
+                </div>
+
+                <div class="dealer-price-header__item">
+                <dt class="dealer-price-header__label">코드</dt>
+                <dd class="dealer-price-header__value"><?= e($dealer->dealer->code ?? '') ?></dd>
+                </div>
+            </dl>
         </div>
+
 
         <form id="frm" method="post" enctype="multipart/form-data"
               action="<?= route('admin.dealer-memo.save', ['id' => $dealer->id]) ?>">

@@ -42,6 +42,13 @@ class Paginator
             }
         }
     }
+    
+    public function mutateItems(callable $fn): void
+    {
+        foreach ($this->items as $k => $item) {
+            $fn($item, $k);
+        }
+    }
 
 
     public function items(): Collection

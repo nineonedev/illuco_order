@@ -435,14 +435,46 @@ class ProductTemplateController extends Controller
                     break;
             }
         } else {
-            $query->orderByDesc('sort_order')->orderByDesc('created_at');
+            $query->orderByDesc('created_at');
         }
 
         $perPage = $request->query('perpage', 15);
         $page = $request->query('page', 1);
 
         $paginator = $query->paginate($perPage, $page);
+
+                // ✅ [대리점 전용] 목록 가격에 대리점 단가 반영
+        if (user()->isDealer()) {
+            $dealerId = (int) user()->dealer->id;
+
+            // [product_template_id => price] 맵 구성
+            $dealerPrices = DealerPriceRepository::make()
+                ->query()
+                ->where('dealer_id', $dealerId)
+                ->where('is_active', 1)
+                ->get();
+
+            $priceMap = [];
+            foreach ($dealerPrices as $dp) {
+                $tplId = (int) ($dp->product_template_id ?? 0);
+                if ($tplId > 0) {
+                    $priceMap[$tplId] = (float) $dp->price;
+                }
+            }
+
+            $paginator->mutateItems(function ($item) use ($priceMap) {
+                $id = (int) ($item->id ?? 0);
+                if ($id && isset($priceMap[$id])) {
+                    $item->original_price = $item->original_price ?? ($item->price ?? null);
+                    $item->dealer_price   = $priceMap[$id];
+                    $item->price          = $priceMap[$id];
+                }
+            });
+        }
+
+        // 이후에 JSON 변환
         $templates = $request->expectsJson() ? $paginator->toArray() : $paginator;
+
 
         // 카테고리 목록도 같이 내려줌
         $categoryQuery = CategoryRepository::make()

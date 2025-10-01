@@ -46,33 +46,39 @@ class DealerPriceController extends Controller
             $user = UserRepository::make()->with([UserType::DEALER])->find($id);
             if (!$user) throw new RuntimeException('해당 사용자가 존재하지 않습니다.');
             $dealer = $user->{UserType::DEALER} ?? null;
-            if (!$dealer) throw new RuntimeException('딜러가 아닌 사용자입니다.');
+            if (!$dealer) throw new RuntimeException('대리점이 아닌 사용자입니다.');
             $id = (int)$dealer->id;
 
             $tplId    = (int)$request->body('product_template_id');
             $price    = (float)$request->body('price');
             $isActive = (int)($request->body('is_active', 0) ? 1 : 0);
 
+            if (!$tplId){
+                throw new RuntimeException("제품을 선택해주세요.");
+            }
+
             // upsert
-            $repo  = DealerPriceRepository::make();
-            $model = $repo->query()
+            $model = DealerPriceRepository::make()->query()
                 ->where('dealer_id', $id)
                 ->where('product_template_id', $tplId)
                 ->first();
 
             if ($model) {
-                $model->price = $price;
-                $model->is_active = $isActive;
-            } else {
-                $model = new DealerPrice([
-                    'dealer_id' => $id,
-                    'product_template_id' => $tplId,
-                    'price' => $price,
-                    'is_active' => $isActive,
-                ]);
+                throw new RuntimeException("이미 등록된 모델입니다.");
             }
 
-            $repo->save($model);
+            $model = new DealerPrice([
+                'dealer_id' => $id,
+                'product_template_id' => $tplId,
+                'price' => $price,
+                'is_active' => $isActive,
+            ]);
+
+            $saved = DealerPriceRepository::make()->save($model);
+
+            if (!$saved) {
+                throw new RuntimeException("단가 등록 중 문제가 발생하였습니다.");
+            }
 
             return $this->render(null, ['id' => $model->id], '대리점 단가가 저장되었습니다.');
         });

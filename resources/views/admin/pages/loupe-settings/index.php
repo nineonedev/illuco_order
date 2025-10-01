@@ -212,7 +212,7 @@
                         <div>
                             <div class="no-text-sm"><strong><?= e($s->template->name ?? '-') ?></strong></div>
                             <div class="no-text-xs no-text-muted">
-                            <?= e($s->template->model ?? '-') ?> · <?= e($s->template->code ?? '-') ?>
+                            <?= e($s->template->model ?? '-') ?>
                             </div>
                         </div>
                         </div>

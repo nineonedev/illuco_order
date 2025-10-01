@@ -125,7 +125,10 @@
                                     <div class="no-img-label__image">
                                         <img src="<?= $tpl->fileattachment[0]->upload_path ?>" alt="">
                                     </div>
-                                    <span class="no-img-label__label"><?= $tpl->name ?></span>
+                                    <div>
+                                        <p class="no-img-label__label"><?= $tpl->name ?></p>
+                                        <small class="no-text-xs no-text-muted"><?= $tpl->model ?></small>
+                                    </div>
                                 </div>
                             </td>
 

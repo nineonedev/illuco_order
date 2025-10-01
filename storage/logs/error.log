@@ -99367,3 +99367,762 @@ Stack trace:
     "meta": []
 }
 --------------------------------------------------------------------------------
+[2025-09-30 23:46:33] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 00:10:42] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 01:17:36] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 01:23:45] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 01:24:05] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 01:24:25] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 01:39:48] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:03:38] ERROR: model: 이미 존재하는 model입니다.
+{
+    "code": 422,
+    "message": "model: 이미 존재하는 model입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:03:41] ERROR: model: 이미 존재하는 model입니다.
+{
+    "code": 422,
+    "message": "model: 이미 존재하는 model입니다.",
+    "exception": "Framework\\Support\\Exceptions\\ValidationException",
+    "file": "\/var\/www\/html\/framework\/Http\/FormRequest.php",
+    "line": 89,
+    "trace": "#0 \/var\/www\/html\/framework\/Http\/FormRequest.php(38): Framework\\Http\\FormRequest->failedValidation()\n#1 [internal function]: Framework\\Http\\FormRequest->__construct(Array, Array, Array, Array, Array)\n#2 \/var\/www\/html\/framework\/Core\/Reflector.php(97): ReflectionClass->newInstanceArgs(Array)\n#3 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Reques...', Array)\n#4 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Reques...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Reques...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Reflector.php(146): Framework\\Core\\Application->make('App\\\\Http\\\\Reques...')\n#7 \/var\/www\/html\/framework\/Core\/Reflector.php(40): Framework\\Core\\Reflector->resolveDependencies(Array)\n#8 \/var\/www\/html\/framework\/Core\/Container.php(161): Framework\\Core\\Reflector->call(Array, Array)\n#9 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(58): Framework\\Core\\Container->call(Array, Array)\n#10 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(30): Framework\\Routing\\ControllerDispatcher->invoke(Object(App\\Http\\Controllers\\Product\\ProductTemplateController), 'store', Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#11 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#12 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#13 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#14 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#17 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#18 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#19 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#20 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#21 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#22 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#23 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:05:10] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:05:34] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:05:45] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:07:10] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:07:18] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:07:25] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:08:01] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:08:03] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:08:41] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:08:47] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:08:52] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:08:57] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:08:59] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:09:01] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:09:03] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:10:36] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:13:18] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:13:25] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:13:34] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:29:26] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:29:33] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:29:37] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:29:40] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:29:55] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:29:56] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:30:07] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:30:12] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:31:32] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:32:40] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:32:45] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:34:00] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:34:23] ERROR: syntax error, unexpected 'if' (T_IF)
+{
+    "code": 500,
+    "message": "syntax error, unexpected 'if' (T_IF)",
+    "exception": "ParseError",
+    "file": "\/var\/www\/html\/app\/Http\/Controllers\/DealerPriceController.php",
+    "line": 69,
+    "trace": "#0 \/var\/www\/html\/vendor\/composer\/ClassLoader.php(428): Composer\\Autoload\\includeFile('\/var\/www\/html\/v...')\n#1 [internal function]: Composer\\Autoload\\ClassLoader->loadClass('App\\\\Http\\\\Contro...')\n#2 [internal function]: spl_autoload_call('App\\\\Http\\\\Contro...')\n#3 \/var\/www\/html\/framework\/Core\/Reflector.php(72): class_exists('App\\\\Http\\\\Contro...')\n#4 \/var\/www\/html\/framework\/Core\/Container.php(107): Framework\\Core\\Reflector->build('App\\\\Http\\\\Contro...', Array)\n#5 \/var\/www\/html\/framework\/Core\/Container.php(77): Framework\\Core\\Container->resolve('App\\\\Http\\\\Contro...', Array)\n#6 \/var\/www\/html\/framework\/Core\/Application.php(170): Framework\\Core\\Container->make('App\\\\Http\\\\Contro...', Array)\n#7 \/var\/www\/html\/framework\/Routing\/ControllerDispatcher.php(29): Framework\\Core\\Application->make('App\\\\Http\\\\Contro...')\n#8 \/var\/www\/html\/framework\/Routing\/Router.php(72): Framework\\Routing\\ControllerDispatcher->dispatch(Object(Framework\\Http\\Request), Object(Framework\\Routing\\Route))\n#9 \/var\/www\/html\/framework\/Http\/Kernel.php(50): Framework\\Routing\\Router->dispatch(Object(Framework\\Http\\Request))\n#10 [internal function]: Framework\\Http\\Kernel->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#11 \/var\/www\/html\/framework\/Http\/Pipeline.php(80): call_user_func(Object(Closure), Object(Framework\\Http\\Request))\n#12 \/var\/www\/html\/app\/Http\/Middlewares\/AuthMiddleware.php(24): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#13 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\AuthMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#14 \/var\/www\/html\/app\/Http\/Middlewares\/CsrfMiddleware.php(35): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#15 \/var\/www\/html\/framework\/Http\/Pipeline.php(72): App\\Http\\Middlewares\\CsrfMiddleware->handle(Object(Framework\\Http\\Request), Object(Closure))\n#16 \/var\/www\/html\/framework\/Http\/Pipeline.php(57): Framework\\Http\\Pipeline->Framework\\Http\\{closure}(Object(Framework\\Http\\Request))\n#17 \/var\/www\/html\/framework\/Http\/Kernel.php(51): Framework\\Http\\Pipeline->then(Object(Closure))\n#18 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#19 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#20 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:37:04] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:38:13] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:38:16] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:38:31] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:39:30] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:39:37] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:39:41] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:39:48] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:40:28] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:40:37] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:40:40] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:40:53] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:40:59] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:41:02] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:41:43] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:41:46] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:41:52] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:41:54] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:42:00] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:42:12] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:50:13] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 02:50:41] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 03:59:03] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 04:00:24] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 04:00:41] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 04:00:51] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 04:00:53] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------
+[2025-10-01 04:00:58] ERROR: 404 Not Found
+{
+    "code": 404,
+    "message": "404 Not Found",
+    "exception": "Framework\\Support\\Exceptions\\Http\\NotFoundException",
+    "file": "\/var\/www\/html\/framework\/Http\/Kernel.php",
+    "line": 38,
+    "trace": "#0 \/var\/www\/html\/framework\/Core\/Application.php(129): Framework\\Http\\Kernel->handle(Object(Framework\\Http\\Request))\n#1 \/var\/www\/html\/index.php(12): Framework\\Core\\Application->handleRequest(Object(Framework\\Http\\Request))\n#2 {main}",
+    "meta": []
+}
+--------------------------------------------------------------------------------

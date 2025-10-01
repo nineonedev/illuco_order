@@ -160,7 +160,7 @@ export default class DealerPriceController extends Controller {
             this._activeButton &&
             typeof this._activeButton.setState === "function"
         ) {
-            this._activeButton.setState({ label: template.name });
+            this._activeButton.setState({ label: `${template.name} - ${template.model}` });
         }
 
         if (this._activeButtonEl) {
@@ -322,7 +322,7 @@ export default class DealerPriceController extends Controller {
             }
         } catch (err) {
             console.error(err);
-            alert("요청 처리 중 오류가 발생했습니다.");
+            // alert("요청 처리 중 오류가 발생했습니다.");
         } finally {
             this.loader.hide();
             submitter && (submitter.disabled = false);

@@ -144,21 +144,29 @@ export default class ProductTemplateController extends Controller {
         this._prepare();
 
         this.form.addEventListener('submit', async (e) => {
-            const result = await this._process(e, (data, action) => this._ajax.post(action, data, true))
-            
-            if (!result.success) {
-                return; 
-            }
+            this.loader.show();
 
-            const {data} = result;
-            
-            if (data.redirect) {
-                location.href = data.redirect; 
-                return;
-            }
+            try {
+                const result = await this._process(e, (data, action) => this._ajax.post(action, data, true))
+                
+                if (!result.success) {
+                    return; 
+                }
 
-            if (this.cancelBtn) {
-                this.cancelBtn.click();
+                const {data} = result;
+                
+                if (data.redirect) {
+                    location.href = data.redirect; 
+                    return;
+                }
+
+                if (this.cancelBtn) {
+                    this.cancelBtn.click();
+                }
+            } catch {
+
+            } finally {
+                this.loader.hide(); 
             }
 
         });
@@ -167,12 +175,19 @@ export default class ProductTemplateController extends Controller {
     async _destroy(action, data) {
         if (!confirm("정말로 삭제하시겠습니까?")) return;
 
-        const result = await this._ajax.delete(action, data);
-        this._logger.success(result);
+        this.loader.show();
+        try {
+            const result = await this._ajax.delete(action, data);
+            this._logger.success(result);
+            if (result.success) {
+                this.cancelBtn?.click();
+            }
+        } catch {
 
-        if (result.success) {
-            this.cancelBtn?.click();
+        } finally {
+            this.loader.hide(); 
         }
+
     }
 
     async edit() {
@@ -180,10 +195,16 @@ export default class ProductTemplateController extends Controller {
         this._prepare();
 
         this.form.addEventListener('submit', async (e) => {
-            
-            const result = await this._process(e, (data, action) => this._ajax.put(action, data, true))
-            if (result?.success) {
-                location.reload();
+            this.loader.show(); 
+
+            try {
+                const result = await this._process(e, (data, action) => this._ajax.put(action, data, true))
+                if (result?.success) {
+                    location.reload();
+                }
+            } catch {}
+            finally {
+                this.loader.hide(); 
             }
             
         });

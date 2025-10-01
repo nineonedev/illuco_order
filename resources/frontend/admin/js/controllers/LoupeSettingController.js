@@ -21,63 +21,6 @@ export default class LoupeSettingController extends Controller {
         this._logger.info("loupe-settings.index");
         this._prepare();
         this._handleListDelete(); // 선택삭제/개별삭제(목록 페이지용)
-
-        // 전체선택 / 선택삭제
-        const deleteBtn = document.getElementById('select-delete-btn');
-        const chkAll = document.getElementById('chk-all');
-        const chkItems = document.querySelectorAll('input[name="checked_ids[]"]');
-        const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-
-        const updateDeleteButtonState = () => {
-        const count = Array.from(chkItems).filter(c => c.checked).length;
-        if (deleteBtn) {
-            deleteBtn.disabled = count === 0;
-            deleteBtn.querySelector('span').textContent = count > 0 ? `총 ${count}개 선택삭제` : '선택삭제';
-        }
-        };
-
-        chkItems.forEach(c => c.addEventListener('change', () => {
-        if (chkAll) chkAll.checked = Array.from(chkItems).every(x => x.checked);
-        updateDeleteButtonState();
-        }));
-
-        chkAll?.addEventListener('change', () => {
-        const on = chkAll.checked;
-        chkItems.forEach(c => c.checked = on);
-        updateDeleteButtonState();
-        });
-
-        deleteBtn?.addEventListener('click', async () => {
-        const checked = Array.from(chkItems).filter(c => c.checked);
-        if (checked.length === 0) { alert('삭제할 항목을 선택해주세요.'); return; }
-        if (!confirm(`정말로 ${checked.length}개의 항목을 삭제하시겠습니까?`)) return;
-
-        // 각 행의 개별 삭제 버튼에서 URL 추출 → 순차 삭제
-        for (const c of checked) {
-            const row = c.closest('tr');
-            const actionBtn = row?.querySelector('[data-action][data-method="delete"]');
-            const url = actionBtn?.getAttribute('data-action');
-            if (!url) continue;
-
-            try {
-            const body = new FormData();
-            body.append('_method', 'delete');
-            if (csrf) body.append('_token', csrf);
-
-            await fetch(url, {
-                method: 'POST',
-                headers: { 'X-Requested-With': 'XMLHttpRequest', ...(csrf ? {'X-CSRF-TOKEN': csrf} : {}) },
-                body
-            });
-            } catch (e) {
-            console.error('삭제 실패:', e);
-            }
-        }
-        location.reload();
-        });
-
-        updateDeleteButtonState();
-
     }
 
     async create() {
@@ -285,7 +228,7 @@ export default class LoupeSettingController extends Controller {
         if (idInput) idInput.value = template.id;
 
         // 버튼 라벨 갱신
-        this._activeButton?.setState?.({ label: template.name });
+        this._activeButton?.setState?.({ label: `${template.name} - ${template.model}` });
 
         // 모달 닫고 컨텍스트 초기화
         this.modal.setState({ open: false, header: "", content: "" });
@@ -317,20 +260,35 @@ export default class LoupeSettingController extends Controller {
     }
 
     _handleListDelete() {
+        
         const deleteBtn = document.getElementById("select-delete-btn");
         const chkAll = document.getElementById("chk-all");
         const chkItems = document.querySelectorAll('[name="checked_ids[]"]');
 
         // 개별 삭제 버튼(행 액션)
         const singleDeleteButtons = document.querySelectorAll(
-            '[data-item-action="delete"]'
+            '[data-method="delete"]'
         );
-        singleDeleteButtons.forEach((link) => {
-            link.addEventListener("click", async (e) => {
-                e.preventDefault();
-                const href = link.getAttribute("href");
-                if (!href) return;
-                await this.destroy(href);
+        singleDeleteButtons.forEach(button => {
+            button.addEventListener('click', async e => {
+                e.preventDefault(); 
+
+                if (!confirm("정말로 삭제하시겠습니까?")) return;
+
+                const action = button.getAttribute('data-action');
+                this.loader.show();
+
+                try {
+                    const result = await new Ajax(false).delete(action);
+
+                    if (result.success) {
+                        location.reload();
+                    } else {
+                        alert("삭제에 실패했습니다.");
+                    }
+                } finally {
+                    this.loader.hide();
+                }
             });
         });
 
