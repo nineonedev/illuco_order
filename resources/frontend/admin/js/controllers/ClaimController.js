@@ -161,7 +161,7 @@ export default class ClaimController extends Controller {
         this._listen("pick.customer", this._pickCustomer.bind(this));
         this._listen("pick.template", this._pickTemplate.bind(this));
 
-        this.form.addEventListener("submit", this._store.bind(this));
+        this.form.addEventListener("submit", this._update.bind(this));
     }
     async create() {
         this._logger.info("create");
@@ -209,6 +209,7 @@ export default class ClaimController extends Controller {
         this.form.addEventListener("submit", this._store.bind(this));
     }
 
+
     show() {
         this._logger.info("show");
         this._prepare();
@@ -248,10 +249,8 @@ export default class ClaimController extends Controller {
     async _store(e) {
         e.preventDefault();
 
-        if (Helper.isEmptyObject(this.productZone.state.template) 
-            || Helper.isEmptyObject(this.customerZone.state.template)
-        ) {
-            alert('문의 대상 또는 클레임 대상 중 하나는 반드시 선택해주세요.');
+        if (Helper.isEmptyObject(this.productZone.state.template)) {
+            alert('제품을 선택해주세요.');
             return; 
         }
 
@@ -279,6 +278,46 @@ export default class ClaimController extends Controller {
             this.loader.show();
 
             const result = await this._ajax.post(action, fd);
+            const { success, data } = result;
+
+            if (success) {
+                this.cancelBtn?.click();
+            }
+        } finally {
+            this.loader.hide();
+            submitter.disabled = false;
+        }
+    }
+
+    
+    async _update(e){
+        e.preventDefault();
+
+        if (Helper.isEmptyObject(this.productZone.state.template)) {
+            alert('제품을 선택해주세요.');
+            return; 
+        }
+
+        const t = e.target;
+        const fd = new FormData(t);
+        const action = t.action;
+        const submitter = e.submitter;
+    
+        if (!fd.get('title')) {
+            alert('제목을 입력해주세요.');
+            return; 
+        }
+
+        if (!fd.get('content')) {
+            alert('문의내용을 입력해주세요.');
+            return; 
+        }
+        
+        try {
+            submitter.disabled = true;
+            this.loader.show();
+
+            const result = await this._ajax.put(action, fd);
             const { success, data } = result;
 
             if (success) {
@@ -434,6 +473,7 @@ export default class ClaimController extends Controller {
         this.cancelBtn = document.querySelector('[data-action="cancel"]');
         this.modal = Modal.make("portal").render();
         this.loader = Loader.make("portal").render();
+        
         
         
         document.querySelectorAll('[data-view-type="select"]').forEach(el => {

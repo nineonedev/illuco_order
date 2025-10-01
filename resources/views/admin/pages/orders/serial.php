@@ -72,12 +72,6 @@ use App\Domains\Product\Entities\Loupe; // ⬅️ 루페 렌더용 추가
                                 <span class="label">시리얼 번호</span>
                                 <span class="value no-text-mono"><?= e($serial->serial_number) ?></span>
                             </div>
-                            <!-- <div class="no-order-summary__item">
-                                <span class="label">상태</span>
-                                <span class="value">
-                                    <span class="order-status --<?= e($serial->status) ?>"><?= e(ucfirst($serial->status)) ?></span>
-                                </span>
-                            </div> -->
                             <div class="no-order-summary__item">
                                 <span class="label">생성일</span>
                                 <span class="value"><?= date('Y-m-d h:i A', strtotime($serial->created_at ?? 'now')) ?></span>
@@ -124,7 +118,7 @@ use App\Domains\Product\Entities\Loupe; // ⬅️ 루페 렌더용 추가
                     $jarOdS = ($odS !== null && $odAdd !== null) ? (float)$odS + (float)$odAdd : null;
                     $jarOsS = ($osS !== null && $osAdd !== null) ? (float)$osS + (float)$osAdd : null;
                     ?>
-                    <section class="spec-card" aria-label="루페 시력정보 및 렌즈 계산 요약">
+                    <!-- <section class="spec-card" aria-label="루페 시력정보 및 렌즈 계산 요약">
                         <header class="spec-card__header">
                             <h3 class="spec-card__title">루페 시력정보 & 렌즈 계산 요약</h3>
                         </header>
@@ -132,7 +126,6 @@ use App\Domains\Product\Entities\Loupe; // ⬅️ 루페 렌더용 추가
                         <div class="spec-card__body">
 
                             <div class="spec-card__tables">
-                            <!-- 처방전 표 -->
                             <div class="spec-table">
                                 <div class="spec-table__title">처방전 (Prescription)</div>
                                 <table aria-label="처방전 수치">
@@ -164,7 +157,6 @@ use App\Domains\Product\Entities\Loupe; // ⬅️ 루페 렌더용 추가
                                 </table>
                             </div>
 
-                            <!-- 렌즈 계산 요약 -->
                             <div class="spec-table">
                                 <div class="spec-table__title">렌즈 계산 요약</div>
                                 <table aria-label="렌즈 계산 요약">
@@ -201,11 +193,9 @@ use App\Domains\Product\Entities\Loupe; // ⬅️ 루페 렌더용 추가
                             </div>
                             </div>
 
-                            <!-- 옵션 태그 -->
                             <div class="spec-card__row">
                             <div class="spec-tags">
                                 <?php
-                                // 재사용 가능한 태그 렌더 (필요 없는 필드는 걸러냄)
                                 $labels = \App\Domains\Product\Entities\Loupe::LABELS;
                                 $map = [
                                 'type' => '루페 종류',
@@ -237,12 +227,12 @@ use App\Domains\Product\Entities\Loupe; // ⬅️ 루페 렌더용 추가
                             </div>
 
                         </div>
-                        </section>
+                        </section> -->
                     <?php
                     // ====================[ / 루페 전용 출력 끝 ]==================
                     endif;
                     ?>
-
+                    
                     <section class="no-order-summary">
                         <h3 class="no-order-summary__title">주문 정보</h3>
                         <div class="no-order-summary__grid">

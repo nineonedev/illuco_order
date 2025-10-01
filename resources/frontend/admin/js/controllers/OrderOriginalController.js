@@ -232,7 +232,7 @@ export default class OrderOriginalController extends Controller {
         if (templateHook) {
             this.tplForm = Template.make(templateHook, {
                 useCart: false, // 오리지널 주문 편집이므로 장바구니 경유 X
-                useWrapper: false,
+                useWrapper: true,
             }).render();
         }
     }

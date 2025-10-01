@@ -31,7 +31,7 @@ export default class TemplateForm extends View {
             template: {},
             cartitem: {},
             useCart: true, 
-            useWrapper: true,
+            useWrapper: false,
         };
     }
 
@@ -61,7 +61,7 @@ export default class TemplateForm extends View {
 
         return `
             <div>
-                ${useWrapper ? `<form method="post" data-ref="form"  enctype="multipart/form-data">` : ''}
+                ${!useWrapper ? `<form method="post" data-ref="form"  enctype="multipart/form-data">` : ''}
                     <input type="hidden" name="product[template_id]" value="${id}"/>
                     <input type="type" name="product[type]" value="" />
                     <hr class="no-hr --xl">
@@ -87,7 +87,7 @@ export default class TemplateForm extends View {
                     </fieldset>
                     
                     <div class="no-form-action" id="${this._submitHookId}"></div>
-                ${useWrapper ? `</form>` : ''}
+                ${!useWrapper ? `</form>` : ''}
             </div>
         `;
     }
@@ -260,8 +260,12 @@ export default class TemplateForm extends View {
         if (!this.hasTemplate()) return;
 
         const useWrapper = this._state.useWrapper;
+        const useCart = this._state.useCart; 
+        const form = useWrapper ? this._el.closest('form') : this.refs.form;
+        const eventName = useCart ? 'add.cart' : 'add.original';
 
-        const form = useWrapper ? this.refs.form : this._el.closest('form');
+        this._logger.info(eventName, form);
+        
 
         this.on(form, "submit", (view, e) => {
             e.preventDefault();
@@ -279,7 +283,7 @@ export default class TemplateForm extends View {
 
             console.log("success to validation...");
 
-            this._dispatch(useWrapper ? 'add.cart' : 'add.original', {
+            this._dispatch(eventName, {
                 data: fd,
                 view: this,
                 button: this._submitBtn,

@@ -22,7 +22,10 @@ export default class CartController extends Controller {
         this.modal = Modal.make("portal").render();
         this.loader = Loader.make("portal").render();
         this.cart = Cart.make("cart-hook").render();
-        this.form = Template.make("template-hook").render();
+        this.form = Template.make("template-hook", {
+            useCart: true,
+            useWrapper: false, 
+        }).render();
 
         await this._loadAllData();
 
