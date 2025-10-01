@@ -19,7 +19,7 @@ export default class ProductZone extends View {
    _template() {
         const template = this._state.template;
 
-        if (Helper.isEmptyObject(template)) {
+        if (!template || Helper.isEmptyObject(template)) {
             return `
                 <div class="no-form-empty-fallback">
                     <p>선택된 제품이 없습니다. 제품을 선택해주세요.</p>

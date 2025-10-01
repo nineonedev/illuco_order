@@ -19,8 +19,8 @@ export default class CustomerZone extends View {
 
    _template() {
         const customer = this._state.customer;
-
-        if (Helper.isEmptyObject(customer)) {
+        
+        if (!customer || Helper.isEmptyObject(customer)) {
             return `
                 <div class="no-form-empty-fallback">
                     <p>선택된 고객이 없습니다. 고객을 선택해주세요.</p>

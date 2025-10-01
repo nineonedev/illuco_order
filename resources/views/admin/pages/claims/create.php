@@ -78,7 +78,7 @@
 
                 <div class="no-form-control --md">
                     <label for="product_serial_number" class="no-form-control-inner">
-                        <input type="text" name="product_serial_number" id="product_serial_number" class="no-form-control-input"  placeholder="">
+                        <input type="text" name="product_serial_number" id="product_serial_number" class="no-form-control-input" required  placeholder="">
                         <fieldset class="no-form-control-label">
                             <legend class="no-form-control-text">시리얼 번호</legend>
                         </fieldset>

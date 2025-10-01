@@ -178,7 +178,7 @@ export default class ClaimController extends Controller {
             console.error(`No found search button by Id: "search-product"`);
             return; 
         }
-        SearchButton.make(productSearchBtn, {
+        const prodButton = SearchButton.make(productSearchBtn, {
             onClick: this._handleProductSearch.bind(this),
         }).render();
 
@@ -186,9 +186,12 @@ export default class ClaimController extends Controller {
             console.error(`No found search button by Id: "search-customer"`);
             return; 
         }
-        SearchButton.make(customerSearchBtn, {
+        const cusButton = SearchButton.make(customerSearchBtn, {
             onClick: this._handleCustomerSearch.bind(this),
         }).render();
+
+        console.log(prodButton, cusButton);
+        
 
 
         const refreshBtn = document.getElementById('refresh-btn'); 
@@ -254,10 +257,16 @@ export default class ClaimController extends Controller {
             return; 
         }
 
+
         const t = e.target;
         const fd = new FormData(t);
         const action = t.action;
         const submitter = e.submitter;
+        
+        if (!fd.get('product_serial_number')) {
+            alert('시리얼 번호를 입력해주세요.');
+            return; 
+        }
     
         if (!fd.get('title')) {
             alert('제목을 입력해주세요.');
@@ -303,8 +312,14 @@ export default class ClaimController extends Controller {
         const action = t.action;
         const submitter = e.submitter;
     
+        
         if (!fd.get('title')) {
             alert('제목을 입력해주세요.');
+            return; 
+        }
+
+        if (!fd.get('product_serial_number')) {
+            alert('시리얼 번호를 입력해주세요.');
             return; 
         }
 
