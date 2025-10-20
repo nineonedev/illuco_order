@@ -44,7 +44,6 @@ class OrderController extends Controller
     {
         $input = trim((string)$request->query('serial', ''));
 
-        // 입력 없으면 빈 화면 렌더
         if ($input === '') {
             return $this->render('admin.pages.orders.serial', [
                 'serial'   => null,
@@ -53,7 +52,6 @@ class OrderController extends Controller
             ]);
         }
 
-        // 단건 조회 (대리점이면 자신의 주문만)
         $query = ProductSerialRepository::make()
             ->with([
                 'product.template',
@@ -62,13 +60,19 @@ class OrderController extends Controller
             ->query()
             ->where('serial_number', $input);
 
-
+        // ✅ 대리점 로그인 시: "그 대리점이 구매한 주문"의 시리얼만
         if (user()->isDealer()) {
             $dealerId = user()->dealer->id ?? null;
             if ($dealerId) {
-                $query->whereHas('orderItem.order.customer', fn($cq) => $cq->where('dealer_id', $dealerId));
+                $query->whereExists(function ($sub) use ($dealerId) {
+                    $sub->table('order_items')
+                        ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                        ->whereColumn('order_items.product_id', '=', 'product_serials.product_id')
+                        ->where('orders.dealer_id', '=', $dealerId);
+                });
             }
         }
+
 
         $serial = $query->first();
 
@@ -77,7 +81,6 @@ class OrderController extends Controller
             'query'    => $request->query(),
         ]);
     }
-
 
     public function index(Request $request)
     {
@@ -95,13 +98,24 @@ class OrderController extends Controller
             ] 
         ])->query();
 
-        // 대리점인 경우, 대리점에 해당하는 주문만 조회
-        if (user()->isDealer()) {
-            $dealerId = user()->dealer->id; // 대리점의 ID
-            $query->whereHas('customer', function($q) use ($dealerId) {
-                $q->where('dealer_id', $dealerId); // 고객의 dealer_id 필터링
-            });
+       if (user()->isDealer()) {
+            $dealerId = user()->dealer->id;
+
+            $query
+                // 고객이 내 딜러인 주문만
+                ->whereExists(function ($sub) use ($dealerId) {
+                    $sub->table('customers')
+                        ->whereColumn('customers.id', '=', 'orders.customer_id')
+                        ->where('customers.dealer_id', '=', $dealerId);
+                })
+                // 본사(일루코) 계정이 만든 주문은 제외 → 주문 생성자가 딜러 계정인 것만
+                ->whereExists(function ($sub) {
+                    $sub->table('users')
+                        ->whereColumn('users.id', '=', 'orders.user_id')
+                        ->where('users.type', '=', UserType::DEALER);
+                });
         }
+
 
         // ✅ 상태
         if ($status = $request->query('status')) {
@@ -322,32 +336,6 @@ class OrderController extends Controller
     }
 
 
-    public function cancel(string $orderNo)
-    {
-        $order = OrderRepository::make()
-            ->query()
-            ->where('order_no', $orderNo)
-            ->firstOrFail();
-        
-        if ($order->isFinalized()) {
-            throw new RuntimeException(
-                "해당 주문은 '" 
-                . __('system.order.status.' . $order->order_status) 
-                . "' 상태로 진행 중이어서 취소할 수 없습니다. 클레임으로 문의해 주세요."
-            );
-        }
-
-        $order = OrderRepository::make()->save($order);
-        $order->setStatus(OrderStatus::CANCELED);
-
-        // 오더 취소요청 => 메일!
-
-        if (!$order) {
-            throw new RuntimeException("주문 취소에 실패하였습니다. 잠시 후에 다시 시도해주세요.");
-        }
-
-        return $this->render(null, [], '주문이 성공적으로 취소되었습니다.');
-    }
 
     
     public function store(Request $request)
@@ -1111,6 +1099,22 @@ class OrderController extends Controller
         return $cartItem;
     }
 
+    public function cancel(string $orderNo)
+    {
+        $order = OrderRepository::make()
+            ->query()
+            ->where('order_no', $orderNo)
+            ->first(); 
+
+        if (!$order) {
+            throw new RuntimeException('주문을 찾을 수 없습니다.');
+        }
+
+        /** @var Order $order */
+        $order->cancel(request()->input('reason')); // 엔티티 메서드 내부는 트랜잭션 없음
+
+        return $this->render(null, ['order' => $order->toArray()], '주문을 취소했습니다.');
+    }
 
     public function editOriginal(Request $request, string $orderNo)
     {

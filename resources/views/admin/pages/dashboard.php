@@ -11,7 +11,7 @@
 
     <!-- 최근 오더 목록 -->
     <div class="dashboard-section">
-        <h2 class="dashboard-section-title">최근 오더 목록</h2>
+        <h2 class="dashboard-section-title">최근 오더 목록 <small class="no-small-bedge">최신 10건</small></h2>
 
         <div class="no-page-index-table-outer">
             <table class="no-page-index-table">
@@ -61,7 +61,7 @@
 
     <!-- 공지사항 -->
     <div class="dashboard-section">
-        <h2 class="dashboard-section-title">공지사항</h2>
+        <h2 class="dashboard-section-title">공지사항 <small class="no-small-bedge">최신 10건</small></h2>
 
         <div class="no-page-index-table-outer">
             <table class="no-page-index-table">

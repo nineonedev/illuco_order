@@ -27,7 +27,7 @@ use App\Domains\Communication\Enums\NoticeStatus;
             <div class="no-notice-show__files">
                 <h3 class="no-notice-show__files-title">첨부파일</h3>
                 <?php
-                    $files = $notice->fileattachment;
+                    $files = $notice->fileattachment->all(); 
                 ?>
                 <?php if (!empty($files)) : ?>
                     <ul class="no-notice-show__files-list">

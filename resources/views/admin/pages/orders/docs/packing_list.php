@@ -35,7 +35,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
             <table class="packing-meta-table">
                 <tr>
                     <th>Ref. No.</th>
-                    <td><input type="text" name="ref_no" value="<?= e($entity->ref_no) ?>"></td>
+                    <td><input type="text" name="ref_no" value="<?= e($entity->ref_no ?: $document->document_no) ?>"></td>
                 </tr>
                 <tr>
                     <th>Date</th>
@@ -52,25 +52,51 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
             </table>
         </div>
 
+        <?php
+            // 주문 기준으로 고객-사용자-대리점 선로딩 (N+1 방지)
+            $order->load(['customer.user.dealer']);
+
+            /** @var \App\Domains\User\Entities\User|null $dealerUser */
+            $dealerUser = $order->customer && $order->customer->user ? $order->customer->user : null;
+            /** @var \App\Domains\User\Entities\Dealer|null $dealer */
+            $dealer = ($dealerUser && isset($dealerUser->dealer)) ? $dealerUser->dealer : null;
+
+            // ===== BILL TO (엔티티 저장값 > DealerUser/Dealer > Customer)
+            $billName    = $entity->bill_to_name    ?: ($dealerUser->name ?? $order->customer->name ?? '');
+            $billAddress = $entity->bill_to_address ?: ($dealer->address ?? $order->customer->address ?? '');
+            $billTel     = $entity->bill_to_tel     ?: ($dealerUser->phone ?? $order->customer->phone ?? '');
+            $billEmail   = $entity->bill_to_email   ?: ($dealerUser->email ?? $order->customer->email ?? '');
+            $billAttn    = $entity->bill_to_attn    ?: ($dealerUser->name ?? '');
+
+            // ===== SHIP TO (필요하면 BILL TO를 기본값으로)
+            $shipName    = $entity->ship_to_name    ?: $billName;
+            $shipAddress = $entity->ship_to_address ?: $billAddress;
+            $shipTel     = $entity->ship_to_tel     ?: $billTel;
+            $shipEmail   = $entity->ship_to_email   ?: $billEmail;
+            $shipAttn    = $entity->ship_to_attn    ?: $billAttn;
+        ?>
+
         <!-- Bill To / Ship To -->
         <div class="packing-between">
             <div class="packing-block">
                 <p class="packing-label">BILL TO:</p>
-                <p><strong><input type="text" name="bill_to_name" value="<?= e($entity->bill_to_name) ?>"></strong></p>
-                <p><input type="text" name="bill_to_address" value="<?= e($entity->bill_to_address) ?>"></p>
-                <p>Tel.: <input type="text" name="bill_to_tel" value="<?= e($entity->bill_to_tel) ?>"></p>
-                <p>Attn.: <input type="text" name="bill_to_attn" value="<?= e($entity->bill_to_attn) ?>"></p>
-                <p>Email: <input type="email" name="bill_to_email" value="<?= e($entity->bill_to_email) ?>"></p>
+                <p><strong><input type="text" name="bill_to_name"    value="<?= e($billName) ?>"></strong></p>
+                <p><input type="text"   name="bill_to_address" value="<?= e($billAddress) ?>"></p>
+                <p>Tel.:  <input type="text"   name="bill_to_tel"     value="<?= e($billTel) ?>"></p>
+                <p>Attn.: <input type="text"   name="bill_to_attn"    value="<?= e($billAttn) ?>"></p>
+                <p>Email: <input type="email"  name="bill_to_email"   value="<?= e($billEmail) ?>"></p>
             </div>
+
             <div class="packing-block">
                 <p class="packing-label">SHIP TO:</p>
-                <p><strong><input type="text" name="ship_to_name" value="<?= e($entity->ship_to_name) ?>"></strong></p>
-                <p><input type="text" name="ship_to_address" value="<?= e($entity->ship_to_address) ?>"></p>
-                <p>Tel.: <input type="text" name="ship_to_tel" value="<?= e($entity->ship_to_tel) ?>"></p>
-                <p>Attn.: <input type="text" name="ship_to_attn" value="<?= e($entity->ship_to_attn) ?>"></p>
-                <p>Email: <input type="email" name="ship_to_email" value="<?= e($entity->ship_to_email) ?>"></p>
+                <p><strong><input type="text" name="ship_to_name"    value="<?= e($shipName) ?>"></strong></p>
+                <p><input type="text"   name="ship_to_address" value="<?= e($shipAddress) ?>"></p>
+                <p>Tel.:  <input type="text"   name="ship_to_tel"     value="<?= e($shipTel) ?>"></p>
+                <p>Attn.: <input type="text"   name="ship_to_attn"    value="<?= e($shipAttn) ?>"></p>
+                <p>Email: <input type="email"  name="ship_to_email"   value="<?= e($shipEmail) ?>"></p>
             </div>
         </div>
+
 
         <!-- Delivery Info -->
         <table class="packing-info-table">
@@ -153,7 +179,7 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
                             <input type="text" name="total_quantity" value="<?= e($entity->total_quantity) ?>"> PC(S)
                         </td>
                         <td class="right">
-                            <input type="text" name="total_weight" value="<?= e($entity->total_weight) ?>"> g
+                            <input type="number" step="0.01" name="total_weight" value="<?= e($entity->total_weight) ?>">
                         </td>
                         <td class="right">
                             <input type="text" name="total_volume_cbm" value="<?= e($entity->total_volume_cbm) ?>"> CBM

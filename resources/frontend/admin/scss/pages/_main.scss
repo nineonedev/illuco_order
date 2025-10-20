@@ -577,6 +577,18 @@
     flex-direction: column;
     gap: 4.8rem;
 }
+
 .no-mt-6 {
     margin-top: 0.6rem;
+}
+
+.no-small-bedge {
+    padding: 0.2rem 1rem;
+    border-radius: 5.5rem;
+    background: var(--clr-primary-main);
+    color: var(--clr-background-primary);
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: inline-block;
+    margin-left: 0.8rem;
 }

@@ -93,7 +93,7 @@
                             </li>
                         <?php endif; ?>
 
-                         <?php if (can('product.read')): ?>
+                         <?php if (can('cart.read')): ?>
                             <li class="no-drawer-gnb-item <?= route_is_exact('admin.orders.serial') ? '--active' : '' ?>">
                                 <a href="<?= route('admin.orders.serial') ?>" class="no-drawer-gnb-link no-drawer-link" data-menu-tooltip="right">
                                     <div class="no-drawer-gnb-link__icon">

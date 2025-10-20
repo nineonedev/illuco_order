@@ -283,12 +283,32 @@ class Loupe extends Entity
 
         $opt = $attributes['add_option'] ?? null; // ignore | include | zero_diopter
 
-        // 모렌즈(기본식)
+        // 모렌즈(ADD 포함 규칙 반영)
+        // 기본: 처방 그대로
         $molOd = ['s' => $odS, 'c' => $odC, 'a' => $odA, 'add' => null];
         $molOs = ['s' => $osS, 'c' => $osC, 'a' => $osA, 'add' => null];
+
         if ($opt === 'zero_diopter') {
+            // 안경 미착용자: 모두 0
             $molOd = ['s' => 0, 'c' => 0, 'a' => 0, 'add' => null];
             $molOs = ['s' => 0, 'c' => 0, 'a' => 0, 'add' => null];
+
+        } elseif ($opt === 'include') {
+            // 모렌즈에 ADD 반영: 규칙표에 따른 S 가산치 적용
+            $deltaOd = self::addToMorenzDelta($odAdd);
+            $deltaOs = self::addToMorenzDelta($osAdd);
+
+            $molOd['s'] = ($odS !== null && $deltaOd !== null) ? $odS + $deltaOd : $odS;
+            $molOs['s'] = ($osS !== null && $deltaOs !== null) ? $osS + $deltaOs : $osS;
+
+            // 표의 ADD 칸에도 보여주려면 원래 처방 ADD를 노출
+            $molOd['add'] = $odAdd;
+            $molOs['add'] = $osAdd;
+
+        } else {
+            // ignore 등: S 그대로, ADD 표시는 비움
+            $molOd['add'] = null;
+            $molOs['add'] = null;
         }
 
         // 자렌즈(기본식: S + ADD)
@@ -317,8 +337,8 @@ class Loupe extends Entity
                     </tr>
                     <tr>
                         <th scope="row">모렌즈</th>
-                        <td>'.$fmtSigned($molOd["s"]).'</td><td>'.$fmtSigned($molOd["c"]).'</td><td>'.$fmtAxis($molOd["a"]).'</td><td>–</td>
-                        <td>'.$fmtSigned($molOs["s"]).'</td><td>'.$fmtSigned($molOs["c"]).'</td><td>'.$fmtAxis($molOs["a"]).'</td><td>–</td>
+                        <td>'.$fmtSigned($molOd["s"]).'</td><td>'.$fmtSigned($molOd["c"]).'</td><td>'.$fmtAxis($molOd["a"]).'</td><td>'.$fmtSigned($molOd["add"]).'</td>
+                        <td>'.$fmtSigned($molOs["s"]).'</td><td>'.$fmtSigned($molOs["c"]).'</td><td>'.$fmtAxis($molOs["a"]).'</td><td>'.$fmtSigned($molOs["add"]).'</td>
                     </tr>
                     <tr>
                         <th scope="row">자렌즈</th>
@@ -332,6 +352,19 @@ class Loupe extends Entity
         $html .= '</div>';
 
         return $html;
+    }
+
+    private static function addToMorenzDelta($add): ?float
+    {
+        if ($add === null || $add === '' ) return null;
+        $add = (float) $add;
+
+        if ($add < 1.0) {
+            return 0.0;
+        } elseif ($add < 2.5) {
+            return 0.5;
+        }
+        return 0.75;
     }
 
     public static function renderTag(string $type, array $attributes): string

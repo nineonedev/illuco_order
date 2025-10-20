@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domains\Communication\Repositories\NoticeRepository;
+use App\Domains\Order\Enums\OrderStatus;
 use App\Domains\Order\Repositories\OrderRepository;
 use App\Domains\System\Repositories\FileAttachmentRepository;
 use App\Domains\User\Repositories\UserRepository;
@@ -173,47 +174,39 @@ class AdminController extends Controller
 
     protected function aggregateTotalSales(?int $year = null, ?int $month = null): array
     {
-        $query = db('orders')->whereNull('deleted_at');
+        $query = $this->ordersBase();
 
-        if ($year) {
-            $query->whereRaw("YEAR(created_at) = ?", [$year]);
-        }
-        if ($month) {
-            $query->whereRaw("MONTH(created_at) = ?", [$month]);
-        }
+        if ($year)  { $query->whereRaw("YEAR(created_at) = ?", [$year]); }
+        if ($month) { $query->whereRaw("MONTH(created_at) = ?", [$month]); }
 
         $totalAmount = $query->clone()->sum('total_amount');
 
-        $years = [];
-        $rows = db('orders')
+        // years
+        $yearsRows = $this->ordersBase()
             ->selectRaw("YEAR(created_at) as year, SUM(total_amount) as total_sales")
             ->groupBy('year')
             ->orderBy('year')
-            ->whereNull('deleted_at')
             ->get();
 
-        foreach ($rows as $row) {
+        $years = [];
+        foreach ($yearsRows as $row) {
             $years[] = [
                 'year' => (int)$row->year,
                 'total_sales' => (float)$row->total_sales,
             ];
         }
 
+        // months skeleton
         $months = [];
         for ($m = 1; $m <= 12; $m++) {
-            $months[$m] = [
-                'month' => $m,
-                'total_sales' => 0.0,
-            ];
+            $months[$m] = ['month' => $m, 'total_sales' => 0.0];
         }
 
-        $rows = db('orders')
+        $rows = $this->ordersBase()
             ->when($year, fn($q) => $q->whereRaw("YEAR(created_at) = ?", [$year]))
             ->selectRaw("YEAR(created_at) as year, MONTH(created_at) as month, SUM(total_amount) as total_sales")
             ->groupBy('year', 'month')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->whereNull('deleted_at')
+            ->orderBy('year')->orderBy('month')
             ->get();
 
         foreach ($rows as $row) {
@@ -222,58 +215,48 @@ class AdminController extends Controller
 
         return [
             'total_sales' => (float)$totalAmount,
-            'years' => $years,
-            'months' => array_values($months),
+            'years'       => $years,
+            'months'      => array_values($months),
         ];
     }
 
+
     protected function aggregateIllucoSales(?int $year = null, ?int $month = null): array
     {
-        $query = db('orders')->whereNull('dealer_id')->whereNull('deleted_at');
+        $query = $this->ordersBase()->whereNull('dealer_id');
 
-        if ($year) {
-            $query->whereRaw("YEAR(created_at) = ?", [$year]);
-        }
-        if ($month) {
-            $query->whereRaw("MONTH(created_at) = ?", [$month]);
-        }
+        if ($year)  { $query->whereRaw("YEAR(created_at) = ?", [$year]); }
+        if ($month) { $query->whereRaw("MONTH(created_at) = ?", [$month]); }
 
         $totalAmount = $query->sum('total_amount');
 
         // years
-        $years = db('orders')
+        $yearsRows = $this->ordersBase()
             ->whereNull('dealer_id')
             ->selectRaw("YEAR(created_at) as year, SUM(total_amount) as total_sales")
-            ->groupBy('year')
-            ->orderBy('year')
-            ->whereNull('deleted_at')
+            ->groupBy('year')->orderBy('year')
             ->get();
 
         $yearsResult = [];
-        foreach ($years as $row) {
+        foreach ($yearsRows as $row) {
             $yearsResult[] = [
                 'year' => (int)$row->year,
                 'total_sales' => (float)$row->total_sales,
             ];
         }
 
-        // months
+        // months skeleton
         $months = [];
         for ($m = 1; $m <= 12; $m++) {
-            $months[$m] = [
-                'month' => $m,
-                'total_sales' => 0.0,
-            ];
+            $months[$m] = ['month' => $m, 'total_sales' => 0.0];
         }
 
-        $rows = db('orders')
+        $rows = $this->ordersBase()
             ->whereNull('dealer_id')
             ->when($year, fn($q) => $q->whereRaw("YEAR(created_at) = ?", [$year]))
             ->selectRaw("YEAR(created_at) as year, MONTH(created_at) as month, SUM(total_amount) as total_sales")
             ->groupBy('year', 'month')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->whereNull('deleted_at')
+            ->orderBy('year')->orderBy('month')
             ->get();
 
         foreach ($rows as $row) {
@@ -282,28 +265,22 @@ class AdminController extends Controller
 
         return [
             'total_sales' => (float)$totalAmount,
-            'years' => $yearsResult,
-            'months' => array_values($months),
+            'years'       => $yearsResult,
+            'months'      => array_values($months),
         ];
     }
+
 
     protected function aggregateDealerSales(
         ?int $year = null,
         ?int $month = null,
         ?int $specificDealerId = null
     ): array {
-        $query = db('orders')->whereNotNull('dealer_id')->whereNull('deleted_at');
+        $query = $this->ordersBase()->whereNotNull('dealer_id');
 
-        if ($specificDealerId) {
-            $query->where('dealer_id', $specificDealerId);
-        }
-
-        if ($year) {
-            $query->whereRaw("YEAR(created_at) = ?", [$year]);
-        }
-        if ($month) {
-            $query->whereRaw("MONTH(created_at) = ?", [$month]);
-        }
+        if ($specificDealerId) { $query->where('dealer_id', $specificDealerId); }
+        if ($year)  { $query->whereRaw("YEAR(created_at) = ?", [$year]); }
+        if ($month) { $query->whereRaw("MONTH(created_at) = ?", [$month]); }
 
         $rows = $query
             ->selectRaw("
@@ -313,9 +290,9 @@ class AdminController extends Controller
             ")
             ->groupBy('dealer_id')
             ->orderByDesc('last_order_at')
-            ->whereNull('deleted_at')
             ->get();
 
+        // 딜러명 매핑
         $dealers = UserRepository::make()->query()
             ->with(['dealer'])
             ->where('type', 'dealer')
@@ -330,17 +307,14 @@ class AdminController extends Controller
         }
 
         $result = [];
-
         foreach ($rows as $row) {
             $dealerId = $row->dealer_id;
 
             // per dealer - years
-            $yearsRows = db('orders')
+            $yearsRows = $this->ordersBase()
                 ->where('dealer_id', $dealerId)
                 ->selectRaw("YEAR(created_at) as year, SUM(total_amount) as total_sales")
-                ->groupBy('year')
-                ->orderBy('year')
-                ->whereNull('deleted_at')
+                ->groupBy('year')->orderBy('year')
                 ->get();
 
             $years = [];
@@ -351,23 +325,18 @@ class AdminController extends Controller
                 ];
             }
 
-            // per dealer - months
+            // per dealer - months skeleton
             $months = [];
             for ($m = 1; $m <= 12; $m++) {
-                $months[$m] = [
-                    'month' => $m,
-                    'total_sales' => 0.0,
-                ];
+                $months[$m] = ['month' => $m, 'total_sales' => 0.0];
             }
 
-            $monthsRows = db('orders')
+            $monthsRows = $this->ordersBase()
                 ->where('dealer_id', $dealerId)
                 ->when($year, fn($q) => $q->whereRaw("YEAR(created_at) = ?", [$year]))
                 ->selectRaw("YEAR(created_at) as year, MONTH(created_at) as month, SUM(total_amount) as total_sales")
                 ->groupBy('year', 'month')
-                ->orderBy('year')
-                ->orderBy('month')
-                ->whereNull('deleted_at')
+                ->orderBy('year')->orderBy('month')
                 ->get();
 
             foreach ($monthsRows as $mo) {
@@ -375,15 +344,23 @@ class AdminController extends Controller
             }
 
             $result[] = [
-                'dealer_id' => $dealerId,
+                'dealer_id'   => $dealerId,
                 'dealer_name' => $dealerList[$dealerId] ?? '-',
                 'total_sales' => (float)$row->total_sales,
-                'years' => $years,
-                'months' => array_values($months),
+                'years'       => $years,
+                'months'      => array_values($months),
             ];
         }
 
         return $result;
+    }
+
+
+    protected function ordersBase()
+    {
+        return db('orders')
+            ->whereNull('deleted_at')
+            ->where('order_status', '!=', OrderStatus::CANCELED);
     }
 
 

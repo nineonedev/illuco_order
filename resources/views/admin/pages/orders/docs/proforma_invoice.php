@@ -38,26 +38,44 @@ $pdfName = "{$type}-{$document->document_no}.pdf";
   </div>
 
   <?php 
-    $buyerCompany = user()->name; 
-    $buyerAddress = ''; 
-    $buyerAttn = ''; 
-    $buyerTel = user()->phone ?? ''; 
-    $buyerEmail = user()->email ?? '';
-    
-    if (user()->isDealer()) {
-      $buyerAddress = user()->delaer->address; 
-    }
+    // 주문 → 고객 → 사용자 → 대리점 관계를 미리 로드
+    $order->load(['customer.user.dealer']);
+
+    /** @var \App\Domains\User\Entities\User|null $dealerUser */
+    $dealerUser = $order->customer && $order->customer->user ? $order->customer->user : null;
+    /** @var \App\Domains\User\Entities\Dealer|null $dealer */
+    $dealer = ($dealerUser && isset($dealerUser->dealer)) ? $dealerUser->dealer : null;
+
+    // Buyer(대리점) 기본값: 엔티티에 저장된 값이 있으면 우선, 없으면 대리점/사용자 정보로 채움
+    $buyerName    = $entity->buyer_name    ?: ($dealerUser ? $dealerUser->name  : '');
+    $buyerAddress = $entity->buyer_address ?: ($dealer    ? $dealer->address    : '');
+    $buyerTel     = $entity->buyer_tel     ?: ($dealerUser ? ($dealerUser->phone  ?? '') : '');
+    $buyerEmail   = $entity->buyer_email   ?: ($dealerUser ? ($dealerUser->email  ?? '') : '');
+    // Attn은 보통 담당자명으로 처리
+    $buyerAttn    = $entity->buyer_attn    ?: ($dealerUser ? $dealerUser->name  : '');
   ?>
+
 
   <div class="invoice-between">
     <div class="buyer-section">
       <p><strong>Buyer</strong></p>
-      <p>Company: <input type="text" name="buyer_name" value="<?= e($entity->buyer_name ?:  $order->customer->name) ?>"></p>
-      <p>Address: <input type="text" name="buyer_address" value="<?= e($entity->buyer_address ?: $buyerAddress) ?>"></p>
-      <p>Tel.: <input type="text" name="buyer_tel" value="<?= e($entity->buyer_tel ?: $order->customer->phone) ?>"></p>
-      <p>Attn.: <input type="text" name="buyer_attn" value="<?= e($entity->buyer_attn) ?>"></p>
-      <p>Email: <input type="email" name="buyer_email" value="<?= e($entity->buyer_email ?: $order->customer->email) ?>"></p>
+      <p>Company:
+        <input type="text" name="buyer_name" value="<?= e($buyerName) ?>">
+      </p>
+      <p>Address:
+        <input type="text" name="buyer_address" value="<?= e($buyerAddress) ?>">
+      </p>
+      <p>Tel.:
+        <input type="text" name="buyer_tel" value="<?= e($buyerTel) ?>">
+      </p>
+      <p>Attn.:
+        <input type="text" name="buyer_attn" value="<?= e($buyerAttn) ?>">
+      </p>
+      <p>Email:
+        <input type="email" name="buyer_email" value="<?= e($buyerEmail) ?>">
+      </p>
     </div>
+
 
     <table class="ref-table">
       <tr>

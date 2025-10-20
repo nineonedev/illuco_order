@@ -90,6 +90,64 @@ class Order extends Entity
         ], true);
     }
 
+    public function canCancel(): bool
+    {
+        if ($this->isCanceled()) {
+            return false;
+        }
+        // 출하/완료 상태는 불가, 그 외(NEW/CONFIRMED/PREPARING)는 가능
+        return !in_array($this->order_status, [
+            OrderStatus::SHIPPED,
+            OrderStatus::COMPLETED,
+        ], true);
+    }
+
+    /**
+     * 주문 취소 처리 (PREPARING에서 생성된 시리얼 회수 포함)
+     * @throws \RuntimeException|\Throwable
+     */
+    public function cancel(?string $reason = null): void
+    {
+        if (!$this->canCancel()) {
+            throw new RuntimeException('현재 상태에서는 주문을 취소할 수 없습니다.');
+        }
+        // PREPARING에서 생성된 시리얼 회수(삭제)
+        if ($this->order_status === OrderStatus::PREPARING) {
+            $this->releaseProductSerialNumbers();
+        }
+
+        // 사유 남기기(메모에 누적)
+        if ($reason) {
+            $this->memo = trim(($this->memo ?: '') . "\n[취소사유] " . $reason);
+            OrderRepository::make()->save($this); // 메모 변경 저장
+        }
+
+        // 상태 변경 (canceled_at 세팅 및 로그/알림은 setStatus가 처리)
+        $this->setStatus(OrderStatus::CANCELED);
+    }
+
+    /**
+     * 주문 아이템들에 대해 생성된 시리얼 회수
+     * - 현재 정책: 삭제(중복 방지). 필요 시 'available' 상태로 전환하도록 변경 가능.
+     */
+    protected function releaseProductSerialNumbers(): void
+    {
+        if (!$this->getRelation('items')) {
+            $this->load(['items']);
+        }
+        $items = $this->items ?? [];
+        if (!$items) return;
+
+        $itemIds = array_map(static function ($it) { return (int)$it->id; }, $items);
+
+        if ($itemIds) {
+            ProductSerialRepository::make()
+                ->query()
+                ->whereIn('order_item_id', $itemIds)
+                ->delete();
+        }
+    }
+
     /**
      * 출하/완료/취소 등으로 주문이 ‘잠금’ 상태인지
      */
@@ -146,7 +204,7 @@ class Order extends Entity
             $this->load(['dealer']);
         }
 
-        if ($this->status !== $status) {
+        if ($this->order_status !== $status) {
             $orderLogData = [
                 'order_id' => $this->id, 
                 'user_id' => user()->id,
@@ -259,9 +317,14 @@ class Order extends Entity
 
             // prefix별 현재 최대 시퀀스를 한 번만 조회
             if (!array_key_exists($prefix, $seqCursor)) {
-                $latest = ProductSerial::repositoryClass()::make()
+                // $latest = ProductSerial::repositoryClass()::make()
+                //     ->query()
+                //     ->where('product_id', $product->id)
+                //     ->where('serial_number', 'LIKE', "{$prefix}%")
+                //     ->orderByDesc('serial_number')
+                //     ->first();
+                $latest = ProductSerialRepository::make()
                     ->query()
-                    ->where('product_id', $product->id)
                     ->where('serial_number', 'LIKE', "{$prefix}%")
                     ->orderByDesc('serial_number')
                     ->first();
