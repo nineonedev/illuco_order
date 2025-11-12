@@ -329,41 +329,51 @@ use App\Domains\Product\Repositories\LoupeFrameColorRepository;
                             ?>
                             <?php foreach ($order->set_group_items as $item): ?>
                                 <?php
-                                    $product = $item->product;
+                                    $product   = $item->product ?? null;
 
-                                    if ($product) {
-                                        $serials = $product->serials ? implode(', <br>', array_map(fn($s) => $s->serial_number, $product->serials)) : ' - '; 
+                                    // 안전한 접근을 위한 중간 변수들
+                                    $hasProduct = is_object($product);
+                                    $template   = $hasProduct && isset($product->template) ? $product->template : null;
+
+                                    // 시리얼
+                                    if ($hasProduct && !empty($product->serials)) {
+                                        $serials = implode(', <br>', array_map(fn($s) => $s->serial_number, $product->serials));
                                     } else {
                                         $serials = ' - ';
                                     }
-                                    
 
-                                    $category = $product->template->category ?? null;
-                                    $model = $product ? $product->template->model : '-'; 
-                                    $isHeadlight = ($product->type === 'headlight');
-                                    $isLoupe = ($product->type === 'loupe');
-                                    $headlight = $isHeadlight ? $product->headlight : null;
-                                    $loupe = $isLoupe ? $product->loupe : null;
+                                    // 카테고리/모델
+                                    $category = (is_object($template) && isset($template->category)) ? $template->category : null;
+                                    $model    = (is_object($template) && isset($template->model))    ? $template->model    : '-';
 
-                                    $type = '-'; 
-                                    if ($headlight) {
-                                        $type = $headlight->type; 
-                                    } else if ($loupe) {
-                                        $type = $loupe->type; 
+                                    // 타입 판정
+                                    $productType = $hasProduct && isset($product->type) ? $product->type : null;
+                                    $isHeadlight = ($productType === 'headlight');
+                                    $isLoupe     = ($productType === 'loupe');
+
+                                    $headlight = ($isHeadlight && isset($product->headlight)) ? $product->headlight : null;
+                                    $loupe     = ($isLoupe     && isset($product->loupe))     ? $product->loupe     : null;
+
+                                    // 표시용 타입 문자열
+                                    if ($headlight && isset($headlight->type)) {
+                                        $type = $headlight->type;
+                                    } elseif ($loupe && isset($loupe->type)) {
+                                        $type = $loupe->type;
                                     } else {
                                         $type = '-';
                                     }
 
-                                    $pd_right = $loupe ? floatval($loupe->pd_right ?? 0) : 0;
-                                    $pd_left = $loupe ? floatval($loupe->pd_left ?? 0) : 0;
-                                    $deviation = ($loupe && ($loupe->pd_right !== null && $loupe->pd_left !== null))
+                                    // PD/편차
+                                    $pd_right  = ($loupe && isset($loupe->pd_right)) ? (float)$loupe->pd_right : 0;
+                                    $pd_left   = ($loupe && isset($loupe->pd_left))  ? (float)$loupe->pd_left  : 0;
+                                    $deviation = ($loupe && $loupe->pd_right !== null && $loupe->pd_left !== null)
                                         ? abs($pd_right - $pd_left)
                                         : '-';
 
+                                    // 상세보기 링크
                                     $detailLink = user()->isDealer()
                                         ? route('admin.orders.show', ['orderNo' => $order->order_no])
                                         : route('admin.orders.edit', ['orderNo' => $order->order_no]);
-
                                 ?>
                                 <tr class="<?=$bgClass?>">
                                     <?php if ($first): ?>
